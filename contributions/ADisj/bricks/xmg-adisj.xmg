@@ -1,0 +1,17 @@
+%token id
+%token int
+%token string 
+%token bool
+
+%type ADISJ ADISJ
+%type vals_coma vals_coma
+%type val val
+%%
+
+ADISJ : '@' '{' vals_coma '}' ;
+
+vals_coma : val | val ',' vals_coma ;
+
+val : id | int | bool | string;
+
+%%

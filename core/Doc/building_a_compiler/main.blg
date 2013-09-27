@@ -1,0 +1,6 @@
+[1] Config.pm:300> INFO - This is Biber 0.9.9
+[1] Config.pm:303> INFO - Logfile is 'main.blg'
+[2] biber:145> INFO - === jeu. avril  4, 2013, 11:18:03
+[2] Biber.pm:271> INFO - Reading 'main.bcf'
+[18] Utils.pm:184> ERROR - No data files on command line or provided in the file 'main.bcf'! Exiting
+[19] Biber.pm:110> INFO - ERRORS: 1

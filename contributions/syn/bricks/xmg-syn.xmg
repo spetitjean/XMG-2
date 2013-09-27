@@ -1,0 +1,87 @@
+%token syn
+%token string
+%token id
+%token node
+%token int
+%token bool
+
+%type Var Var
+%type Ids Ids
+%type DimStmt DimStmt
+%type SynStmts SynStmts
+%type SynStmt SynStmt
+%type Node Node
+%type MaybeId MaybeId
+%type MaybeProps MaybeProps
+%type Props Props
+%type MaybeFeats MaybeFeats
+%type Feats Feats
+%type Feat Feat
+%type Dom Dom
+%type DomOp DomOp
+%type Prec Prec
+%type PrecOp PrecOp
+%type IdOrNode IdOrNode
+%type Eq Eq
+%type Expr Expr
+%type Tree Tree
+%type Children Children
+%type Child Child
+%type TreePrecOp TreePrecOp
+%type TreeDomOp TreeDomOp
+
+%ext AVM AVM
+
+%%
+
+/* 
+
+DimStmt : '<syn>' '{' SynStmts '}' ; 
+
+*/
+
+SynStmts : SynStmt | SynStmts ';' SynStmts | SynStmts '|' SynStmts | '{' SynStmts '}';
+
+SynStmt :  Node | Dom | Prec | Eq | Tree;
+
+Node : node MaybeId MaybeProps MaybeFeats;
+
+MaybeId : Var | '';
+
+MaybeProps : '(' Props ')' | '';
+
+Props : Feat | Feat ',' Props;
+
+MaybeFeats : AVM | '';
+	 
+Feat : id '=' id | id '=' int | id '=' bool | id;
+
+Dom : IdOrNode DomOp IdOrNode;
+
+IdOrNode : Node | Var ;
+
+DomOp : '->' | '->+' | '->*';
+
+Prec : IdOrNode PrecOp IdOrNode;
+
+PrecOp : '>>' | '>>+' | '>>*';
+
+Tree : Node '{' Children '}' ;
+
+Children : Child | Child TreePrecOp Children ;
+
+Child : TreeDomOp Node | TreeDomOp Tree;
+
+TreePrecOp : ',,,' | ',,,+' | '';
+
+TreeDomOp : '...' | '...+' | '';
+
+Eq : Expr '=' Expr;
+
+Expr : id | string;
+
+Ids : id | id Ids;
+
+Var : id | '?' id;
+
+%%

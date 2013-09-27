@@ -1,0 +1,36 @@
+%type Stmts Stmts
+%type Stmt Stmt
+%type AStmt AStmt
+%type MaybeIFace MaybeIface
+%type Call Call
+%type ids_coma ids_coma
+%type Dot Dot
+%type Var Var 
+%type EqPart EqPart
+
+%ext DimStmt DimStmt
+%ext IFace IFace
+
+%token id 
+
+%%
+
+Stmts : Stmt | Stmt ';' Stmts | Stmt '|' Stmts; 
+
+Stmt : AStmt MaybeIFace ;
+
+MaybeIFace : '*=' IFace | '' ;
+
+AStmt : '{' Stmts '}' | '(' Stmts ')' | DimStmt | EqPart '=' EqPart | Call ;
+
+Dot : Var '.' Var ;
+
+Call : id '[' ids_coma ']' | id '[' ']';
+
+ids_coma : id ',' ids_coma  | id; 
+
+Var : id | '?' id;
+
+EqPart : Var | Dot | Call ;
+
+%%

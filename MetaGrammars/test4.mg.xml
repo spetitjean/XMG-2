@@ -1,0 +1,65 @@
+<grammar>
+  <entry name="four_2">
+    <family>four</family>
+    <trace>
+      <class>four</class>
+      <class>one</class>
+    </trace>
+    <tree id="class_test_1">
+      <node type="std" name="id(X,coord(../MetaGrammars/test4.mg,32,8))">
+        <narg>
+          <fs coref="@AVM2">
+            <f name="cat">
+              <sym value="one"/>
+            </f>
+          </fs>
+        </narg>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="four_4">
+    <family>four</family>
+    <trace>
+      <class>four</class>
+      <class>two</class>
+    </trace>
+    <tree id="class_test_3">
+      <node type="std" name="id(X,coord(../MetaGrammars/test4.mg,41,8))">
+        <narg>
+          <fs coref="@AVM2">
+            <f name="cat">
+              <sym value="two"/>
+            </f>
+          </fs>
+        </narg>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="four_6">
+    <family>four</family>
+    <trace>
+      <class>four</class>
+      <class>three</class>
+    </trace>
+    <tree id="class_test_5">
+      <node type="std" name="id(X,coord(../MetaGrammars/test4.mg,50,8))">
+        <narg>
+          <fs coref="@AVM2">
+            <f name="cat">
+              <sym value="three"/>
+            </f>
+          </fs>
+        </narg>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+</grammar>

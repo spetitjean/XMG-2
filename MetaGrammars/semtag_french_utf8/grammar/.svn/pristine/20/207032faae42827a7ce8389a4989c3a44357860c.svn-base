@@ -1,0 +1,5 @@
+value negLeft
+value Coordination
+value NominalCoord
+value npPreposition
+value nPreposition

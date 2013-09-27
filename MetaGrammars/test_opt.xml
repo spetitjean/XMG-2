@@ -1,0 +1,193 @@
+<grammar>
+  <entry name="A_0">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+      <class>Maybe</class>
+    </trace>
+    <tree id="A_0">
+      <node type="std" name="id(DB,coord(MetaGrammars/test_opt.mg,11,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(C,coord(MetaGrammars/test_opt.mg,4,24))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="A_1">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+      <class>Maybe</class>
+    </trace>
+    <tree id="A_1">
+      <node type="std" name="id(D,coord(MetaGrammars/test_opt.mg,11,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(B,coord(MetaGrammars/test_opt.mg,4,15))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+          <node type="std" name="id(C,coord(MetaGrammars/test_opt.mg,4,24))">
+            <narg>
+              <fs coref="@AVM4">
+              </fs>
+            </narg>
+          </node>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="A_2">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+      <class>Maybe</class>
+    </trace>
+    <tree id="A_2">
+      <node type="std" name="id(B,coord(MetaGrammars/test_opt.mg,4,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(DC,coord(MetaGrammars/test_opt.mg,11,15))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="A_3">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+      <class>Maybe</class>
+    </trace>
+    <tree id="A_3">
+      <node type="std" name="id(B,coord(MetaGrammars/test_opt.mg,4,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(C,coord(MetaGrammars/test_opt.mg,4,24))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+          <node type="std" name="id(D,coord(MetaGrammars/test_opt.mg,11,15))">
+            <narg>
+              <fs coref="@AVM4">
+              </fs>
+            </narg>
+          </node>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="A_4">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+      <class>Maybe</class>
+    </trace>
+    <tree id="A_4">
+      <node type="std" name="id(B,coord(MetaGrammars/test_opt.mg,4,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(C,coord(MetaGrammars/test_opt.mg,4,24))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="id(D,coord(MetaGrammars/test_opt.mg,11,15))">
+          <narg>
+            <fs coref="@AVM4">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="A_5">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+      <class>Maybe</class>
+    </trace>
+    <tree id="A_5">
+      <node type="std" name="id(B,coord(MetaGrammars/test_opt.mg,4,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(D,coord(MetaGrammars/test_opt.mg,11,15))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="id(C,coord(MetaGrammars/test_opt.mg,4,24))">
+          <narg>
+            <fs coref="@AVM4">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+  <entry name="A_6">
+    <family>A</family>
+    <trace>
+      <class>A</class>
+    </trace>
+    <tree id="A_6">
+      <node type="std" name="id(B,coord(MetaGrammars/test_opt.mg,4,15))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(C,coord(MetaGrammars/test_opt.mg,4,24))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <semantics>
+    </semantics>
+    <interface />
+  </entry>
+</grammar>

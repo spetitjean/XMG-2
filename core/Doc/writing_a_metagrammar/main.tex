@@ -1,0 +1,367 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The Legrand Orange Book
+% LaTeX Template
+% Version 1.0 (25/3/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Mathias Legrand (legrand.mathias@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Compiling this template:
+% This template uses biber for its bibliography and makeindex for its index.
+% This means that to update the bibliography and index in this template you
+% will need to run the following sequence of commands in the template
+% directory:
+%
+% 1) pdflatex main
+% 2) makeindex main.idx -s StyleInd.ist
+% 3) biber main
+% 4) pdflatex main
+%
+% This template also uses a number of packages which may need to be
+% updated to the newest versions for the template to compile. It is strongly
+% recommended you update your LaTeX distribution if you have any
+% compilation errors.
+%
+% Important note:
+% Chapter heading images should have a 2:1 width:height ratio,
+% e.g. 920px width and 460px height.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt,fleqn]{book} % Default font size and left-justified equations
+
+\usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,a4paper]{geometry} % Page margins
+
+\usepackage{xcolor} % Required for specifying colors by name
+\definecolor{ocre}{RGB}{243,102,25} % Define the orange color used for highlighting throughout the book
+
+% Font Settings
+\usepackage{avant} % Use the Avantgarde font for headings
+%\usepackage{times} % Use the Times font for headings
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Sym­bol, Chancery and Com­puter Modern fonts
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[utf8]{inputenc} % Required for including letters with accents
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+
+% Bibliography
+\usepackage[style=alphabetic,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
+%\addbibresource{bibliography.bib} % BibTeX bibliography file
+\defbibheading{bibempty}{}
+
+% Index
+\usepackage{calc} % For simpler calculation - used for spacing the index letter headings correctly
+\usepackage{makeidx} % Required to make an index
+\usepackage{tikz}
+\makeindex % Tells LaTeX to create the files required for indexing
+
+%----------------------------------------------------------------------------------------
+
+\input{commands} % Insert the commands.tex file which contains the majority of the structure behind the template
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begingroup
+\thispagestyle{empty}
+\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}} % Image background
+\centering
+\vspace*{9cm}
+\par\normalfont\fontsize{35}{35}\sffamily\selectfont
+Writing a XMG MetaGrammar\par % Book title
+\vspace*{1cm}
+{\Huge Simon Petitjean}\par % Author name
+\endgroup
+
+%-------------------------------------------------------------------------------%% ---------
+%% %	COPYRIGHT PAGE
+%% %----------------------------------------------------------------------------------------
+
+%% \newpage
+%% ~\vfill
+%% \thispagestyle{empty}
+
+%% \noindent Copyright \copyright\ 2013 John Smith\\ % Copyright notice
+
+%% \noindent \textsc{Published by Publisher}\\ % Publisher
+
+%% \noindent \textsc{book-website.com}\\ % URL
+
+%% \noindent Licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License (the ``License''). You may not use this file except in compliance with the License. You may obtain a copy of the License at \url{http://creativecommons.org/licenses/by-nc/3.0}. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \textsc{``AS IS'' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND}, either express or implied. See the License for the specific language governing permissions and limitations under the License.\\ % License information
+
+%% \noindent \textit{First printing, March 2013} % Printing/edition date
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_1.pdf} % Table of contents heading image
+
+\pagestyle{empty} % No headers
+
+\tableofcontents % Print the table of contents itself
+
+\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right
+
+\pagestyle{fancy} % Print headers again
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 1
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_3.pdf} % Chapter heading image
+
+\chapter{Introduction}
+
+About XMG MetaGrammars. 
+
+\chapter{Principles and Constants}
+
+\section{Principles}
+The first piece of information one has to give in a metagrammar is the principles that will be needed to compute the grammar structures. The instruction used to do this is the use principle with (constraints) dims (dimensions) statement. For instance, one may decide to force the syntactic structures of the output grammar to have the grammatical function gf with the value subj only once. This is told by:
+
+\begin{theorem}
+use unicity with (gf = subj) dims (syn)
+\end{theorem}
+In the syn dimension, we use the unicity principle on the attribute-value gf = subj.\\ At the time of this writing 3 principles are available in the XMG system, namely:\\
+unicity: 	uniqueness on a specific attribute-value\\
+rank: 	ordering of clitics by means of associating the rank property to nodes\\
+color: 	automatization of the node merging by assigning color to nodes\\
+\\
+Note that principles use as parameters pieces of information that are associated to nodes with the status property (see below). 
+
+\section{Types and Constants}
+XMG includes light typing. By "light" we mean that one has to type the pieces of information that are used, but for now there is no strong type checking during compilation and execution (but only a syntax checking). There are 4 ways of defining types:
+
+\begin{itemize}
+\item    as an enumerated type, using the syntax type Id = \{Val1,...,ValN\} such as in: 
+\begin{theorem}
+type CAT=\{n,v,p\}
+\end{theorem}
+
+(note that the values associated to a type are constants)
+
+\item    as an integer interval, using the syntax type Id = [I1 .. I2] such as in: 
+\begin{theorem}
+type PERS=[1 .. 3]
+\end{theorem}
+
+\item    as a structured definition (T1 ... Tn represent types) type Id = [ id1 : T1 , id2 : T2 , ..., idn : Tn ], such as in: 
+\begin{theorem}
+type ATOMIC=[
+     mode : MODE,
+     num : NUMBER,
+     gen : GENDER,
+     pers : PERS]
+\end{theorem}
+
+\item    as an unspecified type type Id !, such as in: 
+\begin{theorem}
+type LABEL !
+\end{theorem}
+
+(this is useful when one wants to avoid having to define acceptable values for every single piece of information). Note that XMG integrates 3 predefined types: int, bool (whose associated values are + and -) and string.
+\end{itemize}
+Once types have been defined, we can define typed properties that will be associated to the nodes used in the tree descriptions. The role of these properties is either (a) to provide specific information to the compiler so that additional treatments can be done on the output structures to ensure their well-formedness or (b) to decorate nodes with a label that is linked to the target formalism and that will appear in the output (see XMG's graphical output). The syntax used to define properties is property Id : Type, such as in:
+
+\begin{theorem}
+property extraction : bool
+\end{theorem}
+
+There also exists a syntactic sugar concerning properties. Here one may want to avoid having to state extraction=+ several times. An alternative to this is to associate an abbreviation (between curly-brackets):
+
+\begin{theorem}
+property extraction : bool {extra = +}
+\end{theorem}
+
+This means that using extra is equivalent to giving the value + to the property extraction of a node, ie equivalent to extraction=+.
+
+Eventually we have to define typed features that are associated to nodes in several syntactic formalisms such as Feature-Based Tree Adjoining Grammars (FBTAG) or Interaction Grammars (IG). The definition of a feature is done by writing feature Id : Type, such as in:
+
+\begin{theorem}
+feature num : NUMBER
+\end{theorem}
+
+Up to now, we have seen the declarations that are needed by the compiler to perform different tasks (syntax cheking, output processing, etc). Next we will see the heart of the metagrammar: the definition of the clauses, ie the classes. 
+
+\section{Classes}
+Here we will see how to define classes (i.e. the abstractions in the XMG formalism). Note that in TAG these classes refer to tree fragments. A class always begins with class Id, such as in:
+
+\begin{theorem}
+class CanonicalSubj
+\end{theorem}
+N.B. A class may be parametrized, in that case the parameters are bracketted and separated by a colon, as presented in Miscellaneous.
+
+\subsection{Import}
+To reach a better factorization, a class can inherit from another one. This is done by invoking import Id (where Id is a class name), such as in:
+
+\begin{theorem}
+import TopClass[]
+\end{theorem}
+That is to say, the metagrammar corresponds to an inheritance hierarchy. But what does inherit mean here ? In fact, the content of the imported class is made available to the daughter class. More precisely, a class uses identifiers to refer to specific pieces of information. When a class inherits from another one, it can reuse the identifiers of its mother class (provided they have been exported, see below). Thus, some node can be specialized by adding new features and so on.
+\\
+Note that XMG allows multiple inheritance, and besides it offers an extended control of the scope of the inherited identifiers, since one can restrict the import to specific identifiers, and also rename imported identifiers (see Miscellaneous).
+\\
+N.B. When importing a class, even if it has parameters in its definition, these cannot be instantiated.
+
+\subsection{Export}
+As we just saw, we use in each class identifiers. One important point when defining a class is the scope we want these identifiers to have. More precisely we can give (or not) an extern visibility to each identifier by using the export declaration. Only exported identifiers will be available when inheriting or calling (ie instantiating) a class. Identifiers are exported using export id1 id2 ... idn such as in:
+
+\begin{theorem}
+export ?X ?Y
+\end{theorem}
+(The ? indicated X and Y are variables, and not skolem constants, ie anonymous constants that would have been prefixed with !) Besides, when exporting an identifier you can rename it so that it can later be referred to by a new name (to avoid name conflict). This is done by typing export id1=id1new, example:
+
+\begin{theorem}
+export ?X=?U ?Y
+\end{theorem}
+(here the X variable will be referred to by using ?U in the daughter class, ?Y will still be called ?Y)
+
+\subsection{Identifiers}
+In XMG, identifiers can refer either to a node, the value of a node property, or the value of a node feature. But whatever an identifier refers to, it must have been declared before by typing declare id1 id2 ... idn, such as in:
+
+\begin{theorem}
+declare ?X ?Y ?Z
+\end{theorem}
+Note that in the declare section the prefix ? (for variables) and ! (for skolem constants) are mandatory. 
+
+\subsection{Content}
+Once the identifiers have been declared and their scope defined, we can start describing the content of the class. Basically this content is given between curly-brackets. This content can either be:
+\begin{itemize}
+\item    a statement
+\item    a conjunction of statements represented by "S1 ; S2" in the XMG formalism
+\item    a disjunction of statements represented by "S1 | S2"
+\item    a statement associated to an interface (see below) 
+\end{itemize}
+By statement we mean:
+
+\begin{itemize}
+\item    an expression: E (that is a variable, a constant, an attribute-value matrix, a reference (by using a dot operator, see the example below), a disjunction of expressions, or an atomic disjunction of constant values such as @{n,v,s}),
+\item    a unification equation: E1=E2,
+\item    a class instanciation: ClassId[] (note that the square-brackets after the class id are mandatory even if the instantiated class has no parameter),
+\item a description belonging to a dimension
+\end{itemize} 
+
+\chapter{Using the Control Language}
+
+For Calls, Conjunctions and Disjunctions
+
+\chapter{Using the Tree Language}
+%%To describe Tree Adjoining Grammars or Interaction Grammars
+A syntactic description is given following the pattern <syn>{ formulas }. Now what kind of formulas doas a syntactic description contain ? The answer is nodes. These nodes are in relation with each other. In XMG, you may give a name to a node by using a variable, and also associate properties and/or features with it. The classic node definition is node ?id ( prop1=val1 , ... , propN=valN ) [ feat1=val1 , ... , featN=valN ] such as in:
+\\
+\begin{theorem}
+node ?Y (gf=subj)[cat=n]
+\end{theorem}
+\\
+Here we have a node that we refer to by using the ?Y variable. This node has the property gf (grammatical function) associated with the value subj, and the feature structure [cat=n] (note that associating a variable to a node is optional).
+\\
+Once you defined the nodes of the tree fragment, you can describe how they are related to each other. To do this, you have the following operators:
+
+\begin{itemize}
+\item -> 	strict dominance
+\item ->+ 	strict large dominance (transitive non-reflexive closure)
+\item ->* 	large dominance (transitive reflexive closure)
+\item >> 	strict precedence
+\item >>+ 	strict large precedence (transitive non-reflexive closure)
+\item >>* 	large precedence (transitive reflexive closure)
+\item = 	node equation
+\end{itemize}
+Each subformula you define can be added conjunctively (using ";") or disjunctively (using "|") to the description. For instance, the fragment introduced previously, that is:
+
+\begin{center}
+\begin{tikzpicture}
+\path (2,2) node (1) {S};
+\path (0,0) node (11){N};
+\path (2,0) node (12){V};
+\draw 
+ (1) -- (11)
+ (1) -- (12);
+\end{tikzpicture}
+\end{center}
+can be represented by the following code in XMG:
+\\
+\begin{theorem}
+class Example\\
+declare ?X ?Y ?Z\\
+\{<syn>\{\\
+      node ?X [cat=S] ; node ?Y [cat=N] ; node ?Z [cat=V] ;\\
+      ?X -> ?Y ; ?X -> ?Z ; ?Y >> ?Z\\
+      \}\\
+\}
+\end{theorem}
+\\
+XMG also supports an alternative way of specifiyng how the nodes are related to each other. This alternative syntax should allow the user to both define the nodes and give their relations at the same time:
+
+\begin{itemize}
+\item node \{ node \} 	strict dominance
+\item node \{ ...+node \} 	strict large dominance (transitive non-reflexive closure)
+\item node \{ ...node \} 	large dominance (transitive reflexive closure)
+\item node node 	strict precedence
+\item node ,,,+node 	strict large precedence (transitive non-reflexive closure)
+\item node ,,,node 	large precedence (transitive reflexive closure)
+\item = 	node equation
+\end{itemize}
+Thus the tree fragment above could be defined in the XMG syntax the following way:
+\\
+\begin{theorem}
+class Example
+{<syn>{
+       node [cat=S] {
+               node [cat=N]
+               node [cat=V]
+               }
+       }
+}
+\end{theorem}
+\\
+Note that the use of variables to refer to the nodes becomes useless inside the fragment, nonetheless we may want to assign variables to node to reuse them later through inheritence. 
+
+\chapter{Using the Semantic Language}
+
+About predicates
+
+\chapter{Using the Morphologic Language}
+
+To describe fields and features
+
+
+
+
+%% %----------------------------------------------------------------------------------------
+%% %	BIBLIOGRAPHY
+%% %----------------------------------------------------------------------------------------
+
+\chapter*{Bibliography}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
+\section*{Books}
+\addcontentsline{toc}{section}{Books}
+\printbibliography[heading=bibempty,type=book]
+\section*{Articles}
+\addcontentsline{toc}{section}{Articles}
+\printbibliography[heading=bibempty,type=article]
+
+%----------------------------------------------------------------------------------------
+%	INDEX
+%----------------------------------------------------------------------------------------
+
+\cleardoublepage
+\setlength{\columnsep}{0.75cm}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}}
+\printindex
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

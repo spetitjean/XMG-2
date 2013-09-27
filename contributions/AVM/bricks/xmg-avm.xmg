@@ -1,0 +1,20 @@
+%token id
+%token int
+%token string 
+
+%type AVM AVM
+%type Feats Feats
+%type Feat Feat
+
+%ext Value Value
+
+%%
+
+AVM : '[' Feats ']';
+
+Feats : Feat | Feat ',' Feats;
+
+Feat : id '=' Value | id | id '=' AVM;
+
+
+%%

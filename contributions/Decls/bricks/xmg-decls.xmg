@@ -1,0 +1,89 @@
+%token use
+%token dims
+%token dim
+%token id
+%token with
+%token int
+%token string
+%token bool
+%token feature
+%token type
+%token hierarchy
+%token property
+%token extern
+%token semantics
+
+%type Decls Decls
+%type Decl Decl
+
+%type Principle Principle
+%type PrincipleFeat PrincipleFeat
+%type Principles Principles
+%type Dims Dims
+
+%type Type Type
+%type TypeDef TypeDef
+%type Structs Structs
+%type Struct Struct
+
+%type Properties Properties
+%type Property Property
+%type MaybeAbbrev MaybeAbbrev
+%type Abbrevs Abbrevs
+%type Abbrev Abbrev
+
+%type Feats Feats
+%type Feat Feat
+
+%type val val
+%type vals_coma vals_coma
+
+%type ids ids
+
+%type id_pairs id_pairs
+%type id_pair id_pair
+
+%ext ODecl ODecl
+
+%%
+
+Decls : '' | Decl Decls ;
+
+Decl : Principle | Type | Property | ODecl;
+
+Principle : use id with '(' PrincipleFeat ')' dims '(' Dims ')'; 
+
+PrincipleFeat : id '=' id | id | id '=' int | id '=' bool | '';
+
+Dims : dim | dim Dims;
+
+
+Type : type id '=' TypeDef | type id '!'; 
+
+TypeDef : '{' vals_coma '}' | '[' int '.' '.' int ']' | '[' Structs ']';
+
+Structs : Struct | Struct ',' Structs;
+
+Struct : id ':' id;
+
+
+Property : property id ':' id MaybeAbbrev;
+
+MaybeAbbrev : '{' Abbrevs '}' | '';
+
+Abbrevs : Abbrev | Abbrev ',' Abbrevs;
+
+Abbrev : id '=' id | id '=' bool | id '=' int;
+
+
+val : id | bool | int;
+
+vals_coma : val | val ',' vals_coma;
+
+ids : id | id ids;
+
+id_pairs : id_pair | id_pair ',' id_pairs;
+
+id_pair : '(' id ',' id ')';
+
+%%

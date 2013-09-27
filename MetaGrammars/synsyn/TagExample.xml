@@ -1,0 +1,37 @@
+<grammar>
+  <entry name="test_0">
+    <family>test</family>
+    <trace>
+      <class>test</class>
+    </trace>
+    <tree id="test_0">
+      <node type="std" name="id(X1,coord(MetaGrammars/synsyn/TagExample.mg,72,14))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(X2,coord(MetaGrammars/synsyn/TagExample.mg,72,35))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <tree id="test_0">
+      <node type="std" name="id(X3,coord(MetaGrammars/synsyn/TagExample.mg,74,14))">
+        <narg>
+          <fs coref="@AVM2">
+          </fs>
+        </narg>
+        <node type="std" name="id(X4,coord(MetaGrammars/synsyn/TagExample.mg,74,35))">
+          <narg>
+            <fs coref="@AVM3">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface />
+  </entry>
+</grammar>

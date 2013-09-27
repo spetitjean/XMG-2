@@ -1,0 +1,11 @@
+%token feature
+%token id
+
+%type Feat Feat
+
+
+%%
+
+Feat : feature id ':' id;
+
+%%

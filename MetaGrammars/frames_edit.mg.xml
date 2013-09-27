@@ -1,0 +1,53 @@
+<grammar>
+  <entry name="activity_0">
+    <family>activity</family>
+    <trace>
+      <class>activity</class>
+    </trace>
+    <morph>
+      <feats>
+      </feats>
+      <fields>
+      </fields>
+    </morph>
+    <tree id="none"/>
+    <pg id="none"/>
+    <semantics>
+    </semantics>
+    <frame id="none"/>
+  </entry>
+  <entry name="directed-motion_0">
+    <family>directed-motion</family>
+    <trace>
+      <class>directed-motion</class>
+    </trace>
+    <morph>
+      <feats>
+      </feats>
+      <fields>
+      </fields>
+    </morph>
+    <tree id="none"/>
+    <pg id="none"/>
+    <semantics>
+    </semantics>
+    <frame id="none"/>
+  </entry>
+  <entry name="causation_0">
+    <family>causation</family>
+    <trace>
+      <class>causation</class>
+    </trace>
+    <morph>
+      <feats>
+      </feats>
+      <fields>
+      </fields>
+    </morph>
+    <tree id="none"/>
+    <pg id="none"/>
+    <semantics>
+    </semantics>
+    <frame id="none"/>
+  </entry>
+</grammar>

@@ -1,0 +1,30 @@
+%token sem
+%token id
+
+%type DimStmt DimStmt
+%type SemStmts SemStmts
+%type SemStmt SemStmt
+%type APred Apred
+%type Pred Pred
+%type ScopeOver ScopeOver
+%type Var Var
+%type Vars_coma Vars_coma
+
+%%
+
+/* DimStmt : '<sem>' '{' SemStmts '}' ; */
+
+SemStmts : SemStmt | SemStmt ';' SemStmts | SemStmt '|' SemStmts | '{' SemStmts '}';
+
+SemStmt : Pred | ScopeOver;
+ 
+Pred : Var ':' id '(' Vars_coma ')' | id '(' Vars_coma ')';
+
+ScopeOver : Var '<<' Var;
+
+Var : id | '?' id | '!' id;
+
+Vars_coma : Var | Var ',' Vars_coma;
+
+
+%%

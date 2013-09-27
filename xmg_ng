@@ -1,0 +1,13 @@
+#! /usr/bin/python3
+# -*- mode:python; coding:utf-8 -*-
+# this script is for invocation from within the source tree
+
+import sys, os.path
+
+# look in source directory for xmg python modules
+sys.path.insert(0,os.path.join(os.path.dirname(sys.argv[0]),"core/python"))
+
+import xmg.modular_program
+xmg.modular_program.YAPDIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),"."))
+
+xmg.modular_program.main()

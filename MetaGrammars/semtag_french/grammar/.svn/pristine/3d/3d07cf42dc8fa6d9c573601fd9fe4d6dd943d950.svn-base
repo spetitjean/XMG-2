@@ -1,0 +1,10 @@
+value pureDeterminer
+value DetAdj
+value detQuantifier
+value detNegQuantifier
+value whdeterminer
+value complexNDeDeterminersg
+value complexAdvDeDeterminer
+value complexDeterminer
+value stddeterminer
+value possDeterminer

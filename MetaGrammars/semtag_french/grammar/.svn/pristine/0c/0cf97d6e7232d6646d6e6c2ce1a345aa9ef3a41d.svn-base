@@ -1,0 +1,10 @@
+26/01/2012
+Claire Gardent
+
+The selresgram grammar takes as starting point the allegro grammar (../allegro/grammar) and extends it to include selectional restriction (semtype attribute).
+
+All extension/bug fixes will from now on be carried out on selresgram
+
+The grammar can be used without selectional restriction checks by
+using the lexicon without semtype equations .
+

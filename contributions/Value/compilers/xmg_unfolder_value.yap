@@ -1,0 +1,68 @@
+%% -*- prolog -*-
+
+%% ========================================================================
+%% Copyright (C) 2013  Simon Petitjean
+
+%%  This program is free software: you can redistribute it and/or modify
+%%  it under the terms of the GNU General Public License as published by
+%%  the Free Software Foundation, either version 3 of the License, or
+%%  (at your option) any later version.
+
+%%  This program is distributed in the hope that it will be useful,
+%%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%  GNU General Public License for more details.
+
+%%  You should have received a copy of the GNU General Public License
+%%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%% ========================================================================
+
+:-module(xmg_unfolder_value).
+ 
+unfold('Value',[Value],UValue):-
+	unfold(Value,UValue).
+unfold('Value',[token(_,'?'),Value],UValue):-
+	unfold(Value,UValue).
+unfold('Else',[Value],UValue):-
+	unfold(Value,UValue).
+unfold('ADisj',[V],UV):-
+	add_to_path('ADisj'),
+	use_module(xmg_unfolder_adisj),
+	xmg_unfolder_adisj:unfold(V,UV),!.
+
+
+unfold(token(C,id(ID)),id(ID,C)).
+unfold(token(C,string(ID)),string(ID,C)).
+unfold(token(C,int(ID)),int(ID,C)).
+unfold(token(C,bool(ID)),bool(ID,C)).
+
+%% GENERIC RULES
+
+unfold(Term,UTerm):-
+	Term=..[Head|Params],
+	head_module(Head,Module),
+	head_name(Head,Name),
+	(
+	    (
+		xmg_modules_def:module_def(Module,'Value'),
+		unfold(Name,Params,UTerm)
+	    )
+	;
+	(
+	    not(xmg_modules_def:module_def(Module,'Value')),
+	    xmg_modules:get_module(Module,unfolder,UModule),
+	    UModule:unfold(Term,UTerm)
+	)
+    ),!.
+
+unfold(Rule,_):- 
+	throw(xmg(unfolder_error(no_unfolding_rule(value,Rule)))),	
+	!.
+
+head_module(Head,Module):-
+	atomic_list_concat(A,'-',Head),
+	A=[Module|_],!.
+
+head_name(Head,Name):-
+	atomic_list_concat(A,'-',Head),
+	A=[_,Name],!.

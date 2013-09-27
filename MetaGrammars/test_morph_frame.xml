@@ -1,0 +1,47 @@
+<grammar>
+  <entry name="test_0">
+    <family>test</family>
+    <trace>
+      <class>test</class>
+    </trace>
+    <morph>
+      <form value="undergroundingly"/>
+      <morphemes>
+        <morpheme value="under"/>
+        <morpheme value="ground"/>
+        <morpheme value="ing"/>
+        <morpheme value="ly"/>
+      </morphemes>
+    </morph>
+    <frame id="class_test_0">
+      <node type="std" name="id(ROOTTEST,coord(MetaGrammars/test_morph_frame.mg,48,8))">
+        <narg>
+          <fs coref="@AVM2">
+            <f name="ftype">
+              <sym value="direct-motion-activity"/>
+            </f>
+            <f name="var">
+              <sym varname="@V3"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="std" name="id(RECIPIENT,coord(MetaGrammars/test_morph_frame.mg,49,30))">
+          <narg>
+            <fs coref="@AVM4">
+              <f name="var">
+                <sym varname="@V5"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="id(RECIPIENT2,coord(MetaGrammars/test_morph_frame.mg,50,26))">
+          <narg>
+            <fs coref="@AVM6">
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </frame>
+    <interface />
+  </entry>
+</grammar>

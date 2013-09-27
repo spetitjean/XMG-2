@@ -1,0 +1,116 @@
+%token class
+%token value
+%token id
+%token bool
+%token int
+%token as
+%token int
+%token close
+%token mutex
+%token semantics
+
+%type MetaGrammar MetaGrammar
+
+%type Mutexes Mutexes
+%type Mutex Mutex
+
+%type Semantics Semantics
+
+%type Classes Classes
+%type Class Class
+%type StarsOrNot StarsOrNot
+%type ParamsOrNot ParamsOrNot
+%type ImportsOrNot ImportsOrNot
+%type ExportsOrNot ExportsOrNot
+%type DeclsOrNot DeclsOrNot
+%type Params Params
+%type Imports Imports
+%type IClasses IClasses
+%type IClass IClass
+%type MaybeAs MaybeAs
+%type AsList AsList
+%type AsElem AsElem
+%type Exports Exports
+%type Decls Decls
+%type Vars Vars
+%type Var Var
+%type ids ids
+%type ids_coma ids_coma
+%type val val
+%type vals_coma vals_coma
+%type Stmts Stmts
+
+%type Values Values
+%type Value Value
+
+%ext EDecls EDecls
+%ext Stmt Stmt
+
+%%
+
+MetaGrammar : EDecls Classes Values;
+
+
+Mutex : mutex id | mutex id '+=' id;
+
+Semantics : semantics ids;
+
+
+Classes : Class | Class Classes;
+
+Class : class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stmts | Mutex | Semantics;
+
+StarsOrNot : '**' | '' ;
+
+ParamsOrNot : Params | '' ;
+
+Params : '[' ids_coma ']' | '[' ']';
+
+
+ImportsOrNot : Imports | '';
+
+Imports : 'import' IClasses ;
+
+IClasses : IClass | IClass IClasses ;
+
+IClass : id '[' ParamsOrNot ']' MaybeAs ;
+
+MaybeAs : as '[' AsList  ']' | '' ;
+
+AsList : AsElem | AsElem AsList ;
+
+AsElem : Var '=' Var | Var ;
+
+
+ExportsOrNot : Exports | '';
+
+Exports : 'export' Vars;
+
+
+DeclsOrNot : Decls | '';
+
+Decls : 'declare' Vars;
+
+
+Stmts : '{' Stmt '}' | '';
+
+
+Values : Value | Value Values;
+    
+Value : value id ;   
+    
+
+Vars : Var | Var Vars;
+
+Var : '?' id | '!' id | id ;
+
+
+ids : id | id ids ;
+
+ids_coma : id | id ',' ids_coma;
+
+val : id | bool | int;
+
+vals_coma : val | val ',' vals_coma;
+
+%%
