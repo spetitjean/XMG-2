@@ -60,113 +60,116 @@ load_modules([Module|Modules]):-
 	load_modules(Modules),!.
 
 load_module('MG'):-
-	add_to_path('contributions/MG'),
-	use_module('compilers/xmg_errors'),
+	add_to_path('contributions/MG/bricks/MG/compiler'),
+	use_module('xmg_errors'),
 	use_module('tokenizer'),
-	use_module('compilers/xmg_parser'),
-	use_module('compilers/xmg_unfolder'),
-	use_module('compilers/xmg_exporter'),
-	use_module('compilers/xmg_typer'),
-	use_module('compilers/xmg_generator'),
-	use_module('compilers/xmg_convert'),
-	use_module('compilers/xmg_printer'),!.
+	use_module('xmg_parser'),
+	use_module('xmg_unfolder'),
+	use_module('xmg_exporter'),
+	use_module('xmg_typer'),
+	use_module('xmg_generator'),
+	use_module('xmg_convert'),
+	use_module('xmg_printer'),!.
 
 load_module('Decls'):-
-	add_to_path('contributions/Decls'),
-	use_module('compilers/xmg_unfolder_decls'),
-	use_module('compilers/xmg_principles'),!.
+	add_to_path('contributions/Decls/bricks/Decls/compiler'),
+	use_module('xmg_unfolder_decls'),
+	use_module('xmg_principles'),!.
 
 load_module('Control'):-
-	add_to_path('contributions/Control'),
-	use_module('compilers/xmg_unfolder_control'),
-	use_module('compilers/xmg_generator_control'),!.
+	add_to_path('contributions/Control/bricks/Control/compiler'),
+	use_module('xmg_unfolder_control'),
+	use_module('xmg_generator_control'),!.
 	
 load_module('morph'):-
 	load_module('AVM'),
-	add_to_path('contributions/morph'),
-	use_module('compilers/xmg_unfolder_morph'),
-	use_module('compilers/xmg_generator_morph'),
-	use_module('compilers/xmg_solver_morph'),
-	use_module('compilers/xmg_output_morph'),
-	use_module('compilers/xmg_convert_morph'),
-	use_module('compilers/xmg_xsat'),!.
+	add_to_path('contributions/morph/bricks/morph/compiler'),
+	use_module('xmg_unfolder_morph'),
+	use_module('xmg_generator_morph'),
+	use_module('xmg_solver_morph'),
+	use_module('xmg_output_morph'),
+	use_module('xmg_convert_morph'),
+	use_module('xmg_xsat'),!.
 
 load_module('morph2'):-
-	add_to_path('contributions/morph2'),
-	use_module('compilers/xmg_unfolder_morph'),
-	use_module('compilers/xmg_generator_morph'),
-	use_module('compilers/xmg_solver_morph'),
-	use_module('compilers/xmg_output_morph'),
-	use_module('compilers/xmg_convert_morph'),!.
+	add_to_path('contributions/morph2/bricks/morph2/compiler'),
+	use_module('xmg_unfolder_morph'),
+	use_module('xmg_generator_morph'),
+	use_module('xmg_solver_morph'),
+	use_module('xmg_output_morph'),
+	use_module('xmg_convert_morph'),!.
 
 load_module('syn'):-
-	add_to_path('contributions/syn'),
-	use_module('compilers/xmg_unfolder_syn'),
-	use_module('compilers/xmg_generator_syn'),
-	use_module('compilers/xmg_preparer_syn'),
-	use_module('compilers/xmg_tree'),
+	add_to_path('contributions/syn/bricks/syn/compiler'),
+	use_module('xmg_unfolder_syn'),
+	use_module('xmg_generator_syn'),
+	use_module('xmg_preparer_syn'),
+	use_module('xmg_convert_tag_syn'),
+	add_to_path('contributions/syn/principles'),
+	use_module('xmg_tree'),
 	%% this should be done optionally
-	use_module('compilers/xmg_unicity'),
-	use_module('compilers/xmg_colors'),
-	use_module('compilers/xmg_rank'),
-	use_module('compilers/xmg_tag'),
-	use_module('compilers/xmg_convert_tag_syn'),!.
+	use_module('xmg_unicity'),
+	use_module('xmg_colors'),
+	use_module('xmg_rank'),
+	use_module('xmg_tag'),
+!.
 
 load_module('AVM'):-
-	add_to_path('contributions/AVM'),
-	use_module('compilers/xmg_unfolder_avm'),
-	use_module('compilers/xmg_generator_avm'),
-	use_module('compilers/xmg_convert_avm'),
-	use_module('compilers/xmg_convert_h_avm'),
-	use_module('compilers/xmg_avm'),!.
+	add_to_path('contributions/AVM/bricks/AVM/compiler'),
+	use_module('xmg_unfolder_avm'),
+	use_module('xmg_generator_avm'),
+	use_module('xmg_convert_avm'),
+	use_module('xmg_convert_h_avm'),
+	add_to_path('contributions/AVM/libraries'),
+	use_module('xmg_avm'),!.
 
 load_module('Value'):-
-	add_to_path('contributions/Value'),
-	use_module('compilers/xmg_unfolder_value'),!.
+	add_to_path('contributions/Value/bricks/Value/compiler'),
+	use_module('xmg_unfolder_value'),!.
 
 load_module('ADisj'):-
-	add_to_path('contributions/ADisj'),
-	use_module('compilers/xmg_unfolder_adisj'),
-	use_module('compilers/xmg_adisj'),!.
+	add_to_path('contributions/ADisj/bricks/ADisj/compiler'),
+	use_module('xmg_unfolder_adisj'),
+	use_module('xmg_adisj'),!.
 
 load_module('pg'):-
 	add_to_path('contributions/pg'),
-	use_module('compilers/xmg_unfolder_pg'),
-	use_module('compilers/xmg_generator_pg'),
-	use_module('compilers/xmg_output_pg'),!.
+	use_module('xmg_unfolder_pg'),
+	use_module('xmg_generator_pg'),
+	use_module('xmg_output_pg'),!.
 
 load_module('sem'):-
-	add_to_path('contributions/sem'),
-	use_module('compilers/xmg_unfolder_sem'),
-	use_module('compilers/xmg_generator_sem'),
-	use_module('compilers/xmg_output_sem'),
-	use_module('compilers/xmg_convert_sem'),!.
+	add_to_path('contributions/sem/bricks/sem/compiler'),
+	use_module('xmg_unfolder_sem'),
+	use_module('xmg_generator_sem'),
+	use_module('xmg_output_sem'),
+	use_module('xmg_convert_sem'),!.
 
 load_module('frame'):-
 	add_to_path('contributions/frame'),
-	use_module('compilers/xmg_unfolder_frame'),
-	use_module('compilers/xmg_generator_frame'),
-	use_module('compilers/xmg_preparer_frame'),
-	use_module('compilers/xmg_solver_frame'),
-	use_module('compilers/xmg_convert_frame'),
-	use_module('compilers/xmg_h_avm'),
-	use_module('compilers/xmg_nodename_frame'),
+	use_module('xmg_unfolder_frame'),
+	use_module('xmg_generator_frame'),
+	use_module('xmg_preparer_frame'),
+	use_module('xmg_solver_frame'),
+	use_module('xmg_convert_frame'),
+	use_module('xmg_h_avm'),
+	use_module('xmg_nodename_frame'),
 	!.
 
 load_module('hierarchy'):-
 	add_to_path('contributions/hierarchy'),
-	use_module('compilers/xmg_unfolder_hierarchy'),
-	use_module('compilers/xmg_typer_hierarchy'),
+	use_module('xmg_unfolder_hierarchy'),
+	use_module('xmg_typer_hierarchy'),
 	!.
 
 load_module('feats'):-
-	add_to_path('contributions/feats'),
-	use_module('compilers/xmg_unfolder_feats'),
+	add_to_path('contributions/feats/bricks/feats/compiler'),
+	use_module('xmg_unfolder_feats'),
 	!.
 
 load_module('fields'):-
 	add_to_path('contributions/fields'),
-	use_module('compilers/xmg_unfolder_fields'),
+	use_module('xmg_unfolder_fields'),
 	!.
 
 load_module(Module):-

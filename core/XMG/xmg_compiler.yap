@@ -19,7 +19,7 @@
 
 :-module(xmg_compiler,[send/2]).
 
-:-use_module('MG/edcg').
+:-use_module('../../contributions/MG/bricks/MG/libraries/edcg').
 :-use_module('xmg_modules').
 %%:-use_module('syn_frame_conf').
 %%:-use_module('syn_frame_std_conf').

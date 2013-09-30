@@ -1,15 +1,15 @@
 from core.compiler_generator.BrickCompiler import BrickCompiler
 from core.compiler_generator.BrickGrammar import BrickGrammar
 from core.compiler_generator.skeleton import generate_compiler_brick
-from contributions.MG.bricks.mg import MG
-from contributions.Decls.bricks.decls import Decls
-from contributions.feats.bricks.feats import Feats
-from contributions.Control.bricks.control import Control
-from contributions.AVM.bricks.avm import AVM
-from contributions.Value.bricks.value import Value
-from contributions.ADisj.bricks.adisj import ADisj
-from contributions.sem.bricks.sem import Sem
-from contributions.syn.bricks.syn import Syn
+from contributions.MG.bricks.MG.mg import MG
+from contributions.Decls.bricks.Decls.decls import Decls
+from contributions.feats.bricks.feats.feats import Feats
+from contributions.Control.bricks.Control.control import Control
+from contributions.AVM.bricks.AVM.avm import AVM
+from contributions.Value.bricks.Value.value import Value
+from contributions.ADisj.bricks.ADisj.adisj import ADisj
+from contributions.sem.bricks.sem.sem import Sem
+from contributions.syn.bricks.syn.syn import Syn
  
 
 MG=MG()
