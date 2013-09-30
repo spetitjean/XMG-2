@@ -7,6 +7,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 module_def('XMG','MG').
+module_def('AVM','AVM').
+
 module_def('syn','syn').
 module_def('sem','sem').
 module_def('Value','Value').

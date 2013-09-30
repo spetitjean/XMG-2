@@ -57,6 +57,7 @@ gather_one(Decls,gather(One,Two,New),[New-NDecl|Decls2]):-
 	lists:delete(Decls1,Two-DTwo,Decls2),
 	NDecl=..[New,One-DOne,Two-DTwo],
 	!.
+gather_one(Decls,_,Decls):-!.
 
 
 type_decls([]):- !.
@@ -74,6 +75,8 @@ type_decl(property-Decls):-
 	type_properties(Decls),!.
 type_decl(feat-Decls):-
 	type_feats(Decls),!.
+type_decl(principle-Principle):-
+	!.
 type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):-
 	assert_field_precs(FieldPrecs),
 	xmg_compiler:send(info,' fields orders asserted\n '),

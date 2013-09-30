@@ -112,7 +112,12 @@ load_module('syn'):-
 	use_module('xmg_colors'),
 	use_module('xmg_rank'),
 	use_module('xmg_tag'),
-!.
+	add_to_path('contributions/syn/libraries'),
+	use_module('xmg_engine_syn'),
+	use_module('xmg_most'),
+	use_module('xmg_nodename'),
+	use_module('xmg_polarity'),
+	!.
 
 load_module('AVM'):-
 	add_to_path('contributions/AVM/bricks/AVM/compiler'),

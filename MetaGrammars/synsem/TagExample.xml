@@ -1,1 +1,151 @@
- ?- 
+<grammar>
+  <entry name="lexemeManger_0">
+    <family>lexemeManger</family>
+    <trace>
+      <class>lexemeManger</class>
+      <class>transitifDirect</class>
+      <class>subjCan</class>
+      <class>objCan</class>
+      <class>activeMorph</class>
+      <class>BinaryRel</class>
+    </trace>
+    <semantics>
+      <literal negated="no">
+        <label>
+          <sym value="!C1"/>
+        </label>
+        <predicate>
+          <sym varname="@V2"/>
+        </predicate>
+        <arg>
+          <sym varname="sconst(_133720,_133721)"/>
+        </arg>
+        <arg>
+          <sym varname="@V3"/>
+        </arg>
+        <arg>
+          <sym varname="@V4"/>
+        </arg>
+      </literal>
+    </semantics>
+    <tree id="lexemeManger_0">
+      <node type="std" name="id(xmgvar1SS,no_coord)">
+        <narg>
+          <fs coref="@AVM2">
+            <f name="cat">
+              <sym value="s"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="subst" name="id(NN,coord(MetaGrammars/synsem/TagExample.mg,74,8))">
+          <narg>
+            <fs coref="@AVM3">
+              <f name="cat">
+                <sym value="n"/>
+              </f>
+              <f name="top">
+                <fs coref="@AVM4">
+                  <f name="idx">
+                    <sym varname="@V3"/>
+                  </f>
+                  <f name="num">
+                    <sym varname="@V5"/>
+                  </f>
+                  <f name="pers">
+                    <sym varname="@V6"/>
+                  </f>
+                </fs>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="id(NVNVNV,coord(MetaGrammars/synsem/TagExample.mg,95,8))">
+          <narg>
+            <fs coref="@AVM7">
+              <f name="bot">
+                <fs coref="@AVM8">
+                  <f name="mode">
+                    <sym varname="@V9"/>
+                  </f>
+                </fs>
+              </f>
+              <f name="cat">
+                <sym value="v"/>
+              </f>
+              <f name="top">
+                <fs coref="@AVM10">
+                  <f name="num">
+                    <sym varname="@V5"/>
+                  </f>
+                  <f name="pers">
+                    <sym varname="@V6"/>
+                  </f>
+                </fs>
+              </f>
+            </fs>
+          </narg>
+          <node type="std" name="id(NVV,coord(MetaGrammars/synsem/TagExample.mg,96,9))">
+            <narg>
+              <fs coref="@AVM11">
+                <f name="cat">
+                  <sym value="v"/>
+                </f>
+                <f name="top">
+                  <fs coref="@AVM12">
+                    <f name="mode">
+                      <sym varname="@V9"/>
+                    </f>
+                  </fs>
+                </f>
+              </fs>
+            </narg>
+            <node type="std" name="id(NPh,coord(MetaGrammars/synsem/TagExample.mg,97,10))">
+              <narg>
+                <fs coref="@AVM13">
+                  <f name="phon">
+                    <sym value="manger"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+          </node>
+        </node>
+        <node type="subst" name="id(NN,coord(MetaGrammars/synsem/TagExample.mg,86,15))">
+          <narg>
+            <fs coref="@AVM14">
+              <f name="cat">
+                <sym value="n"/>
+              </f>
+              <f name="top">
+                <fs coref="@AVM15">
+                  <f name="idx">
+                    <sym varname="@V4"/>
+                  </f>
+                </fs>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="anch">
+          <sym value="manger"/>
+        </f>
+        <f name="arg0">
+          <sym varname="@V3"/>
+        </f>
+        <f name="arg1">
+          <sym varname="@V4"/>
+        </f>
+        <f name="obj">
+          <sym varname="@V4"/>
+        </f>
+        <f name="suj">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+</grammar>
