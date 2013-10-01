@@ -59,17 +59,20 @@ load_modules([Module|Modules]):-
 	load_module(Module),
 	load_modules(Modules),!.
 
+%% load_module('MG'):-
+%% 	add_to_path('contributions/MG/bricks/MG/compiler'),
+%% 	use_module('xmg_errors'),
+%% 	use_module('tokenizer'),
+%% 	use_module('xmg_parser'),
+%% 	use_module('xmg_unfolder'),
+%% 	use_module('xmg_exporter'),
+%% 	use_module('xmg_typer'),
+%% 	use_module('xmg_generator'),
+%% 	use_module('xmg_convert'),
+%% 	use_module('xmg_printer'),!.
 load_module('MG'):-
-	add_to_path('contributions/MG/bricks/MG/compiler'),
-	use_module('xmg_errors'),
-	use_module('tokenizer'),
-	use_module('xmg_parser'),
-	use_module('xmg_unfolder'),
-	use_module('xmg_exporter'),
-	use_module('xmg_typer'),
-	use_module('xmg_generator'),
-	use_module('xmg_convert'),
-	use_module('xmg_printer'),!.
+	use_module('contributions/MG/bricks/MG/compiler/xmg_loader_mg'),
+	xmg_loader_mg:load_module,!.
 
 load_module('Decls'):-
 	add_to_path('contributions/Decls/bricks/Decls/compiler'),
@@ -119,14 +122,17 @@ load_module('syn'):-
 	use_module('xmg_polarity'),
 	!.
 
+%% load_module('AVM'):-
+%% 	add_to_path('contributions/AVM/bricks/AVM/compiler'),
+%% 	use_module('xmg_unfolder_avm'),
+%% 	use_module('xmg_generator_avm'),
+%% 	use_module('xmg_convert_avm'),
+%% 	use_module('xmg_convert_h_avm'),
+%% 	add_to_path('contributions/AVM/libraries'),
+%% 	use_module('xmg_avm'),!.
 load_module('AVM'):-
-	add_to_path('contributions/AVM/bricks/AVM/compiler'),
-	use_module('xmg_unfolder_avm'),
-	use_module('xmg_generator_avm'),
-	use_module('xmg_convert_avm'),
-	use_module('xmg_convert_h_avm'),
-	add_to_path('contributions/AVM/libraries'),
-	use_module('xmg_avm'),!.
+	use_module('contributions/AVM/bricks/AVM/compiler/xmg_loader_avm'),
+	xmg_loader_avm:load_module,!.
 
 load_module('Value'):-
 	add_to_path('contributions/Value/bricks/Value/compiler'),
