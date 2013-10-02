@@ -102,25 +102,28 @@ load_module('morph2'):-
 	use_module('xmg_output_morph'),
 	use_module('xmg_convert_morph'),!.
 
+%% load_module('syn'):-
+%% 	add_to_path('contributions/syn/bricks/syn/compiler'),
+%% 	use_module('xmg_unfolder_syn'),
+%% 	use_module('xmg_generator_syn'),
+%% 	use_module('xmg_preparer_syn'),
+%% 	use_module('xmg_convert_tag_syn'),
+%% 	add_to_path('contributions/syn/principles'),
+%% 	use_module('xmg_tree'),
+%% 	%% this should be done optionally
+%% 	use_module('xmg_unicity'),
+%% 	use_module('xmg_colors'),
+%% 	use_module('xmg_rank'),
+%% 	use_module('xmg_tag'),
+%% 	add_to_path('contributions/syn/libraries'),
+%% 	use_module('xmg_engine_syn'),
+%% 	use_module('xmg_most'),
+%% 	use_module('xmg_nodename'),
+%% 	use_module('xmg_polarity'),
+%% 	!.
 load_module('syn'):-
-	add_to_path('contributions/syn/bricks/syn/compiler'),
-	use_module('xmg_unfolder_syn'),
-	use_module('xmg_generator_syn'),
-	use_module('xmg_preparer_syn'),
-	use_module('xmg_convert_tag_syn'),
-	add_to_path('contributions/syn/principles'),
-	use_module('xmg_tree'),
-	%% this should be done optionally
-	use_module('xmg_unicity'),
-	use_module('xmg_colors'),
-	use_module('xmg_rank'),
-	use_module('xmg_tag'),
-	add_to_path('contributions/syn/libraries'),
-	use_module('xmg_engine_syn'),
-	use_module('xmg_most'),
-	use_module('xmg_nodename'),
-	use_module('xmg_polarity'),
-	!.
+	use_module('contributions/syn/bricks/syn/compiler/xmg_loader_syn'),
+	xmg_loader_syn:load_module,!.
 
 %% load_module('AVM'):-
 %% 	add_to_path('contributions/AVM/bricks/AVM/compiler'),

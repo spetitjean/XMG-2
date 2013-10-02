@@ -133,44 +133,52 @@ eval(morph,Morph,XML,_):-
 	%%send(info,Value),
 	xmg_convert_morph:toXML(Value,XML,0).
 
+%% eval(syn,Syn,XML,Class):-
+%% 	%%send(info,Syn),
+%% 	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
+%% 	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
+%% 	%%send(info,UTree),
+%% 	%%flush_output,
+%% 	current(Previous),
+%% 	%% Current is Previous + 1,
+%% 	%% retract(current(Previous)),
+%% 	%% asserta(current(Current)),
+%% 	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
+%% eval(syn,[], elem(tree, features([id-none])),_).
+
+%% eval(syn1,Syn,XML,Class):-
+%% 	%%send(info,Syn),
+%% 	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
+%% 	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
+%% 	%%send(info,UTree),
+%% 	%%flush_output,
+%% 	current(Previous),
+%% 	%% Current is Previous + 1,
+%% 	%% retract(current(Previous)),
+%% 	%% asserta(current(Current)),
+%% 	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
+%% eval(syn1,[], elem(tree, features([id-none])),_).
+
+%% eval(syn2,Syn,XML,Class):-
+%% 	%%send(info,Syn),
+%% 	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
+%% 	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
+%% 	%%send(info,UTree),
+%% 	%%flush_output,
+%% 	current(Previous),
+%% 	%% Current is Previous + 1,
+%% 	%% retract(current(Previous)),
+%% 	%% asserta(current(Current)),
+%% 	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
+%% eval(syn2,[], elem(tree, features([id-none])),_).
+
 eval(syn,Syn,XML,Class):-
-	%%send(info,Syn),
-	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
-	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
-	%%send(info,UTree),
-	%%flush_output,
-	current(Previous),
-	%% Current is Previous + 1,
-	%% retract(current(Previous)),
-	%% asserta(current(Current)),
-	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
-eval(syn,[], elem(tree, features([id-none])),_).
-
+	xmg_compiler_syn:eval(Syn,XML,Class).
 eval(syn1,Syn,XML,Class):-
-	%%send(info,Syn),
-	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
-	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
-	%%send(info,UTree),
-	%%flush_output,
-	current(Previous),
-	%% Current is Previous + 1,
-	%% retract(current(Previous)),
-	%% asserta(current(Current)),
-	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
-eval(syn1,[], elem(tree, features([id-none])),_).
-
+	xmg_compiler_syn:eval(Syn,XML,Class).
 eval(syn2,Syn,XML,Class):-
-	%%send(info,Syn),
-	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
-	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
-	%%send(info,UTree),
-	%%flush_output,
-	current(Previous),
-	%% Current is Previous + 1,
-	%% retract(current(Previous)),
-	%% asserta(current(Current)),
-	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
-eval(syn2,[], elem(tree, features([id-none])),_).
+	xmg_compiler_syn:eval(Syn,XML,Class).
+
 
 eval(pg,PG,elem(pg, features([id-none])),_):-
 	xmg_output_pg:output(PG).
