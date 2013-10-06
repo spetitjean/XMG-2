@@ -4,10 +4,20 @@
 
 import sys, os.path
 
-# look in source directory for xmg python modules
-sys.path.insert(0,os.path.join(os.path.dirname(sys.argv[0]),"core/python"))
+# current bootstrapping. need to do better later
+appdir = os.path.dirname(sys.argv[0])
+sys.path.insert(0,os.path.join(appdir, "core/python"))
+
+import xmg
+
+inifile = os.path.join(appdir, "xmg.ini")
+xmg.load_inifile(inifile)
+
+#sys.path.remove(appdir)
+sys.path.insert(0, xmg.config['DEFAULT']['XMG_PYTHON_ROOTDIR'])
 
 import xmg.modular_program
+# this should use xmg.config
 xmg.modular_program.YAPDIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),"."))
 
 xmg.modular_program.main()
