@@ -4,7 +4,7 @@ import os, os.path, xmg.modular_yap
 YAPDIR = None
 
 #------------------------------------------------------------------------------
-# xmg COMPILER compile IFILE [OFILE]
+# xmg compile COMPILER IFILE [OFILE]
 #------------------------------------------------------------------------------
 
 def handler_xmg_compile(args):        
