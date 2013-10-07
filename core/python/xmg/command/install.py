@@ -17,6 +17,7 @@ class ContribInstaller:
         self.install_bricks(d)
         self.install_commands(d)
         self.install_pylibs(d)
+        self.install_yaplibs(d)
 
     def ensure_dirs(self, d):
         os.makedirs(d, exist_ok=True)
@@ -82,6 +83,22 @@ class ContribInstaller:
                                     os.path.join(xmg_library_dir, name))
         import glob
         libraries = glob.glob(os.path.join(libraries_dir, "*.py"))
+        if libraries:
+            self.ensure_dirs(xmg_library_dir)
+            for path in libraries:
+                self.link_file(path, os.path.join(xmg_library_dir, os.path.basename(path)))
+
+    def install_yaplibs(self, d):
+        libraries_dir = os.path.realpath(os.path.join(d, "yaplibs"))
+        libraries = self.subdirs(libraries_dir)
+        xmg_library_dir = os.path.join(self.yap_rootdir, "xmg")
+        if libraries:
+            self.ensure_dirs(xmg_library_dir)
+            for name in libraries:
+                self.link_directory(os.path.join(libraries_dir, name),
+                                    os.path.join(xmg_library_dir, name))
+        import glob
+        libraries = glob.glob(os.path.join(libraries_dir, "*.yap"))
         if libraries:
             self.ensure_dirs(xmg_library_dir)
             for path in libraries:
