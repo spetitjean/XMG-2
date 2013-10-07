@@ -1,13 +1,12 @@
 from xmg.command import parser, subparsers
 import os, os.path, xmg.modular_yap
 
-YAPDIR = None
-
 #------------------------------------------------------------------------------
 # xmg compile COMPILER IFILE [OFILE]
 #------------------------------------------------------------------------------
 
-def handler_xmg_compile(args):        
+def handler_xmg_compile(args):
+    YAPDIR = xmg.command.YAPDIR
     if args.compiler is None:
         parser.exit(status=1, message="compiler is required\n") 
     compilers_dir=YAPDIR+'/contributions/'

@@ -47,15 +47,20 @@ class ContribInstaller:
                                 os.path.join(xmg_brick_dir, name))
 
     def install_commands(self, d):
-        commands_dir = os.path.join(d, "commands")
+        commands_dir = os.path.realpath(os.path.join(d, "commands"))
         commands = self.subdirs(commands_dir)
         if not commands:
             return
         xmg_command_dir = os.path.join(self.python_rootdir, "xmg/command")
-        self.ensure_dirs(xmg_brick_dir)
+        self.ensure_dirs(xmg_command_dir)
+        command_list = xmg.config['COMMANDS']['commands'].strip().split()
         for name in commands:
             self.link_directory(os.path.join(commands_dir, name),
                                 os.path.join(xmg_command_dir, name))
+            if name not in command_list:
+                command_list.append(name)
+        xmg.config['COMMANDS']['commands'] = " ".join(command_list)
+        xmg.config.save()
 
 
 def handler_xmg_install(args):
