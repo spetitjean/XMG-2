@@ -16,7 +16,7 @@ class ContribInstaller:
         d = os.path.realpath(d)
         self.install_bricks(d)
         self.install_commands(d)
-        self.install_libraries(d)
+        self.install_pylibs(d)
 
     def ensure_dirs(self, d):
         os.makedirs(d, exist_ok=True)
@@ -71,11 +71,8 @@ class ContribInstaller:
         xmg.config['COMMANDS']['commands'] = " ".join(command_list)
         xmg.config.save()
 
-    def install_libraries(self, d):
-        self.install_python_libraries(d)
-
-    def install_python_libraries(self, d):
-        libraries_dir = os.path.realpath(os.path.join(d, "libraries/python"))
+    def install_pylibs(self, d):
+        libraries_dir = os.path.realpath(os.path.join(d, "pylibs"))
         libraries = self.subdirs(libraries_dir)
         xmg_library_dir = os.path.join(self.python_rootdir, "xmg")
         if libraries:
