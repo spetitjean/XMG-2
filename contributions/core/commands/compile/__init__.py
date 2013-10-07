@@ -1,11 +1,11 @@
 from xmg.command import parser, subparsers
-import os, os.path, xmg.modular_yap
 
 #------------------------------------------------------------------------------
 # xmg compile COMPILER IFILE [OFILE]
 #------------------------------------------------------------------------------
 
 def handler_xmg_compile(args):
+    import os, os.path, xmg.modular_yap
     YAPDIR = xmg.command.YAPDIR
     if args.compiler is None:
         parser.exit(status=1, message="compiler is required\n") 

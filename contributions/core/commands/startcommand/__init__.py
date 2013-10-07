@@ -40,3 +40,4 @@ cmd.set_defaults(handler=handler_xmg_startcommand)
 cmd = subparsers.add_parser(
     "startcommand", description="add a new command to a contribution")
 cmd.add_argument("name", metavar="NAME")
+cmd.set_defaults(handler=handler_xmg_startcommand)
