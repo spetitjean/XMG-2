@@ -15,7 +15,7 @@ def handler_xmg_startcontrib(args):
     typepath = os.path.join(dotxmg, "type")
     os.symlink('CONTRIBUTION', typepath)
 
-cmd = subparser.add_parser(
+cmd = subparsers.add_parser(
     "startcontrib", description="start a new contribution")
 cmd.add_argument("name", metavar="NAME")
 cmd.set_defaults(handler=handler_xmg_startcontrib)
