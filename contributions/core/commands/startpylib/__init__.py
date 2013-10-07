@@ -1,15 +1,16 @@
 from xmg.command import subparsers
 
 #==============================================================================
-# xmg startcommand NAME
+# xmg startpylib NAME
 #==============================================================================
 
-def handler_xmg_startcommand(args):
+# the function implementing the command
+def handler_xmg_startpylib(args):
     import os, os.path
     if not (os.path.islink(".xmg/type") and os.readlink(".xmg/type")=="CONTRIBUTION"):
-        raise RuntimeError("startcommand must be invoked at the top-level of a contribution")
+        raise RuntimeError("startpylib must be invoked at the top-level of a contribution")
     name = args.name
-    path = os.path.join("commands", name)
+    path = os.path.join("pylibs", name)
     if os.path.lexists(path):
         raise RuntimeError("%s exists already" % path)
     os.makedirs(path, exist_ok=True)
@@ -18,26 +19,15 @@ def handler_xmg_startcommand(args):
         f.write(FORMAT % {"name": name})
 
 
-FORMAT = """from xmg.command import subparsers
-
+FORMAT = """#==============================================================================
+# module xmg.%(name)s
 #==============================================================================
-# xmg %(name)s ...
-#==============================================================================
-
-# the function implementing the command
-def handler_xmg_%(name)s(args):
-    pass
+"""
 
 # create the xmg subcommand
 cmd = subparsers.add_parser(
-    "%(name)s", description="???")
-cmd.set_defaults(handler=handler_xmg_%(name)s)
+    "startpylib", description="start a new python directory-module")
+cmd.set_defaults(handler=handler_xmg_startpylib)
 
 # add options and arguments here
-
-"""
-
-cmd = subparsers.add_parser(
-    "startcommand", description="add a new command to a contribution")
 cmd.add_argument("name", metavar="NAME")
-cmd.set_defaults(handler=handler_xmg_startcommand)
