@@ -13,18 +13,27 @@ class ContribInstaller:
         self.data_rootdir = xmg.config['DEFAULT']['XMG_DATA_ROOTDIR']
 
     def run(self, d):
+        d = os.path.realpath(d)
         self.install_bricks(d)
         self.install_commands(d)
+        self.install_libraries(d)
 
     def ensure_dirs(self, d):
         os.makedirs(d, exist_ok=True)
 
     def link_directory(self, old, new):
-        if os.path.exists(new):
+        if os.path.lexists(new):
             if os.path.islink(new) and os.path.realpath(old) == os.path.realpath(new):
                 return
-            raise RuntimeError("conflict linking %s -> %s" % (_old, _new))
+            raise RuntimeError("conflict linking %s -> %s" % (new, old))
         os.symlink(old, new, target_is_directory=True)
+
+    def link_file(self, old, new):
+        if os.path.lexists(new):
+            if os.path.islink(new) and os.path.realpath(old) == os.path.realpath(new):
+                return
+            raise RuntimeError("conflict linking %s -> %s" % (new, old))
+        os.symlink(old, new, target_is_directory=False)
 
     def subdirs(self, d):
         l=[]
@@ -61,6 +70,25 @@ class ContribInstaller:
                 command_list.append(name)
         xmg.config['COMMANDS']['commands'] = " ".join(command_list)
         xmg.config.save()
+
+    def install_libraries(self, d):
+        self.install_python_libraries(d)
+
+    def install_python_libraries(self, d):
+        libraries_dir = os.path.realpath(os.path.join(d, "libraries/python"))
+        libraries = self.subdirs(libraries_dir)
+        xmg_library_dir = os.path.join(self.python_rootdir, "xmg")
+        if libraries:
+            self.ensure_dirs(xmg_library_dir)
+            for name in libraries:
+                self.link_directory(os.path.join(libraries_dir, name),
+                                    os.path.join(xmg_library_dir, name))
+        import glob
+        libraries = glob.glob(os.path.join(libraries_dir, "*.py"))
+        if libraries:
+            self.ensure_dirs(xmg_library_dir)
+            for path in libraries:
+                self.link_file(path, os.path.join(xmg_library_dir, os.path.basename(path)))
 
 
 def handler_xmg_install(args):
