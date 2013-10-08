@@ -1,5 +1,5 @@
 import xmg.compgen.Tokenizer, xmg.compgen.BrickTokenizer
-from xmg.compgen.user_parser import semicolon,colon,pipe,arrow,endsection,_id,sqstring,T,NT,EXT
+from xmg.compgen.brick_parser import semicolon,colon,pipe,arrow,endsection,_id,sqstring,T,NT,EXT
 from xmg.compgen.Symbol import EOF
 
 def convertEOF(token) : 

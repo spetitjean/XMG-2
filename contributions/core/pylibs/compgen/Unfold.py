@@ -2,7 +2,7 @@ import xmg.compgen.Symbol
 import xmg.compgen.Grammar
 import xmg.compgen.BrickTokenizer
 import xmg.compgen.Parser
-import xmg.compgen.user_parser
+import xmg.compgen.brick_parser
 import warnings
 
 class Unfold(object):
