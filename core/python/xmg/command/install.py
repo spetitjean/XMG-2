@@ -5,61 +5,6 @@ import xmg, os, os.path
 # xmg install [CONTRIB]
 #==============================================================================
 
-class InstallAction:
-
-    def __init__(self, type, src, dst):
-        self._type = type
-        self._src  = src
-        self._dst  = dst
-
-    def __str__(self):
-        return "%s|%s|%s" % (self,_type, self._src, self._dst)
-
-    def verify(self):
-        meth = "verify_%s" % self.type
-        getattr(self, meth)()
-
-    def execute(self):
-        meth = "execute_%s" % self.type
-        getattr(self, meth)()
-
-    def verify_LNDIR(self):
-        src = os.path.realpath(self._src)
-        dst = os.path.realpath(self._dst)
-        if not os.path.isdir(src):
-            raise RuntimeError("%s is not a directory" % src)
-        if src==dst:
-            return
-        if os.path.lexists(dst):
-            raise RuntimeError("%s already exists" % dst)
-
-    def verify_LNFILE(self):
-        src = os.path.realpath(self._src)
-        dst = os.path.realpath(self._dst)
-        if not os.path.isfile(src):
-            raise RuntimeError("%s is not a file" % src)
-        if src==dst:
-            return
-        if os.path.lexists(dst):
-            raise RuntimeError("%s already exists" % dst)
-
-    def execute_LNDIR(self):
-        src = self._src
-        dst = self._dst
-        if os.path.lexists(src):
-            os.unlink(src)
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        os.symlink(src, dst, target_is_directory=True)
-
-    def execute_LNFILE(self):
-        src = self._src
-        dst = self._dst
-        if os.path.lexist(src):
-            os.unlink(src)
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        os.symlink(src, dst, target_is_directory=True)
-
-
 class ContribInstaller:
 
     def __init__(self):
@@ -82,17 +27,28 @@ class ContribInstaller:
             if os.path.islink(new) and os.path.realpath(old) == os.path.realpath(new):
                 return
             raise RuntimeError("conflict linking %s -> %s" % (new, old))
+        self.ensure_dirs(os.path.dirname(new))
         os.symlink(old, new, target_is_directory=True)
+
+    def link_directory_if_exists(self, old, new):
+        if os.path.lexists(old):
+            self.link_directory(old, new)
 
     def link_file(self, old, new):
         if os.path.lexists(new):
             if os.path.islink(new) and os.path.realpath(old) == os.path.realpath(new):
                 return
             raise RuntimeError("conflict linking %s -> %s" % (new, old))
+        self.ensure_dirs(os.path.dirname(new))
         os.symlink(old, new, target_is_directory=False)
+
+    def link_file_if_exists(self, old, new):
+        if os.path.lexists(old):
+            self.link_file(old, new)
 
     def subdirs(self, d):
         l=[]
+        d=os.path.realpath(d)
         if os.path.isdir(d):
             for name in os.listdir(d):
                 path = os.path.join(d, name)
@@ -105,11 +61,39 @@ class ContribInstaller:
         bricks = self.subdirs(bricks_dir)
         if not bricks:
             return
-        xmg_brick_dir = os.path.join(self.python_rootdir, "xmg/brick")
-        self.ensure_dirs(xmg_brick_dir)
         for name in bricks:
-            self.link_directory(os.path.join(bricks_dir, name),
-                                os.path.join(xmg_brick_dir, name))
+            self.install_brick(name, os.path.join(bricks_dir, name))
+
+    def install_brick(self, name, path):
+        brick_dir_yap = os.path.join(self.yap_rootdir, "xmg/brick", name)
+        brick_dir_data = os.path.join(self.data_rootdir, "xmg/brick", name)
+        self.link_file_if_exists(
+            os.path.join(path, "lang.def"),
+            os.path.join(brick_dir_data, "lang.def"))
+        self.link_directory_if_exists(
+            os.path.join(path, "compiler"),
+            os.path.join(brick_dir_yap, "compiler"))
+        yaplib = os.path.join(path, "yaplib")
+        for subdir in self.subdirs(yaplib):
+            self.link_directory(
+                subdir,
+                os.path.join(brick_dir_yap, os.path.basename(subdir)))
+        for yapfile in self.yapfiles(yaplib):
+            self.link_file(
+                yapfile,
+                os.path.join(brick_dir_yap, os.path.basename(yapfile)))
+
+    def extfiles(self, path, ext):
+        import glob
+        return (os.path.realpath(f)
+                for f in glob.glob(os.path.join(path, "*.%s" % ext))
+                if os.path.isfile(f))
+
+    def pyfiles(self, path):
+        return self.extfiles(path, "py")
+
+    def yapfiles(self, path):
+        return self.extfiles(path, "yap")
 
     def install_commands(self, d):
         commands_dir = os.path.realpath(os.path.join(d, "commands"))
