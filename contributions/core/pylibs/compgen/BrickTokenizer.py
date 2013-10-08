@@ -1,6 +1,6 @@
 ## -*- python -*-
 
-from pylr.compiler_generator.Tokenizer import Token, TokenizerEngine, TokenizerBuilder, TokenKeyword
+from xmg.compgen.Tokenizer import Token, TokenizerEngine, TokenizerBuilder, TokenKeyword
 import re
 
 #==============================================================================

@@ -1,9 +1,9 @@
-import pylr.BrickTokenizer
-import pylr.Parser
-import pylr.user_parser
-import pylr.Unfold
+import xmg.compgen.BrickTokenizer
+import xmg.compgen.Parser
+import xmg.compgen.user_parser
+import xmg.compgen.Unfold
 
-y=pylr.Parser.Parser(pylr.user_parser.G,pylr.BrickTokenizer.BrickTokenizer,'meta_morph/xmg-mg.xmg')
+y=xmg.compgen.Parser.Parser(xmg.compgen.user_parser.G,xmg.compgen.BrickTokenizer.BrickTokenizer,'meta_morph/xmg-mg.xmg')
 
 params=dict()
 

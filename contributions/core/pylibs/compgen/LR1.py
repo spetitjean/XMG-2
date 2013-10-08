@@ -1,11 +1,11 @@
-from pylr.compiler_generator.Symbol import NT, EOF
-from pylr.compiler_generator.Item import LR0Item, LR1Item
-from pylr.compiler_generator.First import First
-from pylr.compiler_generator.utils import Counter, indent, unicode_indent
-from pylr.compiler_generator.shift import shift
-from pylr.compiler_generator.reduce import reduce
-from pylr.compiler_generator.next import next
-from pylr.compiler_generator.accept import accept
+from xmg.compgen.Symbol import NT, EOF
+from xmg.compgen.Item import LR0Item, LR1Item
+from xmg.compgen.First import First
+from xmg.compgen.utils import Counter, indent, unicode_indent
+from xmg.compgen.shift import shift
+from xmg.compgen.reduce import reduce
+from xmg.compgen.next import next
+from xmg.compgen.accept import accept
 
 class LR1(object):
 

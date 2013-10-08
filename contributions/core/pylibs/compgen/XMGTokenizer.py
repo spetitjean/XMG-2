@@ -16,7 +16,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##=============================================================================
 
-from pylr.Tokenizer import Token, TokenizerEngine, TokenizerBuilder
+from xmg.compgen.Tokenizer import Token, TokenizerEngine, TokenizerBuilder
 import re
 
 #==============================================================================

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pylr.compiler_generator.Symbol import AXIOM, EOF
-from pylr.compiler_generator.Rule import Rule
-from pylr.compiler_generator.Nullables import Nullables
-from pylr.compiler_generator.First import First
-from pylr.compiler_generator.Follow import Follow
-from pylr.compiler_generator.LR0 import LR0
-from pylr.compiler_generator.LR1 import LR1
+from xmg.compgen.Symbol import AXIOM, EOF
+from xmg.compgen.Rule import Rule
+from xmg.compgen.Nullables import Nullables
+from xmg.compgen.First import First
+from xmg.compgen.Follow import Follow
+from xmg.compgen.LR0 import LR0
+from xmg.compgen.LR1 import LR1
 
 class BasicGrammar(object):
 

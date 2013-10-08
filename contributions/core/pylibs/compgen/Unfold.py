@@ -1,8 +1,8 @@
-import pylr.compiler_generator.Symbol
-import pylr.compiler_generator.Grammar
-import pylr.compiler_generator.BrickTokenizer
-import pylr.compiler_generator.Parser
-import pylr.compiler_generator.user_parser
+import xmg.compgen.Symbol
+import xmg.compgen.Grammar
+import xmg.compgen.BrickTokenizer
+import xmg.compgen.Parser
+import xmg.compgen.user_parser
 import warnings
 
 class Unfold(object):
@@ -91,15 +91,15 @@ class Unfold(object):
                 #print(G)
                 axiom=G.Rules[0].head
                 if extg._dim:
-                    tdim=pylr.compiler_generator.Symbol.T('<'+extg._prefix+'>')
+                    tdim=xmg.compgen.Symbol.T('<'+extg._prefix+'>')
                     brick._punctuation.append('<'+extg._prefix+'>')
-                    openStmt=pylr.compiler_generator.Symbol.T('{')
-                    closeStmt=pylr.compiler_generator.Symbol.T('}')
-                    self.Rules.append(pylr.compiler_generator.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt)))
+                    openStmt=xmg.compgen.Symbol.T('{')
+                    closeStmt=xmg.compgen.Symbol.T('}')
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt)))
                 else:
-                    self.Rules.append(pylr.compiler_generator.Rule.Rule(self.NTs[i],(axiom,)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,)))
   
-        Gram=pylr.compiler_generator.Grammar.Grammar(tuple(self.Rules))
+        Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules))
         return Gram
 
 
@@ -108,12 +108,12 @@ class Unfold(object):
             (H,T)=Sem
             if H == 'TD':
                 if T[0] not in self.Ts:
-                    self.Ts[T[0]]=pylr.compiler_generator.Symbol.T(T[0])
+                    self.Ts[T[0]]=xmg.compgen.Symbol.T(T[0])
             elif H == 'NTD':
                 if T[0] not in self.NTs:
-                    self.NTs[T[0]]=pylr.compiler_generator.Symbol.NT(self.prefix+"-"+T[0])
+                    self.NTs[T[0]]=xmg.compgen.Symbol.NT(self.prefix+"-"+T[0])
             elif H == 'EXTD':
-                self.NTs[T[0]]=pylr.compiler_generator.Symbol.NT(self.prefix+"-"+T[0])
+                self.NTs[T[0]]=xmg.compgen.Symbol.NT(self.prefix+"-"+T[0])
                 self.EXTs[T[0]]=T[1]
             elif H == 'RuD':
                 # check left part is a non terminal
@@ -164,8 +164,8 @@ class Unfold(object):
             else:
                 if r not in self._punctuation:
                     raise Exception('Undefined symbol: '+r)
-                R.append(pylr.compiler_generator.Symbol.T(r))
-        return pylr.compiler_generator.Rule.Rule(self.NTs[Left],tuple(R))
+                R.append(xmg.compgen.Symbol.T(r))
+        return xmg.compgen.Rule.Rule(self.NTs[Left],tuple(R))
     
 
 

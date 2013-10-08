@@ -1,9 +1,9 @@
-import pylr.compiler_generator.BrickTokenizer
-import pylr.compiler_generator.Parser
-import pylr.compiler_generator.user_parser
-import pylr.compiler_generator.Unfold
-import pylr.compiler_generator.Symbol
-import pylr.compiler_generator.Grammar
+import xmg.compgen.BrickTokenizer
+import xmg.compgen.Parser
+import xmg.compgen.user_parser
+import xmg.compgen.Unfold
+import xmg.compgen.Symbol
+import xmg.compgen.Grammar
 
 class BrickGrammar(object):
 
@@ -11,13 +11,13 @@ class BrickGrammar(object):
         self._file = file
         self._prefix=prefix
         self._dim=dim
-        self._grammar = pylr.compiler_generator.Parser.Parser(pylr.compiler_generator.user_parser.G,pylr.compiler_generator.BrickTokenizer.BrickTokenizer,file)
+        self._grammar = xmg.compgen.Parser.Parser(xmg.compgen.user_parser.G,xmg.compgen.BrickTokenizer.BrickTokenizer,file)
         self._connections=dict()
         self._dims=[]
         self._dimsp=[]
         self._punctuation=self._grammar.punctuation
         self._unfolded=False
-        self._unfold=pylr.compiler_generator.Unfold.Unfold(self)
+        self._unfold=xmg.compgen.Unfold.Unfold(self)
 
     def connect(self, ext, brick):
         if not ext in self._connections:
@@ -26,7 +26,7 @@ class BrickGrammar(object):
 
 
     def generate_parser(self, file):
-        #G=pylr.Unfold.Unfold(self)
+        #G=xmg.compgen.Unfold.Unfold(self)
         G=self._unfold.build_grammar()
         for Rule in G.rules:
             print(Rule)

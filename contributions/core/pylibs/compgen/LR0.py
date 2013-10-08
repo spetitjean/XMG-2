@@ -1,5 +1,5 @@
-from pylr.compiler_generator.Item import LR0Item 
-from pylr.compiler_generator.utils import Counter, indent, unicode_indent
+from xmg.compgen.Item import LR0Item 
+from xmg.compgen.utils import Counter, indent, unicode_indent
 
 class LR0(object):
 
