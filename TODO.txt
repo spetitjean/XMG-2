@@ -1,0 +1,23 @@
+ADisj		core
+AVM		core
+colors		treemg
+Control		core
+core
+Decls		core
+feats		core
+fields		morphmg
+frame		framemg
+hierarchy	framemg
+MG		core
+morph		morphmg
+morph2		morphmg
+pg
+rank		treemg
+sem		treemg
+syn		treemg
+synsem		treemg
+tag		treemg
+tree		treemg
+unicity		treemg
+Value		core
+Var
