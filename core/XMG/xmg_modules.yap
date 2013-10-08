@@ -74,15 +74,24 @@ load_module('MG'):-
 	use_module('contributions/MG/bricks/MG/compiler/xmg_loader_mg'),
 	xmg_loader_mg:load_module,!.
 
+%% load_module('Decls'):-
+%% 	add_to_path('contributions/Decls/bricks/Decls/compiler'),
+%% 	use_module('xmg_unfolder_decls'),
+%% 	use_module('xmg_principles'),!.
+
 load_module('Decls'):-
-	add_to_path('contributions/Decls/bricks/Decls/compiler'),
-	use_module('xmg_unfolder_decls'),
-	use_module('xmg_principles'),!.
+	use_module('contributions/Decls/bricks/Decls/compiler/xmg_loader_decls'),
+	xmg_loader_decls:load_modules,!.
+
+%% load_module('Control'):-
+%% 	add_to_path('contributions/Control/bricks/Control/compiler'),
+%% 	use_module('xmg_unfolder_control'),
+%% 	use_module('xmg_generator_control'),!.
 
 load_module('Control'):-
-	add_to_path('contributions/Control/bricks/Control/compiler'),
-	use_module('xmg_unfolder_control'),
-	use_module('xmg_generator_control'),!.
+	use_module('contributions/Control/bricks/Control/compiler/xmg_loader_control'),
+	xmg_loader_control:load_modules,!.
+
 	
 load_module('morph'):-
 	load_module('AVM'),
@@ -141,10 +150,14 @@ load_module('Value'):-
 	add_to_path('contributions/Value/bricks/Value/compiler'),
 	use_module('xmg_unfolder_value'),!.
 
+%% load_module('ADisj'):-
+%% 	add_to_path('contributions/ADisj/bricks/ADisj/compiler'),
+%% 	use_module('xmg_unfolder_adisj'),
+%% 	use_module('xmg_adisj'),!.
+
 load_module('ADisj'):-
-	add_to_path('contributions/ADisj/bricks/ADisj/compiler'),
-	use_module('xmg_unfolder_adisj'),
-	use_module('xmg_adisj'),!.
+	use_module('contributions/ADisj/bricks/ADisj/compiler/xmg_loader_adisj'),
+	xmg_loader_adisj:load_module,!.
 
 load_module('pg'):-
 	add_to_path('contributions/pg'),
@@ -152,12 +165,15 @@ load_module('pg'):-
 	use_module('xmg_generator_pg'),
 	use_module('xmg_output_pg'),!.
 
+%% load_module('sem'):-
+%% 	add_to_path('contributions/sem/bricks/sem/compiler'),
+%% 	use_module('xmg_unfolder_sem'),
+%% 	use_module('xmg_generator_sem'),
+%% 	use_module('xmg_output_sem'),
+%% 	use_module('xmg_convert_sem'),!.
 load_module('sem'):-
-	add_to_path('contributions/sem/bricks/sem/compiler'),
-	use_module('xmg_unfolder_sem'),
-	use_module('xmg_generator_sem'),
-	use_module('xmg_output_sem'),
-	use_module('xmg_convert_sem'),!.
+	use_module('contributions/sem/bricks/sem/compiler/xmg_loader_sem'),
+	xmg_loader_sem:load_module,!.
 
 load_module('frame'):-
 	add_to_path('contributions/frame'),
@@ -176,10 +192,13 @@ load_module('hierarchy'):-
 	use_module('xmg_typer_hierarchy'),
 	!.
 
+%% load_module('feats'):-
+%% 	add_to_path('contributions/feats/bricks/feats/compiler'),
+%% 	use_module('xmg_unfolder_feats'),
+%% 	!.
 load_module('feats'):-
-	add_to_path('contributions/feats/bricks/feats/compiler'),
-	use_module('xmg_unfolder_feats'),
-	!.
+	use_module('contributions/feats/bricks/feats/compiler/xmg_loader_feats'),
+	xmg_loader_feats:load_module,!.
 
 load_module('fields'):-
 	add_to_path('contributions/fields'),

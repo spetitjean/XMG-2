@@ -127,6 +127,17 @@ class ContribInstaller:
         xmg.config['COMMANDS']['commands'] = " ".join(command_list)
         xmg.config.save()
 
+    def install_compilers(self, d):
+        compiler_dir = os.path.join(d, "compilers")
+        compilers = self.subdirs(compilers_dir)
+        if not compilers:
+            return
+        xmg_compilers_dir = os.path.join(self.python_rootdir, "xmg/compiler")
+        self.ensure_dirs(xmg_compilers_dir)
+        for name in compilers:
+            self.link_directory(os.path.join(compilers_dir, name),
+                                os.path.join(xmg_compilers_dir, name))
+
     def install_pylibs(self, d):
         libraries_dir = os.path.realpath(os.path.join(d, "pylibs"))
         libraries = self.subdirs(libraries_dir)
@@ -158,7 +169,6 @@ class ContribInstaller:
             self.ensure_dirs(xmg_library_dir)
             for path in libraries:
                 self.link_file(path, os.path.join(xmg_library_dir, os.path.basename(path)))
-
 
 def handler_xmg_install(args):
     installer = ContribInstaller()
