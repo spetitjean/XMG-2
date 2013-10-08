@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from pylr.Symbol import Symbol
-from pylr.Item import LR0Item
-from pylr.Rule import Rule
-from pylr.Grammar import BasicGrammar
-from pylr.First import First
+from xmg.compgen.Symbol import Symbol
+from xmg.compgen.Item import LR0Item
+from xmg.compgen.Rule import Rule
+from xmg.compgen.Grammar import BasicGrammar
+from xmg.compgen.First import First
 
 # class Closure:
 

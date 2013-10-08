@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pylr.compiler_generator.Symbol import Symbol
+from xmg.compgen.Symbol import Symbol
 
 class First(object):
 

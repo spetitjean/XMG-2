@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from pylr.Symbol import Symbol
-from pylr.Item import LR0Item
-from pylr.Rule import Rule
-from pylr.Closure import compute_closure, compute_closure_1
+from xmg.compgen.Symbol import Symbol
+from xmg.compgen.Item import LR0Item
+from xmg.compgen.Rule import Rule
+from xmg.compgen.Closure import compute_closure, compute_closure_1
 
 #class Transition:
 

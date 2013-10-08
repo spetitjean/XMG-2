@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pylr.compiler_generator.Symbol import NT, AXIOM, EOF
+from xmg.compgen.Symbol import NT, AXIOM, EOF
 
 class Follow(object):
 

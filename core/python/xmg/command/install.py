@@ -5,6 +5,61 @@ import xmg, os, os.path
 # xmg install [CONTRIB]
 #==============================================================================
 
+class InstallAction:
+
+    def __init__(self, type, src, dst):
+        self._type = type
+        self._src  = src
+        self._dst  = dst
+
+    def __str__(self):
+        return "%s|%s|%s" % (self,_type, self._src, self._dst)
+
+    def verify(self):
+        meth = "verify_%s" % self.type
+        getattr(self, meth)()
+
+    def execute(self):
+        meth = "execute_%s" % self.type
+        getattr(self, meth)()
+
+    def verify_LNDIR(self):
+        src = os.path.realpath(self._src)
+        dst = os.path.realpath(self._dst)
+        if not os.path.isdir(src):
+            raise RuntimeError("%s is not a directory" % src)
+        if src==dst:
+            return
+        if os.path.lexists(dst):
+            raise RuntimeError("%s already exists" % dst)
+
+    def verify_LNFILE(self):
+        src = os.path.realpath(self._src)
+        dst = os.path.realpath(self._dst)
+        if not os.path.isfile(src):
+            raise RuntimeError("%s is not a file" % src)
+        if src==dst:
+            return
+        if os.path.lexists(dst):
+            raise RuntimeError("%s already exists" % dst)
+
+    def execute_LNDIR(self):
+        src = self._src
+        dst = self._dst
+        if os.path.lexists(src):
+            os.unlink(src)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        os.symlink(src, dst, target_is_directory=True)
+
+    def execute_LNFILE(self):
+        src = self._src
+        dst = self._dst
+        if os.path.lexist(src):
+            os.unlink(src)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        os.symlink(src, dst, target_is_directory=True)
+
+
 class ContribInstaller:
 
     def __init__(self):

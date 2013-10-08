@@ -1,7 +1,7 @@
-import pylr.compiler_generator.Grammar
-import pylr.compiler_generator.Tokenizer
-from pylr.compiler_generator.convert import convert
-from pylr.compiler_generator.user_parser import sqstring
+import xmg.compgen.Grammar
+import xmg.compgen.Tokenizer
+from xmg.compgen.convert import convert
+from xmg.compgen.user_parser import sqstring
 
 class ParserFactory(object):
 
