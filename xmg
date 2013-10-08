@@ -12,10 +12,10 @@ appdir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 INITEXT = """[DEFAULT]
 xmg_srcdir = %(appdir)s
-xmg_install = %(XMG_SRCDIR)s/.install
-xmg_python_rootdir = %(XMG_INSTALL)s/python
-xmg_yap_rootdir = %(XMG_INSTALL)s/yap
-xmg_data_rootdir = %(XMG_INSTALL)s/share
+xmg_install = %%(XMG_SRCDIR)s/.install
+xmg_python_rootdir = %%(XMG_INSTALL)s/python
+xmg_yap_rootdir = %%(XMG_INSTALL)s/yap
+xmg_data_rootdir = %%(XMG_INSTALL)s/share
 
 [COMMANDS]
 commands = 
