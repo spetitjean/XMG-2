@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from pylr.Symbol import Symbol, NT, T
-from pylr.Closure import compute_closure, compute_closure_1
-from pylr.Rule import Rule
-from pylr.Grammar import BasicGrammar
-from pylr.Transition import compute_transition, compute_transition_1
-from pylr.Item import LR0Item
+from xmg.compgen.Symbol import Symbol, NT, T
+from xmg.compgen.Closure import compute_closure, compute_closure_1
+from xmg.compgen.Rule import Rule
+from xmg.compgen.Grammar import BasicGrammar
+from xmg.compgen.Transition import compute_transition, compute_transition_1
+from xmg.compgen.Item import LR0Item
 
 # class Items():
 
