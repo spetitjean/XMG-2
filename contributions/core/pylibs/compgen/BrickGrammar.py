@@ -1,6 +1,6 @@
 import xmg.compgen.BrickTokenizer
 import xmg.compgen.Parser
-import xmg.compgen.user_parser
+import xmg.compgen.brick_parser
 import xmg.compgen.Unfold
 import xmg.compgen.Symbol
 import xmg.compgen.Grammar
@@ -11,7 +11,7 @@ class BrickGrammar(object):
         self._file = file
         self._prefix=prefix
         self._dim=dim
-        self._grammar = xmg.compgen.Parser.Parser(xmg.compgen.user_parser.G,xmg.compgen.BrickTokenizer.BrickTokenizer,file)
+        self._grammar = xmg.compgen.Parser.Parser(xmg.compgen.brick_parser.G,xmg.compgen.BrickTokenizer.BrickTokenizer,file)
         self._connections=dict()
         self._dims=[]
         self._dimsp=[]

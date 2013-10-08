@@ -1,7 +1,7 @@
 import xmg.compgen.Grammar
 import xmg.compgen.Tokenizer
 from xmg.compgen.convert import convert
-from xmg.compgen.user_parser import sqstring
+from xmg.compgen.brick_parser import sqstring
 
 class ParserFactory(object):
 
