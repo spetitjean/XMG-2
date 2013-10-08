@@ -1,4 +1,4 @@
-:- module(xmg_avm, [avm/2, const_avm/2]).
+:- module(xmg_brick_avm_avm, [avm/2, const_avm/2]).
 
 :- use_module(library(atts)).
 :- use_module(library(rbtrees)).

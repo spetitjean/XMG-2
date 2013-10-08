@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_convert_avm).
+:- module(xmg_brick_avm_convert).
 
 %%:- edcg:thread(name,edcg:counter).
 
