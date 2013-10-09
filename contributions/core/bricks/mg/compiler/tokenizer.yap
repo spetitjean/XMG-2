@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(tokenizer).
+:- module(xmg_brick_mg_tokenizer).
 
 :- use_module(edcg).
 :- use_module(library(lists)).

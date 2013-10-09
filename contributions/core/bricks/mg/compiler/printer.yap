@@ -1,6 +1,6 @@
 %% -*- prolog -*-
 
-:- module(xmg_printer).
+:- module(xmg_brick_mg_printer).
 
 printXML([], I):-!.
 printXML([H|T], I) :- printElem(H, I), printXML(T, I),!.

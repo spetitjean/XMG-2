@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_feats).
+:-module(xmg_brick_feats_unfolder).
 
 %% SPECIFIC RULES
 

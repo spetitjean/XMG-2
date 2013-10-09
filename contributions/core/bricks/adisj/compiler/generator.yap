@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_generator_adisj).
+:-module(xmg_brick_adisj_generator).
 
 :-edcg:using(xmg_generator:decls).
 :-edcg:using(xmg_generator:name).

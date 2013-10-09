@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_adisj).
+:-module(xmg_brick_adisj_unfolder).
 
 unfold('ADISJ',[token(_,'@'),token(_,'{'),IDS,token(_,'}')],adisj(UADisj)):-
 	unfold(IDS,UADisj),!.

@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_unfolder_value).
+:-module(xmg_brick_value_unfolder).
  
 unfold('Value',[Value],UValue):-
 	unfold(Value,UValue).

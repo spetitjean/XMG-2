@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_exporter).
+:-module(xmg_brick_mg_exporter).
 :-dynamic(exports/2).
 :-dynamic(declared/2).
 :-dynamic(classNumber/1).

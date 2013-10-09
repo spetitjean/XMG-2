@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_decls).
+:-module(xmg_brick_decls_unfolder).
 
 sort_decls([],[]):- !.
 sort_decls([H|T],[Head-Found|Sorted]):-

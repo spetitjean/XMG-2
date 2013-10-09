@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_generator).
+:-module(xmg_brick_mg_generator).
 
 :-edcg:thread(decls,edcg:table).
 :-edcg:thread(name,edcg:counter).

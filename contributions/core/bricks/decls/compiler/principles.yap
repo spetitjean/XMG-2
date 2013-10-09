@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_principles).
+:-module(xmg_brick_decls_principles).
 
 principles('MetaGrammar'(Decls,_,_)):- 
 	get_principles(Decls,Principles),!,

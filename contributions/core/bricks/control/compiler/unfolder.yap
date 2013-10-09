@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_control).
+:-module(xmg_brick_control_unfolder).
 
 unfold('Stmts',[Stmt1,token(_,';'),Stmt2],conj(UStmt1,UStmt2)):- !,
 	unfold(Stmt1,UStmt1),

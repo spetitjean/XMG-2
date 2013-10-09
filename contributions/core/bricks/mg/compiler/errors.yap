@@ -1,6 +1,6 @@
 %% -*- prolog -*-
 
-:- module(xmg_errors, []).
+:- module(xmg_brick_mg_errors, []).
 :- use_module(library(lists)).
 :- use_module(library(charsio)).
 :- use_module(edcg).

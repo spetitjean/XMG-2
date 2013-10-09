@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_typer).
+:-module(xmg_brick_mg_typer).
 :-dynamic(type/2).
 :-dynamic(property/2).
 :-dynamic(field/2).

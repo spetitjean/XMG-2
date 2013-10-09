@@ -1,4 +1,4 @@
-:- module(xmg_convert, []).
+:- module(xmg_brick_mg_convert, []).
 
 :- edcg:thread(name,edcg:counter).
 

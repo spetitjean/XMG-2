@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_generator_control).
+:-module(xmg_brick_control_generator).
 
 :-edcg:using(xmg_generator:decls).
 :-edcg:using(xmg_generator:name).
