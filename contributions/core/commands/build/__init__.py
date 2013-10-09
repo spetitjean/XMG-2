@@ -8,8 +8,17 @@ from xmg.command import subparsers
 def handler_xmg_build(args):
     import yaml
     desc = yaml.load(open("compiler.yml"))
-    from xmg.command.build.BrickSpec import yaml_to_specs
+    from xmg.command.build.BrickSpec import \
+     yaml_to_specs, determine_axioms, build_and_connect
     specs = yaml_to_specs(desc)
+    axioms = determine_axioms(specs)
+    build_and_connect(specs)
+    from xmg.compgen.BrickCompiler import BrickCompiler
+    compiler = BrickCompiler("generated", "generated/parser.yap")
+    for b in specs.values():
+        compiler.add_brick(b.brick)
+    axiom_id = list(axioms)[0]
+    compiler.generate_parser(specs[axiom_id].brick)
 
 # create the xmg subcommand
 cmd = subparsers.add_parser(

@@ -29,7 +29,10 @@ class Brick(object):
     @property
     def language_brick(self):
         if self._lang is None:
-            from core.compiler_generator.BrickGrammar import BrickGrammar
+            from xmg.compgen.BrickGrammar import BrickGrammar
             self._lang = BrickGrammar(self.lang_def_pathname, prefix=self._prefix)
         return self._lang
         
+    @property
+    def compiler_brick(self):
+        return self.compiler_pathname
