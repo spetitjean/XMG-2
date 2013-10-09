@@ -1,0 +1,62 @@
+%token id
+%token node
+%token edge
+
+%type Var Var
+%type Ids Ids
+%type FrameStmts FrameStmts
+%type FrameStmt FrameStmt
+%type Node Node
+
+%type Tree Tree
+%type Children Children
+%type PropChild PropChild
+%type Child Child
+
+%type MaybeId MaybeId
+%type MaybeProps MaybeProps
+%type Props Props
+%type MaybeFeats MaybeFeats
+%type Feats Feats
+%type Feat Feat
+%type Eq Eq
+%type Edge Edge
+%type Expr Expr
+
+%ext AVM AVM
+
+%%
+
+FrameStmts : FrameStmt | FrameStmt ';' FrameStmts | FrameStmt '|' FrameStmts | '{' FrameStmts '}';
+
+FrameStmt :  Node | Tree | Eq | Edge ;
+
+Node : node MaybeId MaybeProps MaybeFeats;
+
+Tree : Node '{' Children '}' ;
+
+Children : PropChild | PropChild Children ;
+
+PropChild : MaybeProps Child;
+
+Child : Node | Tree;
+
+MaybeId : Var | '';
+
+MaybeProps : '(' Props ')' | '';
+
+Props : Feat | Feat ',' Props;
+
+MaybeFeats : AVM | '';
+	 
+Feat : id '=' Var;
+
+Eq : Expr '=' Expr;
+
+Edge : edge MaybeProps Var Var ;
+
+Expr : id ;
+
+Var : id | '?' id;
+
+%%

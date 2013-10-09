@@ -1,0 +1,20 @@
+%token hierarchy
+%token id
+
+%type Hierarchy Hierarchy
+%type HierarchyDef HierarchyDef
+
+%type id_pairs id_pairs
+%type id_pair id_pair
+
+%%
+
+Hierarchy : hierarchy id '=' HierarchyDef;
+
+HierarchyDef : '{' id_pairs '}';
+
+id_pairs : id_pair | id_pair ',' id_pairs;
+
+id_pair : '(' id ',' id ')';
+
+%%

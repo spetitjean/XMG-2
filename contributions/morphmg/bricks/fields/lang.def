@@ -1,0 +1,18 @@
+%token field
+%token id
+
+%type FieldDecl FieldDecl
+%type Field Field
+%type FieldPrec FieldPrec
+
+%%
+
+FieldDecl : Field | FieldPrec;
+
+
+Field : field id;
+
+FieldPrec : id '>>' id;
+
+
+%%

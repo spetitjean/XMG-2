@@ -1,0 +1,39 @@
+%token morpheme
+%token string
+%token id
+%token int
+%token bool
+
+%type DimStmt DimStmt
+%type MorphStmts MorphStmts
+%type MorphStmt MorphStmt
+%type InStem InStem
+%type Stem Stem
+%type StemRel StemRel
+%type Eq Eq
+%type Expr Expr
+%type Values Values
+%type Value Value
+%type Var Var
+
+%ext ADisj ADisj
+
+%%
+
+MorphStmts : MorphStmt | MorphStmts ';' MorphStmts | MorphStmts '|' MorphStmts | MorphStmts '->' MorphStmts | '{' MorphStmts '}';
+
+MorphStmt : Stem | InStem | StemRel | Eq;
+
+Stem : morpheme Var;
+
+InStem : Var '<-' Expr;
+
+StemRel : Var '>>' Var;
+
+Eq : Expr '=' Expr;
+
+Expr : Var | string | int | bool | ADisj;
+
+Var : id | '?' id;
+
+%%

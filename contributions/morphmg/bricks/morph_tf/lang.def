@@ -1,0 +1,32 @@
+%token morph
+%token string
+%token id
+%token int
+%token bool
+
+%type DimStmt DimStmt
+%type MorphStmts MorphStmts
+%type MorphStmt MorphStmt
+%type InField Infield
+%type Eq Eq
+%type Expr Expr
+%type Values Values
+%type Value Value
+
+%ext ADisj ADisj
+
+%%
+
+/* DimStmt : '<morph>' '{' MorphStmts '}' ; */
+
+MorphStmts : MorphStmt | MorphStmts ';' MorphStmts | MorphStmts '|' MorphStmts | MorphStmts '->' MorphStmts | '{' MorphStmts '}';
+
+MorphStmt : InField | Eq;
+
+InField : id '<-' Expr;
+
+Eq : Expr '=' Expr;
+
+Expr : id | string | int | bool | ADisj;
+
+%%
