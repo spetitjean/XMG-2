@@ -1,0 +1,15 @@
+mg: 
+  Stmt: control
+  EDecls: decls
+decls:
+  ODecl: feats
+control:
+  IFace: avm
+  DimStmt: sem syn
+avm: 
+  Value: value
+value: 
+  Else: avm adisj
+syn:
+  AVM: avm
+  
