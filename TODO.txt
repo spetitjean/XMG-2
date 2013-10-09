@@ -5,12 +5,12 @@ Control		core	*
 core			*
 Decls		core	*
 feats		core	*
-fields		morphmg
+fields		morphmg *
 frame		framemg
 hierarchy	framemg
 MG		core	*
-morph		morphmg
-morph2		morphmg
+morph		morphmg *
+morph2		morphmg *
 pg			*
 rank		treemg	*
 sem		treemg	*
