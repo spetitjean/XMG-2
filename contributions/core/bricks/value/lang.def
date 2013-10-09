@@ -5,11 +5,10 @@
 
 %type Value Value
 
-%ext ADisj ADisj
 %ext Else Else
 
 %%
 
-Value : id | '?' id | bool | int | string | ADisj | Else;
+Value : id | '?' id | '!' id | bool | int | string | Else;
 
 %%
