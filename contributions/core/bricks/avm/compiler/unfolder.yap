@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_unfolder_avm).
+:-module(xmg_brick_avm_unfolder).
 
 
 unfold('AVM',[token(_,'['),Feats,token(_,']')],avm(UFeats)):-
