@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_generator_syn).
+:-module(xmg_brick_syn_generator).
 :-use_module(xmg_engine_syn).
 
 :-edcg:using(xmg_generator:decls).

@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_tree, []).
+:- module(xmg_brick_tree_tree, []).
 
 :- use_module(library(gecode)).
 :- use_module(xmg_dominance).

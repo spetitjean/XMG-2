@@ -1,4 +1,4 @@
-:- module(xmg_most,[most/2]).
+:- module(xmg_brick_syn_most,[most/2]).
 
 :- use_module(library(atts)).
 :- attribute mostval/1.

@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_preparer_syn, []).
+:- module(xmg_brick_syn_preparer, []).
 
 prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Colors,Ranks,TagOps,Unicities,TableInvF,NodeList)):-  
 	lists:remove_duplicates(Syn,SynD),

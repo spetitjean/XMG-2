@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_compiler_syn).
+:-module(xmg_brick_syn_compiler).
 
 eval(Syn,XML,Class):-
 	%%send(info,Syn),

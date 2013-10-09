@@ -1,4 +1,4 @@
-:- module(xmg_rank, []).
+:- module(xmg_brick_rank_rank, []).
 
 :- use_module(library(gecode)).
 :- use_module(xmg_dominance).

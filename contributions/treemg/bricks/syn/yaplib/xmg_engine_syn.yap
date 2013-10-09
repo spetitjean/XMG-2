@@ -1,4 +1,4 @@
-:- module(xmg_engine_syn,[]).
+:- module(xmg_brick_syn_engine,[]).
 
 :- use_module(xmg_polarity).
 :- use_module(xmg_nodename).

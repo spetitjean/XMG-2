@@ -1,4 +1,4 @@
-:-module(xmg_output_sem).
+:-module(xmg_brick_sem_output).
 
 output([]):-!.
 output(L):-

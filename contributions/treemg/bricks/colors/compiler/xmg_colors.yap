@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_colors, []).
+:- module(xmg_brick_color_colors, []).
 
 :- use_module(library(gecode)).
 :- use_module(xmg_dominance).

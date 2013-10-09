@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_sem).
+:-module(xmg_brick_sem_unfolder).
 
 unfold('sem-DimStmt',[token(_,'<sem>'),token(_,'{'),DimStmt,token(_,'}')],'semStmt'(UStmt)):-
 	unfold(DimStmt,UStmt),

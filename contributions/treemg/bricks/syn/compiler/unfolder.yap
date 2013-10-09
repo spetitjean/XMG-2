@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_syn).
+:-module(xmg_brick_syn_unfolder).
 
 %%:-add_to_path('../AVM').
 %%:-use_module('xmg_unfolder_avm').

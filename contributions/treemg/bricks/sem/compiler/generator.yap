@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_generator_sem).
+:-module(xmg_brick_sem_generator).
 
 :-edcg:using(xmg_generator:decls).
 :-edcg:using(xmg_generator:name).

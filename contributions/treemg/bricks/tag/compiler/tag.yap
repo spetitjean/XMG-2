@@ -1,4 +1,4 @@
-:- module(xmg_tag, []).
+:- module(xmg_bricks_tag_tag, []).
 
 :- use_module(library(gecode)).
 :- use_module(xmg_dominance).

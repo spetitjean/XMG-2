@@ -1,4 +1,4 @@
-:- module(xmg_polarity,[polarity/2]).
+:- module(xmg_brick_syn_polarity,[polarity/2]).
 
 :- use_module(library(atts)).
 :- attribute polval/1.
