@@ -13,6 +13,8 @@ class Brick(object):
         self._name = name
         self._lang = None
         self._prefix = name if prefix is None else prefix
+        self._is_dimension = None
+        self._config = None
 
     @property
     def lang_def_pathname(self):
@@ -36,3 +38,19 @@ class Brick(object):
     @property
     def compiler_brick(self):
         return self.compiler_pathname
+
+    @property
+    def config(self):
+        if self._config is None:
+            import xmg, os.path
+            xmg_data_rootdir = xmg.config['DEFAULT']['xmg_data_rootdir']
+            ini = os.path.join(xmg_data_rootdir, "xmg/brick/%s/config.ini" % self._name)
+            from configparser import ConfigParser
+            self._config = ConfigParser()
+            if os.path.exists(ini):
+                self._config.read(ini)
+        return self._config
+
+    @property
+    def is_dimension(self):
+        return self.config.getboolean('DEFAULT', 'dimension', fallback=False)

@@ -7,6 +7,10 @@ from xmg.command import subparsers
 LANGDEF = """
 """
 
+CONFDEF = """[DEFAULT]
+dimension = no
+"""
+
 # the function implementing the command
 def handler_xmg_startbrick(args):
     import os, os.path
@@ -21,6 +25,8 @@ def handler_xmg_startbrick(args):
     os.makedirs(os.path.join(path, "yaplib"))
     with open(os.path.join(path, "lang.def")) as f:
         f.write(LANGDEF % {"name": name})
+    with open(os.path.join(path, "config.ini")) as f:
+        f.write(CONFDEF % {"name": name})
 
 # create the xmg subcommand
 cmd = subparsers.add_parser(

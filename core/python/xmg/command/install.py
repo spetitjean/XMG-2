@@ -70,6 +70,9 @@ class ContribInstaller:
         self.link_file_if_exists(
             os.path.join(path, "lang.def"),
             os.path.join(brick_dir_data, "lang.def"))
+        self.link_file_if_exists(
+            os.path.join(path, "config.ini"),
+            os.path.join(brick_dir_data, "config.ini"))
         self.link_directory_if_exists(
             os.path.join(path, "compiler"),
             os.path.join(brick_dir_yap, "compiler"))
