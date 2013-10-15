@@ -19,8 +19,8 @@
 
 :-module(xmg_brick_mg_compiler,[send/2]).
 
-:-use_module('../../../brick/mg/edcg.yap').
-:-use_module('../../../brick/mg/compiler/modules.yap').
+:-use_module('xmg/brick/mg/edcg.yap').
+:-use_module('xmg/brick/mg/compiler/modules.yap').
 %%:-use_module('syn_frame_conf').
 %%:-use_module('syn_frame_std_conf').
 
@@ -61,8 +61,8 @@ send_nl(info,N):-
 compile_file(File,Eval):-
 	xmg_compiler_conf:init,
 	findall(Module,xmg_modules_def:module_def(_,Module),Modules),
-	xmg_bricks_mg_modules:load_modules(Modules),
-	xmg_bricks_mg_parser:parse_file(File,[Parse]),!,
+	xmg_brick_mg_modules:load_modules(Modules),
+	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	send(info,' parsed '),
 	%%send(info,Parse),
 	send_nl(info),

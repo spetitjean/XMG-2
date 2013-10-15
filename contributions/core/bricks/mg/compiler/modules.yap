@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(xmg_bricks_mg_modules).
+:- module(xmg_brick_mg_modules).
 
 
 %% Get a compiler Module corresponding to a Language Brick and a Compiling Step
@@ -145,6 +145,7 @@ load_module('fields'):-
 	!.
 
 load_module(Module):-
+	xmg_brick_mg_compiler:send(info,Module),
 	use_module(M,Module,_),!.
 
 load_module(Module):-

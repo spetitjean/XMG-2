@@ -20,7 +20,7 @@
 
 :- module(xmg_brick_mg_tokenizer).
 
-:- use_module(edcg).
+:- use_module('xmg/brick/mg/edcg.yap').
 :- use_module(library(lists)).
 
 

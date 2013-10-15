@@ -26,13 +26,14 @@ class Brick(object):
     def compiler_pathname(self):
         import xmg, os.path
         xmg_yap_rootdir = xmg.config['DEFAULT']['xmg_yap_rootdir']
-        return os.path.join(xmg_yap_rootdir, "xmg/brick/%s/compiler" % self._name)
+        #return os.path.join(xmg_yap_rootdir, "xmg/brick/%s/compiler" % self._name)
+        return "xmg/brick/%s/compiler" % self._name
 
     @property
     def language_brick(self):
         if self._lang is None:
             from xmg.compgen.BrickGrammar import BrickGrammar
-            self._lang = BrickGrammar(self.lang_def_pathname, prefix=self._prefix)
+            self._lang = BrickGrammar(self.lang_def_pathname, dim=self.is_dimension, prefix=self._prefix)
         return self._lang
         
     @property

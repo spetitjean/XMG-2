@@ -11,7 +11,7 @@ def handler_xmg_compile(args):
     YAPDIR = xmg.command.YAPDIR
     if args.compiler is None:
         parser.exit(status=1, message="compiler is required\n") 
-    compilers_dir=YAPDIR+'/contributions/'
+    compilers_dir=YAPDIR+'/xmg/compiler/'
     if not os.path.exists(compilers_dir+args.compiler):
         comps=""
         for comp in os.listdir(compilers_dir):

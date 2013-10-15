@@ -21,6 +21,5 @@
 :-module(xmg_loader_decls).
 
 load_module:-
-	add_to_path('contributions/Decls/bricks/Decls/compiler'),
-	use_module('xmg_unfolder_decls'),
-	use_module('xmg_principles'),!.
+	use_module('xmg/brick/decls/unfolder'),
+	use_module('xmg/brick/decls/principles'),!.

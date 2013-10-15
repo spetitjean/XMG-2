@@ -48,6 +48,6 @@ xmg.config = CONFIG
 
 import xmg.command
 # this should use xmg.config
-xmg.command.YAPDIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),"."))
+xmg.command.YAPDIR = CONFIG['DEFAULT']['XMG_YAP_ROOTDIR']
 
 xmg.command.main()

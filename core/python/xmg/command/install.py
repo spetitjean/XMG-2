@@ -16,6 +16,7 @@ class ContribInstaller:
         d = os.path.realpath(d)
         self.install_bricks(d)
         self.install_commands(d)
+        self.install_compilers(d)
         self.install_pylibs(d)
         self.install_yaplibs(d)
 
@@ -115,11 +116,11 @@ class ContribInstaller:
         xmg.config.save()
 
     def install_compilers(self, d):
-        compiler_dir = os.path.join(d, "compilers")
+        compilers_dir = os.path.join(d, "compilers")
         compilers = self.subdirs(compilers_dir)
         if not compilers:
             return
-        xmg_compilers_dir = os.path.join(self.python_rootdir, "xmg/compiler")
+        xmg_compilers_dir = os.path.join(self.yap_rootdir, "xmg/compiler")
         self.ensure_dirs(xmg_compilers_dir)
         for name in compilers:
             self.link_directory(os.path.join(compilers_dir, name),

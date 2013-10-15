@@ -43,9 +43,9 @@ class BrickCompiler(object):
         if not compiler in self._compilers:
             raise Exception("Brick "+compiler+" is not part of the compiler")
         #self._links[language]=compiler
-        if compiler == 'Control':
+        if compiler == 'control':
             self._links.append((language,compiler))
-        elif compiler == 'MG':
+        elif compiler == 'mg':
             self._links.insert(0,(language,compiler))
         else:
             self._links.insert(1,(language,compiler))
@@ -69,7 +69,7 @@ class BrickCompiler(object):
             self._dims.append(dim)
 
     def generate_dimensions(self):
-        dimfile=open(self._folder+"/xmg_dimensions.yap","w")
+        dimfile=open(self._folder+"/dimensions.yap","w")
         dimfile.write('%% -*- prolog -*-\n\n')
         dimfile.write(':-module(xmg_dimensions).\n\n')
         self.init_dims()
@@ -86,7 +86,7 @@ class BrickCompiler(object):
 
         
     def generate_tokenize_dims(self):
-        tokenizefile=open(self._folder+"/xmg_tokenizer_dims.yap","w")
+        tokenizefile=open(self._folder+"/tokenizer_dims.yap","w")
         tokenizefile.write('%% -*- prolog -*-\n\n')
         tokenizefile.write(':-module(xmg_tokenizer).\n\n')
         tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -112,7 +112,7 @@ class BrickCompiler(object):
 
     def generate_tokenize_punctuation(self):
         self.collect_punctuation()
-        tokenizefile=open(self._folder+"/xmg_tokenizer_punct.yap","w")
+        tokenizefile=open(self._folder+"/tokenizer_punct.yap","w")
         tokenizefile.write('%% -*- prolog -*-\n\n')
         tokenizefile.write(':-module(xmg_tokenizer_punct).\n\n')
         tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -127,7 +127,7 @@ class BrickCompiler(object):
         print("Part of tokenizer generated in "+self._folder)
 
     def generate_unfold_rules(self):
-        unfoldfile=open(self._folder+"/xmg_unfolder.yap","w")
+        unfoldfile=open(self._folder+"/unfolder.yap","w")
         unfoldfile.write('%% -*- prolog -*-\n\n')
         unfoldfile.write(':-module(xmg_unfolder_control).\n\n')
         unfoldfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -137,7 +137,7 @@ class BrickCompiler(object):
         for dim in self._dims:
             unfoldfile.write('unfold_stmt([\''+dim+'-DimStmt\'(Stmt)],\''+dim+'Stmt\'(UStmt)):-\n')
             unfoldfile.write('    Stmt=..[\''+dim+'-DimStmt\',token(_,\'<\'),token(_,\''+dim+'\'),token(_,\'>\'),token(_,\'{\'),DimStmt,token(_,\'}\')],!,\n')
-            unfoldfile.write('    add_to_path(\''+dim+'\'),\n')
+            #unfoldfile.write('    add_to_path(\''+dim+'\'),\n')
             unfoldfile.write('    use_module(\'xmg_unfolder_'+dim+'\'),\n')
             unfoldfile.write('    xmg_unfolder_'+dim+':unfold(DimStmt,UStmt).\n\n')      
         unfoldfile.close()
@@ -145,7 +145,7 @@ class BrickCompiler(object):
 
 
     def generate_gen_rules(self):
-        genfile=open(self._folder+"/xmg_generator.yap","w")
+        genfile=open(self._folder+"/generator.yap","w")
         genfile.write('%% -*- prolog -*-\n\n')
         genfile.write(':-module(xmg_generator_control).\n\n')
         genfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -159,7 +159,7 @@ class BrickCompiler(object):
         print("Part of generator generated in "+self._folder)
 
     def generate_modules(self):
-        compfile=open(self._folder+"/xmg_modules_def.yap","w")
+        compfile=open(self._folder+"/modules_def.yap","w")
         compfile.write('%% -*- prolog -*-\n\n')
         compfile.write(':-module(xmg_modules_def).\n\n')
         compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -169,7 +169,7 @@ class BrickCompiler(object):
         # for comp in self._links:
         #     compfile.write('module_def(\''+comp._prefix+'\',\''+self._links[comp]+'\').\n')
         for (comp,brick) in self._links:
-            compfile.write('module_def(\''+comp._prefix+'\',\''+brick+'\').\n')
+            compfile.write('module_def(\''+comp._prefix+'\',\''+brick+'/loader\').\n')
         compfile.close()
         print("Part of modules generated in "+self._folder)
 
@@ -196,12 +196,12 @@ class BrickCompiler(object):
         conffile.write('%% Compiler Configuration\n')
         conffile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
         conffile.write('init:-\n')
-        conffile.write('\tadd_to_path(\'' + os.path.abspath(os.path.dirname(sys.argv[0])) + '\'),\n')
-        conffile.write('\tuse_module(\'' + self._parser_file + '\'),\n')
-        conffile.write('\tadd_to_path(\'' + os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), self._folder) + '\'),\n')
-        conffile.write('\tuse_module(\'xmg_dimensions\'),\n')
-        conffile.write('\tuse_module(\'xmg_tokenizer_punct\'),\n')
-        conffile.write('\tuse_module(\'xmg_modules_def\').')
+        #conffile.write('\tadd_to_path(\'' + os.path.abspath(os.path.dirname(sys.argv[0])) + '\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/synsem/' + self._parser_file + '\'),\n')
+        #conffile.write('\tadd_to_path(\'' + os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), self._folder) + '\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/synsem/generated/dimensions\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/synsem/generated/tokenizer_punct\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/synsem/generated/modules_def\').')
         conffile.close()
         print("Configuration file generated in "+self._folder)
 
