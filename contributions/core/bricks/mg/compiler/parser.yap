@@ -102,21 +102,21 @@ parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
 	generated_parser:action(State,Tok,'reduce',NRule),
 	generated_parser:action(State,Tok,'shift',NState),
-	xmg_compiler:send(info,'reduce/shift confict'),false,!. 
+	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
 parse_sem([State|States],[Token|Tokens]):--
 	generated_parser:action(State,'','reduce',NRule),
 	generated_parser:action(State,'','shift',NState),
-	xmg_compiler:send(info,'reduce/shift confict'),false,!. 
+	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
 	generated_parser:action(State,Tok,'reduce',NRule),
 	generated_parser:action(State,'','shift',NState),
-	xmg_compiler:send(info,'reduce/shift confict'),false,!. 
+	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
 	generated_parser:action(State,'','reduce',NRule),
 	generated_parser:action(State,Tok,'shift',NState),
-	xmg_compiler:send(info,'reduce/shift confict'),false,!. 
+	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
 	
 
 parse_sem([State|States],[Token|Tokens]):--
@@ -190,7 +190,7 @@ parse_sem([State|States],[token(Coord,Token)|Tokens]):--
 	       retractall(lastError(_,_)),
 	       %%errors::drop,
 
-	       %%xmg_compiler:send(debug,assert_last),
+	       %%xmg_brick_mg_compiler:send(debug,assert_last),
 	       asserta(lastError([error(State,Token,Coord)],Step))
 	       %%errors::push(error(error(State,Token,Coord),Step))
 	   )
@@ -199,8 +199,8 @@ parse_sem([State|States],[token(Coord,Token)|Tokens]):--
        	    Step = StepE,
        	    retractall(lastError(_,_)),
        	    Errors=[error(State,Token,Coord)|LastE],
-	    %%xmg_compiler:send(debug,assert_same),
-	    %%xmg_compiler:send(debug,Coord),
+	    %%xmg_brick_mg_compiler:send(debug,assert_same),
+	    %%xmg_brick_mg_compiler:send(debug,Coord),
 	    
        	    asserta(lastError(Errors,Step))
 	    %%errors::push(error(error(State,Token,Coord),Step))
@@ -209,11 +209,11 @@ parse_sem([State|States],[token(Coord,Token)|Tokens]):--
 	fail.
 
 throw_errors:--
-	xmg_compiler:send(info,' ERROR :'),
+	xmg_brick_mg_compiler:send(info,' ERROR :'),
 	lastError(Errors,_),
 	%%errors::top(Errors),
 	
-	xmg_compiler:send(debug,Errors),
+	xmg_brick_mg_compiler:send(debug,Errors),
 	throw_error(Errors,[],0,none),!.
 
 throw_error([],Expected,Coord,Token):-
@@ -234,25 +234,25 @@ parse_sem(States,Tokens,Sem):--
 	throw_errors,!.
 
 parse_file(File,Sem):--
-	xmg_compiler:encoding(Encoding),
-	tokenizer:tokenize_file(File,Tokens,Encoding),
-	xmg_compiler:send(info,tokenized),
-	%%xmg_compiler:send(debug,Tokens),
+	xmg_brick_mg_compiler:encoding(Encoding),
+	xmg_brick_mg_tokenizer:tokenize_file(File,Tokens,Encoding),
+	xmg_brick_mg_compiler:send(info,tokenized),
+	%%xmg_brick_mg_compiler:send(debug,Tokens),
 	remove_coords(Tokens,Toks),
-	%%xmg_compiler:send(debug,Toks),
+	%%xmg_brick_mg_compiler:send(debug,Toks),
 	parse_sem([0],Toks,Sem) with errors(Errors,[error(error(none,none,none),0)]),!.
 
 remove_coords([coord(A,B,C)],[token(coord(A,B,C),'(EOF)')]):- !.
 remove_coords([Token],[token(coord(0,0,end),'(EOF)')]):-
-	xmg_compiler:send(info,Token),!.
+	xmg_brick_mg_compiler:send(info,Token),!.
 remove_coords([coord(A1,B1,C1),coord(A,B,C)|T],T1):-
-	%xmg_compiler:send(info,H),
+	%xmg_brick_mg_compiler:send(info,H),
 	remove_coords([coord(A,B,C)|T],T1),!.
 remove_coords([coord(A,B,C),Token|T],[token(coord(A,B,C),Token)|T1]):- 
 	remove_coords(T,T1),!.
 
 remove_coords([H,coord(A,B,C)|T],[token(coord(A,B,C),H)|T1]):-
-	%xmg_compiler:send(info,H),
+	%xmg_brick_mg_compiler:send(info,H),
 	remove_coords([coord(A,B,C)|T],T1),!.
 
 

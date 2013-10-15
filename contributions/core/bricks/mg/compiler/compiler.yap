@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_bricks_mg_compiler,[send/2]).
+:-module(xmg_brick_mg_compiler,[send/2]).
 
 :-use_module('../../../brick/mg/edcg.yap').
 :-use_module('../../../brick/mg/compiler/modules.yap').
