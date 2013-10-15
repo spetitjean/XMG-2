@@ -19,8 +19,6 @@
 
 
 :-module(xmg_loader_adisj).
+:- use_module('../../../brick/adisj/compiler/unfolder.yap').
+:- use_module('../../../brick/adisj/adisj.yap').
 
-load_module:-
-	add_to_path('contributions/ADisj/bricks/ADisj/compiler'),
-	use_module('xmg_unfolder_adisj'),
-	use_module('xmg_adisj'),!.

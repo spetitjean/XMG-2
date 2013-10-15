@@ -20,8 +20,5 @@
 
 :-module(xmg_loader_control).
 
-load_module:-
-	add_to_path('contributions/Control/bricks/Control/compiler'),
-	use_module('xmg_unfolder_control'),
-	use_module('xmg_generator_control'),
-	!.
+:-use_module('../../../brick/control/compiler/unfolder').
+:-use_module('../../../brick/control/compiler/generator').

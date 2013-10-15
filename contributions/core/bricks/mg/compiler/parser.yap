@@ -19,7 +19,7 @@
 
 
 
-:-module(xmg_brick_mg_parser).
+:-module(xmg_bricks_mg_parser).
 
 :- dynamic(lastError/2).
 

@@ -1,6 +1,6 @@
 from xmg.command import parser, subparsers
 
-YAPDIR = '.'
+YAPDIR = '.install/yap'
 
 #------------------------------------------------------------------------------
 # xmg compile COMPILER IFILE [OFILE]

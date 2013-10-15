@@ -23,7 +23,7 @@
 		 op( 500, xfy, '=>'  ),
 		 op( 500, xfy, ':='  )]).
 :- use_module(library(lists)).
-:- use_module(xmg_table).
+:- use_module('table.yap').
 
 :- dynamic edcg_info/2.
 
