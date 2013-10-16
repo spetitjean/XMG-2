@@ -66,7 +66,7 @@ compile_file(File,Eval):-
 	send(info,' parsed '),
 	%%send(info,Parse),
 	send_nl(info),
-	xmg_unfolder:unfold(Parse,Unfolded),!,
+	xmg_brick_mg_unfolder:unfold(Parse,Unfolded),!,
 	send(info,' unfolded '),
 	%%send(info,Unfolded),
 	send_nl(info),	

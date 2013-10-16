@@ -52,13 +52,15 @@ unfold(Term,UTerm):-
 	head_name(Head,Name),
 	(
 	    (
-		xmg_modules_def:module_def(Module,'AVM'),
+		Module=avm,
+		%%xmg_modules_def:module_def(Module,'avm'),
 		unfold(Name,Params,UTerm)
 	    )
 	;
 	(
-	    not(xmg_modules_def:module_def(Module,'AVM')),
-	    xmg_modules:get_module(Module,unfolder,UModule),
+	    not(Module=avm),
+	    %%not(xmg_modules_def:module_def(Module,'avm')),
+	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
 	    UModule:unfold(Term,UTerm)
 	)
     ),!.

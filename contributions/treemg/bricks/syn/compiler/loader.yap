@@ -20,23 +20,18 @@
 
 :-module(xmg_loader_syn).
 
-load_module:-
-	add_to_path('contributions/syn/bricks/syn/compiler'),
-	use_module('xmg_compiler_syn'),
-	use_module('xmg_unfolder_syn'),
-	use_module('xmg_generator_syn'),
-	use_module('xmg_preparer_syn'),
-	use_module('xmg_convert_tag_syn'),
-	add_to_path('contributions/syn/principles'),
-	use_module('xmg_tree'),
+:-	use_module('xmg/brick/syn/compiler/compiler').
+:-	use_module('xmg/brick/syn/compiler/unfolder').
+:-	use_module('xmg/brick/syn/compiler/generator').
+:-	use_module('xmg/brick/syn/compiler/preparer').
+:-	use_module('xmg/brick/syn/compiler/convert_tag').
+:-	use_module('xmg/brick/syn/tree').
 	%% this should be done optionally
-	use_module('xmg_unicity'),
-	use_module('xmg_colors'),
-	use_module('xmg_rank'),
-	use_module('xmg_tag'),
-	add_to_path('contributions/syn/libraries'),
-	use_module('xmg_engine_syn'),
-	use_module('xmg_most'),
-	use_module('xmg_nodename'),
-	use_module('xmg_polarity'),
-	!.
+:-	use_module('xmg/brick/syn/unicity').
+:-	use_module('xmg/brick/syn/colors').
+:-	use_module('xmg/brick/syn/rank').
+:-	use_module('xmg/brick/syn/tag').
+:-	use_module('xmg/brick/syn/engine').
+:-	use_module('xmg/brick/syn/most').
+:-	use_module('xmg/brick/syn/nodename').
+:-	use_module('xmg/brick/syn/polarity').

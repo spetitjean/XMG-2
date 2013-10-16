@@ -114,7 +114,7 @@ unfold('MaybeProps',[token(_,'('),Feats,token(_,')')],UFeats):-
 	unfold(Feats,UFeats).
 
 unfold('Feat',List,UF):-
-	xmg_unfolder_avm:unfold('Feat',List,UF),!.
+	xmg_brick_avm_unfolder:unfold('Feat',List,UF),!.
 
 unfold('AVM',[AVM],UAVM):-
 	unfold(AVM,UAVM),!.
@@ -129,9 +129,9 @@ unfold('DomOp',[token(_,O)],O).
 unfold('PrecOp',[token(_,O)],O).
 
 unfold('Props',[Feat],[UF]):-
-	xmg_unfolder_avm:unfold(Feat,UF).
+	xmg_brick_avm_unfolder:unfold(Feat,UF).
 unfold('Props',[Feat,token(_,','),Feats],[UF|UFs]):-
-	xmg_unfolder_avm:unfold(Feat,UF),
+	xmg_brick_avm_unfolder:unfold(Feat,UF),
 	unfold(Feats,UFs).
 
 unfold('Eq',[Left,token(_,'='),Right],eq(UL,UR)):-
@@ -155,13 +155,15 @@ unfold(Term,UTerm):-
 	head_name(Head,Name),
 	(
 	    (
-		xmg_modules_def:module_def(Module,'syn'),
+		Module=syn,
+		%%xmg_modules_def:module_def(Module,'syn'),
 		unfold(Name,Params,UTerm)
 	    )
 	;
 	(
-	    not(xmg_modules_def:module_def(Module,'syn')),
-	    xmg_modules:get_module(Module,unfolder,UModule),
+	    not(Module=syn),
+	    %%not(xmg_modules_def:module_def(Module,'syn')),
+	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
 	    UModule:unfold(Term,UTerm)
 	)
     ),!.

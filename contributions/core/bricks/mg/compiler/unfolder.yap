@@ -27,7 +27,7 @@ unfold('MetaGrammar',[E,F,G],'MetaGrammar'(OUDecls,UClasses,UValues)):-
 	%% temporary
 	%%xmg_unfolder_decls:order_decls(UDecls,OUDecls),
 	%% next:
-	xmg_unfolder_decls:sort_decls(UDecls,OUDecls),
+	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
 	%%xmg_compiler:send(info,OUDecls),
 	unfold(F,UClasses),
 	unfold(G,UValues).
@@ -158,13 +158,13 @@ unfold(Term,UTerm):-
 	head_name(Head,Name),
 	(
 	    (
-		Module='XMG',
+		Module='mg',
 		unfold(Name,Params,UTerm)
 	    )
 	;
 	(
-	    not(Module='XMG'),
-	    xmg_modules:get_module(Module,unfolder,UModule),
+	    not(Module='mg'),
+	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
 	    UModule:unfold(Term,UTerm)
 	)
     ),!.

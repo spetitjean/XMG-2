@@ -20,6 +20,5 @@
 
 :-module(xmg_loader_decls).
 
-load_module:-
-	use_module('xmg/brick/decls/unfolder'),
-	use_module('xmg/brick/decls/principles'),!.
+:-use_module('xmg/brick/decls/compiler/unfolder').
+:-use_module('xmg/brick/decls/compiler/principles').

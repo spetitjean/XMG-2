@@ -86,13 +86,13 @@ unfold(Term,UTerm):-
 	head_name(Head,Name),
 	(
 	    (
-		Module='Control',
+		Module='control',
 		unfold(Name,Params,UTerm)
 	    )
 	;
 	(
-	    not(Module='Control'),
-	    xmg_modules:get_module(Module,unfolder,UModule),
+	    not(Module='control'),
+	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
 	    UModule:unfold(Term,UTerm)
 	)
     ),!.

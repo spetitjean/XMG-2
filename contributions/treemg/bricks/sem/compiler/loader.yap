@@ -20,9 +20,7 @@
 
 :-module(xmg_loader_sem).
 
-load_module:-
-	add_to_path('contributions/sem/bricks/sem/compiler'),
-	use_module('xmg_unfolder_sem'),
-	use_module('xmg_generator_sem'),
-	use_module('xmg_output_sem'),
-	use_module('xmg_convert_sem'),!.
+:-	use_module('xmg/brick/sem/compiler/unfolder').
+:-	use_module('xmg/brick/sem/compiler/generator').
+:-	use_module('xmg/brick/sem/output').
+:-	use_module('xmg/brick/sem/compiler/convert').

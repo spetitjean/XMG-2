@@ -34,20 +34,25 @@ get_module(Brick,Step,Get):-
 
 %% Get a compiler module corresponding to a Compiler Brick and a Compiling Step
 
-get_module_c('control',unfolder,'xmg_unfolder_control'):- !.
-get_module_c('decls',unfolder,'xmg_unfolder_decls'):- !.
-get_module_c('hierarchy',unfolder,'xmg_unfolder_hierarchy'):- !.
-get_module_c('feats',unfolder,'xmg_unfolder_feats'):- !.
-get_module_c('fields',unfolder,'xmg_unfolder_fields'):- !.
-get_module_c('syn',unfolder,'xmg_unfolder_syn'):- !.
-get_module_c('frame',unfolder,'xmg_unfolder_frame'):- !.
-get_module_c('morph',unfolder,'xmg_unfolder_morph'):- !.
-get_module_c('morph2',unfolder,'xmg_unfolder_morph'):- !.
-get_module_c('pg',unfolder,'xmg_unfolder_pg'):- !.
-get_module_c('sem',unfolder,'xmg_unfolder_sem'):- !.
-get_module_c('avm',unfolder,'xmg_unfolder_avm'):- !.
-get_module_c('value',unfolder,'xmg_unfolder_value'):- !.
-get_module_c('adisj',unfolder,'xmg_unfolder_adisj'):- !.
+%% get_module_c('control',unfolder,'xmg_unfolder_control'):- !.
+%% get_module_c('decls',unfolder,'xmg_unfolder_decls'):- !.
+%% get_module_c('hierarchy',unfolder,'xmg_unfolder_hierarchy'):- !.
+%% get_module_c('feats',unfolder,'xmg_unfolder_feats'):- !.
+%% get_module_c('fields',unfolder,'xmg_unfolder_fields'):- !.
+%% get_module_c('syn',unfolder,'xmg_unfolder_syn'):- !.
+%% get_module_c('frame',unfolder,'xmg_unfolder_frame'):- !.
+%% get_module_c('morph',unfolder,'xmg_unfolder_morph'):- !.
+%% get_module_c('morph2',unfolder,'xmg_unfolder_morph'):- !.
+%% get_module_c('pg',unfolder,'xmg_unfolder_pg'):- !.
+%% get_module_c('sem',unfolder,'xmg_unfolder_sem'):- !.
+%% get_module_c('avm',unfolder,'xmg_unfolder_avm'):- !.
+%% get_module_c('value',unfolder,'xmg_unfolder_value'):- !.
+%% get_module_c('adisj',unfolder,'xmg_unfolder_adisj'):- !.
+get_module_c(Brick,unfolder,Unfolder):-
+	atomic_concat('xmg/brick/',BrickTmp,Brick),
+	atomic_concat(BrickName,'/compiler/loader',BrickTmp),
+	atom_concat(['xmg_brick_',BrickName,'_unfolder'],Unfolder),
+	xmg_brick_mg_compiler:send(info,Unfolder),!.
 get_module_c(Module,Step,_):- 
 	%% Error : Step Step not defined for Module Module 
 	throw(xmg(unfolder_error(no_step_defined_for_module(Step,Module)))),	

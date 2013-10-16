@@ -34,13 +34,15 @@ unfold(Term,UTerm):-
 	head_name(Head,Name),
 	(
 	    (
-		xmg_modules_def:module_def(Module,'feats'),
+		Module=feats,
+		%%xmg_modules_def:module_def(Module,'feats'),
 		unfold(Name,Params,UTerm)
 	    )
 	;
 	(
-	    not(xmg_modules_def:module_def(Module,'feats')),
-	    xmg_modules:get_module(Module,unfolder,UModule),
+	    not(Module=feats),
+	    %%not(xmg_modules_def:module_def(Module,'feats')),
+	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
 	    UModule:unfold(Head,Params,UTerm)
 	)
     ),!.
@@ -64,4 +66,6 @@ head_module(Head,Module):-
 head_name(Head,Name):-
 	atomic_list_concat(A,'-',Head),
 	A=[_,Name],!.
+
+unfold_type(_,none).
 

@@ -18,7 +18,10 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_feats).
+:-module(xmg_loader_avm).
 
-
-:-use_module('xmg/brick/feats/compiler/unfolder').
+:-use_module('xmg/brick/avm/compiler/unfolder').
+:-use_module('xmg/brick/avm/compiler/generator').
+:-use_module('xmg/brick/avm/compiler/convert').
+:-use_module('xmg/brick/avm/convert_h').
+:-use_module('xmg/brick/avm/avm').

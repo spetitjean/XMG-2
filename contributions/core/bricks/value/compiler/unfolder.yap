@@ -28,7 +28,7 @@ unfold('Else',[Value],UValue):-
 unfold('ADisj',[V],UV):-
 	add_to_path('ADisj'),
 	use_module(xmg_unfolder_adisj),
-	xmg_unfolder_adisj:unfold(V,UV),!.
+	xmg_brick_adisj_unfolder:unfold(V,UV),!.
 
 
 unfold(token(C,id(ID)),id(ID,C)).
@@ -44,13 +44,15 @@ unfold(Term,UTerm):-
 	head_name(Head,Name),
 	(
 	    (
-		xmg_modules_def:module_def(Module,'Value'),
+		Module=value,
+		%%xmg_modules_def:module_def(Module,'value'),
 		unfold(Name,Params,UTerm)
 	    )
 	;
 	(
-	    not(xmg_modules_def:module_def(Module,'Value')),
-	    xmg_modules:get_module(Module,unfolder,UModule),
+	    not(Module=value),
+	    %%not(xmg_modules_def:module_def(Module,'value')),
+	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
 	    UModule:unfold(Term,UTerm)
 	)
     ),!.
