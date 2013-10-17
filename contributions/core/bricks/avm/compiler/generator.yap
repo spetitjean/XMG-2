@@ -20,8 +20,8 @@
 
 :-module(xmg_brick_avm_generator).
 
-:-edcg:using(xmg_generator:decls).
-:-edcg:using(xmg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:decls).
+:-edcg:using(xmg_brick_mg_generator:name).
 
 :-edcg:weave([decls,name], [new_name/2,var_or_const/2,generate/5]).
 
@@ -41,9 +41,9 @@ generate(avm,[ID1-avm(AVM)|Feats],[TID1-NAVM|TFeats],[AVMP|TOut],C):--!,
 	%%var_or_const(ID1,feat(TID1)),
 	get_feat(ID1,TID1),
 
-	%%xmg_compiler:send(debug,AVM),
+	%%xmg_brick_mg_compiler:send(debug,AVM),
 	generate(avm,AVM,TAVM,Out,C),
-	AVMP=xmg_avm:avm(NAVM,TAVM),
+	AVMP=xmg_brick_avm_avm:avm(NAVM,TAVM),
 	generate(avm,Feats,TFeats,TOut,C).
 generate(avm,[ID1-ID2|Feats],[TID1-TID2|TFeats],TOut,C):--
 	%%var_or_const(ID1,feat(TID1)),
@@ -66,7 +66,7 @@ generate(h_avm,[ID1-adisj(AD)|Feats],[TID1-const(ADisj,_)|TFeats],[ADP|TOut],C):
 	generate(h_avm,Feats,TFeats,TOut,C).
 generate(h_avm,[ID1-avm(AVM)|Feats],[TID1-NAVM|TFeats],[AVMP|TOut],C):--
 	%%var_or_const(ID1,feat(TID1)),
-	%%xmg_compiler:send(debug,AVM),
+	%%xmg_brick_mg_compiler:send(debug,AVM),
 	get_feat(ID1,TID1),
 	generate(h_avm,AVM,TAVM,Out,C),
 	AVMP=xmg_h_avm:h_avm(NAVM,TAVM),
@@ -88,11 +88,11 @@ generate(adisj,[bool(ID,_)|AD],[ID|AD1]):-
 	generate(adisj,AD,AD1),!.
 
 get_feat(id(A,C),A):-
-	xmg_typer:feat(A,_),!.
+	xmg_brick_mg_typer:feat(A,_),!.
 get_feat(id(A,C),A):-
-	xmg_typer:property(A,_),!.
+	xmg_brick_mg_typer:property(A,_),!.
 get_feat(id(A,C),A):-
-		xmg_compiler:send(info,'Warning : feat '),xmg_compiler:send(info,A),xmg_compiler:send(info,' was not declared '),xmg_compiler:send(info,C),xmg_compiler:send_nl(info),!.
+		xmg_brick_mg_compiler:send(info,'Warning : feat '),xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send(info,' was not declared '),xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info),!.
 
 
 var_or_const(Var,var(NVar)):--
@@ -102,26 +102,26 @@ var_or_const(Var,var(NVar)):--
 	decls::tput(Name,NVar),!.
 
 var_or_const(id(A,C),Var):--
-	%%xmg_compiler:send(info,List),
+	%%xmg_brick_mg_compiler:send(info,List),
 	decls::tget(A,Var),!.
 %% var_or_const(id(A,C),feat(A)):--
-%% 	xmg_typer:feat(A,_),!.
+%% 	xmg_brick_mg_typer:feat(A,_),!.
 %% var_or_const(id(A,C),feat(A)):--
-%% 	xmg_typer:property(A,_),!.
+%% 	xmg_brick_mg_typer:property(A,_),!.
 
 var_or_const(id(A,C),A):--
-	xmg_typer:field(A,_),!.
+	xmg_brick_mg_typer:field(A,_),!.
 var_or_const(id(A,C),const(A,T)):--
-	xmg_typer:type(T,TD),
+	xmg_brick_mg_typer:type(T,TD),
 	lists:member(id(A,_),TD),!.
 var_or_const(bool(A,C),const(A,bool)):--!.
 var_or_const(int(A,C),const(A,int)):--!.
 var_or_const(id(A,C),const(A,unknown)):--
-	xmg_compiler:send(info,'Warning : '),xmg_compiler:send(info,A),xmg_compiler:send(info,' was not declared '),xmg_compiler:send(info,C),xmg_compiler:send_nl(info).
+	xmg_brick_mg_compiler:send(info,'Warning : '),xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send(info,' was not declared '),xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info).
 var_or_const(id(A,C),A):--
-	xmg_compiler:send(info,'Warning : '),xmg_compiler:send(info,A),xmg_compiler:send(info,' was not declared '),xmg_compiler:send(info,C),xmg_compiler:send_nl(info).
+	xmg_brick_mg_compiler:send(info,'Warning : '),xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send(info,' was not declared '),xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info).
 %% var_or_const(id(A,C),feat(A)):--
-%% 		xmg_compiler:send(info,'Warning : feat '),xmg_compiler:send(info,A),xmg_compiler:send(info,' was not declared '),xmg_compiler:send(info,C),xmg_compiler:send_nl(info),!.
+%% 		xmg_brick_mg_compiler:send(info,'Warning : feat '),xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send(info,' was not declared '),xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info),!.
 
 
 
@@ -131,14 +131,14 @@ var_or_const(string(A,C),const(A,string)):-- !.
 check_type(Attr,A,A):-
 	var(A),!.
 check_type(Attr,const(C,_),const(C,label)):-
-	xmg_typer:type(Attr,label),!.
+	xmg_brick_mg_typer:type(Attr,label),!.
 check_type(Attr,const(C,Type),const(C,Type)):-
-	xmg_typer:feat(Attr,Type),!.
+	xmg_brick_mg_typer:feat(Attr,Type),!.
 check_type(Attr,const(C,Type),const(C,Type)):-
-	xmg_typer:property(Attr,Type),!.
+	xmg_brick_mg_typer:property(Attr,Type),!.
 check_type(Attr,Val,const(C,_)):-
 	Val=const(C,_),
-	xmg_compiler:send(info,'Warning : '),xmg_compiler:send(info,Attr),xmg_compiler:send(info,' and '),xmg_compiler:send(info,Val),xmg_compiler:send(info,' do not share the same type'),xmg_compiler:send_nl(info).
+	xmg_brick_mg_compiler:send(info,'Warning : '),xmg_brick_mg_compiler:send(info,Attr),xmg_brick_mg_compiler:send(info,' and '),xmg_brick_mg_compiler:send(info,Val),xmg_brick_mg_compiler:send(info,' do not share the same type'),xmg_brick_mg_compiler:send_nl(info).
 check_type(Attr,Val,sconst(_,_)):- !.
 check_type(Attr,Val,const(C,_)):-
-	xmg_compiler:send(info,Val),false.
+	xmg_brick_mg_compiler:send(info,Val),false.

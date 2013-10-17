@@ -14,18 +14,18 @@ gensym(Name) :--
 	atomic_concat(['XMGC',N],Name).
 
 %% inode(X,N) :-
-%% 	xmg_avm:avm(P,[]),
-%% 	xmg_avm:avm(T,[]),
+%% 	xmg_brick_avm_avm:avm(P,[]),
+%% 	xmg_brick_avm_avm:avm(T,[]),
 %% 	nb_getval(suffix,Number),
 %% 	Number1 is Number + 1,
 %% 	nb_setval(suffix,Number1),
 %% 	atomic_concat([N,'_',Number1],N1),
-%% 	xmg_nodename:nodename(I,N1),
+%% 	xmg_brick_syn_nodename:nodename(I,N1),
 %% 	X = node(P,T,I),!. 
 inode(X,N) :-
-	xmg_avm:avm(P,[]),
-	xmg_avm:avm(F,[]),
-	xmg_nodename:nodename(I,N),
+	xmg_brick_avm_avm:avm(P,[]),
+	xmg_brick_avm_avm:avm(F,[]),
+	xmg_brick_syn_nodename:nodename(I,N),
 	X = node(P,F,I),!. 
 
 inodeprops(X,P) :-
@@ -36,7 +36,7 @@ inodefeats(X,F) :-
 
 
 feat(F,A,B,P) :-
-	xmg_avm:avm(N,[A-value(B,P)]),
+	xmg_brick_avm_avm:avm(N,[A-value(B,P)]),
 	F=N,
 	!.
 

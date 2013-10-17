@@ -21,14 +21,14 @@
 
 eval(Syn,XML,Class):-
 	%%send(info,Syn),
-	xmg_preparer_syn:prepare(syn(Syn,[Class]),Prepared),
-	xmg_tree:solve(Prepared,solution(UTree,Children,Table)),
+	xmg_brick_syn_preparer:prepare(syn(Syn,[Class]),Prepared),
+	xmg_brick_tree_tree:solve(Prepared,solution(UTree,Children,Table)),
 	%%send(info,UTree),
 	%%flush_output,
-	xmg_compiler:current(Previous),
+	xmg_brick_mg_compiler:current(Previous),
 	%% Current is Previous + 1,
 	%% retract(current(Previous)),
 	%% asserta(current(Current)),
-	xmg_convert_tag_syn:toXML(tree(UTree,Class),XML,Previous).
+	xmg_brick_syn_convert:toXML(tree(UTree,Class),XML,Previous).
 eval([], elem(tree, features([id-none])),_).
 

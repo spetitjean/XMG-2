@@ -20,8 +20,8 @@
 
 :-module(xmg_brick_sem_generator).
 
-:-edcg:using(xmg_generator:decls).
-:-edcg:using(xmg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:decls).
+:-edcg:using(xmg_brick_mg_generator:name).
 
 :-edcg:weave([decls,name], [var_Stmt/2,var_or_const/2,generate_Stmt/4,generate_params/2]).
 
@@ -43,7 +43,7 @@ var_Stmt(pred(none,Pred,Params),Generated):--
 	var_or_const(Pred,CPred),
 	generate_params(Params,GParams),
 	APred=..['@',CPred,GParams],
-	Generated=..['::',xmg_generator:sem,put(APred)],
+	Generated=..['::',xmg_brick_mg_generator:sem,put(APred)],
 	!.
 var_Stmt(pred(L,Pred,Params),Generated):--
 	var_or_const(L,VL),
@@ -52,7 +52,7 @@ var_Stmt(pred(L,Pred,Params),Generated):--
 	generate_params(Params,GParams),
 	APred=..['@',CPred,GParams],
 	ALPred=..[':',VL,APred],
-	Generated=..['::',xmg_generator:sem,put(ALPred)],
+	Generated=..['::',xmg_brick_mg_generator:sem,put(ALPred)],
 
 	!.
 

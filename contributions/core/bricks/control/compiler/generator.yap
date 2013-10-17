@@ -19,8 +19,8 @@
 
 :-module(xmg_brick_control_generator).
 
-:-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:decls).
 
 :-edcg:weave([decls,name], [put_in_table/1, generate_Stmt/4, generate_iface/4, generate_EqPart/4, generate_dimStmt/4]).
 
@@ -42,20 +42,20 @@ generate_dimStmt(dimStmt(syn,Stmt),List,Class,Generated):--
 	xmg_brick_mg_compiler:send(info,Stmt),
 	xmg_brick_syn_generator:generate_Stmt(Stmt,List,Class,Generated,'syn').
 generate_dimStmt(dimStmt(syn1,Stmt),List,Class,Generated):--
-	xmg_compiler:send(info,Stmt),
+	xmg_brick_mg_compiler:send(info,Stmt),
 	xmg_brick_syn_generator:generate_Stmt(Stmt,List,Class,Generated,'syn1').
 generate_dimStmt(dimStmt(syn2,Stmt),List,Class,Generated):--
-	xmg_compiler:send(info,Stmt),
+	xmg_brick_mg_compiler:send(info,Stmt),
 	xmg_brick_syn_generator:generate_Stmt(Stmt,List,Class,Generated,'syn2').
 generate_dimStmt(dimStmt(pg,Stmt),List,Class,Generated):--
 	%%use_module('xmg_generator_pg'),
-	xmg_generator_pg:generate_Stmt(Stmt,List,Class,Generated).
+	xmg_brick_pg_generator:generate_Stmt(Stmt,List,Class,Generated).
 generate_dimStmt(dimStmt(sem,Stmt),List,Class,Generated):--
 	%%use_module('xmg_generator_sem'),
 	xmg_brick_sem_generator:generate_Stmt(Stmt,List,Class,Generated).
 generate_dimStmt(dimStmt(frame,Stmt),List,Class,Generated):--
 	%%xmg_compiler:send(debug,Stmt),
-	xmg_generator_frame:generate_Stmt(Stmt,List,Class,Generated).
+	xmg_brick_frame_generator:generate_Stmt(Stmt,List,Class,Generated).
 
 generate_dimStmt(Stmt,_,_,_):--
 	xmg_brick_mg_compiler:send(info,Stmt),false,!.
@@ -76,7 +76,7 @@ generate_Stmt(class(Call,Params),List,Class,Gen):--
 	%%current_predicate(Call/N),
 	get_params(Params,List,GParams,Eqs),
 	ClassCall=..[Call,params(GParams),IDVar],
-	Calls=xmg_generator:ClassCall,
+	Calls=xmg_brick_mg_generator:ClassCall,
 	%%add_eqs(Eqs,CEqs),
 	%%Calls=..[',',xmg_generator:ClassCall,CEqs],
 	%%write(Calls),
@@ -123,13 +123,13 @@ generate_Stmt(eq(Left,Right,C),List,Class,NewEq):--
 %% 	%%xmg_generator:var_or_const(id(ID,C),var(IDVar)),
 %% 	!.
 generate_EqPart(id(ID,C),List,Class,part([],Const)):--
-	xmg_generator:var_or_const(id(ID,C),Const),
+	xmg_brick_mg_generator:var_or_const(id(ID,C),Const),
 	!.
 
-generate_EqPart(dot(D1,D2),List,Class,part([xmg_generator_control:Dot],Var)):--
+generate_EqPart(dot(D1,D2),List,Class,part([xmg_brick_control_generator:Dot],Var)):--
 	Dot=..['dot',List,D1,D2,Var],
 	!.
-generate_EqPart(class(Call,Params),List,Class,part([xmg_generator:ClassCall],Var)):--
+generate_EqPart(class(Call,Params),List,Class,part([xmg_brick_mg_generator:ClassCall],Var)):--
 	get_params(Params,List,GParams,Eqs),
 	ClassCall=..[Call,params(GParams),Var],
 	!.
@@ -147,8 +147,8 @@ generate_iface(none,List,Class,[]):-- !.
 generate_iface(avm(IFace),List,Class,[AVMFeats,UIFace]):--
 	xmg_brick_avm_generator:generate(avm,IFace,GFeats,FOut,C),
 
-	AVMFeats=xmg_avm:avm(AVMF,GFeats),
-	UIFace=..['::',xmg_generator:iface,top(AVMF)],
+	AVMFeats=xmg_brick_avm_avm:avm(AVMF,GFeats),
+	UIFace=..['::',xmg_brick_mg_generator:iface,top(AVMF)],
 	
 	%%Generated=iface::top(AVM),
 	%% Or just: iface::top(AVM)

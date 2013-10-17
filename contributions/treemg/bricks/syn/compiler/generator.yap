@@ -19,10 +19,10 @@
 
 
 :-module(xmg_brick_syn_generator).
-:-use_module(xmg_engine_syn).
+:-use_module(xmg_brick_syn_engine).
 
-:-edcg:using(xmg_generator:decls).
-:-edcg:using(xmg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:decls).
+:-edcg:using(xmg_brick_mg_generator:name).
 
 
 :-edcg:weave([decls,name], [new_name/2,var_Stmt/3,var_or_const/2,generate_Stmt/5]).
@@ -49,25 +49,25 @@ var_Stmt(eq(Left,Right),Generated,Acc):--
 	Generated=..['=',GLeft,GRight],!.
 var_Stmt(synnode(N,props(Props),feats(Feats),C),Generated,Acc):--
 	var_or_const(N,VN),
-	VNode=xmg_engine_syn:inode(VN,N),
+	VNode=xmg_brick_syn_engine:inode(VN,N),
 
-	xmg_compiler:send(info,Props),
-	xmg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(info,Props),
+	xmg_brick_mg_compiler:send_nl(info),
 
-	xmg_compiler:send(info,Feats),
+	xmg_brick_mg_compiler:send(info,Feats),
 	
-	xmg_generator_avm:generate(avm,Feats,GFeats,FOut,C),
-	xmg_generator_avm:generate(avm,Props,GProps,POut,C),
-	AVMFeats=xmg_avm:avm(AVMF,GFeats),
-	AVMProps=xmg_avm:avm(AVMP,GProps),
-	VFeats=xmg_engine_syn:inodefeats(VN,AVMF),
-	VProps=xmg_engine_syn:inodeprops(VN,AVMP),
+	xmg_brick_avm_generator:generate(avm,Feats,GFeats,FOut,C),
+	xmg_brick_avm_generator:generate(avm,Props,GProps,POut,C),
+	AVMFeats=xmg_brick_avm_avm:avm(AVMF,GFeats),
+	AVMProps=xmg_brick_avm_avm:avm(AVMP,GProps),
+	VFeats=xmg_brick_syn_engine:inodefeats(VN,AVMF),
+	VProps=xmg_brick_syn_engine:inodeprops(VN,AVMP),
 	Generated4=..[',',VNode,AVMProps],
 	Generated3=..[',',Generated4,AVMFeats],
 	Generated2=..[',',Generated3,VProps],
 	Generated1=..[',',Generated2,VFeats],
 	Put=..[put,VN],
-	AccNode=..['::',xmg_generator:Acc,Put],
+	AccNode=..['::',xmg_brick_mg_generator:Acc,Put],
 	add_out(Generated1,FOut,Generated0),
 	%% + POut
 	Generated=..[',',Generated0,AccNode].
@@ -76,16 +76,16 @@ var_Stmt(syndom(Dom,N1,N2,C),Generated,Acc):--
 	var_or_const(N2,VN2),
 	VDom=dom(VN1,Dom,VN2,none),
 	Add=..[put,VDom],
-	Generated=..['::',xmg_generator:Acc,Add].
+	Generated=..['::',xmg_brick_mg_generator:Acc,Add].
 var_Stmt(synprec(Prec,N1,N2,C),Generated,Acc):--
 	var_or_const(N1,VN1),
 	var_or_const(N2,VN2),
 	VPrec=prec(VN1,Prec,VN2),
 	Add=..[put,VPrec],
-	Generated=..['::',xmg_generator:Acc,Add].
+	Generated=..['::',xmg_brick_mg_generator:Acc,Add].
 
 var_or_const(A,B):--
-	xmg_generator:var_or_const(A,B),!.
+	xmg_brick_mg_generator:var_or_const(A,B),!.
 
 
 

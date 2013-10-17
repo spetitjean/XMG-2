@@ -25,13 +25,13 @@
 :-	use_module('xmg/brick/syn/compiler/generator').
 :-	use_module('xmg/brick/syn/compiler/preparer').
 :-	use_module('xmg/brick/syn/compiler/convert_tag').
-:-	use_module('xmg/brick/syn/tree').
+:-	use_module('xmg/brick/tree/compiler/tree').
 	%% this should be done optionally
-:-	use_module('xmg/brick/syn/unicity').
-:-	use_module('xmg/brick/syn/colors').
-:-	use_module('xmg/brick/syn/rank').
-:-	use_module('xmg/brick/syn/tag').
-:-	use_module('xmg/brick/syn/engine').
-:-	use_module('xmg/brick/syn/most').
-:-	use_module('xmg/brick/syn/nodename').
-:-	use_module('xmg/brick/syn/polarity').
+:-	use_module('xmg/brick/unicity/compiler/unicity').
+:-	use_module('xmg/brick/colors/compiler/colors').
+:-	use_module('xmg/brick/rank/compiler/rank').
+:-	use_module('xmg/brick/tag/compiler/tag').
+:-	use_module('xmg/brick/syn/xmg_engine_syn').
+:-	use_module('xmg/brick/syn/xmg_most').
+:-	use_module('xmg/brick/syn/xmg_nodename').
+:-	use_module('xmg/brick/syn/xmg_polarity').

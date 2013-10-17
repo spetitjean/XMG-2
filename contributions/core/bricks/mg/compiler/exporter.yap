@@ -26,9 +26,9 @@ export_metagrammar('MetaGrammar'(_,Classes,Values)):-
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
 	asserta(classNumber(L)),
-	xmg_compiler:send(info,' ordering classes '),xmg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(info,' ordering classes '),xmg_brick_mg_compiler:send_nl(info),
 	order_classes(Classes,OClasses),!,
-	xmg_compiler:send(info,' classes ordered '),xmg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(info,' classes ordered '),xmg_brick_mg_compiler:send_nl(info),
 	retract(classNumber(L)),
 	export_classes(OClasses).
 
@@ -48,8 +48,8 @@ order_classes([],Classes,Acc,OClasses,Laps):-!,
 	    )
 	;
 	(
-	    xmg_compiler:send(info,'Could not order classes for exports\n'),!,
-	    xmg_compiler:send(info,Classes),
+	    xmg_brick_mg_compiler:send(info,'Could not order classes for exports\n'),!,
+	    xmg_brick_mg_compiler:send(info,Classes),
 	    whatsWrong(Classes,Acc)
 	)
     ).
@@ -80,7 +80,7 @@ imports_before([import(id(H,C),_)|T],Acc):-
 
 whatsWrong([],Acc):-!.
 whatsWrong([class(id(Class),class(_,I,_,_,_),_)|T],Acc):-
-	xmg_compiler:send(info,' in class '),xmg_compiler:send(info,Class),xmg_compiler:send(info,'\n'),
+	xmg_brick_mg_compiler:send(info,' in class '),xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send(info,'\n'),
 	whichImport(I,Acc),!,
 	whatsWrong(T,Acc).
 
@@ -88,20 +88,20 @@ whichImport([id(H,C)|T],Acc):-
 	lists:member(H,Acc),!,
 	whichImport(T,Acc).
 whichImport([id(H,C)|T],Acc):-
-	xmg_compiler:send(info,'Error while importing class '),xmg_compiler:send(info,H),xmg_compiler:send(info,' at '),xmg_compiler:send(info,C),xmg_compiler:send(info,'\n'),!,
+	xmg_brick_mg_compiler:send(info,'Error while importing class '),xmg_brick_mg_compiler:send(info,H),xmg_brick_mg_compiler:send(info,' at '),xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send(info,'\n'),!,
 	whichImport(T,Acc).
 
 %% Export variables
 
 export_classes([]):- 
-	xmg_compiler:send(info,' exported '),xmg_compiler:send_nl(info),!.
+	xmg_brick_mg_compiler:send(info,' exported '),xmg_brick_mg_compiler:send_nl(info),!.
 export_classes([H|T]):-
 	export_class(H),!,
 	export_classes(T).
 
 export_class(class(id(Name),class(P,I,E,D,_),_)):-
 	imports_exports(I,E,D,Exps),
-	%%xmg_compiler:send(debug,Exps),
+	%%xmg_brick_mg_compiler:send(debug,Exps),
 	%% check exported variables have whether been declared or imported
 	exports_declared(E,Exps,D),!,
 	%% open unification
@@ -124,9 +124,9 @@ add_vars(Exps,[H|T],[H-_|T1]):-
 add_vars_no_duplicates(Exps,[],Exps).
 add_vars_no_duplicates(Exps,[id(H,C)|T],T1):-
 	lists:member(id(H,_)-_,Exps),!,
-	xmg_compiler:send(info,' Multiple declarations of variable '),
-	xmg_compiler:send(info,H),
-	xmg_compiler:send(info,C),
+	xmg_brick_mg_compiler:send(info,' Multiple declarations of variable '),
+	xmg_brick_mg_compiler:send(info,H),
+	xmg_brick_mg_compiler:send(info,C),
 	false,
 	add_vars_no_duplicates(Exps,T,T1).
 add_vars_no_duplicates(Exps,[H|T],[H-_|T1]):-
@@ -138,8 +138,8 @@ imports_exports([import(id(I,C),AS)|TI],E,D,Exps):-
 	   import_exports(I,Exps1)
 	;
 	(
-	    xmg_compiler:send_nl(info),xmg_compiler:send(info,'Did not find exports for class '),
-	    xmg_compiler:send(info,I),xmg_compiler:send(info,' at '), xmg_compiler:send(info,C),xmg_compiler:send_nl(info)
+	    xmg_brick_mg_compiler:send_nl(info),xmg_brick_mg_compiler:send(info,'Did not find exports for class '),
+	    xmg_brick_mg_compiler:send(info,I),xmg_brick_mg_compiler:send(info,' at '), xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info)
 	)
     ),
 	!,
@@ -163,11 +163,11 @@ exports_declared([id(H,C)|T],Exps,D):-
 	    ( lists:member(id(H,_)-_,Exps) ; lists:member(id(H,_),D) )
 	;
 	(
-	    %% xmg_compiler:send_nl(info),
-	    %% xmg_compiler:send(info,'variable '),
-	    %% xmg_compiler:send(info,H),
-	    %% xmg_compiler:send(info,' exported but not declared '),
-	    %% xmg_compiler:send(info,C),xmg_compiler:send_nl(info)
+	    %% xmg_brick_mg_compiler:send_nl(info),
+	    %% xmg_brick_mg_compiler:send(info,'variable '),
+	    %% xmg_brick_mg_compiler:send(info,H),
+	    %% xmg_brick_mg_compiler:send(info,' exported but not declared '),
+	    %% xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info)
 	    throw(xmg(exporter_error(variable_not_declared(H,C))))
 	)
     )

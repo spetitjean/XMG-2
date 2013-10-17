@@ -21,7 +21,7 @@
 
 %%:- edcg:thread(name,edcg:counter).
 
-:- edcg:using(xmg_convert:name).
+:- edcg:using(xmg_brick_mg_convert:name).
 
 :- edcg:weave([name],[xmlFeats/2, new_name/2]).
 

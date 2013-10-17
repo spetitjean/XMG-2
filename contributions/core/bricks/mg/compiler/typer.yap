@@ -26,8 +26,8 @@
 
 %% type_metagrammar('MetaGrammar'(decls(Principles,Types,Properties,Feats,Fields,FieldPrecs),_,_)):-
 	
-%% 	%%xmg_compiler:send(info,'types : '),
-%% 	%%xmg_compiler:send(info,Types),
+%% 	%%xmg_brick_mg_compiler:send(info,'types : '),
+%% 	%%xmg_brick_mg_compiler:send(info,Types),
 %% 	get_types(Types),!,
 %% 	type_properties(Properties),!,
 %% 	type_feats(Feats),!,
@@ -36,7 +36,7 @@
 %% 	order_fields(PFields,OFields),
 %% 	retractall(fieldprec(_,_)),
 %% 	type_fields(OFields,1),
-%% 	xmg_compiler:send(info,' typed').
+%% 	xmg_brick_mg_compiler:send(info,' typed').
 
 type_metagrammar('MetaGrammar'(Decls,_,_)):-
 	G=[gather(field,fieldprec,fields)],
@@ -49,8 +49,8 @@ gather_decls(Decls,[HG|TG],GDecls):-
 	gather_decls(GODecls,TG,GDecls),!.
 
 gather_one(Decls,gather(One,Two,New),[New-NDecl|Decls2]):-
-	xmg_compiler:send(info,' gathering '),
-	xmg_compiler:send(info,New),
+	xmg_brick_mg_compiler:send(info,' gathering '),
+	xmg_brick_mg_compiler:send(info,New),
 	lists:member(One-DOne,Decls),
 	lists:delete(Decls,One-DOne,Decls1),
 	lists:member(Two-DTwo,Decls1),
@@ -79,17 +79,17 @@ type_decl(principle-Principle):-
 	!.
 type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):-
 	assert_field_precs(FieldPrecs),
-	xmg_compiler:send(info,' fields orders asserted\n '),
+	xmg_brick_mg_compiler:send(info,' fields orders asserted\n '),
 	prepare_fields(Fields,PFields),
-	xmg_compiler:send(info,' fields prepared\n '),
+	xmg_brick_mg_compiler:send(info,' fields prepared\n '),
 	order_fields(PFields,OFields),
-	xmg_compiler:send(info,' fields ordered\n '),
-	xmg_compiler:send(info,OFields),
+	xmg_brick_mg_compiler:send(info,' fields ordered\n '),
+	xmg_brick_mg_compiler:send(info,OFields),
 	type_fields(OFields,1),
 	!.
 type_decl(Type-Decls):-
-	xmg_compiler:send(info,'  unknown decl type: '),
-	xmg_compiler:send(info,Type),
+	xmg_brick_mg_compiler:send(info,'  unknown decl type: '),
+	xmg_brick_mg_compiler:send(info,Type),
 	false,!.
 
 get_types([]).
@@ -105,7 +105,7 @@ get_type(type(Type,range(Inf,Sup))):-
 get_type(type(Type,label)):-
 	asserta(type(Type,label)),!.
 get_type(A):-
-	xmg_compiler:send(info,A),xmg_compiler:send_nl(info).
+	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
 
 get_hierarchies([]):-!.
 get_hierarchies([H|T]):-
@@ -139,8 +139,8 @@ prepare_fields([],[]):- !.
 prepare_fields([field(id(ID,_))|T],[ID|PT]):-
 	prepare_fields(T,PT),!.
 prepare_fields([U|T],[ID|PT]):-
-	xmg_compiler:send(info,'UNEXPECTED '),
-	xmg_compiler:send(info,U),false,!.
+	xmg_brick_mg_compiler:send(info,'UNEXPECTED '),
+	xmg_brick_mg_compiler:send(info,U),false,!.
 
 order_fields([],[]):-!.
 order_fields(Fields,OFields):-
@@ -153,14 +153,14 @@ order_fields(Fields,First,[First|OFields]):-
 	fieldprec(First,Next),!,
 	order_fields(NFields,Next,OFields),!.
 order_fields(Fields,First,[First|OFields]):- !,
-	xmg_compiler:send(info,' Could not order fields, nothing seems to follow '),
-	xmg_compiler:send(info,First),
+	xmg_brick_mg_compiler:send(info,' Could not order fields, nothing seems to follow '),
+	xmg_brick_mg_compiler:send(info,First),
 	false,!.
 
 
 
 find_first([],_):- !,
-	xmg_compiler:send(info,' Could not find a first field, there might be a cycle'),false,!.
+	xmg_brick_mg_compiler:send(info,' Could not find a first field, there might be a cycle'),false,!.
 find_first([F1|T],F2):-
 	fieldprec(_,F1),!,
 	find_first(T,F2),!.

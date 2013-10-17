@@ -93,58 +93,58 @@ write_lit(node(PropAVM,FeatAVM,N),'none',Table):--
 	!.
 
 write_lit(dom(node(_,_,A),'->',node(_,_,C),_),vstep(one,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(dom(node(_,_,A),'-L>',node(_,_,C),_),vstep(oneleft,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(dom(node(_,_,A),'-R>',node(_,_,C),_),vstep(oneright,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(dom(node(_,_,A),'->+',node(_,_,C),_),vstep(more,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(dom(node(_,_,A),'->*',node(_,_,C),_),vstep(any,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(prec(node(_,_,A),'>>',node(_,_,C)),hstep(one,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(prec(node(_,_,A),'>>+',node(_,_,C)),hstep(more,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
 write_lit(prec(node(_,_,A),'>>*',node(_,_,C)),hstep(any,A2,C2),Table):--
-	xmg_nodename:nodename(A,A1),
+	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
-	xmg_nodename:nodename(C,C1),
+	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
@@ -173,7 +173,7 @@ write_nodes([H|T],L,NodeList,N,Table):--
 	!.
 
 write_node(node(PropAVM,FeatAVM,N),N2,Table):--
-	xmg_nodename:nodename(N,N1),
+	xmg_brick_syn_nodename:nodename(N,N1),
 	xmg_table:table_get(Table,N1,N2),
 	!.
 
@@ -195,8 +195,8 @@ write_colors([H|T],Colors,[H|T1]):-
 	write_colors(T,Colors,T1),!.
 
 write_color(Name,PropAVM,color(C)):-
-	xmg_avm:avm(PropAVM, Props),!,
-	xmg_nodename:nodename(Name,NodeName),!,
+	xmg_brick_avm_avm:avm(PropAVM, Props),!,
+	xmg_brick_syn_nodename:nodename(Name,NodeName),!,
 	search_color(NodeName,Props,C),!.
 
 
@@ -220,7 +220,7 @@ write_ranks([_|T],Ranks):-
 	write_ranks(T,Ranks),!.
 
 write_rank(PropAVM,rank(C)):-
-	xmg_avm:avm(PropAVM, Props),
+	xmg_brick_avm_avm:avm(PropAVM, Props),
 	search_rank(Props,C),
 	!.
 
@@ -247,7 +247,7 @@ write_tagops([_|T],Tagops):-
 	write_tagops(T,Tagops),!.
 
 write_tagop(PropAVM,tagop(C)):-
-	xmg_avm:avm(PropAVM, Props),
+	xmg_brick_avm_avm:avm(PropAVM, Props),
 	search_tagop(Props,C),
 	!.
 
@@ -274,12 +274,12 @@ write_unicities(Nodes,[U1|UT],[H1|T1]):-
 write_unicity([],_,[]):-!.
 write_unicity([Node|T],feat(A,V),['true'|T1]):-
 	Node=node(Prop,Feat,_),
-	xmg_avm:avm(Prop,PL),
+	xmg_brick_avm_avm:avm(Prop,PL),
 	lists:member(A-const(V,_),PL),!,	
 	write_unicity(T,feat(A,V),T1),!.
 write_unicity([Node|T],feat(A,V),['true'|T1]):-
 	Node=node(Prop,Feat,_),
-	xmg_avm:avm(Feat,PL),
+	xmg_brick_avm_avm:avm(Feat,PL),
 	lists:member(A-const(V,_),PL),!,	
 	write_unicity(T,feat(A,V),T1),!.
 write_unicity([Node|T],feat(A,V),['false'|T1]):-
@@ -294,22 +294,22 @@ count([],0,0,0,_,Table,Table):-- !.
 
 count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	J is I+1,
-	xmg_nodename:nodename(N,Nodename),
+	xmg_brick_syn_nodename:nodename(N,Nodename),
 	xmg_table:table_get(TableIn,Nodename,_),
 	xmg_compiler:send(info,Nodename),
 	xmg_compiler:send(info,' CONFLICT '),!,
 
 	%% this should be done in a better way
-	xmg_nodename:nodename(M,id(new,c)),
+	xmg_brick_syn_nodename:nodename(M,id(new,c)),
 	M=N,
-	xmg_nodename:nodename(N,NewNodename),
+	xmg_brick_syn_nodename:nodename(N,NewNodename),
 	xmg_table:table_put(TableIn,NewNodename,J,Table),
 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
 	Nodes is NodesR +1,!.
 
 count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	J is I+1,!,
-	xmg_nodename:nodename(N,Nodename),
+	xmg_brick_syn_nodename:nodename(N,Nodename),
 	xmg_table:table_put(TableIn,Nodename,J,Table),
 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
 	Nodes is NodesR +1,!.
@@ -364,14 +364,14 @@ add_constraint(node(Props1,Feats1,_),node(Props2,Feats2,_),L,L):-
 	not(not(Feats1=Feats2)),!.
 add_constraint(node(_,Feats1,Node1),node(_,Feats2,Node2),L,[noteq(Nodename1,Nodename2)|L]):-
 
-	xmg_nodename:nodename(Node1,Nodename1),
-	xmg_nodename:nodename(Node2,Nodename2),
+	xmg_brick_syn_nodename:nodename(Node1,Nodename1),
+	xmg_brick_syn_nodename:nodename(Node2,Nodename2),
 
 	%% xmg_compiler:send(info,Nodename1),
 	%% xmg_compiler:send_nl(info),
 	%% xmg_compiler:send(info,Nodename2),
-	%% xmg_avm:print_avm(Feats1),
-	%% xmg_avm:print_avm(Feats2),
+	%% xmg_brick_avm_avm:print_avm(Feats1),
+	%% xmg_brick_avm_avm:print_avm(Feats2),
 	%% xmg_compiler:send_nl(info,2),
 	!.
 
@@ -381,10 +381,10 @@ inverse_table([H-H1|T],Table,Table2):-
 	inverse_table(T,Table1,Table2),!.
 
 no_color(AVM,NCAVM):-
-	xmg_avm:avm(AVM,LAVM),
+	xmg_brick_avm_avm:avm(AVM,LAVM),
 	lists:member(color-C,LAVM),!,
 	lists:delete(LAVM,color-C,NCLAVM),
-	xmg_avm:avm(NCAVM,NCLAVM),!.
+	xmg_brick_avm_avm:avm(NCAVM,NCLAVM),!.
 
 no_color(AVM,AVM):-
 	!.
@@ -397,12 +397,12 @@ print_nodes([H|T]):-
 print_node(node(P,F,N)):-
 	xmg_compiler:send(info,node(P,F,N)),
 	xmg_compiler:send_nl(info),
-	xmg_nodename:nodename(N,Name),
-	xmg_avm:avm(P,AP),
-	xmg_avm:avm(F,AF),
+	xmg_brick_syn_nodename:nodename(N,Name),
+	xmg_brick_avm_avm:avm(P,AP),
+	xmg_brick_avm_avm:avm(F,AF),
 	xmg_compiler:send(info,Name),
-	xmg_avm:print_avm(P),
-	xmg_avm:print_avm(F),
+	xmg_brick_avm_avm:print_avm(P),
+	xmg_brick_avm_avm:print_avm(F),
 	
 	xmg_compiler:send_nl(info,2),!.
 print_node(H):-

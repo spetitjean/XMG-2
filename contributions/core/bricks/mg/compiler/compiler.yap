@@ -70,10 +70,10 @@ compile_file(File,Eval):-
 	send(info,' unfolded '),
 	%%send(info,Unfolded),
 	send_nl(info),	
-	xmg_principles:principles(Unfolded),!,
-	xmg_exporter:export_metagrammar(Unfolded),!,
-	xmg_typer:type_metagrammar(Unfolded),!,
-	xmg_generator:generate(Unfolded),!,
+	xmg_brick_decls_principles:principles(Unfolded),!,
+	xmg_brick_mg_exporter:export_metagrammar(Unfolded),!,
+	xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
+	xmg_brick_mg_generator:generate(Unfolded),!,
 	send_nl(info),	
 	send(info,' generated '),
 	send_nl(info),	
@@ -84,7 +84,7 @@ compile_file(File,Eval):-
 	eval.	
 
 eval:-
-	xmg_generator:compute(Class,Computed),
+	xmg_brick_mg_generator:compute(Class,Computed),
 	xmg_dimensions:dims(Dims),
 
 	%% Computed=dims([morph-Morph,syn-Syn,pg-PG,sem-Sem]),
@@ -105,8 +105,8 @@ eval:-
 	Current is Previous + 1,
 	retract(current(Previous)),
 	asserta(current(Current)),
-	xmg_convert:toXML(entry(Trace,EDims),XML,Previous),
-	xmg_printer:printXML([XML],1),
+	xmg_brick_mg_convert:toXML(entry(Trace,EDims),XML,Previous),
+	xmg_brick_mg_printer:printXML([XML],1),
 	send(info,Previous),send_nl(info),send_nl(info),
 
 
@@ -126,7 +126,7 @@ eval_dims([Dim-Acc|T],[XML|T1],Class):-
 
 eval(morph,Morph,XML,_):-
 	%%send(info,Morph),
-	xmg_solver_morph:eval_morph(Morph,Value),
+	xmg_brick_morph_solver:eval_morph(Morph,Value),
 	%%send_nl(info,2),
 	%%send(info,' Value : '),
 	%%send(info,Value),
@@ -134,7 +134,7 @@ eval(morph,Morph,XML,_):-
 
 
 eval(syn,Syn,XML,Class):-
-	xmg_compiler_syn:eval(Syn,XML,Class).
+	xmg_brick_syn_compiler:eval(Syn,XML,Class).
 eval(syn1,Syn,XML,Class):-
 	xmg_compiler_syn:eval(Syn,XML,Class).
 eval(syn2,Syn,XML,Class):-
@@ -146,12 +146,12 @@ eval(pg,PG,elem(pg, features([id-none])),_):-
 
 eval(sem,Sem,XML,_):-
 	send(info,Sem),
-	xmg_convert_sem:toXML(Sem,XML),
+	xmg_brick_sem_convert:toXML(Sem,XML),
 	send_nl(info).
 
 eval(frame,Frame,XML,_):-
 	Class=class_test,
-	xmg_preparer_frame:prepare(Frame,PFrame),
+	xmg_brick_mg_preparer_frame:prepare(Frame,PFrame),
 	%%send(debug,PFrame),
 	xmg_solver_frame:solve(PFrame,solution(Tree)),
 	xmg_convert_frame:toXML(tree(Tree,Class),XML,0).
@@ -160,9 +160,9 @@ eval(frame,[], elem(tree, features([id-none])),_).
 
 
 eval(iface,I, elem(interface, children([elem(fs, children(XML))])),_):-
-	xmg_avm:avm(I,IAVM),
+	xmg_brick_avm_avm:avm(I,IAVM),
 	%%send(info,IAVM),
-	xmg_convert_avm:xmlFeats(IAVM,XML,1,_).
+	xmg_brick_avm_convert:xmlFeats(IAVM,XML,1,_).
 eval(iface,[], elem(interface, features([])),_).
 		
 get_dim(Dim,[Dim-CDim|_],CDim):-!.
