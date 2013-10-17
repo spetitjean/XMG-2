@@ -54,8 +54,8 @@ xmlFeats([A-sconst(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,feat
 
 
 xmlFeats([A-AVM|T],[H1|T1]):--
-	xmg_avm:avm(AVM,LAVM),
-	xmg_avm:const_avm(AVM,CAVM),
+	xmg_brick_avm_avm:avm(AVM,LAVM),
+	xmg_brick_avm_avm:const_avm(AVM,CAVM),
 	((
 	    var(CAVM),!,
 	    new_name('@AVM',CAVM),
@@ -85,8 +85,8 @@ xmlFeats([A-sconst(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,feat
 
 xmlFeats([A-const(AD,_)|T],[H1|T1]):--
 	%%write(AD),
-	xmg_adisj:adisj(AD,LAD),
-	xmg_adisj:const_adisj(AD,CLAD),!,
+	xmg_brick_adisj_adisj:adisj(AD,LAD),
+	xmg_brick_adisj_adisj:const_adisj(AD,CLAD),!,
 	((
 	    var(CLAD),!,
 	    new_name('@AD',CLAD),

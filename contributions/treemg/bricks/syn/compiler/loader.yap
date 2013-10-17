@@ -24,7 +24,7 @@
 :-	use_module('xmg/brick/syn/compiler/unfolder').
 :-	use_module('xmg/brick/syn/compiler/generator').
 :-	use_module('xmg/brick/syn/compiler/preparer').
-:-	use_module('xmg/brick/syn/compiler/convert_tag').
+:-	use_module('xmg/brick/syn/compiler/convert').
 :-	use_module('xmg/brick/tree/compiler/tree').
 	%% this should be done optionally
 :-	use_module('xmg/brick/unicity/compiler/unicity').

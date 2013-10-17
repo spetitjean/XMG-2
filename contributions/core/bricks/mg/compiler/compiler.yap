@@ -98,8 +98,8 @@ eval:-
 
 	send_nl(info),send_nl(info),send(info,'                Computed '),send(info,Class),send_nl(info),send_nl(info),
 
-	%%send(debug,Dims),
-
+	send(info,Dims),
+	
 	eval_dims(Dims,EDims,Class),
 	current(Previous),
 	Current is Previous + 1,
@@ -121,7 +121,9 @@ eval_dims([trace-Acc|T],T1,Class):-
 eval_dims([skolem-Acc|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
+	send(info,Dim),
 	eval(Dim,Acc,XML,Class),
+	send(info,' done '),
 	eval_dims(T,T1,Class).
 
 eval(morph,Morph,XML,_):-
@@ -134,6 +136,7 @@ eval(morph,Morph,XML,_):-
 
 
 eval(syn,Syn,XML,Class):-
+	send(info,Syn),
 	xmg_brick_syn_compiler:eval(Syn,XML,Class).
 eval(syn1,Syn,XML,Class):-
 	xmg_compiler_syn:eval(Syn,XML,Class).
@@ -145,7 +148,7 @@ eval(pg,PG,elem(pg, features([id-none])),_):-
 	xmg_output_pg:output(PG).
 
 eval(sem,Sem,XML,_):-
-	send(info,Sem),
+	%%send(info,Sem),
 	xmg_brick_sem_convert:toXML(Sem,XML),
 	send_nl(info).
 

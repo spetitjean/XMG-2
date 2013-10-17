@@ -22,7 +22,7 @@
 :- use_module('xmg_most').
 
 %%:- edcg:using(xmg_convert_avm:name).
-:- edcg:using(xmg_convert:name).
+:- edcg:using(xmg_brick_mg_convert:name).
 
 :- dynamic(dejavu/1).
 
@@ -55,11 +55,11 @@ xmlSyn([],[]):-- !.
 xmlSyn(Node,Root):--
 	Node=node(PropAVM,FeatAVM,N),
 
-	xmg_avm:avm(PropAVM, Props),
-	xmg_avm:avm(FeatAVM, Feats),
+	xmg_brick_avm_avm:avm(PropAVM, Props),
+	xmg_brick_avm_avm:avm(FeatAVM, Feats),
 
-	xmg_avm:const_avm(FeatAVM,CAVM),
-	%%xmg_nodename:nodename(N,Name),
+	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
+	%%xmg_brick_nodename_nodename:nodename(N,Name),
 	xmlName(Props,Name,N),
 	xmlMark(Props,XMLMark),
 	%%xmlBound(Props,XMLBound),
@@ -69,7 +69,7 @@ xmlSyn(Node,Root):--
 	    
 	    (
 		new_name('@AVM',CAVM),
-		xmg_convert_avm:xmlFeats(Feats,XMLFeats),!,
+		xmg_brick_avm_convert:xmlFeats(Feats,XMLFeats),!,
 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
 	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))]))
 		)
@@ -83,11 +83,11 @@ xmlSyn(Node,Root):--
 xmlSyn(tree(H,Trees),Root):--
 	H=node(PropAVM,FeatAVM,N),
 
-	xmg_avm:avm(PropAVM, Props),
-	xmg_avm:avm(FeatAVM, Feats),
+	xmg_brick_avm_avm:avm(PropAVM, Props),
+	xmg_brick_avm_avm:avm(FeatAVM, Feats),
 
-	xmg_avm:const_avm(FeatAVM,CAVM),
-	%%xmg_nodename:nodename(N,Name),
+	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
+	%%xmg_brick_nodename_nodename:nodename(N,Name),
 	xmlName(Props,Name,N),
 	xmlMark(Props,XMLMark),
 	(
@@ -95,7 +95,7 @@ xmlSyn(tree(H,Trees),Root):--
 	    
 	    (
 		new_name('@AVM',CAVM),
-		xmg_convert_avm:xmlFeats(Feats,XMLFeats),!,
+		xmg_brick_avm_convert:xmlFeats(Feats,XMLFeats),!,
 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
 	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))|Trees1]))
 		)
@@ -117,7 +117,7 @@ xmlMark([_-_|T],Props):--
 	xmlMark(T,Props),!.
 
 xmlName([],Name,N):--
-	xmg_nodename:nodename(N,Name),
+	xmg_brick_syn_nodename:nodename(N,Name),
 	!.
 
 xmlName([name-value(Prop,_)|T],Prop,_):--!.
@@ -168,18 +168,18 @@ handle_most([],[]):--!.
 handle_most([dom(A,'-L>',C,D)|T],[dom(A,'->',C,D)|T1]):--
 	C=node(P,_,_),
 	xmg_most:most(Most,left),
-	xmg_avm:avm(P,[bound-Most]),
+	xmg_brick_avm_avm:avm(P,[bound-Most]),
 	handle_most(T,T1),!.
 
 handle_most([dom(A,'-R>',C,D)|T],[dom(A,'->',C,D)|T1]):--
 	C=node(P,_,_),
 	xmg_most:most(Most,right),
-	xmg_avm:avm(P,[bound-Most]),
+	xmg_brick_avm_avm:avm(P,[bound-Most]),
 	handle_most(T,T1),!.
 
 handle_most([node(P,A,B)|T],[node(P,A,B)|T1]):--
 	xmg_most:most(Most,none),
-	xmg_avm:avm(P,[bound-Most]),
+	xmg_brick_avm_avm:avm(P,[bound-Most]),
 	handle_most(T,T1),!.
 
 handle_most([H|T],[H|T1]):--

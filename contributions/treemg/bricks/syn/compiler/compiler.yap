@@ -20,8 +20,11 @@
 :-module(xmg_brick_syn_compiler).
 
 eval(Syn,XML,Class):-
-	%%send(info,Syn),
+	%%xmg_brick_mg_compiler:send(info,Syn),
+	xmg_brick_mg_compiler:send(debug,' preparing '),
+
 	xmg_brick_syn_preparer:prepare(syn(Syn,[Class]),Prepared),
+	xmg_brick_mg_compiler:send(info,' prepared '),
 	xmg_brick_tree_tree:solve(Prepared,solution(UTree,Children,Table)),
 	%%send(info,UTree),
 	%%flush_output,
