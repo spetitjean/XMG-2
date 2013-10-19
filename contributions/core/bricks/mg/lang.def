@@ -58,7 +58,9 @@ Semantics : semantics ids;
 
 Classes : Class | Class Classes;
 
-Class : class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stmts | Mutex | Semantics;
+Class : class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stmts /*{ '$$ = $3 :- $8' } */
+      	| Mutex 
+	| Semantics;
 
 StarsOrNot : '**' | '' ;
 

@@ -41,10 +41,14 @@ REXT=xmg.compgen.Rule.Rule(EXTD,(EXT,_id,_id))
 RuD=xmg.compgen.Symbol.NT("RuD")
 RuleParts=xmg.compgen.Symbol.NT("RuleParts")
 RulePart=xmg.compgen.Symbol.NT("RulePart")
+openAction=xmg.compgen.Symbol.T("{")
+closeAction=xmg.compgen.Symbol.T("}")
+#Action=xmg.compgen.Symbol.NT("Action")
 RRu=xmg.compgen.Rule.Rule(RuD,(_id,colon,RuleParts))
 RRu1=xmg.compgen.Rule.Rule(RuleParts,(RulePart,semicolon))
 RRu2=xmg.compgen.Rule.Rule(RuleParts,(RulePart,pipe,RuleParts))
 RRu3=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,))
+RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,openAction,sqstring,closeAction))
 
 # Grammar file
 S=xmg.compgen.Symbol.NT("S")
@@ -68,12 +72,12 @@ R=xmg.compgen.Rule.Rule(S,(Decls,endsection,Rules,endsection))
 # RuD ::= Id : RuleParts
 # RuleParts ::= RulePart ;
 #             | RulePart|RuleParts
-# RulePart ::= Ids
+# RulePart ::= Ids | Ids { Action }
 # Ids ::= Id | Id Ids
 # Decl ::= TD | NTD
 # TD ::= %token Id
 # NTD ::= %type Id Id
 
-G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1))
+G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1))
 
 

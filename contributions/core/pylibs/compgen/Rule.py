@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-def same(X):
-    return X
 
 def nofirst(X):
     return X[1:]
@@ -11,11 +9,14 @@ class Rule(object):
     precedence (an int) and an optional action (a function to get a 
     tuple from the body)."""
 
-    def __init__(self, head, body, prec=None, action=same):
+    def __init__(self, head, body, prec=None, action=None):
         self.head   = head
         self.body   = body
         self.prec   = prec
-        self.action = action(body)
+        if action is None:
+            self.action = body
+        else:
+            self.action=action
 
     def __str__(self):
         return "%s -> %s" % (str(self.head)," ".join(map(str,self.body)))

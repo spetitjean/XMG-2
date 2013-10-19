@@ -161,7 +161,8 @@ class LR1(object):
             rightsize=len(r.body)
             lines.append("rule("+str(i)+",\'"+str(left)+"\',"+str(rightsize)+").\n")
             if not r.action is None :
-                lines.append("ruleAction("+str(i)+",['"+"','".join(map(str,r.action))+"']).\n")
+                nbActions=len(r.action)
+                lines.append("ruleAction("+str(i)+",[get("+"),get(".join(map(str,(range(1,nbActions+1))))+")]).\n")
             i=i+1
         for Item in Table:
             for J in Table[Item]:

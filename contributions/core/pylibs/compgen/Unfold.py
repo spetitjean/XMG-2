@@ -123,8 +123,8 @@ class Unfold(object):
                 for Rule in T:
                     self.unfold_rule(Rule,Right)
                     
-                    for part in Right:
-                        self.Rules.append(self.create_rule(Left,part))
+                    for (part,action) in Right:
+                        self.Rules.append(self.create_rule(Left,part,action))
             else:
                 for ht in T:
                     self.unfold(ht)
@@ -136,11 +136,14 @@ class Unfold(object):
             Right.append(Sem)
         else:
             (H,T)=Sem
+            action=None
             if H=='RulePart':
-                for id in T:
-                    ids=[]
-                    self.unfold_ids(id,ids)
-                    Right.append(ids)
+                if len(T) == 2:
+                    action=T[1]
+                id=T[0]
+                ids=[]
+                self.unfold_ids(id,ids)
+                Right.append((ids,action))
             else:
                 for ht in T:
                     self.unfold_rule(ht,Right)
@@ -154,7 +157,7 @@ class Unfold(object):
                 self.unfold_ids(ht,Right)
         
         
-    def create_rule(self,Left,Right):
+    def create_rule(self,Left,Right,Action):
         R=list()
         for r in Right:
             if r in self.Ts:
@@ -165,7 +168,7 @@ class Unfold(object):
                 if r not in self._punctuation:
                     raise Exception('Undefined symbol: '+r)
                 R.append(xmg.compgen.Symbol.T(r))
-        return xmg.compgen.Rule.Rule(self.NTs[Left],tuple(R))
+        return xmg.compgen.Rule.Rule(self.NTs[Left],tuple(R),action=Action)
     
 
 
