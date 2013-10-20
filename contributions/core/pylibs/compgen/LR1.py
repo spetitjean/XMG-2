@@ -161,8 +161,22 @@ class LR1(object):
             rightsize=len(r.body)
             lines.append("rule("+str(i)+",\'"+str(left)+"\',"+str(rightsize)+").\n")
             if not r.action is None :
-                nbActions=len(r.action)
-                lines.append("ruleAction("+str(i)+",[get("+"),get(".join(map(str,(range(1,nbActions+1))))+")]).\n")
+                if type(r.action) is str:
+                    convert=[]
+                    for part in r.action.split(" "):
+                        if part[0] == '$':
+                            ref=None
+                            if part[1] == '$':
+                                ref="Left"
+                            else:
+                                ref=part[1:]
+                            convert.append('get('+ref+')')
+                        else:
+                            convert.append('put(\''+part+'\')')
+                    lines.append("ruleAction("+str(i)+",["+",".join(map(str,convert))+"]).\n")
+                else:
+                    nbActions=len(r.action)
+                    lines.append("ruleAction("+str(i)+",[get("+"),get(".join(map(str,(range(1,nbActions+1))))+")]).\n")
             i=i+1
         for Item in Table:
             for J in Table[Item]:
