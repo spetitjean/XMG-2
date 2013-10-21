@@ -14,16 +14,30 @@ closepred=xmg.compgen.Symbol.T(")")
 openlist=xmg.compgen.Symbol.T("[")
 closelist=xmg.compgen.Symbol.T("]")
 
+star=xmg.compgen.Symbol.T("*")
+plus=xmg.compgen.Symbol.T("+")
+
 endsection=xmg.compgen.Symbol.T("%%")
 
 
 _id=xmg.compgen.Symbol.T("identifier")
 sqstring=xmg.compgen.Symbol.T("sqstring")
+_id_or_t_=xmg.compgen.Symbol.NT("ids_or_t_")
 _ids_or_t=xmg.compgen.Symbol.NT("ids_or_t")
 _id_or_t=xmg.compgen.Symbol.NT("id_or_t")
+_id_or_t_star=xmg.compgen.Symbol.NT("id_or_t_star")
+_id_or_t_plus=xmg.compgen.Symbol.NT("id_or_t_plus")
 ids_coma=xmg.compgen.Symbol.NT("ids_coma")
-RID=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_t,))
-RID2=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_t,_ids_or_t))
+RID=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_t_,))
+RID2=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_t_,_ids_or_t))
+RID5=xmg.compgen.Rule.Rule(_id_or_t_,(_id_or_t_star,))
+RID6=xmg.compgen.Rule.Rule(_id_or_t_,(_id_or_t_plus,))
+RID7=xmg.compgen.Rule.Rule(_id_or_t_,(_id_or_t,))
+
+RID8=xmg.compgen.Rule.Rule(_id_or_t_star,(_id_or_t,star))
+RID9=xmg.compgen.Rule.Rule(_id_or_t_plus,(_id_or_t,plus))
+
+
 RID3=xmg.compgen.Rule.Rule(_id_or_t,(_id,))
 RID4=xmg.compgen.Rule.Rule(_id_or_t,(sqstring,))
 
@@ -114,6 +128,6 @@ R=xmg.compgen.Rule.Rule(S,(Decls,endsection,Rules,endsection))
 # TD ::= %token Id
 # NTD ::= %type Id Id
 
-G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList1,RList2,RListEnum,RListCons))
+G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID8,RID9,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList1,RList2,RListEnum,RListCons))
 
 

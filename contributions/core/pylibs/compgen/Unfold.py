@@ -195,6 +195,8 @@ class Unfold(object):
         if type(Sem).__name__=='str':
             Right.append(Sem)
         else:
+            if Sem[0] == 'id_or_t_star':
+                print('star')
             (H,T)=Sem
             for ht in T:
                 self.unfold_ids(ht,Right)
