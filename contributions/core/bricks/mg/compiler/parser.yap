@@ -28,8 +28,9 @@
 :- edcg:thread(steps,edcg:counter).
 :- edcg:thread(errors,edcg:stack).
 
-:- edcg:weave([stack],[preAction/2 ]).
-:- edcg:weave([stack2],[makeAction/2 ]).
+:- edcg:weave([stack,stack2],[preAction/1 ]).
+:- edcg:weave([stack],[makeAction/3 ]).
+:- edcg:weave([stack2],[makeBody/3 ]).
 :- edcg:weave([errors],[throw_errors/0,parse_sem/3]).
 :- edcg:weave([stack,steps,errors],[parse_sem/2]).
 
@@ -72,24 +73,33 @@
 %% 	stack2::push(H1),
 %% 	makeAction(T),!.
 
-%% makeAction: 2 steps. 1st is to pop all the rightsize of the rule and accumulate it in a temp list. Then, go through the action list. When the element is a number, get the nth element of the temps list and push it into stack2. Else, push the element into stack2. 
+%% makeAction: 2 steps. 1st is to pop all the rightsize of the rule and accumulate it in a temp list. Then, go through the action list. When the element is a number, get the nth element of the temp list and push it into stack2. Else, push the element into stack2. 
 
-preAction(0,[]):-- !.
-preAction(N,[Element|Tmp]):--
+preAction(0):-- !.
+preAction(N):--
 	M is N-1,
 	stack::pop(Element),
-	%%xmg_brick_mg_compiler:send(info,Element),
-	preAction(M,Tmp),!.
+	stack2::push(Element),
+	preAction(M),!.
 
-makeAction(PreAction,[]):-- !.
-makeAction(PreAction,[get(N)|T]):--
-	!,
-	lists:nth(N,PreAction,Elt),
-	stack2::push(Elt),!,
-	makeAction(PreAction,T),!.
-makeAction(PreAction,[put(P)|T]):--
-	stack2::push(P),!,
-	makeAction(PreAction,T),!.
+makeAction(PreAction,Left,pred(Head,Body)):--
+	ref_or_not(PreAction,Left,Head,RHead),
+	makeBody(PreAction,Left,Body) with stack2([],MBody),
+	xmg_brick_mg_compiler:send(info,RHead),
+	Pred=..[RHead|MBody],
+	stack::push(Pred),!.
+
+makeBody(PreAction,Left,[]):-- !.
+makeBody(PreAction,Left,[H|T]):--
+	ref_or_not(PreAction,Left,H,RH),
+	stack2::push(RH),!,
+	makeBody(PreAction,Left,T),!.
+
+ref_or_not(PreAction,Left,get('left'),Left):-!.
+ref_or_not(PreAction,Left,get(Ref),Elt):-
+	lists:nth(Ref,PreAction,Elt),!.
+ref_or_not(PreAction,Left,put(Put),Put):-!.
+	
 
 
 acc(Acc,Acc).
@@ -151,12 +161,9 @@ parse_sem([State|States],[Token|Tokens]):--
 	generated_parser:next(Top,Left,Next),
 	generated_parser:ruleAction(NRule,Action),
 	%%xmg_brick_mg_compiler:send(info,RightSize), 
-	preAction(RightSize,PreAction),
+	preAction(RightSize) with stack2([],PreAction),
 	%%xmg_brick_mg_compiler:send(info,PreAction), 
-	makeAction(PreAction,Action) with stack2([],SemAc),
-	%%xmg_brick_mg_compiler:send(info,SemAc), 
-	SemP=..[Left|SemAc],
-	stack::push(SemP),
+	makeAction(PreAction,Left,Action),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 %% for the empty word
 parse_sem([State|States],[Token|Tokens]):--
@@ -168,10 +175,8 @@ parse_sem([State|States],[Token|Tokens]):--
 	Stack=[Top|_],
 	generated_parser:next(Top,Left,Next),
 	generated_parser:ruleAction(NRule,Action),
-	preAction(RightSize,PreAction),
-	makeAction(PreAction,Action) with stack2([],SemAc),
-	SemP=..[Left|SemAc],
-	stack::push(SemP),
+	preAction(RightSize) with stack2([],PreAction),
+	makeAction(PreAction,Left,Action),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 
 parse_sem([State|States],[Token|Tokens]):--

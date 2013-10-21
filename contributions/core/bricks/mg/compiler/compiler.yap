@@ -64,7 +64,7 @@ compile_file(File,Eval):-
 	xmg_brick_mg_modules:load_modules(Modules),
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	send(info,' parsed '),
-	%%send(info,Parse),
+	send(info,Parse),
 	send_nl(info),
 	xmg_brick_mg_unfolder:unfold(Parse,Unfolded),!,
 	send(info,' unfolded '),

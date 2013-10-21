@@ -140,6 +140,7 @@ class Unfold(object):
             if H=='RulePart':
                 if len(T) == 2:
                     action=T[1]
+                    action=self.unfold_action(action)
                 id=T[0]
                 ids=[]
                 self.unfold_ids(id,ids)
@@ -147,6 +148,26 @@ class Unfold(object):
             else:
                 for ht in T:
                     self.unfold_rule(ht,Right)
+    
+    def unfold_action(self,action):
+        ret=[]
+        for actionpart in action[1]:
+            uactionpart=self.unfold_actionpart(actionpart)
+            ret.append(uactionpart)
+        return ret
+
+    def unfold_actionpart(self,actionpart):
+        for part in actionpart[1]:
+            if part[0] == 'Pred':
+                upred=self.unfold_pred(part)
+                return upred
+
+    def unfold_pred(self,pred):
+        body=[]
+        head=self.unfold_ref(pred[1][0])
+        self.unfold_refs(pred[1][1],body)
+        return 'pred('+str(head)+",["+",".join(map(str,body))+'])'
+
 
     def unfold_ids(self,Sem,Right):
         if type(Sem).__name__=='str':
@@ -155,7 +176,34 @@ class Unfold(object):
             (H,T)=Sem
             for ht in T:
                 self.unfold_ids(ht,Right)
+
+    def unfold_refs(self,ids,unfold):
+        if type(ids).__name__=='str':
+            if ids[0] == '$':
+                if ids[1] == '$':
+                    gid='left'
+                else:
+                    gid=ids[1:]
+                uid='get('+gid+')'
+            else:
+                uid='put('+ids+')'
+            unfold.append(uid)
+        else:
+            (H,T)=ids
+            for ht in T:
+                self.unfold_refs(ht,unfold)
         
+    def unfold_ref(self,_id):
+        if _id[0] == '$':
+            if _id[1] == '$':
+                gid='left'
+            else:
+                gid=_id[1:]
+            uid='get('+gid+')'
+        else:
+            uid='put('+_id+')'
+        return uid
+
         
     def create_rule(self,Left,Right,Action):
         R=list()

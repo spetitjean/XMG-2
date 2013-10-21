@@ -13,10 +13,7 @@ class Rule(object):
         self.head   = head
         self.body   = body
         self.prec   = prec
-        if action is None:
-            self.action = body
-        else:
-            self.action=action
+        self.action = action
 
     def __str__(self):
         return "%s -> %s" % (str(self.head)," ".join(map(str,self.body)))
