@@ -56,9 +56,9 @@ Mutex : mutex id | mutex id '+=' id;
 Semantics : semantics ids;
 
 
-Classes : Class | Class Classes;
+Classes : Class { '$$' = [ '$1' ] } | Class Classes { '$$' = [ '$1' | '$2' ] } ;
 
-Class : class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stmts /* { $$ = $3 :- $8 } */ { '$3' ('$4', '$5', '$6', '$7', '$8' )  }  
+Class : class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stmts /* { $$ = $3 :- $8 } */ { '$$' = '$3' ('$4', '$5', '$6', '$7', '$8' )  }  
       	| Mutex 
 	| Semantics;
 
@@ -73,7 +73,7 @@ ImportsOrNot : Imports | '';
 
 Imports : 'import' IClasses ;
 
-IClasses : IClass | IClass IClasses ;
+IClasses : IClass  | IClass IClasses  ;
 
 IClass : id '[' ParamsOrNot ']' MaybeAs ;
 

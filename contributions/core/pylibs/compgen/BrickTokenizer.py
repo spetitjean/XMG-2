@@ -33,7 +33,7 @@ class TokenPercentKeyword(TokenKeyword):
 BrickTokenizer = TokenizerBuilder(BrickTokenizerEngine)
 
 BrickTokenizer.operators([
-    "%%",":","|",";",'{','}','=',',','(',')' ])
+    "%%",":","|",";",'{','}','=',',','(',')','[',']' ])
 
 BrickTokenizer.keywords([
    ])

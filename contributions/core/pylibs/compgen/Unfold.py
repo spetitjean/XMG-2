@@ -150,6 +150,7 @@ class Unfold(object):
                     self.unfold_rule(ht,Right)
     
     def unfold_action(self,action):
+        #print(action)
         ret=[]
         for actionpart in action[1]:
             uactionpart=self.unfold_actionpart(actionpart)
@@ -161,14 +162,35 @@ class Unfold(object):
             if part[0] == 'Pred':
                 upred=self.unfold_pred(part)
                 return upred
+            elif part[0] == 'Eq':
+                ueq=self.unfold_eq(part)
+                return ueq
+            elif part[0] == 'List':
+                ulist=self.unfold_list(part[1][0])
+                return ulist
 
     def unfold_pred(self,pred):
         body=[]
         head=self.unfold_ref(pred[1][0])
         self.unfold_refs(pred[1][1],body)
         return 'pred('+str(head)+",["+",".join(map(str,body))+'])'
+ 
+    def unfold_eq(self,eq):
+        left=self.unfold_ref(eq[1][0])
+        right=self.unfold_actionpart(('actionpart',[eq[1][1]]))
+        print(right)
+        return 'eq('+left+','+right+')'
 
+    def unfold_list(self,lst):
+        print(lst)
+        if lst[0] == 'ListCons':
+            cons1=self.unfold_ref(lst[1][0])
+            cons2=self.unfold_ref(lst[1][1])
+            return 'listcons('+cons1+','+cons2+')'
+        elif lst[0]== 'ListEnum':
+            return 'listenum(['+self.unfold_ref(lst[1][0])+'])'
 
+        
     def unfold_ids(self,Sem,Right):
         if type(Sem).__name__=='str':
             Right.append(Sem)

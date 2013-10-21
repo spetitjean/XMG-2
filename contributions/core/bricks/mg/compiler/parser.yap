@@ -29,7 +29,7 @@
 :- edcg:thread(errors,edcg:stack).
 
 :- edcg:weave([stack,stack2],[preAction/1 ]).
-:- edcg:weave([stack],[makeAction/3 ]).
+:- edcg:weave([stack],[makeAction/3, buildAction/4 ]).
 :- edcg:weave([stack2],[makeBody/3 ]).
 :- edcg:weave([errors],[throw_errors/0,parse_sem/3]).
 :- edcg:weave([stack,steps,errors],[parse_sem/2]).
@@ -82,18 +82,42 @@ preAction(N):--
 	stack2::push(Element),
 	preAction(M),!.
 
-makeAction(PreAction,Left,pred(Head,Body)):--
+makeAction(PreAction,Left,Action):--
+	buildAction(PreAction,Left,Action,_),
+	stack::push(Left),!.
+
+buildAction(PreAction,Left,pred(Head,Body),Pred):--
 	ref_or_not(PreAction,Left,Head,RHead),
+	(
+	    RHead=token(_,id(IDHead))
+	;
+	IDHead=RHead
+    ),
 	makeBody(PreAction,Left,Body) with stack2([],MBody),
-	xmg_brick_mg_compiler:send(info,RHead),
-	Pred=..[RHead|MBody],
-	stack::push(Pred),!.
+	%%xmg_brick_mg_compiler:send(info,RHead),
+	%%xmg_brick_mg_compiler:send(info,MBody),
+	Pred=..[IDHead|MBody],!.
+buildAction(PreAction,Left,listenum(List),MList):--
+	!,
+	makeBody(PreAction,Left,List) with stack2([],MList),!.
+buildAction(PreAction,Left,listcons(H,T),[H1|T1]):--
+	!,
+	ref_or_not(PreAction,Left,H,H1),
+	ref_or_not(PreAction,Left,T,T1),!.
+buildAction(PreAction,Left,eq(E1,E2),none):--!,
+	ref_or_not(PreAction,Left,E1,RE1),
+	buildAction(PreAction,Left,E2,RE2),
+	RE1 = RE2,!.
+buildAction(PreAction,Left,Id,RId):--
+	ref_or_not(PreAction,Left,Id,RId),!.
+
+	
 
 makeBody(PreAction,Left,[]):-- !.
 makeBody(PreAction,Left,[H|T]):--
 	ref_or_not(PreAction,Left,H,RH),
-	stack2::push(RH),!,
-	makeBody(PreAction,Left,T),!.
+	makeBody(PreAction,Left,T),
+	stack2::push(RH),!.
 
 ref_or_not(PreAction,Left,get('left'),Left):-!.
 ref_or_not(PreAction,Left,get(Ref),Elt):-
@@ -163,7 +187,7 @@ parse_sem([State|States],[Token|Tokens]):--
 	%%xmg_brick_mg_compiler:send(info,RightSize), 
 	preAction(RightSize) with stack2([],PreAction),
 	%%xmg_brick_mg_compiler:send(info,PreAction), 
-	makeAction(PreAction,Left,Action),
+	makeAction(PreAction,OneLeft,Action),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 %% for the empty word
 parse_sem([State|States],[Token|Tokens]):--
@@ -176,7 +200,7 @@ parse_sem([State|States],[Token|Tokens]):--
 	generated_parser:next(Top,Left,Next),
 	generated_parser:ruleAction(NRule,Action),
 	preAction(RightSize) with stack2([],PreAction),
-	makeAction(PreAction,Left,Action),
+	makeAction(PreAction,OneLeft,Action),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 
 parse_sem([State|States],[Token|Tokens]):--

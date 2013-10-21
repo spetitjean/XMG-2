@@ -11,6 +11,9 @@ equal=xmg.compgen.Symbol.T("=")
 coma=xmg.compgen.Symbol.T(',')
 openpred=xmg.compgen.Symbol.T("(")
 closepred=xmg.compgen.Symbol.T(")")
+openlist=xmg.compgen.Symbol.T("[")
+closelist=xmg.compgen.Symbol.T("]")
+
 endsection=xmg.compgen.Symbol.T("%%")
 
 
@@ -58,17 +61,27 @@ RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,openAction,Action,closeAction))
 ActionPart=xmg.compgen.Symbol.NT("ActionPart")
 Eq=xmg.compgen.Symbol.NT("Eq")
 Pred=xmg.compgen.Symbol.NT("Pred")
+List=xmg.compgen.Symbol.NT("List")
+ListEnum=xmg.compgen.Symbol.NT("ListEnum")
+ListCons=xmg.compgen.Symbol.NT("ListCons")
+RListEnum=xmg.compgen.Rule.Rule(ListEnum,(sqstring,))
+RListCons=xmg.compgen.Rule.Rule(ListCons,(sqstring,pipe,sqstring))
+
 RAction1=xmg.compgen.Rule.Rule(Action,(ActionPart,))
 RAction2=xmg.compgen.Rule.Rule(Action,(ActionPart,coma,Action))
 RAction3=xmg.compgen.Rule.Rule(Action,(ActionPart,semicolon,Action))
 RActionP1=xmg.compgen.Rule.Rule(ActionPart,(Eq,))
-RActionP2=xmg.compgen.Rule.Rule(ActionPart,(Pred,))
 #REq=xmg.compgen.Rule.Rule(Eq,(_id,equal,_id))
-REq=xmg.compgen.Rule.Rule(Eq,(sqstring,equal,sqstring))
+REq1=xmg.compgen.Rule.Rule(Eq,(sqstring,equal,sqstring))
+REq2=xmg.compgen.Rule.Rule(Eq,(sqstring,equal,Pred))
+REq3=xmg.compgen.Rule.Rule(Eq,(sqstring,equal,List))
 #RPred=xmg.compgen.Rule.Rule(Pred,(_id,openpred,ids_coma,closepred))
 RPred=xmg.compgen.Rule.Rule(Pred,(sqstring,openpred,ids_coma,closepred))
 RIdsComa1=xmg.compgen.Rule.Rule(ids_coma,(sqstring,))
 RIdsComa2=xmg.compgen.Rule.Rule(ids_coma,(sqstring,coma,ids_coma))
+
+RList1=xmg.compgen.Rule.Rule(List,(openlist,ListEnum,closelist))
+RList2=xmg.compgen.Rule.Rule(List,(openlist,ListCons,closelist))
 #RIdsComa1=xmg.compgen.Rule.Rule(ids_coma,(_id,))
 #RIdsComa2=xmg.compgen.Rule.Rule(ids_coma,(_id,coma,ids_coma))
 
@@ -101,6 +114,6 @@ R=xmg.compgen.Rule.Rule(S,(Decls,endsection,Rules,endsection))
 # TD ::= %token Id
 # NTD ::= %type Id Id
 
-G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,RActionP2,REq,RPred,RIdsComa1,RIdsComa2))
+G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList1,RList2,RListEnum,RListCons))
 
 

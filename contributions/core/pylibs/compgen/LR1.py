@@ -163,7 +163,7 @@ class LR1(object):
             if r.action is None :
                 action=r.body
                 nbActions=len(action)
-                lines.append("ruleAction("+str(i)+",pred(get(left),[get("+"),get(".join(map(str,(range(1,nbActions+1))))+")])).\n")
+                lines.append("ruleAction("+str(i)+",eq(get(left),pred(put(pred),[get("+"),get(".join(map(str,(range(1,nbActions+1))))+")]))).\n")
             else:
                 # convert=[]
                 # print(r.action)
