@@ -82,10 +82,14 @@ preAction(N):--
 	stack2::push(Element),
 	preAction(M),!.
 
-makeAction(PreAction,Left,Action):--
-	xmg_brick_mg_compiler:send(info,Action),
-	buildAction(PreAction,Left,Action,_),
-	stack::push(Left),!.
+%% makeAction(PreAction,Left,Action):--
+%% 	xmg_brick_mg_compiler:send(info,Action),
+%% 	buildAction(PreAction,Left,Action,_),
+%% 	stack::push(Left),!.
+
+makeAction(PreAction,_,Action):--
+	generated_parser:ruleAction(Action,Result,PreAction),
+	stack::push(Result),!.
 
 buildAction(PreAction,Left,pred(Head,Body),Pred):--
 	ref_or_not(PreAction,Left,Head,RHead),
@@ -184,11 +188,11 @@ parse_sem([State|States],[Token|Tokens]):--
 	pop2N([State|States],RightSize,Pop,Stack),
 	Stack=[Top|_],
 	generated_parser:next(Top,Left,Next),
-	generated_parser:ruleAction(NRule,Action),
+	%%generated_parser:ruleAction(NRule,Action),
 	%%xmg_brick_mg_compiler:send(info,RightSize), 
 	preAction(RightSize) with stack2([],PreAction),
 	%%xmg_brick_mg_compiler:send(info,PreAction), 
-	makeAction(PreAction,OneLeft,Action),
+	makeAction(PreAction,OneLeft,NRule),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 %% for the empty word
 parse_sem([State|States],[Token|Tokens]):--
@@ -199,9 +203,9 @@ parse_sem([State|States],[Token|Tokens]):--
 	pop2N([State|States],RightSize,Pop,Stack),
 	Stack=[Top|_],
 	generated_parser:next(Top,Left,Next),
-	generated_parser:ruleAction(NRule,Action),
+	%%generated_parser:ruleAction(NRule,Action),
 	preAction(RightSize) with stack2([],PreAction),
-	makeAction(PreAction,OneLeft,Action),
+	makeAction(PreAction,OneLeft,NRule),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 
 parse_sem([State|States],[Token|Tokens]):--

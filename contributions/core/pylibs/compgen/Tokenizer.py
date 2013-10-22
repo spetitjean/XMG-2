@@ -502,14 +502,15 @@ class TokenizerEngine:
         text = self.read_string(self.SINGLE_QUOTED, coord)
         return self.token_single_quoted_string(text, coord)
 
-    def read_string(self, re_end, coord):
+    def read_string(self, re_end, coord, eval=True):
         contents = []
         while True:
             m = re_end.match(self.line, self.colno)
             if m:
                 contents.append(m.group()[:-1])
                 self.colno = m.end()
-                return self.backslash_eval("".join(contents))
+                text = "".join(contents)
+                return self.backslash_eval(text) if eval else text
             if not self.nextline():
                 raise TokenizerError("unterminated string", coord)
             self.colno = 0

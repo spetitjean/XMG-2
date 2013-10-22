@@ -162,8 +162,8 @@ class LR1(object):
             lines.append("rule("+str(i)+",\'"+str(left)+"\',"+str(rightsize)+").\n")
             if r.action is None :
                 action=r.body
-                nbActions=len(action)
-                lines.append("ruleAction("+str(i)+",eq(get(left),pred(put(pred),[get("+"),get(".join(map(str,(range(1,nbActions+1))))+")]))).\n")
+                nbActions=rightsize#len(action)
+                lines.append("ruleAction("+str(i)+",VAR__RESULT,[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+"]):-\n    VAR__RESULT=pred(VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+").\n")
             else:
                 # convert=[]
                 # print(r.action)
@@ -178,7 +178,7 @@ class LR1(object):
                 #     else:
                 #         convert.append('put(\''+part+'\')')
                 # lines.append("ruleAction("+str(i)+",["+",".join(map(str,convert))+"]).\n")
-                lines.append("ruleAction("+str(i)+","+r.action[0]+").\n")
+                lines.append("ruleAction("+str(i)+",VAR__RESULT,[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]):-\n    "+r.action+".\n")
                     
             i=i+1
         for Item in Table:

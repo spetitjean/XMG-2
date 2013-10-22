@@ -149,13 +149,16 @@ class Unfold(object):
                 for ht in T:
                     self.unfold_rule(ht,Right)
     
+    # def unfold_action(self,action):
+    #     #print(action)
+    #     ret=[]
+    #     for actionpart in action[1]:
+    #         uactionpart=self.unfold_actionpart(actionpart)
+    #         ret.append(uactionpart)
+    #     return ret
+
     def unfold_action(self,action):
-        #print(action)
-        ret=[]
-        for actionpart in action[1]:
-            uactionpart=self.unfold_actionpart(actionpart)
-            ret.append(uactionpart)
-        return ret
+        return action
 
     def unfold_actionpart(self,actionpart):
         for part in actionpart[1]:
@@ -211,10 +214,10 @@ class Unfold(object):
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'macroOpP' :
-            self.Rules.append(self.create_rule(ntid,uids,['eq(get(left),listenum([get(1)]))']))
+            self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
         elif op[1][0][0] == 'macroOpS' :
-            self.Rules.append(self.create_rule(ntid,[''],['eq(get(left),listenum([]))']))
-        self.Rules.append(self.create_rule(ntid,uids+[ntid],['eq(get(left),listenum([get(1)]))']))
+            self.Rules.append(self.create_rule(ntid,[''],'VAR__RESULT=[]'))
+        self.Rules.append(self.create_rule(ntid,uids+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
         return ntid
 
     def unfold_refs(self,ids,unfold):

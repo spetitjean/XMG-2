@@ -18,7 +18,7 @@ star=xmg.compgen.Symbol.T("*")
 plus=xmg.compgen.Symbol.T("+")
 
 endsection=xmg.compgen.Symbol.T("%%")
-
+action=xmg.compgen.Symbol.T("action")
 
 _id=xmg.compgen.Symbol.T("identifier")
 sqstring=xmg.compgen.Symbol.T("sqstring")
@@ -81,7 +81,10 @@ RRu3=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,))
 
 # Actions
 Action=xmg.compgen.Symbol.NT("Action")
-RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,openAction,Action,closeAction))
+#RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,openAction,Action,closeAction))
+
+RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,action))
+
 ActionPart=xmg.compgen.Symbol.NT("ActionPart")
 Eq=xmg.compgen.Symbol.NT("Eq")
 Pred=xmg.compgen.Symbol.NT("Pred")

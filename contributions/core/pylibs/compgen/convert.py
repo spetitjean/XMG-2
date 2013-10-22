@@ -1,5 +1,5 @@
 import xmg.compgen.Tokenizer, xmg.compgen.BrickTokenizer
-from xmg.compgen.brick_parser import semicolon,colon,pipe,arrow,endsection,openAction,closeAction,_id,sqstring,coma,equal,openpred,closepred,openlist,closelist,star,plus,T,NT,EXT
+from xmg.compgen.brick_parser import semicolon,colon,pipe,arrow,endsection,openAction,closeAction,_id,sqstring,coma,equal,openpred,closepred,openlist,closelist,star,plus,T,NT,EXT,action
 from xmg.compgen.Symbol import EOF
 
 def convertEOF(token) : 
@@ -54,6 +54,9 @@ kopt={
 def convertPercentKeyword (token) : 
     return kopt[token.name],None,token.coord
 
+def convertActionKeyword(token):
+    return action,token.name,token.coord
+
 TABLE={
     xmg.compgen.Tokenizer.TokenEOF:convertEOF,
     xmg.compgen.Tokenizer.TokenOperator:convertOperator,
@@ -64,6 +67,7 @@ TABLE={
     xmg.compgen.Tokenizer.TokenIdentifier:convertIdentifier,
     xmg.compgen.Tokenizer.TokenKeyword:convertKeyword,
     xmg.compgen.BrickTokenizer.TokenPercentKeyword:convertPercentKeyword,
+    xmg.compgen.BrickTokenizer.TokenActionKeyword:convertActionKeyword,
     }
 
 def convert(token):
