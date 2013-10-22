@@ -83,6 +83,7 @@ preAction(N):--
 	preAction(M),!.
 
 makeAction(PreAction,Left,Action):--
+	xmg_brick_mg_compiler:send(info,Action),
 	buildAction(PreAction,Left,Action,_),
 	stack::push(Left),!.
 

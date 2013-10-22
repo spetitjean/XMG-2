@@ -166,8 +166,11 @@ class Unfold(object):
                 ueq=self.unfold_eq(part)
                 return ueq
             elif part[0] == 'List':
-                ulist=self.unfold_list(part[1][0])
-                return ulist
+                if part[1] == []:
+                    return 'listenum([])'
+                else:
+                    ulist=self.unfold_list(part[1][0])
+                    return ulist
 
     def unfold_pred(self,pred):
         body=[]
@@ -178,11 +181,9 @@ class Unfold(object):
     def unfold_eq(self,eq):
         left=self.unfold_ref(eq[1][0])
         right=self.unfold_actionpart(('actionpart',[eq[1][1]]))
-        print(right)
         return 'eq('+left+','+right+')'
 
     def unfold_list(self,lst):
-        print(lst)
         if lst[0] == 'ListCons':
             cons1=self.unfold_ref(lst[1][0])
             cons2=self.unfold_ref(lst[1][1])
@@ -206,15 +207,14 @@ class Unfold(object):
         (ids,op)=macro
         uids=[]
         self.unfold_ids(ids,uids)
-        print(uids)
         ntid=self.prefix+"-"+"*4"+"-".join(map(str,uids))
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'macroOpP' :
-            self.Rules.append(self.create_rule(ntid,uids,'listenum([get(1)])'))
+            self.Rules.append(self.create_rule(ntid,uids,['eq(get(left),listenum([get(1)]))']))
         elif op[1][0][0] == 'macroOpS' :
-            self.Rules.append(self.create_rule(ntid,[],'listenum([])'))
-        self.Rules.append(self.create_rule(ntid,uids+[ntid],'listenum([get(1)])'))
+            self.Rules.append(self.create_rule(ntid,[''],['eq(get(left),listenum([]))']))
+        self.Rules.append(self.create_rule(ntid,uids+[ntid],['eq(get(left),listenum([get(1)]))']))
         return ntid
 
     def unfold_refs(self,ids,unfold):
