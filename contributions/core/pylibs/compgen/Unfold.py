@@ -196,10 +196,21 @@ class Unfold(object):
             Right.append(Sem)
         else:
             if Sem[0] == 'id_or_t_star':
-                print('star')
-            (H,T)=Sem
-            for ht in T:
-                self.unfold_ids(ht,Right)
+                Right.append(self.unfold_macro(Sem[1]))
+            else:                      
+                (H,T)=Sem
+                for ht in T:
+                    self.unfold_ids(ht,Right)
+
+    def unfold_macro(self,macro):
+        for mac in macro:
+            print(mac[1])
+        ntid="*4"+mac[1][0]
+        nt=xmg.compgen.Symbol.NT(ntid)
+        self.NTs[ntid]=nt
+        self.Rules.append(self.create_rule(ntid,[mac[1][0]],'listenum([get(1)])'))
+        self.Rules.append(self.create_rule(ntid,[mac[1][0],ntid],'listenum([get(1)])'))
+        return ntid
 
     def unfold_refs(self,ids,unfold):
         if type(ids).__name__=='str':
