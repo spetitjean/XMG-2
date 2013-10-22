@@ -18,7 +18,7 @@ star=xmg.compgen.Symbol.T("*")
 plus=xmg.compgen.Symbol.T("+")
 
 endsection=xmg.compgen.Symbol.T("%%")
-
+action=xmg.compgen.Symbol.T("action")
 
 _id=xmg.compgen.Symbol.T("identifier")
 sqstring=xmg.compgen.Symbol.T("sqstring")
