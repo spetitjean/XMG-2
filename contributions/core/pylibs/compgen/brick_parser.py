@@ -22,24 +22,32 @@ endsection=xmg.compgen.Symbol.T("%%")
 
 _id=xmg.compgen.Symbol.T("identifier")
 sqstring=xmg.compgen.Symbol.T("sqstring")
-_id_or_t_=xmg.compgen.Symbol.NT("ids_or_t_")
+macro=xmg.compgen.Symbol.NT("macro")
+_id_or_macro=xmg.compgen.Symbol.NT("_id_or_macro")
+macroOp=xmg.compgen.Symbol.NT("macroOp")
+macroOpP=xmg.compgen.Symbol.NT("macroOpP")
+macroOpS=xmg.compgen.Symbol.NT("macroOpS")
 _ids_or_t=xmg.compgen.Symbol.NT("ids_or_t")
 _id_or_t=xmg.compgen.Symbol.NT("id_or_t")
 _id_or_t_star=xmg.compgen.Symbol.NT("id_or_t_star")
 _id_or_t_plus=xmg.compgen.Symbol.NT("id_or_t_plus")
 ids_coma=xmg.compgen.Symbol.NT("ids_coma")
-RID=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_t_,))
-RID2=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_t_,_ids_or_t))
-RID5=xmg.compgen.Rule.Rule(_id_or_t_,(_id_or_t_star,))
-RID6=xmg.compgen.Rule.Rule(_id_or_t_,(_id_or_t_plus,))
-RID7=xmg.compgen.Rule.Rule(_id_or_t_,(_id_or_t,))
-
-RID8=xmg.compgen.Rule.Rule(_id_or_t_star,(_id_or_t,star))
-RID9=xmg.compgen.Rule.Rule(_id_or_t_plus,(_id_or_t,plus))
-
+RID=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_macro,))
+RID2=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_macro,_ids_or_t))
 
 RID3=xmg.compgen.Rule.Rule(_id_or_t,(_id,))
 RID4=xmg.compgen.Rule.Rule(_id_or_t,(sqstring,))
+
+RID5=xmg.compgen.Rule.Rule(_id_or_macro,(macro,))
+RID6=xmg.compgen.Rule.Rule(_id_or_macro,(_id_or_t,))
+
+RID7=xmg.compgen.Rule.Rule(macro,(openpred,_ids_or_t,closepred,macroOp))
+
+RID8=xmg.compgen.Rule.Rule(macroOp,(macroOpP,))
+RID9=xmg.compgen.Rule.Rule(macroOp,(macroOpS,))
+
+RID10=xmg.compgen.Rule.Rule(macroOpP,(plus,))
+RID11=xmg.compgen.Rule.Rule(macroOpS,(star,))
 
 
 
@@ -70,6 +78,8 @@ RRu1=xmg.compgen.Rule.Rule(RuleParts,(RulePart,semicolon))
 RRu2=xmg.compgen.Rule.Rule(RuleParts,(RulePart,pipe,RuleParts))
 RRu3=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,))
 #RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,openAction,sqstring,closeAction))
+
+# Actions
 Action=xmg.compgen.Symbol.NT("Action")
 RRu4=xmg.compgen.Rule.Rule(RulePart,(_ids_or_t,openAction,Action,closeAction))
 ActionPart=xmg.compgen.Symbol.NT("ActionPart")
@@ -79,8 +89,8 @@ List=xmg.compgen.Symbol.NT("List")
 ListEnum=xmg.compgen.Symbol.NT("ListEnum")
 ListCons=xmg.compgen.Symbol.NT("ListCons")
 RListEnum=xmg.compgen.Rule.Rule(ListEnum,(sqstring,))
+RListEnum1=xmg.compgen.Rule.Rule(ListEnum,(sqstring,ListEnum))
 RListCons=xmg.compgen.Rule.Rule(ListCons,(sqstring,pipe,sqstring))
-
 RAction1=xmg.compgen.Rule.Rule(Action,(ActionPart,))
 RAction2=xmg.compgen.Rule.Rule(Action,(ActionPart,coma,Action))
 RAction3=xmg.compgen.Rule.Rule(Action,(ActionPart,semicolon,Action))
@@ -96,6 +106,7 @@ RIdsComa2=xmg.compgen.Rule.Rule(ids_coma,(sqstring,coma,ids_coma))
 
 RList1=xmg.compgen.Rule.Rule(List,(openlist,ListEnum,closelist))
 RList2=xmg.compgen.Rule.Rule(List,(openlist,ListCons,closelist))
+RList3=xmg.compgen.Rule.Rule(List,(openlist,closelist))
 #RIdsComa1=xmg.compgen.Rule.Rule(ids_coma,(_id,))
 #RIdsComa2=xmg.compgen.Rule.Rule(ids_coma,(_id,coma,ids_coma))
 
@@ -123,11 +134,15 @@ R=xmg.compgen.Rule.Rule(S,(Decls,endsection,Rules,endsection))
 # RuleParts ::= RulePart ;
 #             | RulePart|RuleParts
 # RulePart ::= Ids | Ids { Action }
-# Ids ::= Id | Id Ids
+# Ids ::= Id_or_Macro | Id_or_Macro Ids
+# Id_or_Macro ::= ( Ids ) MacOp | Id
+# MacOp ::= MacOpP | MacOpS
+# MacOpP ::= +
+# MacOpS ::= *
 # Decl ::= TD | NTD
 # TD ::= %token Id
 # NTD ::= %type Id Id
 
-G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID8,RID9,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList1,RList2,RListEnum,RListCons))
+G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID8,RID9,RID10,RID11,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList1,RList2,RList3,RListEnum,RListEnum1,RListCons))
 
 

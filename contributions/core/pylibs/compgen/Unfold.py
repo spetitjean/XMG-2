@@ -195,7 +195,7 @@ class Unfold(object):
         if type(Sem).__name__=='str':
             Right.append(Sem)
         else:
-            if Sem[0] == 'id_or_t_star':
+            if Sem[0] == 'macro':
                 Right.append(self.unfold_macro(Sem[1]))
             else:                      
                 (H,T)=Sem
@@ -203,13 +203,18 @@ class Unfold(object):
                     self.unfold_ids(ht,Right)
 
     def unfold_macro(self,macro):
-        for mac in macro:
-            print(mac[1])
-        ntid="*4"+mac[1][0]
+        (ids,op)=macro
+        uids=[]
+        self.unfold_ids(ids,uids)
+        print(uids)
+        ntid=self.prefix+"-"+"*4"+"-".join(map(str,uids))
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
-        self.Rules.append(self.create_rule(ntid,[mac[1][0]],'listenum([get(1)])'))
-        self.Rules.append(self.create_rule(ntid,[mac[1][0],ntid],'listenum([get(1)])'))
+        if op[1][0][0] == 'macroOpP' :
+            self.Rules.append(self.create_rule(ntid,uids,'listenum([get(1)])'))
+        elif op[1][0][0] == 'macroOpS' :
+            self.Rules.append(self.create_rule(ntid,[],'listenum([])'))
+        self.Rules.append(self.create_rule(ntid,uids+[ntid],'listenum([get(1)])'))
         return ntid
 
     def unfold_refs(self,ids,unfold):

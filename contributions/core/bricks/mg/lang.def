@@ -65,7 +65,7 @@ Class : class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stm
 StarsOrNot : '**' | '' ;
 
 /* ParamsOrNot : Params | '' ; */
-ParamsOrNot : '[' id * ']' ;
+ParamsOrNot : '[' ( id ) * ']' ;
 
 Params : '[' ids_coma ']' | '[' ']';
 
