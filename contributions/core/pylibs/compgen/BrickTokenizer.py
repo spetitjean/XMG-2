@@ -108,7 +108,7 @@ class TokenActionKeyword(TokenKeyword):
 BrickTokenizer = TokenizerBuilder(BrickTokenizerEngine)
 
 BrickTokenizer.operators([
-    "%%",":","|",";",'{','}','=',',','(',')','[',']','*','+' ])
+    "%%",":","|",";",'{','}','=',',','(',')','[',']','*','+','//' ])
 
 BrickTokenizer.keywords([
    ])

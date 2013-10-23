@@ -16,6 +16,7 @@ closelist=xmg.compgen.Symbol.T("]")
 
 star=xmg.compgen.Symbol.T("*")
 plus=xmg.compgen.Symbol.T("+")
+sepmacro=xmg.compgen.Symbol.T("//")
 
 endsection=xmg.compgen.Symbol.T("%%")
 action=xmg.compgen.Symbol.T("action")
@@ -41,7 +42,8 @@ RID4=xmg.compgen.Rule.Rule(_id_or_t,(sqstring,))
 RID5=xmg.compgen.Rule.Rule(_id_or_macro,(macro,))
 RID6=xmg.compgen.Rule.Rule(_id_or_macro,(_id_or_t,))
 
-RID7=xmg.compgen.Rule.Rule(macro,(openpred,_ids_or_t,closepred,macroOp))
+RID7=xmg.compgen.Rule.Rule(macro,(openpred,_id_or_t,closepred,macroOp))
+RID71=xmg.compgen.Rule.Rule(macro,(openpred,_id_or_t,sepmacro,_id_or_t,closepred,macroOp))
 
 RID8=xmg.compgen.Rule.Rule(macroOp,(macroOpP,))
 RID9=xmg.compgen.Rule.Rule(macroOp,(macroOpS,))
@@ -146,6 +148,6 @@ R=xmg.compgen.Rule.Rule(S,(Decls,endsection,Rules,endsection))
 # TD ::= %token Id
 # NTD ::= %type Id Id
 
-G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID8,RID9,RID10,RID11,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList3,RList1,RList2,RListEnum,RListEnum1,RListCons))
+G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID71,RID8,RID9,RID10,RID11,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList3,RList1,RList2,RListEnum,RListEnum1,RListCons))
 
 

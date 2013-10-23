@@ -69,7 +69,7 @@ StarsOrNot : '**' | '' ;
 /* ParamsOrNot : Params | '' ; */ 
 ParamsOrNot : '[' ( id ) * ']' | '' ;
 
-Params : '[' ids_coma ']' | '[' ']';
+Params : '[' ( id // ',')* ']' ;
 
 
 ImportsOrNot : Imports | '';
