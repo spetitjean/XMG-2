@@ -48,15 +48,15 @@
 
 %%
 
-MetaGrammar : EDecls Classes Values;
+MetaGrammar : EDecls Classes Values { $$=..['mg',$1,$2,$3]};
 
 
-Mutex : mutex id | mutex id '+=' id;
+Mutex : mutex id {$$=mutex($2)}| mutex id '+=' id {$$=mutex_add($2,$4)};
 
-Semantics : semantics ids {$$=[]};
+Semantics : semantics (id)+ {$$=semantics($2)};
 
 
-Classes : Class {$$=[$1]} | Class Classes {$$=[$1|$2]} ;
+Classes : (Class)* ;
 
 Class :
        class StarsOrNot id ParamsOrNot ImportsOrNot ExportsOrNot DeclsOrNot Stmts
@@ -67,7 +67,7 @@ Class :
 StarsOrNot : '**' | '' ;
 
 /* ParamsOrNot : Params | '' ; */ 
-ParamsOrNot : '[' ( id ) * ']' | '' ;
+ParamsOrNot : '[' ( id // ',')* ']' | '' ;
 
 Params : '[' ( id // ',')* ']' ;
 
@@ -76,11 +76,11 @@ ImportsOrNot : Imports | '';
 
 Imports : 'import' IClasses ;
 
-IClasses : IClass  | IClass IClasses  ;
+IClasses : (IClass)+  ;
 
 IClass : id '[' (id)* ']' MaybeAs ;
 
-MaybeAs : as '[' AsList  ']' | '' ;
+MaybeAs : as '[' (AsElem)+  ']' | '' ;
 
 AsList : AsElem | AsElem AsList ;
 
