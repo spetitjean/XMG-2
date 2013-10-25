@@ -219,14 +219,18 @@ class Unfold(object):
             sepstr=sep[0]
         uids=[]
         self.unfold_ids(ids,uids)
-        ntid=self.prefix+"-"+"*4"+"-".join(map(str,uids))+"sep_"+sepstr
+        ntid=self.prefix+"-"+"macro4"+"-".join(map(str,uids))+"sep_"+sepstr
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'macroOpP' :
             self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
         elif op[1][0][0] == 'macroOpS' :
-            self.Rules.append(self.create_rule(ntid,[''],'VAR__RESULT=[]'))
-        self.Rules.append(self.create_rule(ntid,uids+sep+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
+            self.Rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
+        if op[1][0][0] == 'macroOpQ' :
+            self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
+            self.Rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
+        else:
+            self.Rules.append(self.create_rule(ntid,uids+sep+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
         return ntid
 
     def unfold_refs(self,ids,unfold):

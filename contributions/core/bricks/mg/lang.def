@@ -64,10 +64,10 @@ Class :
        	| Mutex 
 	| Semantics;
 
-StarsOrNot : '**' | '' ;
+StarsOrNot : ('**')? ;
 
 /* ParamsOrNot : Params | '' ; */ 
-ParamsOrNot : '[' ( id // ',')* ']' | '' ;
+ParamsOrNot : '[' ( id // ',')* ']' | ;
 
 Params : '[' ( id // ',')* ']' ;
 
@@ -80,24 +80,24 @@ IClasses : (IClass)+  ;
 
 IClass : id '[' (id)* ']' MaybeAs ;
 
-MaybeAs : as '[' (AsElem)+  ']' | '' ;
+MaybeAs : as '[' (AsElem)+  ']' | ;
 
 AsList : AsElem | AsElem AsList ;
 
 AsElem : Var '=' Var | Var ;
 
 
-ExportsOrNot : Exports | '';
+ExportsOrNot : Exports | ;
 
 Exports : 'export' Vars;
 
 
-DeclsOrNot : Decls | '';
+DeclsOrNot : Decls | ;
 
 Decls : 'declare' Vars;
 
 
-Stmts : '{' Stmt '}' | '';
+Stmts : '{' Stmt '}' | ;
 
 
 Values : Value | Value Values;

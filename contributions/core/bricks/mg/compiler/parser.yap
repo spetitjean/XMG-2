@@ -89,6 +89,12 @@ preAction(N):--
 
 makeAction(PreAction,_,Action):--
 	generated_parser:ruleAction(Action,Result,PreAction),
+	%%xmg_brick_mg_compiler:send(info,PreAction),
+	%%xmg_brick_mg_compiler:send(info,'\n\n'),
+	xmg_brick_mg_compiler:send(info,Action),
+	xmg_brick_mg_compiler:send(info,'\n\n'),
+
+	
 	stack::push(Result),!.
 
 buildAction(PreAction,Left,pred(Head,Body),Pred):--

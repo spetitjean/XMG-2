@@ -163,22 +163,17 @@ class LR1(object):
             if r.action is None :
                 action=r.body
                 nbActions=rightsize#len(action)
-                lines.append("ruleAction("+str(i)+",VAR__RESULT,[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+"]):-\n    VAR__RESULT=pred(VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+").\n")
+                if nbActions==0:
+                    lines.append("ruleAction("+str(i)+",VAR__RESULT,[]):-\n    VAR__RESULT=none.\n")
+                else:
+                    params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+"]"
+                    lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    VAR__RESULT=pred(VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+").\n")
             else:
-                # convert=[]
-                # print(r.action)
-                # for part in r.action.split(" "):
-                #     if part[0] == '$':
-                #         ref=None
-                #         if part[1] == '$':
-                #             ref="\'Left\'"
-                #         else:
-                #             ref=part[1:]
-                #         convert.append('get('+ref+')')
-                #     else:
-                #         convert.append('put(\''+part+'\')')
-                # lines.append("ruleAction("+str(i)+",["+",".join(map(str,convert))+"]).\n")
-                lines.append("ruleAction("+str(i)+",VAR__RESULT,[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]):-\n    "+r.action+".\n")
+                if rightsize==0:
+                    params="[]"
+                else:
+                    params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]"
+                lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    "+r.action+".\n")
                     
             i=i+1
         for Item in Table:

@@ -16,6 +16,7 @@ closelist=xmg.compgen.Symbol.T("]")
 
 star=xmg.compgen.Symbol.T("*")
 plus=xmg.compgen.Symbol.T("+")
+question=xmg.compgen.Symbol.T("?")
 sepmacro=xmg.compgen.Symbol.T("//")
 
 endsection=xmg.compgen.Symbol.T("%%")
@@ -28,12 +29,13 @@ _id_or_macro=xmg.compgen.Symbol.NT("_id_or_macro")
 macroOp=xmg.compgen.Symbol.NT("macroOp")
 macroOpP=xmg.compgen.Symbol.NT("macroOpP")
 macroOpS=xmg.compgen.Symbol.NT("macroOpS")
+macroOpQ=xmg.compgen.Symbol.NT("macroOpQ")
 _ids_or_t=xmg.compgen.Symbol.NT("ids_or_t")
 _id_or_t=xmg.compgen.Symbol.NT("id_or_t")
 _id_or_t_star=xmg.compgen.Symbol.NT("id_or_t_star")
 _id_or_t_plus=xmg.compgen.Symbol.NT("id_or_t_plus")
 ids_coma=xmg.compgen.Symbol.NT("ids_coma")
-RID=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_macro,))
+RID=xmg.compgen.Rule.Rule(_ids_or_t,())
 RID2=xmg.compgen.Rule.Rule(_ids_or_t,(_id_or_macro,_ids_or_t))
 
 RID3=xmg.compgen.Rule.Rule(_id_or_t,(_id,))
@@ -47,9 +49,11 @@ RID71=xmg.compgen.Rule.Rule(macro,(openpred,_id_or_t,sepmacro,_id_or_t,closepred
 
 RID8=xmg.compgen.Rule.Rule(macroOp,(macroOpP,))
 RID9=xmg.compgen.Rule.Rule(macroOp,(macroOpS,))
+RID10=xmg.compgen.Rule.Rule(macroOp,(macroOpQ,))
 
-RID10=xmg.compgen.Rule.Rule(macroOpP,(plus,))
-RID11=xmg.compgen.Rule.Rule(macroOpS,(star,))
+RID11=xmg.compgen.Rule.Rule(macroOpP,(plus,))
+RID12=xmg.compgen.Rule.Rule(macroOpS,(star,))
+RID13=xmg.compgen.Rule.Rule(macroOpQ,(question,))
 
 
 
@@ -148,6 +152,6 @@ R=xmg.compgen.Rule.Rule(S,(Decls,endsection,Rules,endsection))
 # TD ::= %token Id
 # NTD ::= %type Id Id
 
-G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID71,RID8,RID9,RID10,RID11,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList3,RList1,RList2,RListEnum,RListEnum1,RListCons))
+G=xmg.compgen.Grammar.Grammar((R,RID,RID2,RID3,RID4,RID5,RID6,RID7,RID71,RID8,RID9,RID10,RID11,RID12,RID13,RT,RNT,REXT,RRu,RRu1,RRu2,RRu3,RRu4,RDecls,RDecls1,RDecl,RDecl1,RDecl2,RRules,RRules1,RAction1,RAction2,RAction3,RActionP1,REq1,REq2,REq3,RPred,RIdsComa1,RIdsComa2,RList3,RList1,RList2,RListEnum,RListEnum1,RListCons))
 
 
