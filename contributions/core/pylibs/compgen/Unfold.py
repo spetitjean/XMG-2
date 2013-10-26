@@ -206,6 +206,14 @@ class Unfold(object):
                 for ht in T:
                     self.unfold_ids(ht,Right)
 
+    def unfold_macro_op(self,op):
+        if op == ('macroOp', [('macroOpP', [])]):
+            return '+'
+        elif op == ('macroOp', [('macroOpS', [])]):
+            return '*'
+        elif op == ('macroOp', [('macroOpQ', [])]):
+            return '?'
+
     def unfold_macro(self,macro):
         sep=[]
         if len(macro)==3:
@@ -219,18 +227,26 @@ class Unfold(object):
             sepstr=sep[0]
         uids=[]
         self.unfold_ids(ids,uids)
-        ntid=self.prefix+"-"+"macro4"+"-".join(map(str,uids))+"sep_"+sepstr
+        uop=self.unfold_macro_op(op)
+        ntid=self.prefix+"-"+"macro4"+"-".join(map(str,uids))+"sep_"+sepstr+uop
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'macroOpP' :
             self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
+            self.Rules.append(self.create_rule(ntid,uids+sep+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
         elif op[1][0][0] == 'macroOpS' :
             self.Rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
+            if len(macro)==3:
+                (pids,psep,sop)=macro
+                pmacro=(pids,psep,('macroOp', [('macroOpP', [])]))
+            else:
+                (pids,sop)=macro
+                pmacro=(pids,('macroOp', [('macroOpP', [])]))                
+            unfoldp=self.unfold_macro(pmacro)
+            self.Rules.append(self.create_rule(ntid,[unfoldp],'VAR__RESULT=VAR__PARAM__1'))
         if op[1][0][0] == 'macroOpQ' :
             self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
             self.Rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
-        else:
-            self.Rules.append(self.create_rule(ntid,uids+sep+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
         return ntid
 
     def unfold_refs(self,ids,unfold):
