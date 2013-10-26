@@ -14,6 +14,7 @@ class Unfold(object):
         self._NTs=dict()
         self._EXTs=dict()
         self._Rules=[]
+        self._macros=[]
         self._prefix=brick._prefix
         #self._rename_nt=brick._rename_nt
         #self._rename_t=rename_t
@@ -46,6 +47,9 @@ class Unfold(object):
     @property
     def Rules(self):
         return self._Rules
+    @property
+    def macros(self):
+        return self._macros
     #@property
     #def grammar(self):
     #    return self._grammar
@@ -99,7 +103,7 @@ class Unfold(object):
                 else:
                     self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,)))
   
-        Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules))
+        Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules+self.macros))
         return Gram
 
 
@@ -215,6 +219,7 @@ class Unfold(object):
             return '?'
 
     def unfold_macro(self,macro):
+        rules=[]
         sep=[]
         if len(macro)==3:
             (ids,sep_,op)=macro
@@ -232,10 +237,10 @@ class Unfold(object):
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'macroOpP' :
-            self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
-            self.Rules.append(self.create_rule(ntid,uids+sep+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
+            rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
+            rules.append(self.create_rule(ntid,uids+sep+[ntid],'VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]'))
         elif op[1][0][0] == 'macroOpS' :
-            self.Rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
+            rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
             if len(macro)==3:
                 (pids,psep,sop)=macro
                 pmacro=(pids,psep,('macroOp', [('macroOpP', [])]))
@@ -243,11 +248,13 @@ class Unfold(object):
                 (pids,sop)=macro
                 pmacro=(pids,('macroOp', [('macroOpP', [])]))                
             unfoldp=self.unfold_macro(pmacro)
-            self.Rules.append(self.create_rule(ntid,[unfoldp],'VAR__RESULT=VAR__PARAM__1'))
+            rules.append(self.create_rule(ntid,[unfoldp],'VAR__RESULT=VAR__PARAM__1'))
         if op[1][0][0] == 'macroOpQ' :
-            self.Rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
-            self.Rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
-        return ntid
+            rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
+            rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
+        for rule in rules:
+            self.macros.append(rule)
+        return(ntid)
 
     def unfold_refs(self,ids,unfold):
         if type(ids).__name__=='str':

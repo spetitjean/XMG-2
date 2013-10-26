@@ -89,10 +89,10 @@ preAction(N):--
 
 makeAction(PreAction,_,Action):--
 	generated_parser:ruleAction(Action,Result,PreAction),
-	%%xmg_brick_mg_compiler:send(info,PreAction),
-	%%xmg_brick_mg_compiler:send(info,'\n\n'),
-	xmg_brick_mg_compiler:send(info,Action),
-	xmg_brick_mg_compiler:send(info,'\n\n'),
+	%% xmg_brick_mg_compiler:send(info,PreAction),
+	%% xmg_brick_mg_compiler:send(info,'\n\n'),
+	%% xmg_brick_mg_compiler:send(info,Action),
+	%% xmg_brick_mg_compiler:send(info,'\n\n'),
 
 	
 	stack::push(Result),!.
@@ -162,6 +162,7 @@ tokArgs(token(Coord,Token),Tok,Args):-
 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
+	xmg_brick_mg_compiler:send(info,Token),
 	generated_parser:action(State,Tok,'accept'),!.
 
 parse_sem([State|States],[Token|Tokens]):--
