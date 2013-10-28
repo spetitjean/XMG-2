@@ -168,12 +168,16 @@ class LR1(object):
                 else:
                     params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+"]"
                     lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    VAR__RESULT=pred(VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,nbActions+1))))+").\n")
+
             else:
+                (action,max_param)=r.action
+                if max_param > rightsize:
+                    raise Exception("Parameter out of range",str(r))
                 if rightsize==0:
                     params="[]"
                 else:
                     params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]"
-                lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    "+r.action+".\n")
+                lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    "+action+".\n")
                     
             i=i+1
         for Item in Table:

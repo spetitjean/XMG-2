@@ -36,6 +36,7 @@ class BrickTokenizerEngine(TokenizerEngine):
 
     def read_action(self, coord):
         contents = []
+        max_param = 0
         bracecount = 1
         while True:
             if self.colno >= len(self.line):
@@ -48,7 +49,7 @@ class BrickTokenizerEngine(TokenizerEngine):
                 if c=='}':
                     bracecount -= 1
                     if not bracecount:
-                        return self.token_action("".join(contents), coord)
+                        return self.token_action(("".join(contents),max_param), coord)
                     else:
                         contents.append(c)
                 elif c=='{':
@@ -70,6 +71,8 @@ class BrickTokenizerEngine(TokenizerEngine):
                         contents.append(" VAR__RESULT ")
                     else:
                         index = int(index)
+                        if index > max_param:
+                            max_param = index
                         contents.append(" VAR__PARAM__%d " % index)
                 else:
                     contents.append(c)
