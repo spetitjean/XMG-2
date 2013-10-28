@@ -101,9 +101,9 @@ class Unfold(object):
                     brick._punctuation.append('<'+extg._prefix+'>')
                     openStmt=xmg.compgen.Symbol.T('{')
                     closeStmt=xmg.compgen.Symbol.T('}')
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt),action=('VAR__RESULT=dimStmt(VAR__PARAM__1,VAR__PARAM__3)',4)))
                 else:
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
   
         Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules+self.macros))
         #Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules))

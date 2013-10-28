@@ -32,7 +32,7 @@
 
 %%
 
-Decls : (Decl)* ;
+Decls : (Decl)* {$$=$1} ;
 
 Decl : Principle {$$=$1} 
      | Type {$$=$1}
@@ -41,23 +41,35 @@ Decl : Principle {$$=$1}
 
 Principle : use id with '(' PrincipleFeat ')' dims '(' (dim)+ ')' {$$=principle($2,$5,$9)}; 
 
-PrincipleFeat : id '=' id | id | id '=' int | id '=' bool | ;
+PrincipleFeat : id '=' id {$$=eq($1,$3)}
+	      | id {$$=eq($1,none)}
+	      | id '=' int {$$=eq($1,$3)}
+	      | id '=' bool {$$=eq($1,$3)} 
+	      | {$$=none} ;
 
 
-Type : type id '=' TypeDef {$$=type($2,$4)} | type id '!' {$$=type($2,label)}; 
+Type : type id '=' TypeDef {$$=type($2,$4)} 
+     | type id '!' {$$=type($2,label)}; 
 
-TypeDef : '{' (val // ',')+ '}' {$$=enum($2)} | '[' int '.' '.' int ']' {$$=range($2,$5)} | '[' (Struct // ',')+ ']' {$$=struct($2)};
+TypeDef : '{' (val // ',')+ '}' {$$=enum($2)} 
+	| '[' int '.' '.' int ']' {$$=range($2,$5)} 
+	| '[' (Struct // ',')+ ']' {$$=struct($2)};
 
-Struct : id ':' id;
-
-
-Property : property id ':' id MaybeAbbrev;
-
-MaybeAbbrev : '{' (Abbrev // ',')+ '}' {$$=$2} | {$$=none};
-
-Abbrev : id '=' id | id '=' bool | id '=' int;
+Struct : id ':' id {$$=struct($1,$3)};
 
 
-val : id | bool | int;
+Property : property id ':' id MaybeAbbrev {$$=property($2,$4,$5)};
+
+MaybeAbbrev : '{' (Abbrev // ',')+ '}' {$$=$2} 
+	    | {$$=none};
+
+Abbrev : id '=' id   {$$=eq($1,$3)}
+       | id '=' bool {$$=eq($1,$3)}
+       | id '=' int  {$$=eq($1,$3)};
+
+
+val : id {$$=$1} 
+    | bool {$$=$1}
+    | int {$$=$1};
 
 %%

@@ -161,6 +161,8 @@ class LR1(object):
             rightsize=len(r.body)
             lines.append("rule("+str(i)+",\'"+str(left)+"\',"+str(rightsize)+").\n")
             if r.action is None :
+                if str(left) != "(AXIOM)":
+                    raise Exception("No action for rule",str(r))
                 action=r.body
                 nbActions=rightsize#len(action)
                 if nbActions==0:
