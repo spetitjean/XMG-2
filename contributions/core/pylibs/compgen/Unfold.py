@@ -91,6 +91,8 @@ class Unfold(object):
                     G.build_grammar()
                     for rule in G.Rules:
                         self.Rules.append(rule)
+                    for rule in G.macros:
+                        self.Rules.append(rule)
             
                 #print(G)
                 axiom=G.Rules[0].head
@@ -104,6 +106,7 @@ class Unfold(object):
                     self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,)))
   
         Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules+self.macros))
+        #Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules))
         return Gram
 
 
@@ -250,8 +253,8 @@ class Unfold(object):
             unfoldp=self.unfold_macro(pmacro)
             rules.append(self.create_rule(ntid,[unfoldp],'VAR__RESULT=VAR__PARAM__1'))
         if op[1][0][0] == 'macroOpQ' :
-            rules.append(self.create_rule(ntid,uids,'VAR__RESULT=[VAR__PARAM__1]'))
-            rules.append(self.create_rule(ntid,[],'VAR__RESULT=[]'))
+            rules.append(self.create_rule(ntid,uids,'VAR__RESULT=some(VAR__PARAM__1)'))
+            rules.append(self.create_rule(ntid,[],'VAR__RESULT=none'))
         for rule in rules:
             self.macros.append(rule)
         return(ntid)

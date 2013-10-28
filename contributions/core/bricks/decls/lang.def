@@ -6,12 +6,8 @@
 %token int
 %token string
 %token bool
-%token feature
 %token type
-%token hierarchy
 %token property
-%token extern
-%token semantics
 
 %type Decls Decls
 %type Decl Decl
@@ -23,67 +19,45 @@
 
 %type Type Type
 %type TypeDef TypeDef
-%type Structs Structs
 %type Struct Struct
 
 %type Properties Properties
 %type Property Property
 %type MaybeAbbrev MaybeAbbrev
-%type Abbrevs Abbrevs
 %type Abbrev Abbrev
 
-%type Feats Feats
-%type Feat Feat
-
 %type val val
-%type vals_coma vals_coma
-
-%type ids ids
-
-%type id_pairs id_pairs
-%type id_pair id_pair
 
 %ext ODecl ODecl
 
 %%
 
-Decls : '' | Decl Decls ;
+Decls : (Decl)* ;
 
-Decl : Principle | Type | Property | ODecl;
+Decl : Principle {$$=$1} 
+     | Type {$$=$1}
+     | Property {$$=$1}
+     | ODecl {$$=$1};
 
-Principle : use id with '(' PrincipleFeat ')' dims '(' Dims ')'; 
+Principle : use id with '(' PrincipleFeat ')' dims '(' (dim)+ ')' {$$=principle($2,$5,$9)}; 
 
-PrincipleFeat : id '=' id | id | id '=' int | id '=' bool | '';
-
-Dims : dim | dim Dims;
+PrincipleFeat : id '=' id | id | id '=' int | id '=' bool | ;
 
 
-Type : type id '=' TypeDef | type id '!'; 
+Type : type id '=' TypeDef {$$=type($2,$4)} | type id '!' {$$=type($2,label)}; 
 
-TypeDef : '{' vals_coma '}' | '[' int '.' '.' int ']' | '[' Structs ']';
-
-Structs : Struct | Struct ',' Structs;
+TypeDef : '{' (val // ',')+ '}' {$$=enum($2)} | '[' int '.' '.' int ']' {$$=range($2,$5)} | '[' (Struct // ',')+ ']' {$$=struct($2)};
 
 Struct : id ':' id;
 
 
 Property : property id ':' id MaybeAbbrev;
 
-MaybeAbbrev : '{' Abbrevs '}' | '';
-
-Abbrevs : Abbrev | Abbrev ',' Abbrevs;
+MaybeAbbrev : '{' (Abbrev // ',')+ '}' {$$=$2} | {$$=none};
 
 Abbrev : id '=' id | id '=' bool | id '=' int;
 
 
 val : id | bool | int;
-
-vals_coma : val | val ',' vals_coma;
-
-ids : id | id ids;
-
-id_pairs : id_pair | id_pair ',' id_pairs;
-
-id_pair : '(' id ',' id ')';
 
 %%

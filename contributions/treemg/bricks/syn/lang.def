@@ -6,16 +6,11 @@
 %token bool
 
 %type Var Var
-%type Ids Ids
-%type DimStmt DimStmt
 %type SynStmts SynStmts
 %type SynStmt SynStmt
 %type Node Node
-%type MaybeId MaybeId
 %type MaybeProps MaybeProps
 %type Props Props
-%type MaybeFeats MaybeFeats
-%type Feats Feats
 %type Feat Feat
 %type Dom Dom
 %type DomOp DomOp
@@ -34,53 +29,60 @@
 
 %%
 
-/* 
-
-DimStmt : '<syn>' '{' SynStmts '}' ; 
-
-*/
-
-SynStmts : SynStmt | SynStmts ';' SynStmts | SynStmts '|' SynStmts | '{' SynStmts '}';
+SynStmts : SynStmt {$$=$1}
+	 | SynStmts ';' SynStmts {$$=and($1,$3)}
+	 | SynStmts '|' SynStmts {$$=or($1,$3)}
+	 | '{' SynStmts '}' {$$=$2};
 
 SynStmt :  Node | Dom | Prec | Eq | Tree;
 
-Node : node MaybeId MaybeProps MaybeFeats;
+Node : node (Var)? MaybeProps (AVM)? {$$=node($2,$3,$4)};
 
-MaybeId : Var | '';
+MaybeProps : '(' Props ')' {$$=some($2)}
+	   | {$$=none};
 
-MaybeProps : '(' Props ')' | '';
-
-Props : Feat | Feat ',' Props;
-
-MaybeFeats : AVM | '';
+Props : (Feat // ',')+ {$$=$1};
 	 
-Feat : id '=' id | id '=' int | id '=' bool | id;
+Feat : id '=' id {$$=feat($1,$3)}
+     | id '=' int {$$=feat($1,$3)}
+     | id '=' bool {$$=feat($1,$3)}
+     | id {$$=feat($1)};
 
-Dom : IdOrNode DomOp IdOrNode;
+Dom : IdOrNode DomOp IdOrNode {$$=dom($2,$1,$3)};
 
-IdOrNode : Node | Var ;
+IdOrNode : Node {$$=$1} 
+	 | Var {$$=$1};
 
-DomOp : '->' | '->+' | '->*';
+DomOp : '->' {$$=$1} 
+      | '->+'{$$=$1} 
+      | '->*'{$$=$1} ;
 
-Prec : IdOrNode PrecOp IdOrNode;
+Prec : IdOrNode PrecOp IdOrNode {$$=prec($2,$1,$3)};
 
-PrecOp : '>>' | '>>+' | '>>*';
+PrecOp : '>>' {$$=$1} 
+       | '>>+'{$$=$1}  
+       | '>>*'{$$=$1} ;
 
-Tree : Node '{' Children '}' ;
+Tree : Node '{' Children '}' {$$=tree($1,$3)};
 
-Children : Child | Child TreePrecOp Children ;
+Children : Child {$$=children($1,none)} 
+	 | Child TreePrecOp Children {$$=children($1,brothers($2,$3))};
 
-Child : TreeDomOp Node | TreeDomOp Tree;
+Child : TreeDomOp Node {$$=child($1,$2)} 
+      | TreeDomOp Tree {$$=child($1,$2)};
 
-TreePrecOp : ',,,' | ',,,+' | '';
+TreePrecOp : ',,,' {$$=$1}
+	   | ',,,+'{$$=$1} 
+	   | {$$=none};
 
-TreeDomOp : '...' | '...+' | '';
+TreeDomOp : '...' {$$=$1}
+	  | '...+'{$$=$1}
+	  | {$$=none};
 
-Eq : Expr '=' Expr;
+Eq : Expr '=' Expr {$$=eq($1,$3)};
 
-Expr : id | string;
-
-Ids : id | id Ids;
+Expr : id {$$=$1} 
+     | string {$$=$1};
 
 Var : id | '?' id;
 

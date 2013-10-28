@@ -3,7 +3,6 @@
 %type AStmt AStmt
 %type MaybeIFace MaybeIface
 %type Call Call
-%type ids_coma ids_coma
 %type Dot Dot
 %type Var Var 
 %type EqPart EqPart
@@ -15,22 +14,31 @@
 
 %%
 
-Stmts : Stmt | Stmt ';' Stmts | Stmt '|' Stmts; 
+Stmts : Stmt {$$=$1}
+      | Stmt ';' Stmts {$$=and($1,$3)} 
+      | Stmt '|' Stmts {$$=or($1,$3)}; 
 
-Stmt : AStmt MaybeIFace ;
+Stmt : AStmt MaybeIFace {$$=stmt($1,$2)};
 
-MaybeIFace : '*=' IFace | '' ;
+MaybeIFace : '*=' IFace {$$=some($2)}
+	   | {$$=none};
 
-AStmt : '{' Stmts '}' | '(' Stmts ')' | DimStmt | EqPart '=' EqPart | Call ;
+AStmt : '{' Stmts '}' {$$=$1} 
+      | '(' Stmts ')' {$$=$1}
+      | DimStmt       {$$=$1}
+      | EqPart '=' EqPart {$$=eq($1,$3)}
+      | Call {$$=$1};
 
-Dot : Var '.' Var ;
+Dot : Var '.' Var {$$=dot($1,$3)};
 
-Call : id '[' ids_coma ']' | id '[' ']';
+Call : id '[' (id // ',')* ']' {$$=call($1,$3)} ;
 
-ids_coma : id ',' ids_coma  | id; 
 
-Var : id | '?' id;
+Var : id {$$=$1} 
+    | '?' id {$$=$2};
 
-EqPart : Var | Dot | Call ;
+EqPart : Var {$$=$1}
+       | Dot {$$=$1} 
+       | Call{$$=$1};
 
 %%

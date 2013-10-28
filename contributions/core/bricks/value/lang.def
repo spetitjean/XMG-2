@@ -9,6 +9,12 @@
 
 %%
 
-Value : id | '?' id | '!' id | bool | int | string | Else;
+Value : id {$$=$1} 
+      | '?' id {$$=var($2)} 
+      | '!' id {$$=const($2)}
+      | bool {$$=$1}
+      | int {$$=$1}
+      | string {$$=$1}
+      | Else {$$=$1};
 
 %%
