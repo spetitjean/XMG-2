@@ -1,5 +1,5 @@
 import xmg.compgen.Tokenizer, xmg.compgen.BrickTokenizer
-from xmg.compgen.brick_parser import semicolon,colon,pipe,arrow,endsection,openAction,closeAction,_id,sqstring,coma,equal,openpred,closepred,openlist,closelist,star,plus,question,T,NT,EXT,action,sepmacro
+from xmg.compgen.brick_parser import semicolon,colon,pipe,arrow,endsection,_id,sqstring,coma,equal,openpred,closepred,star,plus,question,T,NT,EXT,action,sepMacro
 from xmg.compgen.Symbol import EOF
 
 def convertEOF(token) : 
@@ -11,18 +11,14 @@ opt={
     "|":pipe,
     "->":arrow,
     "%%":endsection,
-    "{":openAction,
-    "}":closeAction,
     "=":equal,
     ',':coma,
     '(':openpred,
     ')':closepred,
-    '[':openlist,
-    ']':closelist,
     '*':star,
     '+':plus,
     '?':question,
-    '//':sepmacro
+    '//':sepMacro
     
     }
 

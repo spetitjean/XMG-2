@@ -206,7 +206,7 @@ class Unfold(object):
         if type(Sem).__name__=='str':
             Right.append(Sem)
         else:
-            if Sem[0] == 'macro':
+            if Sem[0] == 'Macro':
                 Right.append(self.unfold_macro(Sem[1]))
             else:                      
                 (H,T)=Sem
@@ -214,11 +214,11 @@ class Unfold(object):
                     self.unfold_ids(ht,Right)
 
     def unfold_macro_op(self,op):
-        if op == ('macroOp', [('macroOpP', [])]):
+        if op == ('MacroOp', [('MacroOpP', [])]):
             return '+'
-        elif op == ('macroOp', [('macroOpS', [])]):
+        elif op == ('MacroOp', [('MacroOpS', [])]):
             return '*'
-        elif op == ('macroOp', [('macroOpQ', [])]):
+        elif op == ('MacroOp', [('MacroOpQ', [])]):
             return '?'
 
     def unfold_macro(self,macro):
@@ -239,20 +239,20 @@ class Unfold(object):
         ntid=self.prefix+"-"+"macro4"+"-".join(map(str,uids))+"sep_"+sepstr+uop
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
-        if op[1][0][0] == 'macroOpP' :
+        if op[1][0][0] == 'MacroOpP' :
             rules.append(self.create_rule(ntid,uids,('VAR__RESULT=[VAR__PARAM__1]',len(uids))))
             rules.append(self.create_rule(ntid,uids+sep+[ntid],('VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]',len(uids))))
-        elif op[1][0][0] == 'macroOpS' :
+        elif op[1][0][0] == 'MacroOpS' :
             rules.append(self.create_rule(ntid,[],('VAR__RESULT=[]',0)))
             if len(macro)==3:
                 (pids,psep,sop)=macro
-                pmacro=(pids,psep,('macroOp', [('macroOpP', [])]))
+                pmacro=(pids,psep,('MacroOp', [('MacroOpP', [])]))
             else:
                 (pids,sop)=macro
-                pmacro=(pids,('macroOp', [('macroOpP', [])]))                
+                pmacro=(pids,('MacroOp', [('MacroOpP', [])]))                
             unfoldp=self.unfold_macro(pmacro)
             rules.append(self.create_rule(ntid,[unfoldp],('VAR__RESULT=VAR__PARAM__1',1)))
-        if op[1][0][0] == 'macroOpQ' :
+        if op[1][0][0] == 'MacroOpQ' :
             rules.append(self.create_rule(ntid,uids,('VAR__RESULT=some(VAR__PARAM__1)',len(uids))))
             rules.append(self.create_rule(ntid,[],('VAR__RESULT=none',0)))
         for rule in rules:
