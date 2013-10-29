@@ -80,7 +80,6 @@ class Unfold(object):
                 for brick in extf:
                     print(brick._prefix)
             else:
-                #raise Exception("No brick set for "+i+" in "+self._brick._file)
                 warnings.warn("\n\n No brick set for "+i+" in "+self._brick._file+"\n\n")
                 continue
             
@@ -92,7 +91,7 @@ class Unfold(object):
                     for rule in G.Rules:
                         self.Rules.append(rule)
                     for rule in G.macros:
-                        self.Rules.append(rule)
+                        self.Rules.append(rule)                        
             
                 #print(G)
                 axiom=G.Rules[0].head
@@ -105,6 +104,21 @@ class Unfold(object):
                 else:
                     self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
   
+                # check that every non terminal appears in the left part of a rule
+                for g_nt in G.NTs:
+                    found=False
+                    if g_nt in G.EXTs:
+                        continue
+                    else:
+                        g_nt=G.NTs[g_nt]
+                    for rule in G.Rules+G.macros:
+                        if rule.head == g_nt :
+                            found=True
+                            break
+
+                    if not found:
+                        raise Exception("No rule for Non Terminal "+str(g_nt))
+
         Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules+self.macros))
         #Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules))
         return Gram

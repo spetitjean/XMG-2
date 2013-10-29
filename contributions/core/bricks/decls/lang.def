@@ -14,14 +14,11 @@
 
 %type Principle Principle
 %type PrincipleFeat PrincipleFeat
-%type Principles Principles
-%type Dims Dims
 
 %type Type Type
 %type TypeDef TypeDef
 %type Struct Struct
 
-%type Properties Properties
 %type Property Property
 %type MaybeAbbrev MaybeAbbrev
 %type Abbrev Abbrev

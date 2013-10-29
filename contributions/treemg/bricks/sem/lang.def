@@ -1,10 +1,8 @@
 %token sem
 %token id
 
-%type DimStmt DimStmt
 %type SemStmts SemStmts
 %type SemStmt SemStmt
-%type APred Apred
 %type Pred Pred
 %type ScopeOver ScopeOver
 %type Var Var
