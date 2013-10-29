@@ -123,21 +123,37 @@ class Unfold(object):
         #Gram=xmg.compgen.Grammar.Grammar(tuple(self.Rules))
         return Gram
 
+    def add_terminal(self,T):
+        if T[0].isupper():
+            raise Exception("Terminal "+T+" should not begin with capital letter in "+self.prefix)
+        if T not in self.Ts:
+            self.Ts[T]=xmg.compgen.Symbol.T(T)
+            
+    def add_non_terminal(self,NT):
+        if not NT[0].isupper():
+            raise Exception("Non-Terminal "+NT+" should begin with capital letter in "+self.prefix)
+        if NT not in self.NTs:
+            self.NTs[NT]=xmg.compgen.Symbol.NT(self.prefix+"-"+NT)
+
+    def add_extern(self,NT):
+        if not NT[0].isupper():
+            raise Exception("Non-Terminal "+NT[0]+" should begin with capital letter in "+self.prefix)
+        if NT not in self.NTs:
+            self.NTs[NT]=xmg.compgen.Symbol.NT(self.prefix+"-"+NT)
+            self.EXTs[NT]=NT
 
     def unfold(self,Sem):
         if type(Sem).__name__ != 'str':
             (H,T)=Sem
             if H == 'TD':
-                if T[0] not in self.Ts:
-                    self.Ts[T[0]]=xmg.compgen.Symbol.T(T[0])
+                self.add_terminal(T[0])
             elif H == 'NTD':
-                if T[0] not in self.NTs:
-                    self.NTs[T[0]]=xmg.compgen.Symbol.NT(self.prefix+"-"+T[0])
+                self.add_non_terminal(T[0])
             elif H == 'EXTD':
-                self.NTs[T[0]]=xmg.compgen.Symbol.NT(self.prefix+"-"+T[0])
-                self.EXTs[T[0]]=T[1]
+                self.add_extern(T[0])
             elif H == 'RuD':
-                # check left part is a non terminal
+                if not T[0] in self.NTs:
+                    self.add_non_terminal(T[0])
                 Left=T[0]
                 T=T[1:]
                 Right=[]
@@ -250,7 +266,7 @@ class Unfold(object):
         uids=[]
         self.unfold_ids(ids,uids)
         uop=self.unfold_macro_op(op)
-        ntid=self.prefix+"-"+"macro4"+"-".join(map(str,uids))+"sep_"+sepstr+uop
+        ntid=self.prefix+"-"+"Macro4"+"-".join(map(str,uids))+"sep_"+sepstr+uop
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'MacroOpP' :
@@ -308,10 +324,22 @@ class Unfold(object):
                 R.append(self.Ts[r])
             elif r in self.NTs:
                 R.append(self.NTs[r])
-            else:
-                if r not in self._punctuation:
-                    raise Exception('Undefined symbol: '+r)
+            elif r in self._punctuation:
                 R.append(xmg.compgen.Symbol.T(r))
+            else:
+                print("\nUndefined symbol :"+r+"\n")
+                if r[0].isupper():
+                    print('non-terminal')
+                    self.add_non_terminal(r)
+                    R.append(self.NTs[r])
+                elif r[0] == '_':
+                    print('extern')  
+                    self.add_extern(r)
+                    R.append(self.NTs[r])
+                else:
+                    print('terminal')
+                    self.add_terminal(r)
+                    R.append(self.Ts[r])
         return xmg.compgen.Rule.Rule(self.NTs[Left],tuple(R),action=Action)
     
 

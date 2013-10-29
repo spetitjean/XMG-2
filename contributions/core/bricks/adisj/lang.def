@@ -1,15 +1,9 @@
-%token id
-%token int
-%token string 
-%token bool
 
-%type ADISJ ADISJ
-%type val val
 %%
 
-ADISJ : '@' '{' (val // ',')+ '}' {$$=adisj($3)} ;
+ADISJ : '@' '{' (Val // ',')+ '}' {$$=adisj($3)} ;
 
-val : id {$$=$1}
+Val : id {$$=$1}
     | int {$$=$1}
     | bool {$$=$1}
     | string {$$=$1};

@@ -23,7 +23,7 @@
 %type MaybeAbbrev MaybeAbbrev
 %type Abbrev Abbrev
 
-%type val val
+%type Val Val
 
 %ext ODecl ODecl
 
@@ -48,7 +48,7 @@ PrincipleFeat : id '=' id {$$=eq($1,$3)}
 Type : type id '=' TypeDef {$$=type($2,$4)} 
      | type id '!' {$$=type($2,label)}; 
 
-TypeDef : '{' (val // ',')+ '}' {$$=enum($2)} 
+TypeDef : '{' (Val // ',')+ '}' {$$=enum($2)} 
 	| '[' int '.' '.' int ']' {$$=range($2,$5)} 
 	| '[' (Struct // ',')+ ']' {$$=struct($2)};
 
@@ -65,7 +65,7 @@ Abbrev : id '=' id   {$$=eq($1,$3)}
        | id '=' int  {$$=eq($1,$3)};
 
 
-val : id {$$=$1} 
+Val : id {$$=$1} 
     | bool {$$=$1}
     | int {$$=$1};
 
