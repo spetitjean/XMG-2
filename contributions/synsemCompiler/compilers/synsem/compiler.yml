@@ -7,7 +7,7 @@ control:
   IFace: avm
   DimStmt: sem syn
 avm: 
-  Value: value
+  _Value: value
 value: 
   Else: avm adisj
 syn:

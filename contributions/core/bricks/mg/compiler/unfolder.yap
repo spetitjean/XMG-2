@@ -22,7 +22,7 @@
 
 %% SPECIFIC RULES
 
-unfold('MetaGrammar',[E,F,G],'MetaGrammar'(OUDecls,UClasses,UValues)):-
+unfold(mg(E,F,G),mg(OUDecls,UClasses,UValues)):-
 	unfold(E,UDecls),
 	%% temporary
 	%%xmg_unfolder_decls:order_decls(UDecls,OUDecls),
@@ -32,10 +32,15 @@ unfold('MetaGrammar',[E,F,G],'MetaGrammar'(OUDecls,UClasses,UValues)):-
 	unfold(F,UClasses),
 	unfold(G,UValues).
 
+unfold(in_brick(Module,Term),Unfold):-
+	xmg_brick_mg_compiler:send(info,Module),
+	xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
+	UModule:unfold(Term,Unfold).
+
 unfold('EDecls',[Decls],UDecls):-
 	unfold(Decls,UDecls),!.
 
-unfold('Principle',[token(_,'use'),token(_,id(Principle)),token(_,'with'),token(_,'('),PrincipleFeat,token(_,')'),token(_,'dims'),token(_,'('),Dims,token(_,')')],principle(Principle,UFeat,UDims)):-
+unfold('Principle',[token(_,id(Principle)),PrincipleFeat,Dims],principle(Principle,UFeat,UDims)):-
 	unfold(PricipleFeat,UFeat),
 	unfold(Dims,UDims),!.
 
@@ -152,22 +157,7 @@ unfold('Var',[token(C,id(Id))],id(Id,C)):- !.
 
 %% GENERIC RULES
 
-unfold(Term,UTerm):-
-	Term=..[Head|Params],
-	head_module(Head,Module),
-	head_name(Head,Name),
-	(
-	    (
-		Module='mg',
-		unfold(Name,Params,UTerm)
-	    )
-	;
-	(
-	    not(Module='mg'),
-	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
-	    UModule:unfold(Term,UTerm)
-	)
-    ),!.
+
 
 unfold(Rule,_):- 
 	throw(xmg(unfolder_error(no_unfolding_rule(mg,Rule)))),	
@@ -181,20 +171,13 @@ unfold(Head,Params,UList):-
 	unfold_type(Head,maybe),
 	unfold_maybe(Params,UList),!.
 
-head_module(Head,Module):-
-	atomic_list_concat(A,'-',Head),
-	A=[Module|_],!.
-
-head_name(Head,Name):-
-	atomic_list_concat(A,'-',Head),
-	A=[_,Name],!.
 
 %% PATTERNS
 
-unfold_list([''],[]):-!.
+unfold_list([],[]):-!.
 unfold_list([Elem],[UElem]):-
 	unfold(Elem,UElem),!.
-unfold_list([Elem,List],[UElem|UList]):-
+unfold_list([Elem|List],[UElem|UList]):-
 	unfold(Elem,UElem),!,
 	unfold(List,UList),!.
 

@@ -35,45 +35,36 @@ find(Head,[H|T],T1,[H|Rest]):-
 
 %% SPECIFIC RULES
 
-unfold('Decls',[''],[]):-
-	unfold(Decls,UDecls),!.
-unfold('Decls',[Decl,Decls],[UDecl|UDecls]):-
-	unfold(Decl,UDecl),
-	unfold(Decls,UDecls),!.
+unfold([],[]):-!.
+unfold([H|T],[UH|UT]):-
+	unfold(H,UH),
+	unfold(T,UT),!.
 
-unfold('Decl',[Decl],UDecl):-
-	unfold(Decl,UDecl),!.
-
-unfold('ODecl',[ODecl],UODecl):-
-	unfold(ODecl,UODecl),!.
-
-unfold('Extern',_,extern):-
-	xmg_compiler:send(info,' warning : extern not supported yet \n'),!.
-
-unfold('Principle',[token(_,'use'),token(_,id(Principle)),token(_,'with'),token(_,'('),PrincipleFeat,token(_,')'),token(_,'dims'),token(_,'('),Dims,token(_,')')],principle(Principle,UFeat,UDims)):-
+unfold(principle(token(_,id(Principle)),PrincipleFeat,Dims),principle(Principle,UFeat,UDims)):-
 	unfold(PrincipleFeat,UFeat),
 	asserta(xmg_compiler:principle(Principle)),
 	unfold(Dims,UDims),!.
 
-unfold('PrincipleFeat',[''],none):- !.
-unfold('PrincipleFeat',[Id1,token(_,'='),Id2],eq(UId1,UId2)):-
-	unfold(Id1,UId1),
-	unfold(Id2,UId2),
-	!.
-unfold('PrincipleFeat',[Id],eq(UId,default)):-
+unfold(none,none):-!.
+
+unfold(eq(Id,none),eq(UId,default)):-
 	unfold(Id,UId),
 	!.
-
-unfold('Dims',[token(_,dim(DIM))],[DIM]):-
+unfold(eq(Id,Id1),eq(UId,UId1)):-
+	unfold(Id,UId),
+	unfold(Id1,UId1),
 	!.
-unfold('Dims',[token(_,dim(DIM)),Dims],[DIM|UT]):-
-	unfold(Dims,UT),!.
 
-unfold('Type',[token(_,type),token(_,id(Id)),token(_,'='),TypeDef],type(Id,UTypeDef)):- 
+unfold(token(_,dim(DIM)),DIM):-!.
+
+unfold(type(token(_,id(Id)),TypeDef),type(Id,UTypeDef)):- 
+	xmg_brick_mg_compiler:send(info,TypeDef),
 	unfold(TypeDef,UTypeDef),!.
-unfold('Type',[token(_,type),token(_,id(Id)),token(_,'!')],type(Id,label)):- 
+unfold(type(token(_,id(Id)),label),type(Id,label)):- 
 	!.
 
+unfold(enum(IDS),enum(UIDS)):-
+	unfold(IDS,UIDS),!.
 
 unfold('Property',[token(_,property),token(_,id(Id)),token(_,':'),token(_,id(Val)),MaybeAbbrev],property(Id,Val,UAbbrev)):-
 	unfold_maybeAbbrev(MaybeAbbrev,UAbbrev),
@@ -133,71 +124,12 @@ unfold('val',[token(C,bool(B))],bool(B,C)):- !.
 
 %% GENERIC RULES
 
-unfold(Term,UTerm):-
-	Term=..[Head|Params],
-	head_module(Head,Module),
-	head_name(Head,Name),
-	(
-	    (
-		Module='decls',
-		unfold(Name,Params,UTerm)
-	    )
-	;
-	(
-	    not(Module='decls'),
-	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
-	    xmg_brick_mg_compiler:send(info, 'switching to '),
-	    xmg_brick_mg_compiler:send(info, UModule),
-
-	    UModule:unfold(Term,UTerm)
-	)
-    ),!.
 
 unfold(Rule,_):- 
 	throw(xmg(unfolder_error(no_unfolding_rule(decls,Rule)))),	
 	!.
 
-unfold(Head,Params,UList):-
-	unfold_type(Head,list),
-	unfold_list(Params,UList),!.
-unfold(Head,Params,UList):-
-	unfold_type(Head,maybe),
-	unfold_maybe(Params,UList),!.
-
-head_module(Head,Module):-
-	atomic_list_concat(A,'-',Head),
-	A=[Module|_],!.
-
-head_name(Head,Name):-
-	atomic_list_concat(A,'-',Head),
-	A=[_,Name],!.
 
 
-%% PATTERNS
 
-unfold_list([''],[]):-!.
-unfold_list([Elem],[UElem]):-
-	unfold(Elem,UElem),!.
-unfold_list([Elem,List],[UElem|UList]):-
-	unfold(Elem,UElem),!,
-	unfold(List,UList),!.
 
-unfold_maybe([''],[]):-!.
-unfold_maybe([Elem],UElem):-
-	unfold(Elem,UElem),!.
-
-%% USING PATTERNS 
-
-unfold_type('Principles',list):- !.
-unfold_type('Types',list):- !.
-unfold_type('Properties',list):- !.
-unfold_type('Feats',list):- !.
-unfold_type('Fields',list):- !.
-unfold_type('FieldPrecs',list):- !.
-
-unfold_type('ids',list):- !.
-
-unfold_type('DeclsOrNot',maybe):- !.
-unfold_type('ImportsOrNot',maybe):- !.
-unfold_type('ExportsOrNot',maybe):- !.
-unfold_type('ParamsOrNot',maybe):- !.

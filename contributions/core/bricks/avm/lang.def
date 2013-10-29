@@ -1,17 +1,9 @@
-%token id
-%token int
-%token string 
-
-%type AVM AVM
-%type Feat Feat
-
-%ext Value Value
 
 %%
 
 AVM : '[' (Feat // ',')* ']' {$$=avm($2)};
 
-Feat : id '=' Value {$$=feat($1,$3)} 
+Feat : id '=' _Value {$$=feat($1,$3)} 
      | id {$$=feat($1)}
      | id '=' AVM {$$=feat($1,$3)};
 

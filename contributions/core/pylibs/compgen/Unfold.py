@@ -100,9 +100,9 @@ class Unfold(object):
                     brick._punctuation.append('<'+extg._prefix+'>')
                     openStmt=xmg.compgen.Symbol.T('{')
                     closeStmt=xmg.compgen.Symbol.T('}')
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt),action=('VAR__RESULT=dimStmt(VAR__PARAM__1,VAR__PARAM__3)',4)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt),action=('VAR__RESULT=dimStmt('+extg._prefix+',VAR__PARAM__1,VAR__PARAM__3)',4)))
                 else:
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=in_brick('+extg._prefix+',VAR__PARAM__1)',1)))
   
                 # check that every non terminal appears in the left part of a rule
                 for g_nt in G.NTs:
@@ -125,19 +125,19 @@ class Unfold(object):
 
     def add_terminal(self,T):
         if T[0].isupper():
-            raise Exception("Terminal "+T+" should not begin with capital letter in "+self.prefix)
+            raise Exception("Terminal "+T+" should not begin with a capital letter in "+self.prefix)
         if T not in self.Ts:
             self.Ts[T]=xmg.compgen.Symbol.T(T)
             
     def add_non_terminal(self,NT):
         if not NT[0].isupper():
-            raise Exception("Non-Terminal "+NT+" should begin with capital letter in "+self.prefix)
+            raise Exception("Non-Terminal "+NT+" should begin with a capital letter in "+self.prefix)
         if NT not in self.NTs:
             self.NTs[NT]=xmg.compgen.Symbol.NT(self.prefix+"-"+NT)
 
     def add_extern(self,NT):
-        if not NT[0].isupper():
-            raise Exception("Non-Terminal "+NT[0]+" should begin with capital letter in "+self.prefix)
+        if not (NT[0].isupper() or NT[0]=='_'):
+            raise Exception("Non-Terminal "+NT+" should begin with an underscore or a capital letter in "+self.prefix)
         if NT not in self.NTs:
             self.NTs[NT]=xmg.compgen.Symbol.NT(self.prefix+"-"+NT)
             self.EXTs[NT]=NT
@@ -271,7 +271,7 @@ class Unfold(object):
         self.NTs[ntid]=nt
         if op[1][0][0] == 'MacroOpP' :
             rules.append(self.create_rule(ntid,uids,('VAR__RESULT=[VAR__PARAM__1]',len(uids))))
-            rules.append(self.create_rule(ntid,uids+sep+[ntid],('VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__2]',len(uids))))
+            rules.append(self.create_rule(ntid,uids+sep+[ntid],('VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__3]',len(uids))))
         elif op[1][0][0] == 'MacroOpS' :
             rules.append(self.create_rule(ntid,[],('VAR__RESULT=[]',0)))
             if len(macro)==3:
