@@ -19,6 +19,19 @@
 
 :-module(xmg_brick_avm_unfolder).
 
+unfold_expr(avm:avm(Coord, Feats), Target) :--
+    constraints::enq((Target,avm)),
+    unfold_feats(Feats, Target).
+
+unfold_feats([], _).
+unfold_feats([Feat|Feats], Target) :--
+    unfold_feat(Feat, Target),
+    unfold_feats(Feats, Target).
+
+unfold_feat(avm:feat(F,V), Target) :--
+    new_target_var(Target2),
+    constraints::enq((Target,feat(F,Target2))),
+    unfold_expr(V, Target2).
 
 unfold('AVM',[token(_,'['),Feats,token(_,']')],avm(UFeats)):-
 	unfold(Feats,UFeats),!.
