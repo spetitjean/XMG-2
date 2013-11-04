@@ -162,7 +162,7 @@ tokArgs(token(Coord,Token),Tok,Args):-
 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
-	xmg_brick_mg_compiler:send(info,Token),
+	%%xmg_brick_mg_compiler:send(info,Token),
 	generated_parser:action(State,Tok,'accept'),!.
 
 parse_sem([State|States],[Token|Tokens]):--

@@ -15,10 +15,10 @@
 %%
 
 Stmts : Stmt {$$=$1}
-      | Stmt ';' Stmts {$$=and($1,$3)} 
-      | Stmt '|' Stmts {$$=or($1,$3)}; 
+      | Stmt ';' Stmts {$$=control:and($1,$3)} 
+      | Stmt '|' Stmts {$$=control:or($1,$3)}; 
 
-Stmt : AStmt MaybeIFace {$$=stmt($1,$2)};
+Stmt : AStmt MaybeIFace {$$=control:stmt($1,$2)};
 
 MaybeIFace : '*=' IFace {$$=some($2)}
 	   | {$$=none};
@@ -26,12 +26,12 @@ MaybeIFace : '*=' IFace {$$=some($2)}
 AStmt : '{' Stmts '}' {$$=$1} 
       | '(' Stmts ')' {$$=$1}
       | DimStmt       {$$=$1}
-      | EqPart '=' EqPart {$$=eq($1,$3)}
+      | EqPart '=' EqPart {$$=control:eq($1,$3)}
       | Call {$$=$1};
 
-Dot : Var '.' Var {$$=dot($1,$3)};
+Dot : Var '.' Var {$$=control:dot($1,$3)};
 
-Call : id '[' (id // ',')* ']' {$$=call($1,$3)} ;
+Call : id '[' (id // ',')* ']' {$$=control:call($1,$3)} ;
 
 
 Var : id {$$=$1} 

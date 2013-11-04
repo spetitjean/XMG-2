@@ -19,23 +19,33 @@
 
 
 :-module(xmg_brick_mg_unfolder).
+:-edcg:thread(constraints,edcg:queue).
+
+:-edcg:weave([constraints],[unfold_class/2,xmg_brick_control_unfolder:unfold_stmt/2]).
+
 
 %% SPECIFIC RULES
 
-unfold(mg(E,F,G),mg(OUDecls,UClasses,UValues)):-
-	unfold(E,UDecls),
-	%% temporary
-	%%xmg_unfolder_decls:order_decls(UDecls,OUDecls),
-	%% next:
-	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
+unfold(mg:mg(E,F,G),mg(OUDecls,UClasses,UValues)):-
+	%%unfold(E,UDecls),
+	%%xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
 	%%xmg_compiler:send(info,OUDecls),
 	unfold(F,UClasses),
-	unfold(G,UValues).
+	%%unfold(G,UValues),
+	!.
+unfold([],[]):- !.
+unfold([H|T],[H1|T1]):-
+	unfold(H,H1),
+	unfold(T,T1),!.
 
-unfold(in_brick(Module,Term),Unfold):-
-	xmg_brick_mg_compiler:send(info,Module),
-	xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
-	UModule:unfold(Term,Unfold).
+unfold(mg:class(N,_,I,E,D,S),class(US,Constraints)):--
+	unfold_class(S,US) with (constraints([],Constraints)),!.
+
+unfold_class(C,UC):--
+	%%xmg_brick_mg_compiler:send(info,C),!,
+	xmg_brick_control_unfolder:unfold_stmt(C,UC),!,
+	%%xmg_brick_mg_compiler:send(info,UC),
+	!.
 
 unfold('EDecls',[Decls],UDecls):-
 	unfold(Decls,UDecls),!.

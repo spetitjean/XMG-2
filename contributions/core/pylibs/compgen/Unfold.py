@@ -100,9 +100,9 @@ class Unfold(object):
                     brick._punctuation.append('<'+extg._prefix+'>')
                     openStmt=xmg.compgen.Symbol.T('{')
                     closeStmt=xmg.compgen.Symbol.T('}')
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt),action=('VAR__RESULT=dimStmt('+extg._prefix+',VAR__PARAM__1,VAR__PARAM__3)',4)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt),action=('VAR__RESULT=control:dimStmt('+extg._prefix+',VAR__PARAM__3)',4)))
                 else:
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=in_brick('+extg._prefix+',VAR__PARAM__1)',1)))
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
   
                 # check that every non terminal appears in the left part of a rule
                 for g_nt in G.NTs:

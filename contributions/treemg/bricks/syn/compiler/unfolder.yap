@@ -20,12 +20,40 @@
 
 :-module(xmg_brick_syn_unfolder).
 
+:- edcg:using(xmg_brick_mg_unfolder:constraints).
+
+:- edcg:weave([constraints],[unfold_stmt/2]).
+
+
 %%:-add_to_path('../AVM').
 %%:-use_module('xmg_unfolder_avm').
 
 %% unfold('DimStmt',[token(_,'<syn>'),token(_,'{'),DimStmt,token(_,'}')],'synStmt'(UStmt)):-
 %% 	unfold(DimStmt,UStmt),
 %% 	!.
+
+unfold_stmt(syn:tree(Root,Children),Target):--
+	xmg_brick_mg_compiler:send(info,Root),
+	!.
+unfold_stmt(syn:and(S1,S2),and(US1,US2)):-- 
+	unfold_stmt(S1,US1),
+	unfold_stmt(S2,US2),!.
+unfold_stmt(syn:or(S1,S2),or(US1,US2)):-- 
+	unfold_stmt(S1,US1),
+	unfold_stmt(S2,US2),!.
+unfold_stmt(syn:node(N,P,F),Target):-- 
+	xmg_brick_mg_compiler:send(info,N),
+	constraints::enq((Target,syn:node)),
+	xmg_brick_mg_compiler:send(info,P),
+	unfold_props(P,UP),
+	constraints::enq((Target,syn:props(UP))),	
+	unfold_feats(F,UF),
+	constraints::enq((Target,syn:feats(UF))),
+	!.
+
+unfold_props(P,UP):--
+	xmg_brick_mg_compiler:send(info,P),!.
+
 
 unfold('SynStmt',[M],UM):- 
 	unfold(M,UM),!.

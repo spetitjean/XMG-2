@@ -81,7 +81,7 @@ class objCan
 export S
 declare ?W ?S ?S1 ?NN ?NV
 { <syn>{
-	node S { %(color=white)[cat = s]{
+	node S{
 		node NV(color=white)[cat = v]
 	     ,,,node NN(color=red,mark=subst)[cat = n,top=[idx=?W]]
 	}

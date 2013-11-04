@@ -33,25 +33,25 @@
 
 %%
 
-MetaGrammar : EDecls (Class)+ (Value)+ { $$=..['mg',$1,$2,$3]};
+MetaGrammar : EDecls (Class)+ (Value)+ { $$=mg:mg($1,$2,$3)};
 
 
-Mutex : mutex id {$$=mutex($2)}| mutex id '+=' id {$$=mutex_add($2,$4)};
+Mutex : mutex id {$$=mg:mutex($2)}| mutex id '+=' id {$$=mg:mutex_add($2,$4)};
 
-Semantics : semantics (id)+ {$$=semantics($2)};
+Semantics : semantics (id)+ {$$=mg:semantics($2)};
 
 Class :
        class ('**')? id (Params)? (Imports)? (Exports)? (Decls)? Stmts
-       {$3=token(_,id(Class)), $$=..[Class,$4,$5,$6,$7,$8]}  
+       {$$=mg:class($3,$4,$5,$6,$7,$8)}  
        	| Mutex {$$=$1}
 	| Semantics {$$=$1};
 
 
 Params : '[' ( id // ',')* ']' {$$=$2};
 
-Imports : 'import' (IClass)+ {$$=import($2)};
+Imports : 'import' (IClass)+ {$$=mg:import($2)};
 
-IClass : id '[' (id)* ']' MaybeAs {$$=iclass($1,$3,$5)};
+IClass : id '[' (id)* ']' MaybeAs {$$=mg:iclass($1,$3,$5)};
 
 MaybeAs : as '[' (AsElem)+  ']' {$$=$3} | {$$=none};
 
@@ -59,21 +59,21 @@ AsElem : Var '=' Var {$$=as($1,$3)}
        | Var {$$=as($1,none)};
 
 
-Exports : 'export' (Var)+ {$$=export($2)};
+Exports : 'export' (Var)+ {$$=mg:export($2)};
 
 
-Decls : 'declare' (Var)+ {$$=declare($2)};
+Decls : 'declare' (Var)+ {$$=mg:declare($2)};
 
 
 Stmts : '{' Stmt '}' {$$=$2} 
       | {$$=none};
 
     
-Value : value id {$$=value($2)};   
+Value : value id {$$=mg:value($2)};   
     
 
-Var : '?' id {$$=var($2)} 
-    | '!' id  {$$=const($2)}
+Var : '?' id {$$=mg:var($2)} 
+    | '!' id  {$$=mg:const($2)}
     | id {$$=$1};
 
 

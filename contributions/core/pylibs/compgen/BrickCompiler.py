@@ -36,16 +36,18 @@ class BrickCompiler(object):
     def add_compilers(self,comps):
         for comp in comps:
             self.add_compiler(comp)
+        
 
     def add_link(self,language,compiler):
+        print(language)
         if not language in self._languages:
             raise Exception("Brick "+language._prefix+" is not part of the compiler, try one of "+self._languages)
         if not compiler in self._compilers:
             raise Exception("Brick "+compiler+" is not part of the compiler")
         #self._links[language]=compiler
-        if compiler == 'control':
+        if language._prefix == 'control':
             self._links.append((language,compiler))
-        elif compiler == 'mg':
+        elif language._prefix == 'mg':
             self._links.insert(0,(language,compiler))
         else:
             self._links.insert(1,(language,compiler))

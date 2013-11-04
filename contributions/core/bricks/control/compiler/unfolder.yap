@@ -20,6 +20,27 @@
 
 :-module(xmg_brick_control_unfolder).
 
+:- edcg:using([xmg_brick_mg_unfolder:constraints]).
+:- edcg:weave([constraints],
+	[
+          %%unfold_stmt/2
+         ]).
+
+unfold_stmt(control:and(E1,E2),none):--
+	!.
+unfold_stmt(control:or(E1,E2),none):--
+	!.
+unfold_stmt(control:stmt(E1,E2),stmt(UE1,UE2)):--
+	unfold_stmt(E1,UE1),
+	unfold_stmt(E2,UE2),
+	!.
+
+unfold_stmt(control:dimStmt(syn,E2),UE2):--
+	xmg_brick_syn_unfolder:unfold_stmt(E2,UE2),
+	!.
+
+	
+
 unfold('Stmts',[Stmt1,token(_,';'),Stmt2],conj(UStmt1,UStmt2)):- !,
 	unfold(Stmt1,UStmt1),
 	unfold(Stmt2,UStmt2).
