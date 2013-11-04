@@ -20,9 +20,15 @@
 
 :-module(xmg_brick_mg_unfolder).
 :-edcg:thread(constraints,edcg:queue).
+:-edcg:thread(name,edcg:counter).
 
-:-edcg:weave([constraints],[unfold_class/2,xmg_brick_control_unfolder:unfold_stmt/2]).
+:-edcg:weave([constraints,name],[unfold_class/2,xmg_brick_control_unfolder:unfold_stmt/2]).
+:-edcg:weave([name],[new_name/2]).
 
+new_name(Name,Prefix):--
+	name::incr,
+	name::get(Get),
+	atomic_concat([Prefix,Get],Name),!.
 
 %% SPECIFIC RULES
 
@@ -39,12 +45,12 @@ unfold([H|T],[H1|T1]):-
 	unfold(T,T1),!.
 
 unfold(mg:class(N,_,I,E,D,S),class(US,Constraints)):--
-	unfold_class(S,US) with (constraints([],Constraints)),!.
+	unfold_class(S,US) with (constraints(Constraints,[]), name(0,_)),!.
 
 unfold_class(C,UC):--
 	%%xmg_brick_mg_compiler:send(info,C),!,
 	xmg_brick_control_unfolder:unfold_stmt(C,UC),!,
-	%%xmg_brick_mg_compiler:send(info,UC),
+	xmg_brick_mg_compiler:send(info,UC),
 	!.
 
 unfold('EDecls',[Decls],UDecls):-

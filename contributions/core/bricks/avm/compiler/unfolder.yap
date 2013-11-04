@@ -19,6 +19,9 @@
 
 :-module(xmg_brick_avm_unfolder).
 
+:- edcg:using([xmg_brick_mg_unfolder:constraints,xmg_brick_mg_unfolder:name]).
+:- edcg:weave([constraints,name],[unfold_expr/2,unfold_feats/2,unfold_feat/2]).
+
 unfold_expr(avm:avm(Coord, Feats), Target) :--
     constraints::enq((Target,avm:avm)),
     unfold_feats(Feats, Target).
