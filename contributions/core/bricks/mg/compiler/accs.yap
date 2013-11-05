@@ -20,6 +20,8 @@
 
 :-module(xmg_brick_mg_accs).
 :-edcg:thread(constraints,edcg:queue).
+:-edcg:thread(vars,edcg:queue).
+:-edcg:thread(consts,edcg:queue).
 :-edcg:thread(name,edcg:counter).
 
 :-edcg:weave([name],[new_target_var/2,new_target_var/1]).

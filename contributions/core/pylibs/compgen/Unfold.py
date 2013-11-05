@@ -270,8 +270,12 @@ class Unfold(object):
         nt=xmg.compgen.Symbol.NT(ntid)
         self.NTs[ntid]=nt
         if op[1][0][0] == 'MacroOpP' :
+            if sep:
+                LAST_PARAM="3"
+            else:
+                LAST_PARAM="2"
             rules.append(self.create_rule(ntid,uids,('VAR__RESULT=[VAR__PARAM__1]',len(uids))))
-            rules.append(self.create_rule(ntid,uids+sep+[ntid],('VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__3]',len(uids))))
+            rules.append(self.create_rule(ntid,uids+sep+[ntid],('VAR__RESULT=[VAR__PARAM__1|VAR__PARAM__'+LAST_PARAM+']',len(uids))))
         elif op[1][0][0] == 'MacroOpS' :
             rules.append(self.create_rule(ntid,[],('VAR__RESULT=[]',0)))
             if len(macro)==3:

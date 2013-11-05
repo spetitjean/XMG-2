@@ -19,8 +19,8 @@
 
 :-module(xmg_brick_avm_unfolder).
 
-:- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name]).
-:- edcg:weave([constraints,name],[unfold_expr/2,unfold_feats/2,unfold_feat/2]).
+:- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
+:- edcg:weave([constraints,name,vars,consts],[unfold_expr/2,unfold_feats/2,unfold_feat/2]).
 
 unfold_expr(avm:avm(Coord, Feats), Target) :--
     constraints::enq((Target,avm:avm)),
@@ -32,7 +32,7 @@ unfold_feats([Feat|Feats], Target) :--
     unfold_feats(Feats, Target).
 
 unfold_feat(avm:feat(F,V), Target) :--
-    new_target_var(Target2),
+    xmg_brick_mg_accs:new_target_var(Target2),
     constraints::enq((Target,avm:feat(F,Target2))),
     unfold_expr(V, Target2).
 

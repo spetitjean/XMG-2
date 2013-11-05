@@ -20,10 +20,10 @@
 
 :-module(xmg_brick_control_unfolder).
 
-:- edcg:using([xmg_brick_mg_accs:constraints, xmg_brick_mg_accs:name]).
-:- edcg:weave([constraints,name],
+:- edcg:using([xmg_brick_mg_accs:constraints, xmg_brick_mg_accs:name, xmg_brick_mg_accs:vars, xmg_brick_mg_accs:consts]).
+:- edcg:weave([constraints,name,vars,consts],
 	[
-          unfold_stmt/2
+          %%unfold_stmt/2
          ]).
 
 unfold_stmt(control:and(E1,E2),none):--
