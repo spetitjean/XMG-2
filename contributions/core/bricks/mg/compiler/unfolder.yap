@@ -17,18 +17,11 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-
 :-module(xmg_brick_mg_unfolder).
-:-edcg:thread(constraints,edcg:queue).
-:-edcg:thread(name,edcg:counter).
+:-edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name]).
 
 :-edcg:weave([constraints,name],[unfold_class/2,xmg_brick_control_unfolder:unfold_stmt/2]).
-:-edcg:weave([name],[new_name/2]).
 
-new_name(Name,Prefix):--
-	name::incr,
-	name::get(Get),
-	atomic_concat([Prefix,Get],Name),!.
 
 %% SPECIFIC RULES
 

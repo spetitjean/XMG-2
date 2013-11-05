@@ -1,5 +1,7 @@
 :-module(xmg_loader_mg).
 
+
+:- use_module('xmg/brick/mg/compiler/accs.yap').
 :- use_module('xmg/brick/mg/compiler/errors.yap').
 :- use_module('xmg/brick/mg/compiler/tokenizer.yap').
 :- use_module('xmg/brick/mg/compiler/parser.yap').

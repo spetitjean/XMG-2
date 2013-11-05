@@ -20,7 +20,7 @@
 
 :-module(xmg_brick_syn_unfolder).
 
-:- edcg:using([xmg_brick_mg_unfolder:constraints,xmg_brick_mg_unfolder:name]).
+:- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name]).
 
 :- edcg:weave([constraints,name],[unfold_stmt/2]).
 
@@ -47,7 +47,7 @@ unfold_stmt(syn:S1,US1):--
 	unfold_stmt(S1,US1),!.
 
 unfold_stmt(syn:node(N,P,F),Target):-- 
-	xmg_brick_mg_unfolder:new_name(Node,'Node'),
+	xmg_brick_mg_accs:new_target_var(Node,'Node'),
 	constraints::enq((Target,syn:node)),
 	unfold_props(P,UP),
 	constraints::enq((Target,syn:props(UP))),	
