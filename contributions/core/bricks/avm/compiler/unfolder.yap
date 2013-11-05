@@ -22,7 +22,7 @@
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 :- edcg:weave([constraints,name,vars,consts],[unfold_expr/2,unfold_feats/2,unfold_feat/2]).
 
-unfold_expr(avm:avm(Coord, Feats), Target) :--
+xmg:unfold_expr(avm:avm(Coord, Feats), Target) :--
     constraints::enq((Target,avm:avm)),
     unfold_feats(Feats, Target).
 

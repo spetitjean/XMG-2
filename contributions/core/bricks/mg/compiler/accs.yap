@@ -24,7 +24,10 @@
 :-edcg:thread(consts,edcg:queue).
 :-edcg:thread(name,edcg:counter).
 
+:-multifile(xmg:unfold_stmt/2).
+
 :-edcg:weave([name],[new_target_var/2,new_target_var/1]).
+:-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/2,xmg:unfold_expr/2]).
 
 new_target_var(Name,Prefix):--
 	name::incr,

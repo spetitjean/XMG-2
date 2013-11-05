@@ -22,7 +22,7 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-:- edcg:weave([constraints,name,vars,consts],[unfold_stmt/2, unfold_props/2, unfold_feats/2]).
+:- edcg:weave([constraints,name,vars,consts],[unfold_props/2, unfold_feats/2]).
 
 
 %%:-add_to_path('../AVM').
@@ -32,22 +32,31 @@
 %% 	unfold(DimStmt,UStmt),
 %% 	!.
 
-unfold_stmt(syn:tree(Root,Children),Target):--
+xmg:unfold_stmt(control:stmt(E1,E2),stmt(UE1,UE2)):--
+	xmg:unfold_stmt(E1,UE1),
+	xmg:unfold_stmt(E2,UE2),
+	!.
+xmg:unfold_stmt(control:dimStmt(syn,E2),UE2):--
+	xmg_brick_mg_compiler:send(info,E2),
+	xmg:unfold_stmt(E2,UE2), %% in brick_unfolder_syn
+	!.
+
+xmg:unfold_stmt(syn:tree(Root,Children),Target):--
 	%%xmg_brick_mg_compiler:send(info,Root),
 	!.
-unfold_stmt(syn:and(S1,S2),and(US1,US2)):-- 
+xmg:unfold_stmt(syn:and(S1,S2),and(US1,US2)):-- 
 	xmg_brick_mg_compiler:send(info,S1),
-	unfold_stmt(S1,US1),
+	xmg:unfold_stmt(S1,US1),
 	xmg_brick_mg_compiler:send(info,US1),
-	unfold_stmt(S2,US2),
+	xmg:unfold_stmt(S2,US2),
 	!.
-unfold_stmt(syn:or(S1,S2),or(US1,US2)):-- 
-	unfold_stmt(S1,US1),
-	unfold_stmt(S2,US2),!.
-unfold_stmt(syn:S1,US1):-- 
-	unfold_stmt(S1,US1),!.
+xmg:unfold_stmt(syn:or(S1,S2),or(US1,US2)):-- 
+	xmg:unfold_stmt(S1,US1),
+	xmg:unfold_stmt(S2,US2),!.
+xmg:unfold_stmt(syn:S1,US1):-- 
+	xmg:unfold_stmt(S1,US1),!.
 
-unfold_stmt(syn:node(N,P,F),Target):-- 
+xmg:unfold_stmt(syn:node(N,P,F),Target):-- 
 	%%xmg_brick_mg_accs:new_target_var(Target,'Node'),
 	constraints::enq((Target,syn:node)),
 	unfold_props(P,Target),
@@ -55,18 +64,18 @@ unfold_stmt(syn:node(N,P,F),Target):--
 	unfold_feats(F,Target),
 	constraints::enq((Target,syn:feats(UF))),
 	!.
-unfold_stmt(syn:dom(Op,N1,N2),Target):-- 
+xmg:unfold_stmt(syn:dom(Op,N1,N2),Target):-- 
 	constraints::enq((syn:dom(N1,N2))),
 	!.
 
 unfold_props(some(P),Target):--
-	xmg_brick_avm_unfolder:unfold_expr(P,Target),
+	xmg:unfold_expr(P,Target),
 	!.
 unfold_props(none,_):--
 	!.
 
 unfold_feats(some(F),Target):--
-	xmg_brick_avm_unfolder:unfold_expr(F,Target),
+	xmg:unfold_expr(F,Target),
 	!.
 unfold_feats(none,_):--
 	!.
