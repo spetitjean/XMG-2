@@ -18,6 +18,11 @@
 %% ========================================================================
 
 :-module(xmg_brick_value_unfolder).
+
+:- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
+
+xmg:unfold_expr(token(C,id(ID)),id(ID,C)):--!.
+	
  
 unfold('Value',[Value],UValue):-
 	unfold(Value,UValue).

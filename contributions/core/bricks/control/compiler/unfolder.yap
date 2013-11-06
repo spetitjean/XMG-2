@@ -23,21 +23,27 @@
 :- edcg:using([xmg_brick_mg_accs:constraints, xmg_brick_mg_accs:name, xmg_brick_mg_accs:vars, xmg_brick_mg_accs:consts]).
 :- edcg:weave([constraints,name,vars,consts],
 	[
-          %%unfold_stmt/2
          ]).
 
-xmg:unfold_stmt(control:and(E1,E2),none):--
+xmg:unfold_stmt(control:and(E1,E2)):--
+	xmg:unfold_stmt(E1) with (constraints([]-C1,[]-[])),
+	xmg:unfold_stmt(E2) with (constraints([]-C2,[]-[])),
+	constraints::enq(and(C1,C2)),
 	!.
-xmg:unfold_stmt(control:or(E1,E2),none):--
+xmg:unfold_stmt(control:or(E1,E2)):--
+	xmg:unfold_stmt(E1) with (constraints([]-C1,[]-[])),
+	xmg:unfold_stmt(E2) with (constraints([]-C2,[]-[])),
+	constraints::enq(and(C1,C2)),
 	!.
-%% xmg:unfold_stmt(control:stmt(E1,E2),stmt(UE1,UE2)):--
-%% 	xmg:unfold_stmt(E1,UE1),
-%% 	xmg:unfold_stmt(E2,UE2),
-%% 	!.
+xmg:unfold_stmt(control:stmt(E1,E2)):--
+	%%xmg_brick_mg_compiler:send(info,E1),
+ 	xmg:unfold_stmt(E1),
+ 	xmg:unfold_stmt(E2), %% this is the interface
+ 	!.
 
-xmg:unfold_stmt(control:dimStmt(syn,E2),UE2):--
-	xmg_brick_mg_compiler:send(info,E2),
-	xmg:unfold_stmt(E2,UE2), %% in brick_unfolder_syn
+xmg:unfold_stmt(control:dimStmt(syn,E2)):--
+	%%xmg_brick_mg_compiler:send(info,E2),
+	xmg:unfold_stmt(E2), %% in brick_unfolder_syn
 	!.
 
 	

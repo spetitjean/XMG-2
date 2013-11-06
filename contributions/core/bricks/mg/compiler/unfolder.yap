@@ -20,7 +20,7 @@
 :-module(xmg_brick_mg_unfolder).
 :-edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-:-edcg:weave([constraints, name, vars, consts],[unfold_class/2]).
+:-edcg:weave([constraints, name, vars, consts],[unfold_class/1]).
 :-edcg:weave([vars, consts],[build_context/3, add_decls/1]).
 
 
@@ -41,7 +41,7 @@ unfold([H|T],[H1|T1]):-
 unfold(mg:class(N,_,I,E,D,S),class(US,Constraints)):--
 	build_context(I,E,D) with (vars([]-Vars,[]-[]), consts([]-Consts,[]-[])),
 	%%xmg_brick_mg_compiler:send(info,Vars),
-	unfold_class(S,US) with (constraints([]-Constraints,[]-[]), name(0,_), vars([]-Vars1,[]-Vars), consts([]-Consts1,[]-Consts)),!.
+	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars([]-Vars1,[]-Vars), consts([]-Consts1,[]-Consts)),!.
 
 build_context(I,E,D):--
 	add_decls(D),!.
@@ -56,10 +56,9 @@ add_decls([ID|T]):--
 	add_decls(T),!.
 
 
-unfold_class(C,UC):--
+unfold_class(C):--
 	%%xmg_brick_mg_compiler:send(info,C),!,
-	xmg:unfold_stmt(C,UC),!,
-	xmg_brick_mg_compiler:send(info,UC),
+	xmg:unfold_stmt(C),!,
 	!.
 
 unfold('EDecls',[Decls],UDecls):-
