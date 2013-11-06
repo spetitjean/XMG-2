@@ -38,10 +38,11 @@ unfold([H|T],[H1|T1]):-
 	unfold(H,H1),
 	unfold(T,T1),!.
 
-unfold(mg:class(N,_,I,E,D,S),class(US,Constraints)):--
+unfold(mg:class(N,_,I,E,D,S),class(Constraints)):--
 	build_context(I,E,D) with (vars([]-Vars,[]-[]), consts([]-Consts,[]-[])),
 	%%xmg_brick_mg_compiler:send(info,Vars),
-	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars([]-Vars1,[]-Vars), consts([]-Consts1,[]-Consts)),!.
+	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars([]-Vars1,[]-Vars), consts([]-Consts1,[]-Consts)),
+	xmg_brick_mg_compiler:send(info,Constraints),!.
 
 build_context(I,E,D):--
 	add_decls(D),!.

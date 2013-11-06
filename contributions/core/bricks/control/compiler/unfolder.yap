@@ -27,6 +27,7 @@
 
 xmg:unfold_stmt(control:and(E1,E2)):--
 	xmg:unfold_stmt(E1) with (constraints([]-C1,[]-[])),
+	%%xmg_brick_mg_compiler:send(info,C1),
 	xmg:unfold_stmt(E2) with (constraints([]-C2,[]-[])),
 	constraints::enq(and(C1,C2)),
 	!.
@@ -46,6 +47,7 @@ xmg:unfold_stmt(control:dimStmt(syn,E2)):--
 	xmg:unfold_stmt(E2), %% in brick_unfolder_syn
 	!.
 
+xmg:unfold_stmt(none):-- !.
 	
 
 unfold('Stmts',[Stmt1,token(_,';'),Stmt2],conj(UStmt1,UStmt2)):- !,
