@@ -23,8 +23,8 @@ Stmt : AStmt MaybeIFace {$$=control:stmt($1,$2)};
 MaybeIFace : '*=' IFace {$$=some($2)}
 	   | {$$=none};
 
-AStmt : '{' Stmts '}' {$$=$1} 
-      | '(' Stmts ')' {$$=$1}
+AStmt : '{' Stmts '}' {$$=$2} 
+      | '(' Stmts ')' {$$=$2}
       | DimStmt       {$$=$1}
       | EqPart '=' EqPart {$$=control:eq($1,$3)}
       | Call {$$=$1};

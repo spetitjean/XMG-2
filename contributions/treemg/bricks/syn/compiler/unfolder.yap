@@ -22,7 +22,7 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-:- edcg:weave([constraints,name,vars,consts],[unfold_props/2, unfold_feats/2]).
+:- edcg:weave([constraints,name,vars,consts],[]).
 
 
 %%:-add_to_path('../AVM').
@@ -57,6 +57,8 @@ xmg:unfold_stmt(syn:node(N,P,F)):--
 	constraints::enq((TN,syn:node)),
 	xmg:new_target_var(T1),
 	xmg:new_target_var(T2),
+	%%xmg_brick_mg_compiler:send(info,P),
+	%%xmg_brick_mg_compiler:send(info,F),
 	xmg:unfold_expr(P,T1),
 	constraints::enq((TN,syn:props(T1))),	
 	xmg:unfold_expr(F,T2),

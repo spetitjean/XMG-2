@@ -42,7 +42,7 @@ SynStmt : Node {$$=$1}
 
 Node : node (Var)? MaybeProps (AVM)? {$$=syn:node($2,$3,$4)};
 
-MaybeProps : '(' Props ')' {$$=some($2)}
+MaybeProps : '(' Props ')' {get_coord($1,Coord), $$=some(avm:avm(Coord,$2))}
 	   | {$$=none};
 
 Props : (Feat // ',')+ {$$=$1};
