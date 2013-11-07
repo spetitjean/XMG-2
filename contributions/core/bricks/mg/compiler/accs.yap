@@ -29,15 +29,15 @@
 %%:-multifile(xmg:unfold_expr/2).
 :-multifile(xmg:unfold_expr/10).
 
-:-edcg:weave([name],[new_target_var/2,new_target_var/1]).
+:-edcg:weave([name],[xmg:new_target_var/2,xmg:new_target_var/1]).
 :-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_expr/2]).
 
-new_target_var(Name,Prefix):--
+xmg:new_target_var(Name,Prefix):--
 	name::incr,
 	name::get(Get),
 	atomic_concat([Prefix,Get],Name),!.
 
-new_target_var(Name):--
+xmg:new_target_var(Name):--
 	name::incr,
 	name::get(Get),
 	atomic_concat(['XMG_VAR_',Get],Name),!.

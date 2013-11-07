@@ -52,13 +52,15 @@ xmg:unfold_stmt(syn:S1):--
 	xmg:unfold_stmt(S1),!.
 
 xmg:unfold_stmt(syn:node(N,P,F)):-- 
-	constraints::enq((N,syn:node)),
-	xmg_brick_mg_accs:new_target_var(T1),
-	xmg_brick_mg_accs:new_target_var(T2),
+	xmg:new_target_var(TN),
+	xmg:unfold_expr(N,TN),
+	constraints::enq((TN,syn:node)),
+	xmg:new_target_var(T1),
+	xmg:new_target_var(T2),
 	xmg:unfold_expr(P,T1),
-	constraints::enq((N,syn:props(T1))),	
+	constraints::enq((TN,syn:props(T1))),	
 	xmg:unfold_expr(F,T2),
-	constraints::enq((N,syn:feats(T2))),
+	constraints::enq((TN,syn:feats(T2))),
 	!.
 xmg:unfold_stmt(syn:dom(Op,N1,N2)):-- 
 	constraints::enq((syn:dom(N1,N2))),
