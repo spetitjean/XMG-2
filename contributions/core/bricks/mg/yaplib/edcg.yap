@@ -539,7 +539,7 @@ user:term_expansion(X,Y) :- edcg:term_expansion(X,Y).
 
 :- edcg:class( value,   [set, get, put=set, noop, close=noop, value=get] ).
 :- edcg:class( counter, [set, get, incr, decr, add, sub, mul, put=set, noop, close=noop, value=get], 0 ).
-:- edcg:class( stack,   [push, pop, top, put=push, get=pop, pops=extend, empty=empty, noop, drop, close=sclose, value=get], [] ).
+:- edcg:class( stack,   [push, pop, top, put=push, get=pop, pops=extend, empty=empty, noop, drop, close=sclose, value=get, set], [] ).
 :- edcg:class( queue,   [enq, enq_list, deq, top=topq, pop=deq, put=enq, get=deq, empty=emptyq, noop, close=qclose, value=get], H-H, Q-[] ).
 :- edcg:class( list,    [append, extend, put=append, noop, close=lclose, value=get, default=extend], _, [] ).
 :- edcg:class( table,   [tget, tput, tdel] ).
