@@ -36,6 +36,14 @@ unfold_feat(avm:feat(F,V), Target) :--
     constraints::enq((Target,avm:feat(F,Target2))),
     xmg:unfold_expr(V, Target2).
 
+
+
+
+
+
+
+
+
 unfold('AVM',[token(_,'['),Feats,token(_,']')],avm(UFeats)):-
 	unfold(Feats,UFeats),!.
 
