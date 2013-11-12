@@ -1,6 +1,6 @@
 mg: 
-  Stmt: control
-  EDecls: decls
+  _Stmt: control
+  _EDecls: decls
 decls:
   ODecl: feats
 control:
