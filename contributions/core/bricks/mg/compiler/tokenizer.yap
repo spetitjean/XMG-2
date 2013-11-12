@@ -23,6 +23,8 @@
 :- use_module('xmg/brick/mg/edcg.yap').
 :- use_module(library(lists)).
 
+:- multifile(xmg:punctuation/1).
+
 :- edcg:thread(macros  ,edcg:table  ). % table of macros
 :- edcg:thread(toks    ,edcg:queue  ). % accumulated tokens
 :- edcg:thread(buf     ,edcg:queue  ). % buffer for accumulating the chars of a token
@@ -360,65 +362,65 @@ punctuation_to_token(A,A).
 %% move these out where they belong
 %% they also need to be installed in order of decreasing length.
 
-xmg:punctuation('<sem>').
-xmg:punctuation('<pg>').
-xmg:punctuation('<morph>').
-xmg:punctuation('<syn>').
-xmg:punctuation('<frame>').
+%% xmg:punctuation('<sem>').
+%% xmg:punctuation('<pg>').
+%% xmg:punctuation('<morph>').
+%% xmg:punctuation('<syn>').
+%% xmg:punctuation('<frame>').
 
-xmg:punctuation('<syn1>').
-xmg:punctuation('<syn2>').
+%% xmg:punctuation('<syn1>').
+%% xmg:punctuation('<syn2>').
 
-xmg:punctuation('=>').
-xmg:punctuation('<=!>').
-xmg:punctuation('-!-').
+%% xmg:punctuation('=>').
+%% xmg:punctuation('<=!>').
+%% xmg:punctuation('-!-').
 
-xmg:punctuation('<-').
-xmg:punctuation('...+').
-xmg:punctuation(',,,+').
-xmg:punctuation('...').
-xmg:punctuation(',,,').
-xmg:punctuation(';;;').
-xmg:punctuation('->*').
-xmg:punctuation('->+').
-xmg:punctuation('->').
-xmg:punctuation('>>*').
-xmg:punctuation('>>+').
-xmg:punctuation('>>').
-xmg:punctuation('-L>').
-xmg:punctuation('-R>').
-xmg:punctuation('::').
-xmg:punctuation(':=').
-xmg:punctuation('+=').
-xmg:punctuation('-=').
-xmg:punctuation('=+').
-xmg:punctuation('=-').
-xmg:punctuation('=~').
-xmg:punctuation('=|').
-xmg:punctuation('<<').
-%%xmg:punctuation('..').
-xmg:punctuation('!=').
-xmg:punctuation('**').
-xmg:punctuation('{').
-xmg:punctuation('}').
-xmg:punctuation('&').
-xmg:punctuation('|').
-xmg:punctuation('[').
-xmg:punctuation(']').
-xmg:punctuation(',').
-xmg:punctuation('(').
-xmg:punctuation(')').
-xmg:punctuation('?').
-xmg:punctuation('~').
-xmg:punctuation(':').
-xmg:punctuation('=').
-xmg:punctuation('<').
-xmg:punctuation('>').
-xmg:punctuation('.').
-xmg:punctuation(';').
-xmg:punctuation('@').
-xmg:punctuation('!').
-xmg:punctuation('*=').
+%% xmg:punctuation('<-').
+%% xmg:punctuation('...+').
+%% xmg:punctuation(',,,+').
+%% xmg:punctuation('...').
+%% xmg:punctuation(',,,').
+%% xmg:punctuation(';;;').
+%% xmg:punctuation('->*').
+%% xmg:punctuation('->+').
+%% xmg:punctuation('->').
+%% xmg:punctuation('>>*').
+%% xmg:punctuation('>>+').
+%% xmg:punctuation('>>').
+%% xmg:punctuation('-L>').
+%% xmg:punctuation('-R>').
+%% xmg:punctuation('::').
+%% xmg:punctuation(':=').
+%% xmg:punctuation('+=').
+%% xmg:punctuation('-=').
+%% xmg:punctuation('=+').
+%% xmg:punctuation('=-').
+%% xmg:punctuation('=~').
+%% xmg:punctuation('=|').
+%% xmg:punctuation('<<').
+%% %%xmg:punctuation('..').
+%% xmg:punctuation('!=').
+%% xmg:punctuation('**').
+%% xmg:punctuation('{').
+%% xmg:punctuation('}').
+%% xmg:punctuation('&').
+%% xmg:punctuation('|').
+%% xmg:punctuation('[').
+%% xmg:punctuation(']').
+%% xmg:punctuation(',').
+%% xmg:punctuation('(').
+%% xmg:punctuation(')').
+%% xmg:punctuation('?').
+%% xmg:punctuation('~').
+%% xmg:punctuation(':').
+%% xmg:punctuation('=').
+%% xmg:punctuation('<').
+%% xmg:punctuation('>').
+%% xmg:punctuation('.').
+%% xmg:punctuation(';').
+%% xmg:punctuation('@').
+%% xmg:punctuation('!').
+%% xmg:punctuation('*=').
 
 %%=============================================================================
 %% read a + or - as a boolean

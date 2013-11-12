@@ -123,7 +123,7 @@ class BrickCompiler(object):
 
         for punct in self._punctuation:
             #tokenizefile.write('punctuation(\''+punct+'\') -->> input_gets("'+punct+'"), !.\n')
-            tokenizefile.write('punctuation(\''+punct+'\').\n')
+            tokenizefile.write('xmg:punctuation(\''+punct+'\').\n')
 
         tokenizefile.close()
         print("Part of tokenizer generated in "+self._folder)
