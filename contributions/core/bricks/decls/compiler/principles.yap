@@ -20,7 +20,7 @@
 
 :-module(xmg_brick_decls_principles).
 
-principles('MetaGrammar'(Decls,_,_)):- 
+principles(mg(Decls,_,_)):- 
 	get_principles(Decls,Principles),!,
 	unicities(Principles,Unicities),
 	%%xmg_compiler:send(info,Unicities),

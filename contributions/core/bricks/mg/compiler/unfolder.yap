@@ -26,25 +26,49 @@
 
 %% SPECIFIC RULES
 
-unfold(mg:mg(E,F,G),mg(OUDecls,UClasses,UValues)):-
-	%%unfold(E,UDecls),
+unfold(mg:mg(E,F,G),mg(UDecls,UClasses,UValues)):-
+	unfold(E,UDecls),
 	%%xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
 	%%xmg_compiler:send(info,OUDecls),
 	unfold(F,UClasses),
-	xmg_brick_mg_compiler:send(info,UClasses),
-	%%unfold(G,UValues),
+	%%xmg_brick_mg_compiler:send(info,UClasses),
+	unfold(G,UValues),
 	!.
 unfold([],[]):- !.
 unfold([H|T],[H1|T1]):-
 	unfold(H,H1),
 	unfold(T,T1),!.
 
-unfold(mg:class(token(Coord,id(N)),_,I,E,D,S),class(N,Constraints,Coord)):--
+unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,Constraints,Coord)):--
 	build_context(I,E,D) with (vars([]-Vars,[]-[]), consts([]-Consts,[]-[])),
 	%%xmg_brick_mg_compiler:send(info,Vars),
+	unfold_vars(P,UP),
+	unfold_vars(I,UI),
+	unfold_vars(E,UE),
+	unfold_vars(D,UD),
 	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars([]-Vars1,[]-Vars), consts([]-Consts1,[]-Consts)),
 	%%xmg_brick_mg_compiler:send(info,Constraints),
 	!.
+
+unfold(mg:value(token(_,id(ID))),value(ID)):-!.
+
+unfold_vars(none,[]):-!.
+unfold_vars(some(Vars),UVars):-
+	unfold_vars(Vars,UVars),!.
+unfold_vars(mg:declare(Vars),UVars):-
+	unfold_vars(Vars,UVars),!.
+unfold_vars(mg:export(Vars),UVars):-
+	unfold_vars(Vars,UVars),!.
+unfold_vars(mg:import(Vars),UVars):-
+	unfold_vars(Vars,UVars),!.
+unfold_vars([],[]):-!.
+unfold_vars([H|T],[H1|T1]):-
+	unfold_var(H,H1),
+	unfold_vars(T,T1),!.
+
+unfold_var(value:var(token(Coord,id(VAR))),id(VAR,Coord)):-
+	!.
+
 
 build_context(I,E,D):--
 	add_decls(D),!.

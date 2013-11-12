@@ -30,7 +30,7 @@ Decls	    : 'declare' (Var)+ {$$=mg:declare($2)};
 Stmts	    : '{' _Stmt '}' {$$=$2} 
 	    | {$$=none};
     
-Value	    : 'value' id {$$=value:value($2)};   
+Value	    : 'value' id {$$=mg:value($2)};   
 
 Var	    : '?' id {$$=value:var($2)} 
 	    | '!' id  {$$=value:const($2)}

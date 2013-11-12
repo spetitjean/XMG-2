@@ -38,7 +38,7 @@
 %% 	type_fields(OFields,1),
 %% 	xmg_brick_mg_compiler:send(info,' typed').
 
-type_metagrammar('MetaGrammar'(Decls,_,_)):-
+type_metagrammar(mg(Decls,_,_)):-
 	G=[gather(field,fieldprec,fields)],
 	gather_decls(Decls,G,GDecls),
 	type_decls(GDecls),!.

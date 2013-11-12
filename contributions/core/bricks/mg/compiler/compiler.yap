@@ -58,6 +58,9 @@ send_nl(info,N):-
 	M is N -1,!,
 	send_nl(info,M),!.
 
+xmg:send(T,Send):-
+	send(T,Send),!.
+
 compile_file(File,Eval):-
 	xmg_compiler_conf:init,
 	findall(Module,xmg_modules_def:module_def(_,Module),Modules),
@@ -69,11 +72,18 @@ compile_file(File,Eval):-
 	send_nl(info),
 	xmg_brick_mg_unfolder:unfold(Parse,Unfolded),!,
 	send(info,' unfolded '),
-	%%send(info,Unfolded),
+	send(info,Unfolded),
 	send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
+	send(info,' priciples done '),
+
 	xmg_brick_mg_exporter:export_metagrammar(Unfolded),!,
+	send(info,' exported '),
+
 	xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
+
+	send(info,' typed '),
+
 	xmg_brick_mg_generator:generate(Unfolded),!,
 	send_nl(info),	
 	send(info,' generated '),

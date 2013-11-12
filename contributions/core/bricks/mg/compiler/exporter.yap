@@ -22,7 +22,7 @@
 :-dynamic(declared/2).
 :-dynamic(classNumber/1).
 
-export_metagrammar('MetaGrammar'(_,Classes,Values)):-
+export_metagrammar(mg(_,Classes,Values)):-
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
 	asserta(classNumber(L)),
@@ -63,14 +63,16 @@ order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps):-
     ),
 	order_classes(Classes,MClasses,Acc,OClasses,Laps).
 order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps):-
+	xmg:send(info,Class),
 	class_before(Class,Acc),!,
-	Class=class(id(ClassId),_,_),
+	%%xmg:send(info,Class),
+	Class=class(ClassId,_,_,_,_,_,_),
+	%%xmg:send(info,ClassId),
 	order_classes(Classes,MClasses,[ClassId|Acc],OClasses,Laps).
 order_classes([Class|Classes],MClasses,Acc,OClasses,Laps):-
 	order_classes(Classes,[Class|MClasses],Acc,OClasses,Laps).
 
-class_before(class(_,class(_,I,_,_,_),_),Acc):-
-	flush_output,
+class_before(class(_,_,I,_,_,_,_),Acc):-
 	imports_before(I,Acc).
 
 imports_before([],_):-!.
@@ -79,7 +81,7 @@ imports_before([import(id(H,C),_)|T],Acc):-
 	imports_before(T,Acc).
 
 whatsWrong([],Acc):-!.
-whatsWrong([class(id(Class),class(_,I,_,_,_),_)|T],Acc):-
+whatsWrong([class(Class,_,I,_,_,_,_)|T],Acc):-
 	xmg_brick_mg_compiler:send(info,' in class '),xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send(info,'\n'),
 	whichImport(I,Acc),!,
 	whatsWrong(T,Acc).
@@ -93,13 +95,12 @@ whichImport([id(H,C)|T],Acc):-
 
 %% Export variables
 
-export_classes([]):- 
-	xmg_brick_mg_compiler:send(info,' exported '),xmg_brick_mg_compiler:send_nl(info),!.
+export_classes([]):- !.
 export_classes([H|T]):-
 	export_class(H),!,
 	export_classes(T).
 
-export_class(class(id(Name),class(P,I,E,D,_),_)):-
+export_class(class(Name,P,I,E,D,_,_)):-
 	imports_exports(I,E,D,Exps),
 	%%xmg_brick_mg_compiler:send(debug,Exps),
 	%% check exported variables have whether been declared or imported
