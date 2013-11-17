@@ -44,7 +44,7 @@ prefix_for_weave([Dim-_|T],[xmg_brick_mg_generator:Dim|T1]):-
 	prefix_for_weave(T,T1),!.
 
 
-generate('MetaGrammar'(_,Classes,Values)):-
+generate(mg(_,Classes,Values)):-
 	xmg_dimensions:dims(Dims),
 	threads_(Dims),
 	xmg_table:table_new(TableIn),
@@ -78,7 +78,7 @@ generate_classes([mutex_add(id(M,_),id(A,_))|T]):--
 	generate_classes(T),!.
 generate_classes([semantics|T]):--
 	generate_classes(T),!.
-generate_classes([class(id(Class),class(P,I,_,_,Stmt),coord(_,_,_))|T]):--
+generate_classes([class(Class,P,I,_,_,Stmt,coord(_,_,_))|T]):--
 
 	xmg_brick_mg_compiler:send_nl(info),
 	xmg_brick_mg_compiler:send(info,'______________________________________________'),
@@ -92,10 +92,10 @@ generate_classes([class(id(Class),class(P,I,_,_,Stmt),coord(_,_,_))|T]):--
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with (decls(TableIn,TableOut),name(_,_)),
 
-	generate_class(class(id(Class),class(P,I,_,_,Stmt),coord(_,_,_)),List) with (decls(TableOut,_),name(0,_)),!,
+	generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List) with (decls(TableOut,_),name(0,_)),!,
 	generate_classes(T).
 
-generate_class(class(id(Class),class(P,I,_,_,Stmt),coord(_,_,_)),List):--
+generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	
 	%xmg_brick_mg_exporter:declared(Class,List),
 	xmg_brick_mg_exporter:exports(Class,Exports),
@@ -105,6 +105,7 @@ generate_class(class(id(Class),class(P,I,_,_,Stmt),coord(_,_,_)),List):--
 
 	get_params(P,List,GP),
 
+	%%xmg:send(info,' got params '),
 	
 	xmg_brick_control_generator:generate(Stmt,List,Class,Generated),% with (decls(TableOut,_),name(0,_)),,
 	Head=..[Class,params(GP),exports(LExports)],
@@ -127,7 +128,7 @@ generate_class(class(id(Class),class(P,I,_,_,Stmt),coord(_,_,_)),List):--
 	!.
 
 generate_values([]).
-generate_values(['Value'(Value)|T]):-
+generate_values([value(Value)|T]):-
 	%% Value part
 	xmg_dimensions:dims(Dims),
 	callDims(Dims,CDims),

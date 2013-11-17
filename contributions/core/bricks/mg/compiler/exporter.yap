@@ -63,7 +63,7 @@ order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps):-
     ),
 	order_classes(Classes,MClasses,Acc,OClasses,Laps).
 order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps):-
-	xmg:send(info,Class),
+	%%xmg:send(info,Class),
 	class_before(Class,Acc),!,
 	%%xmg:send(info,Class),
 	Class=class(ClassId,_,_,_,_,_,_),

@@ -22,16 +22,21 @@
 :-edcg:using(xmg_brick_mg_generator:name).
 :-edcg:using(xmg_brick_mg_generator:decls).
 
-:-edcg:weave([decls,name], [put_in_table/1, generate_Stmt/4, generate_iface/4, generate_EqPart/4, generate_dimStmt/4]).
+:-edcg:weave([decls,name], [put_in_table/1, generate_Stmts/4, generate_Stmt/4, generate_iface/4, generate_EqPart/4, generate_dimStmt/4]).
 
 generate(Stmt,List,Class,Generated):--
 	%xmg_table:table_new(TableIn),
 	%put_in_table(List) with (decls(TableIn,TableOut),name(_,_)),
 	
 	%%xmg_compiler:send(debug,Stmt),
-	generate_Stmt(Stmt,List,Class,Generated),% with (decls(TableOut,_),name(0,_)),
+	generate_Stmts(Stmt,List,Class,Generated),% with (decls(TableOut,_),name(0,_)),
 	%%xmg_compiler:send(debug,Generated),
 	!.
+
+generate_Stmts([],L,C,[]):-- !.
+generate_Stmts([H|T],L,C,[H1|T1]):--
+	generate_Stmt(H,L,C,H1),
+	generate_Stmts(T,L,C,T1),!.
 
 generate_dimStmt(dimStmt(morph,Stmt),List,Class,Generated):--
 	%%use_module('xmg_generator_morph'),
@@ -58,19 +63,22 @@ generate_dimStmt(dimStmt(frame,Stmt),List,Class,Generated):--
 	xmg_brick_frame_generator:generate_Stmt(Stmt,List,Class,Generated).
 
 generate_dimStmt(Stmt,_,_,_):--
-	xmg_brick_mg_compiler:send(info,Stmt),false,!.
+	xmg_brick_mg_compiler:send(info,' unable to generate code for: \n'),
+	xmg_brick_mg_compiler:send(info,Stmt),
+	xmg_brick_mg_compiler:send(info,'\n\n'),
+	false,!.
 
 generate_Stmt(empty,_,_,true):-- !.
 generate_Stmt(opt(Stmt),List,Class,Gen):-- 
-	generate_Stmt(disj(Stmt,empty),List,Class,Gen),
+	generate_Stmts(disj(Stmt,empty),List,Class,Gen),
 	!.
-generate_Stmt(conj(Stmt1,Stmt2),List,Class,Conj):--
-	generate_Stmt(Stmt1,List,Class,DS1),
+generate_Stmt(and(Stmt1,Stmt2),List,Class,Conj):--
+	generate_Stmts(Stmt1,List,Class,DS1),
 	generate_Stmt(Stmt2,List,Class,DS2),
 	Conj=..[',',DS1,DS2].
-generate_Stmt(disj(Stmt1,Stmt2),List,Class,Disj):--
-	generate_Stmt(Stmt1,List,Class,DS1),
-	generate_Stmt(Stmt2,List,Class,DS2),
+generate_Stmt(or(Stmt1,Stmt2),List,Class,Disj):--
+	generate_Stmts(Stmt1,List,Class,DS1),
+	generate_Stmts(Stmt2,List,Class,DS2),
 	Disj=..[';',DS1,DS2].
 generate_Stmt(class(Call,Params),List,Class,Gen):--
 	%%current_predicate(Call/N),
@@ -139,7 +147,7 @@ generate_Stmt(Stmt,List,Class,Generated):--
 	generate_dimStmt(Stmt,List,Class,Generated).
 
 generate_Stmt(stmt(Stmt,IFace),List,Class,FGenerated):--
-	generate_Stmt(Stmt,List,Class,Generated),
+	generate_Stmts(Stmt,List,Class,Generated),
 	generate_iface(IFace,List,Class,IGenerated),
 	add_out(Generated,IGenerated,FGenerated),!.
 
