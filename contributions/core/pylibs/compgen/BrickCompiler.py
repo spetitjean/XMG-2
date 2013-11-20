@@ -120,7 +120,10 @@ class BrickCompiler(object):
         tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         tokenizefile.write('%% Part of tokenizer\n')
         tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
+        if not self._punctuation:
+            tokenizefile.write('xmg:punctuation(_):- false.\n')
 
+        
         for punct in self._punctuation:
             #tokenizefile.write('punctuation(\''+punct+'\') -->> input_gets("'+punct+'"), !.\n')
             tokenizefile.write('xmg:punctuation(\''+punct+'\').\n')

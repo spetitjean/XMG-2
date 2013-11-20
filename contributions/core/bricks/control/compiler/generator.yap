@@ -62,19 +62,19 @@ generate_dimStmt(dimStmt(frame,Stmt),List,Class,Generated):--
 	%%xmg_compiler:send(debug,Stmt),
 	xmg_brick_frame_generator:generate_Stmt(Stmt,List,Class,Generated).
 
-generate_dimStmt(Stmt,_,_,_):--
-	xmg_brick_mg_compiler:send(info,' unable to generate code for: \n'),
-	xmg_brick_mg_compiler:send(info,Stmt),
-	xmg_brick_mg_compiler:send(info,'\n\n'),
-	false,!.
+%% generate_dimStmt(Stmt,_,_,_):--
+%% 	xmg_brick_mg_compiler:send(info,' unable to generate code for: \n'),
+%% 	xmg_brick_mg_compiler:send(info,Stmt),
+%% 	xmg_brick_mg_compiler:send(info,'\n\n'),
+%% 	false,!.
 
-generate_Stmt(empty,_,_,true):-- !.
+generate_Stmt(none,_,_,true):-- !.
 generate_Stmt(opt(Stmt),List,Class,Gen):-- 
 	generate_Stmts(disj(Stmt,empty),List,Class,Gen),
 	!.
 generate_Stmt(and(Stmt1,Stmt2),List,Class,Conj):--
 	generate_Stmts(Stmt1,List,Class,DS1),
-	generate_Stmt(Stmt2,List,Class,DS2),
+	generate_Stmts(Stmt2,List,Class,DS2),
 	Conj=..[',',DS1,DS2].
 generate_Stmt(or(Stmt1,Stmt2),List,Class,Disj):--
 	generate_Stmts(Stmt1,List,Class,DS1),
@@ -95,23 +95,6 @@ generate_Stmt(class(Call,Params),List,Class,Gen):--
 	Gen=Calls,
 
 	!.
-%% generate_Stmt(eq(id(ID,_),class(Call,Params),C),List,Class,Gen):--
-%% 	lists:member(id(ID,_)-IDVar,List),
-%% 	get_params(Params,List,GParams,Eqs),
-%% 	ClassCall=..[Call,params(GParams),IDVar],
-%% 	Calls=xmg_generator:ClassCall,
-%% 	Gen=Calls,
-%% 	!.
-%% generate_Stmt(eq(id(ID,_),dot(D1,D2),C),List,Class,xmg_generator_control:Eq):--
-%% 	lists:member(id(ID,_)-IDVar,List),
-%% 	%% ToDo : access value
-%% 	Eq=..['dot',List,D1,D2,IDVar],
-%% 	!.
-%% generate_Stmt(eq(id(ID1,_),id(ID2,_),C),List,Class,xmg_generator_control:Eq):--
-%% 	lists:member(id(ID1,_)-IDVar,List),
-%% 	%%lists:member(id(ID2,_)-IDVar,List),
-%% 	Eq=..['=',IDVar,ID2],
-%% 	!.
 
 generate_Stmt(eq(Left,Right,C),List,Class,NewEq):--
 	generate_EqPart(Left,List,Class,part(Out1,V1)),
@@ -123,6 +106,23 @@ generate_Stmt(eq(Left,Right,C),List,Class,NewEq):--
 	add_out(Eq,Out,NewEq),
 	%%xmg_compiler:send(info,NewEq),
 	!.
+
+generate_Stmt((Left,Right),List,Class,some_eq):--
+	!.
+
+generate_Stmt(Stmt,List,Class,Generated):--
+	generate_dimStmt(Stmt,List,Class,Generated).
+
+generate_Stmt(stmt(Stmt,IFace),List,Class,FGenerated):--
+	generate_Stmts(Stmt,List,Class,Generated),
+	generate_iface(IFace,List,Class,IGenerated),
+	add_out(Generated,IGenerated,FGenerated),!.
+
+generate_Stmt(Stmt,_,_,_):--
+	xmg_brick_mg_compiler:send(info,' unable to generate code for: \n'),
+	xmg_brick_mg_compiler:send(info,Stmt),
+	xmg_brick_mg_compiler:send(info,'\n\n'),
+	false,!.
 
 %% generate_EqPart(id(ID,C),List,Class,part([],IDVar)):-- 
 %% 	decls::tget(ID,IDVar),
@@ -143,13 +143,7 @@ generate_EqPart(class(Call,Params),List,Class,part([xmg_brick_mg_generator:Class
 	!.
 
 
-generate_Stmt(Stmt,List,Class,Generated):--
-	generate_dimStmt(Stmt,List,Class,Generated).
 
-generate_Stmt(stmt(Stmt,IFace),List,Class,FGenerated):--
-	generate_Stmts(Stmt,List,Class,Generated),
-	generate_iface(IFace,List,Class,IGenerated),
-	add_out(Generated,IGenerated,FGenerated),!.
 
 generate_iface(none,List,Class,[]):-- !.
 generate_iface(avm(IFace),List,Class,[AVMFeats,UIFace]):--
