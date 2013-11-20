@@ -25,6 +25,25 @@
 
 :-edcg:weave([decls,name], [new_name/2,var_or_const/2,generate/5]).
 
+xmg:generate_instr((Target,avm:avm)):--
+	code::enq(xmg_brick_avm_avm:avm(Target,[])),
+	!.
+
+xmg:generate_instr((Target,avm:feat(F,Target2))):--
+	code::enq(xmg_brick_avm_avm:avm(Target,[F-Target2])),	
+	!.
+
+
+
+
+
+
+
+
+
+
+
+
 new_name(Name,Prefix):--
 	name::incr,
 	name::get(Get),

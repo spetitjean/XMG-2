@@ -21,8 +21,13 @@
 
 :-edcg:thread(decls,edcg:table).
 :-edcg:thread(name,edcg:counter).
+:-edcg:thread(code,edcg:queue).
+
+:-multifile(xmg:generate_instr/7).
+
 
 :-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, import_calls/3,  unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
+:-edcg:weave([decls,name,code],[xmg:generate_instr/1]).
 
 %% :- edcg:thread(xmg_generator:skolem, edcg:counter).
 %% :- edcg:weave([xmg_generator:skolem],[xmg_generator:init_skolems/1]).

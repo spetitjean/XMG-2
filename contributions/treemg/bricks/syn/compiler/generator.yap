@@ -27,6 +27,29 @@
 
 :-edcg:weave([decls,name], [new_name/2,var_Stmt/3,var_or_const/2,generate_Stmt/5]).
 
+
+xmg:generate_instr((TN,syn:node)):--
+	code::enq(xmg_brick_syn_engine:inode(VN,TN)),
+	Put=..[put,VN],
+	Acc='syn',
+	AccNode=..['::',xmg_brick_mg_generator:Acc,Put],
+	code::enq(Put),
+	!.
+xmg:generate_instr((TN,syn:props(T1))):--
+	!.
+xmg:generate_instr((TN,syn:feats(T1))):--
+	!.
+xmg:generate_instr((syn:dom(N1,N2))):--
+	!.
+
+
+
+
+
+
+
+
+
 new_name(Name,Prefix):--
 	name::incr,
 	name::get(Get),
