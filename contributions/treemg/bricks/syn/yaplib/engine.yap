@@ -1,7 +1,7 @@
 :- module(xmg_brick_syn_engine,[]).
 
-:- use_module(xmg_polarity).
-:- use_module(xmg_nodename).
+:- use_module('xmg/brick/syn/polarity').
+:- use_module('xmg/brick/syn/nodename').
 
 :- edcg:thread(cname,edcg:counter).
 

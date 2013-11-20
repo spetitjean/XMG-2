@@ -19,10 +19,11 @@
 
 
 :-module(xmg_brick_syn_generator).
-:-use_module(xmg_brick_syn_engine).
+:-use_module('xmg/brick/syn/engine').
 
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:code).
 
 
 :-edcg:weave([decls,name], [new_name/2,var_Stmt/3,var_or_const/2,generate_Stmt/5]).

@@ -31,7 +31,7 @@
 :-	use_module('xmg/brick/colors/compiler/colors').
 :-	use_module('xmg/brick/rank/compiler/rank').
 :-	use_module('xmg/brick/tag/compiler/tag').
-:-	use_module('xmg/brick/syn/xmg_engine_syn').
-:-	use_module('xmg/brick/syn/xmg_most').
-:-	use_module('xmg/brick/syn/xmg_nodename').
-:-	use_module('xmg/brick/syn/xmg_polarity').
+:-	use_module('xmg/brick/syn/engine').
+:-	use_module('xmg/brick/syn/most').
+:-	use_module('xmg/brick/syn/nodename').
+:-	use_module('xmg/brick/syn/polarity').

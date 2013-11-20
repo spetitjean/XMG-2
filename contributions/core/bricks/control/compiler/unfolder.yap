@@ -50,7 +50,7 @@ xmg:unfold_stmt(control:call(Class,Params)):--
 xmg:unfold_stmt(none):-- !.
 
 %%!!!DENYS: move to better place (core)
-:- edcg:weave([constraints,name],[xmg:unfold_exprs/2]).
+:- edcg:weave([constraints,name,vars,consts],[xmg:unfold_exprs/2]).
 xmg:unfold_exprs([],[]) :-- !.
 xmg:unfold_exprs([E|Es],[R|Rs]) :--
     xmg:unfold_expr(E,R),

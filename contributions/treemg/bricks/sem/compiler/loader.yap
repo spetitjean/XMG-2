@@ -22,5 +22,5 @@
 
 :-	use_module('xmg/brick/sem/compiler/unfolder').
 :-	use_module('xmg/brick/sem/compiler/generator').
-:-	use_module('xmg/brick/sem/output').
-:-	use_module('xmg/brick/sem/compiler/convert').
+:-	use_module('xmg/brick/sem/compiler/output').
+%:-	use_module('xmg/brick/sem/compiler/convert').

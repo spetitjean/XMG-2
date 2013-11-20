@@ -22,6 +22,7 @@
 
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:code).
 
 :-edcg:weave([decls,name], [new_name/2,var_or_const/2,generate/5]).
 
