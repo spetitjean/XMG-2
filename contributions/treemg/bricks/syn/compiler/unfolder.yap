@@ -33,25 +33,24 @@
 %% 	!.
 
 
-xmg:unfold_stmt(syn:tree(Root,Children),Target):--
+xmg:unfold_dimstmt(Syn,syn:tree(Root,Children)):--
 	%%xmg_brick_mg_compiler:send(info,Root),
 	!.
-xmg:unfold_stmt(syn:and(S1,S2)):-- 
+xmg:unfold_dimstmt(Syn,syn:and(S1,S2)):-- 
 	%%xmg_brick_mg_compiler:send(info,S1),
-	xmg:unfold_stmt(S1) with (constraints([]-C1,[]-[])),
-	xmg:unfold_stmt(S2) with (constraints([]-C2,[]-[])),
-	constraints::enq(and(C1,C2)),
+	xmg:unfold_dimstmt(Syn,S1) ,
+	xmg:unfold_dimstmt(Syn,S2) ,
 	!.
-xmg:unfold_stmt(syn:or(S1,S2)):-- 
-	xmg:unfold_stmt(S1) with (constraints([]-C1,[]-[])),
-	xmg:unfold_stmt(S2) with (constraints([]-C2,[]-[])),
-	constraints::enq(and(C1,C2)),
+xmg:unfold_dimstmt(Syn,syn:or(S1,S2)):-- 
+	xmg:unfold_dimstmt(Syn,S1) with (constraints([]-C1,[]-[])),
+	xmg:unfold_dimstmt(Syn,S2) with (constraints([]-C2,[]-[])),
+	constraints::enq(or([and(C1),and(C2)])),
 	!.
 
-xmg:unfold_stmt(syn:S1):-- 
-	xmg:unfold_stmt(S1),!.
+xmg:unfold_dimstmt(Syn,syn:S1):-- 
+	xmg:unfold_dimstmt(Syn,S1),!.
 
-xmg:unfold_stmt(syn:node(N,P,F)):-- 
+xmg:unfold_dimstmt(Syn,syn:node(N,P,F)):-- 
 	xmg:new_target_var(TN),
 	xmg:unfold_expr(N,TN),
 	constraints::enq((TN,syn:node)),
@@ -64,7 +63,7 @@ xmg:unfold_stmt(syn:node(N,P,F)):--
 	xmg:unfold_expr(F,T2),
 	constraints::enq((TN,syn:feats(T2))),
 	!.
-xmg:unfold_stmt(syn:dom(Op,N1,N2)):-- 
+xmg:unfold_dimstmt(syn,syn:dom(Op,N1,N2)):-- 
 	constraints::enq((syn:dom(N1,N2))),
 	!.
 

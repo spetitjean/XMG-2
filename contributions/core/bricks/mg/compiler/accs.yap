@@ -28,9 +28,12 @@
 :-multifile(xmg:unfold_stmt/9).
 %%:-multifile(xmg:unfold_expr/2).
 :-multifile(xmg:unfold_expr/10).
+:-multifile(xmg:unfold_dimstmt/10).
 
 :-edcg:weave([name],[xmg:new_target_var/2,xmg:new_target_var/1]).
-:-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_expr/2]).
+:-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_dimstmt/2,xmg:unfold_expr/2, xmg:unfold_exprs/2]).
+
+
 
 xmg:new_target_var(Name,Prefix):--
 	name::incr,
@@ -41,3 +44,8 @@ xmg:new_target_var(Name):--
 	name::incr,
 	name::get(Get),
 	atomic_concat(['XMG_VAR_',Get],Name),!.
+
+xmg:unfold_exprs([],[]) :-- !.
+xmg:unfold_exprs([E|Es],[R|Rs]) :--
+    xmg:unfold_expr(E,R),
+    xmg:unfold_exprs(Es,Rs).
