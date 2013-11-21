@@ -44,8 +44,9 @@ xmg:unfold_stmt(control:dimStmt(Dim,E2)):--
 	!.
 xmg:unfold_stmt(control:call(Class,Params)):--
 	xmg:new_target_var(CT),
+	xmg:unfold_expr(Class,UClass),
 	xmg:unfold_exprs(Params, Params2),
-	constraints::enq((CT,control:call(Class,Params2))),
+	constraints::enq((CT,control:call(UClass,Params2))),
 	!.
 xmg:unfold_stmt(none):-- !.
 

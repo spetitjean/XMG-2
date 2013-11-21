@@ -41,11 +41,11 @@ threads_([]):- !.
 %% threads_([skolem-_|T]):-
 %% 	threads_(T),!.
 threads_([Dim-_|T]):-
-	edcg:edcg_thread(xmg_brick_mg_generator:Dim, edcg:queue),
+	edcg:edcg_thread(xmg_acc:Dim, edcg:queue),
 	threads_(T),!.
 
 prefix_for_weave([],[]):- !.
-prefix_for_weave([Dim-_|T],[xmg_brick_mg_generator:Dim|T1]):-
+prefix_for_weave([Dim-_|T],[xmg_acc:Dim|T1]):-
 	prefix_for_weave(T,T1),!.
 
 xmg:generate_instrs([]):-- !.
@@ -71,14 +71,16 @@ generate(mg(_,Classes,Values)):-
 
 
 thread_classes([]):- !.
-thread_classes([class(id(Class),_,_)|T]):-
+thread_classes([class(Class,_,_,_,_,_,_)|T]):-
 	%% this part should be done before (for calls to classes that occur after)
-	xmg_dimensions:dims(Dims),
+	xmg_dimensions:dims(Dims),!,
 	prefix_for_weave(Dims,PDims),	
-	edcg:edcg_weave(PDims,[xmg_brick_mg_generator:Class/2]),!,
-
+	edcg:edcg_weave(PDims,[xmg_class:Class/2]),!,
+	
 	thread_classes(T).
 thread_classes([H|T]):-
+	xmg:send(info,'\n\ndid not thread class '),
+	xmg:send(info,H),
 	thread_classes(T).
 
 
@@ -121,25 +123,38 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	%%xmg:send(info,' got params '),
 	
 	xmg:generate_instrs(Stmt) with code([]-Generated,[]-[]),
-	xmg:send(info,Generated),
+	extract_code(Generated,EGenerated),
+
+	%%xmg:send(info,EGenerated),
+
 	Head=..[Class,params(GP),exports(LExports)],
-	IGenerated=..[',',ICalls,Generated],
+	IGenerated=..[',',ICalls,EGenerated],
 
 	%% add Class to Trace
 	Put=..[put,Class],
-	Trace=..['::',xmg_brick_mg_generator:trace,Put],
+	Trace=..['::',xmg_acc:trace,Put],
+
+
 	Gen=..[',',Trace,IGenerated],
 
-	%% Skolems=xmg_generator:init_skolems(List),
-	%% xmg_brick_mg_compiler:send(info,List),
-	%% SGen=..[',',Skolems,Gen],
+	xmg:send(info,IGenerated),
 
-	edcg:edcg_clause(xmg_brick_mg_generator:Head, Gen, Clause),
-	asserta(xmg_brick_mg_generator:Clause),
+	edcg:edcg_clause(xmg_class:Head, Gen, Clause),
+	xmg:send(info,Clause),
+	asserta(xmg_class:Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
 	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),
 	%%xmg_brick_mg_compiler:send(info,Clause),
 	!.
+
+extract_code([],true).
+extract_code([or(A,B)],Code):-
+	extract_code(A,EA),
+	extract_code(B,EB),
+	Code=..[';',EA,EB],!.
+extract_code([H|T],Code):-
+	extract_code(T,ECode),
+	Code=..[',',H,ECode],!.
 
 generate_values([]).
 generate_values([value(Value)|T]):-
@@ -148,7 +163,7 @@ generate_values([value(Value)|T]):-
 	callDims(Dims,CDims),
 	Head=..[compute,Value,dims(Dims)],
 	Call=..[Value,params(_),exports(_)|CDims],
-	Compute=..[':-',Head,Call],
+	Compute=..[':-',Head,xmg_class:Call],
 	asserta(Compute),
 	generate_values(T).
 
@@ -157,7 +172,7 @@ import_calls([import(id(Class,C),AS)|T],List,ICalls):--
 	xmg_brick_mg_exporter:exports(Class,E),
 	unify_exports(E,List,AS,Exports),
 	Call=..[Class,params(_),exports(Exports)],
-	ICall=..[':',xmg_brick_mg_generator,Call],
+	ICall=..[':',xmg_class,Call],
 	%% add Call to Trace
 	%%Put=..[put,Class],
 	%%Trace=..['::',xmg_generator:trace,Put],

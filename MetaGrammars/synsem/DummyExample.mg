@@ -15,8 +15,8 @@ declare ?X ?Y ?Z
 	node ?Y [cat=n];
 	?X ->+ ?Y
 	} 
-	;
-	dummier[]
+	% ;
+	% dummier[]
  }
 }
 
