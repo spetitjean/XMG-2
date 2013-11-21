@@ -27,7 +27,7 @@
 
 
 :-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, import_calls/3,  unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
-:-edcg:weave([decls,name,code],[xmg:generate_instr/1]).
+:-edcg:weave([decls,name,code],[xmg:generate_instr/1, xmg:generate_instrs/1]).
 
 %% :- edcg:thread(xmg_generator:skolem, edcg:counter).
 %% :- edcg:weave([xmg_generator:skolem],[xmg_generator:init_skolems/1]).
@@ -47,6 +47,14 @@ threads_([Dim-_|T]):-
 prefix_for_weave([],[]):- !.
 prefix_for_weave([Dim-_|T],[xmg_brick_mg_generator:Dim|T1]):-
 	prefix_for_weave(T,T1),!.
+
+xmg:generate_instrs([]):-- !.
+xmg:generate_instrs([H|T]):--
+	xmg:generate_instr(H),
+	xmg:generate_instrs(T),!.
+xmg:generate_instrs([H|T]):--
+	xmg:send(info,'unknown instruction: '),
+	xmg:send(info,H),false,!.
 
 
 generate(mg(_,Classes,Values)):-
@@ -112,7 +120,8 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	%%xmg:send(info,' got params '),
 	
-	xmg_brick_control_generator:generate(Stmt,List,Class,Generated),% with (decls(TableOut,_),name(0,_)),,
+	xmg:generate_instrs(Stmt) with code([]-Generated,[]-[]),
+	xmg:send(info,Generated),
 	Head=..[Class,params(GP),exports(LExports)],
 	IGenerated=..[',',ICalls,Generated],
 
