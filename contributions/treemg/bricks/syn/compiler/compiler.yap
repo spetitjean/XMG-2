@@ -21,7 +21,7 @@
 
 eval(Syn,XML,Class):-
 	%%xmg_brick_mg_compiler:send(info,Syn),
-	xmg_brick_mg_compiler:send(debug,' preparing '),
+	xmg_brick_mg_compiler:send(info,' preparing '),
 
 	xmg_brick_syn_preparer:prepare(syn(Syn,[Class]),Prepared),
 	xmg_brick_mg_compiler:send(info,' prepared '),

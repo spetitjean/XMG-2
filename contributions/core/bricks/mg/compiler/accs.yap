@@ -20,8 +20,8 @@
 
 :-module(xmg_brick_mg_accs).
 :-edcg:thread(constraints,edcg:queue).
-:-edcg:thread(vars,edcg:queue).
-:-edcg:thread(consts,edcg:queue).
+:-edcg:thread(vars,edcg:table).
+:-edcg:thread(consts,edcg:table).
 :-edcg:thread(name,edcg:counter).
 
 %%:-multifile(xmg:unfold_stmt/1).
@@ -30,20 +30,23 @@
 :-multifile(xmg:unfold_expr/10).
 :-multifile(xmg:unfold_dimstmt/10).
 
-:-edcg:weave([name],[xmg:new_target_var/2,xmg:new_target_var/1]).
-:-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_dimstmt/2,xmg:unfold_expr/2, xmg:unfold_exprs/2]).
+:-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_dimstmt/2,xmg:unfold_expr/2, xmg:unfold_exprs/2,xmg:new_target_var/2,xmg:new_target_var/1]).
 
 
 
 xmg:new_target_var(Name,Prefix):--
 	name::incr,
 	name::get(Get),
-	atomic_concat([Prefix,Get],Name),!.
+	atomic_concat([Prefix,Get],Name),
+	vars::tput(Name,_),!.
 
 xmg:new_target_var(Name):--
 	name::incr,
 	name::get(Get),
-	atomic_concat(['XMG_VAR_',Get],Name),!.
+	atomic_concat(['XMG_VAR_',Get],Name),
+	vars::tput(Name,_),!.
+
+
 
 xmg:unfold_exprs([],[]) :-- !.
 xmg:unfold_exprs([E|Es],[R|Rs]) :--

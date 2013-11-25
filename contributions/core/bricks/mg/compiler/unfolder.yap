@@ -39,14 +39,17 @@ unfold([H|T],[H1|T1]):-
 	unfold(H,H1),
 	unfold(T,T1),!.
 
-unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,Constraints,Coord)):--
-	build_context(I,E,D) with (vars([]-Vars,[]-[]), consts([]-Consts,[]-[])),
+unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Constraints,TableVF),Coord)):--
+	xmg_table:table_new(TableV),
+	xmg_table:table_new(TableC),
+
+	build_context(I,E,D) with (vars(TableV,TableVO), consts(TableC,TableCO)),
 	%%xmg_brick_mg_compiler:send(info,Vars),
 	unfold_vars(P,UP),
 	unfold_vars(I,UI),
 	unfold_vars(E,UE),
 	unfold_vars(D,UD),
-	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars([]-Vars1,[]-Vars), consts([]-Consts1,[]-Consts)),
+	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars(TableVO,TableVF), consts(TableCO,TableCF)),
 	%%xmg_brick_mg_compiler:send(info,Constraints),
 	!.
 
@@ -77,8 +80,8 @@ add_decls(none):-- !.
 add_decls(some(mg:declare(Decls))):-- 
 	add_decls(Decls),!.
 add_decls([]):-- !.
-add_decls([ID|T]):-- 
-	vars::enq(ID),
+add_decls([value:var(token(_,id(ID)))|T]):-- 
+	vars::tput(ID,_),
 	%%xmg_brick_mg_compiler:send(info,T),
 	add_decls(T),!.
 

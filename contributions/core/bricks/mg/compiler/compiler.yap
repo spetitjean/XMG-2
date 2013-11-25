@@ -72,7 +72,7 @@ compile_file(File,Eval):-
 	send_nl(info),
 	xmg_brick_mg_unfolder:unfold(Parse,Unfolded),!,
 	send(info,' unfolded '),
-	send(info,Unfolded),
+	%%send(info,Unfolded),
 	send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
 	send(info,' priciples done '),

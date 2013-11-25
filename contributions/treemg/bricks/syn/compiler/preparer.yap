@@ -27,7 +27,6 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	add_constraints(SynD,SynD,[],SynDC),
 
 
-
 	%% écrire l'id de la classe courante
 	Trace=[Family|_],
 	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) ,
@@ -39,6 +38,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% écrire les lits
 	write_lits(SynD,Relations,TableOut),
 
+	xmg:send(info,'here'),
 
 
 	%%xmg_compiler:send(debug,NodeNames),
@@ -180,7 +180,7 @@ write_node(node(PropAVM,FeatAVM,N),N2,Table):--
 write_node(A,'none',Table):-- !.
 
 write_colors_or_not(Nodes,Colors,NodesNC):-
-	xmg_compiler:principle(color),!,
+	xmg_brick_mg_compiler:principle(color),!,
 	write_colors(Nodes,Colors,NodesNC),!.
 write_colors_or_not(Nodes,[],Nodes):- !.
 
