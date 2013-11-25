@@ -108,7 +108,7 @@ generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 	put_in_table(List) with (decls(TableIn,TableOut),name(_,_)),
 
 
-	xmg:send(info,Vars),
+	%%xmg:send(info,Vars),
 	generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List) with (decls(Vars,_),name(0,_)),!,
 	%%xmg:send(info,TableOut),
 	generate_classes(T).
@@ -140,7 +140,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	Gen=..[',',Trace,IGenerated],
 
-	xmg:send(info,IGenerated),
+	%%xmg:send(info,IGenerated),
 
 	edcg:edcg_clause(xmg_class:Head, Gen, Clause),
 	xmg:send(info,Clause),

@@ -21,11 +21,14 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-xmg:unfold_expr(token(C,id(ID)),ID):--
-	constraints::enq((ID,id(ID,C))),!.
+%% xmg:unfold_expr(token(C,id(ID)),ID):--
+%% 	constraints::enq(eq(ID,id(ID,C))),!.
 	
 xmg:unfold_expr(token(C,id(ID)),Target):--
-	constraints::enq((Target,id(ID,C))),!.
+	vars::tget(ID,G),
+	constraints::enq(eq(Target,var(ID))),!.
+xmg:unfold_expr(token(C,id(ID)),Target):--
+	constraints::enq(eq(Target,id(ID,C))),!.
 	
  
 unfold('Value',[Value],UValue):-

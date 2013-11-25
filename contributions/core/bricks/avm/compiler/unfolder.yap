@@ -32,8 +32,10 @@ unfold_feats([Feat|Feats], Target) :--
     unfold_feats(Feats, Target).
 
 unfold_feat(avm:feat(F,V), Target) :--
+    xmg:new_target_var(Target1),
     xmg:new_target_var(Target2),
-    constraints::enq((Target,avm:feat(F,Target2))),
+    constraints::enq((Target,avm:feat(Target1,Target2))),
+    xmg:unfold_expr(F, Target1),
     xmg:unfold_expr(V, Target2).
 
 

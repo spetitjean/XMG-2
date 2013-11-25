@@ -9,4 +9,14 @@
 
 :-module(xmg_brick_mg_generator).
 
-xmg:generate_instr((Var,id(ID,C))):-- !.
+xmg:generate_instr(eq(Var,var(ID))):--
+	decls::tget(Var,GV),
+	decls::tget(ID,GV2),
+	Eq=..['=',GV,GV2], 
+	code::enq(Eq),!.
+
+xmg:generate_instr(eq(Var,id(ID,C))):--
+	xmg:send(info,' trying eq '),
+	decls::tget(Var,GV),
+	Eq=..['=',GV,const(ID,C)], 
+	code::enq(Eq),!.

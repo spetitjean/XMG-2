@@ -100,7 +100,7 @@ xmlFeats([A-const(AD,_)|T],[H1|T1]):--
 	    xmlFeats(T,T1),!.
 
 xmlFeats(Feats,_):--
-	xmg_compiler:send(info,Feats),false.
+	xmg:send(info,Feats),false.
 
 
 

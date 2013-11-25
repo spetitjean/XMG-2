@@ -38,9 +38,15 @@ xmg:generate_instr((TN,syn:node)):--
 	AccNode=..['::',xmg_acc:Acc,Put],
 	code::enq(AccNode),
 	!.
-xmg:generate_instr((TN,syn:props(T1))):--
+xmg:generate_instr((N,syn:props(P))):--
+	decls::tget(N,VN),
+	decls::tget(P,VP),
+	code::enq(xmg_brick_syn_engine:inodeprops(VN,VP)),
 	!.
-xmg:generate_instr((TN,syn:feats(T1))):--
+xmg:generate_instr((N,syn:feats(F))):--
+	decls::tget(N,VN),
+	decls::tget(F,VF),
+	code::enq(xmg_brick_syn_engine:inodefeats(VN,VF)),
 	!.
 xmg:generate_instr((syn:dom(N1,Op,N2,C))):--
 

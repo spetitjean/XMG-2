@@ -32,7 +32,8 @@ xmg:generate_instr((Target,avm:avm)) :--
     !.
 xmg:generate_instr((Target,avm:feat(F,Target2))):--
 	decls::tget(Target,Var),
-    code::enq(xmg_brick_avm_avm:avm(Var,[F-Target2])),	
+	decls::tget(Target2,Var2),
+    code::enq(xmg_brick_avm_avm:avm(Var,[F-Var2])),	
     !.
 
 %% new_name(Name,Prefix):--
