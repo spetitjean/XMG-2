@@ -26,13 +26,14 @@
 
 %% SPECIFIC RULES
 
-unfold(mg:mg(E,F,G),mg(UDecls,UClasses,UValues)):-
-	unfold(E,UDecls),
+unfold(mg:mg(Decls,Classes,Values),mg(UDecls,UClasses,UValues)):-
+	xmg_brick_mg_exporter:export_metagrammar(Classes,EClasses),
+	unfold(Decls,UDecls),
 	%%xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
 	%%xmg_compiler:send(info,OUDecls),
-	unfold(F,UClasses),
+	unfold(EClasses,UClasses),
 	%%xmg_brick_mg_compiler:send(info,UClasses),
-	unfold(G,UValues),
+	unfold(Values,UValues),
 	!.
 unfold([],[]):- !.
 unfold([H|T],[H1|T1]):-
@@ -71,7 +72,10 @@ unfold_vars([H|T],[H1|T1]):-
 
 unfold_var(value:var(token(Coord,id(VAR))),id(VAR,Coord)):-
 	!.
-
+unfold_var(value:var_or_const(token(Coord,id(VAR))),id(VAR,Coord)):-
+	!.
+unfold_var(mg:iclass(token(Coord,id(VAR)),AS,_),import(id(VAR,Coord),AS)):-
+	!.
 
 build_context(I,E,D):--
 	add_decls(D),!.
@@ -84,6 +88,16 @@ add_decls([value:var(token(_,id(ID)))|T]):--
 	vars::tput(ID,_),
 	%%xmg_brick_mg_compiler:send(info,T),
 	add_decls(T),!.
+
+
+
+
+
+
+
+
+
+
 
 
 unfold_class(C):--

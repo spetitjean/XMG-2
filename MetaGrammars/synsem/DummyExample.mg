@@ -1,4 +1,5 @@
 class dummy
+export X Y Z
 declare ?X ?Y ?Z
 {
   <syn>{
@@ -21,6 +22,7 @@ declare ?X ?Y ?Z
 }
 
 class dummier
+import dummy[]
 declare ?T
 {
 	<syn>{
@@ -29,3 +31,4 @@ declare ?T
 }
 
 value dummy
+value dummier

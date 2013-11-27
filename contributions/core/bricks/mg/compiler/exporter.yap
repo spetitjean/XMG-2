@@ -22,15 +22,19 @@
 :-dynamic(declared/2).
 :-dynamic(classNumber/1).
 
-export_metagrammar(mg(_,Classes,Values)):-
+export_metagrammar(Classes,OClasses):-
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
 	asserta(classNumber(L)),
 	xmg_brick_mg_compiler:send(info,' ordering classes '),xmg_brick_mg_compiler:send_nl(info),
 	order_classes(Classes,OClasses),!,
 	xmg_brick_mg_compiler:send(info,' classes ordered '),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(info,OClasses),xmg_brick_mg_compiler:send_nl(info),
 	retract(classNumber(L)),
-	export_classes(OClasses).
+	xmg_brick_mg_compiler:send(info,' exporting classes '),xmg_brick_mg_compiler:send_nl(info),
+	export_classes(OClasses),
+	xmg_brick_mg_compiler:send(info,' exported classes '),xmg_brick_mg_compiler:send_nl(info),!.
+
 
 %% Order classes
 
@@ -55,33 +59,41 @@ order_classes([],Classes,Acc,OClasses,Laps):-!,
     ).
 order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps):-
 	(
-	    Mutex=mutex(_)
+	    Mutex=mg:mutex(_)
 	;
-	Mutex=mutex_add(_,_)
+	Mutex=mg:mutex_add(_,_)
     ;
-	Mutex=semantics
+	Mutex=mg:semantics
     ),
 	order_classes(Classes,MClasses,Acc,OClasses,Laps).
 order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps):-
-	%%xmg:send(info,Class),
 	class_before(Class,Acc),!,
 	%%xmg:send(info,Class),
-	Class=class(ClassId,_,_,_,_,_,_),
+	Class=mg:class(token(_,id(ClassId)),_,_,_,_,_),
 	%%xmg:send(info,ClassId),
 	order_classes(Classes,MClasses,[ClassId|Acc],OClasses,Laps).
 order_classes([Class|Classes],MClasses,Acc,OClasses,Laps):-
 	order_classes(Classes,[Class|MClasses],Acc,OClasses,Laps).
 
-class_before(class(_,_,I,_,_,_,_),Acc):-
+class_before(mg:class(_,_,I,_,_,_),Acc):-
 	imports_before(I,Acc).
 
 imports_before([],_):-!.
-imports_before([import(id(H,C),_)|T],Acc):-
-	lists:member(H,Acc),
+imports_before([mg:iclass(token(_,id(Class)),_,_)|T],Acc):-
+	lists:member(Class,Acc),
 	imports_before(T,Acc).
 
+imports_before(none,_):-!.
+imports_before(some(mg:import(I)),Acc):-
+	imports_before(I,Acc),!.
+imports_before(I,Acc):-
+	xmg:send(info,'do not know what to do with '),
+	xmg:send(info,I),
+	xmg:send(info,Acc),
+	false,!.
+
 whatsWrong([],Acc):-!.
-whatsWrong([class(Class,_,I,_,_,_,_)|T],Acc):-
+whatsWrong([mg:class(token(_,id(Class)),_,I,_,_,_)|T],Acc):-
 	xmg_brick_mg_compiler:send(info,' in class '),xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send(info,'\n'),
 	whichImport(I,Acc),!,
 	whatsWrong(T,Acc).
@@ -100,20 +112,45 @@ export_classes([H|T]):-
 	export_class(H),!,
 	export_classes(T).
 
-export_class(class(Name,P,I,E,D,_,_)):-
-	imports_exports(I,E,D,Exps),
-	%%xmg_brick_mg_compiler:send(debug,Exps),
+export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
+	xmg:send(info,'untype '),
+
+	untype([P,I,E,D],[UP,UI,UE,UD]),
+	xmg:send(info,'imports exports '),
+	imports_exports(UI,UE,UD,Exps),
 	%% check exported variables have whether been declared or imported
-	exports_declared(E,Exps,D),!,
-	%% open unification
-	%%lists:append(Exps,E,FExps),	
-	add_vars(Exps,E,FExps),
+	xmg:send(info,[UE,UD]),
+	xmg:send(info,'exports declared '),
+	exports_declared(UE,Exps,UD),!,
+
+	xmg:send(info,'add vars '),
+
+	add_vars(Exps,UE,FExps),
 	asserta(exports(Name,FExps)),
 	%%lists:append(Exps,D,Decls),
-	add_vars_no_duplicates(Exps,D,Decls),
+	add_vars_no_duplicates(Exps,UD,Decls),
 
-	add_vars_no_duplicates(Decls,P,AllDecls),
+	add_vars_no_duplicates(Decls,UP,AllDecls),
 	asserta(declared(Name,AllDecls)),!.
+
+untype([],[]):-!.
+untype([H|T],[H1|T1]):-
+	untype(H,H1),
+	untype(T,T1),!.
+untype(none,[]):-!.
+untype(some(S),US):-
+	S=..[':',mg,MS],
+	MS=..[_,List],
+	untype_one(List,US),!.
+untype_one([],[]):-!.
+untype_one([H|T],[H1|T1]):-
+	untype_part(H,H1),
+	untype_one(T,T1),!.
+
+untype_part(value:var_or_const(token(C,id(ID))),id(ID,C)):-!.
+untype_part(value:var(token(C,id(ID))),id(ID,C)):-!.
+untype_part(mg:iclass(token(_,id(ID)),[],none),import(id(ID,C),[])):-
+	!.
 
 add_vars(Exps,[],Exps).
 add_vars(Exps,[id(H,C)|T],T1):-

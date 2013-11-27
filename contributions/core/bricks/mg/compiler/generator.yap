@@ -104,19 +104,22 @@ generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 
 	xmg_brick_mg_exporter:declared(Class,List),
 
-	xmg_table:table_new(TableIn),
-	put_in_table(List) with (decls(TableIn,TableOut),name(_,_)),
+	%%xmg_table:table_new(TableIn),
+	put_in_table(List) with (decls(Vars,TableOut),name(_,_)),
+	xmg:send(info,TableOut),
+	xmg:send(info,'\n\n'),
 
-
-	%%xmg:send(info,Vars),
-	generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List) with (decls(Vars,_),name(0,_)),!,
+	generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List) with (decls(TableOut,_),name(0,_)),!,
 	%%xmg:send(info,TableOut),
 	generate_classes(T).
 
 generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	
-	%xmg_brick_mg_exporter:declared(Class,List),
+	%%xmg_brick_mg_exporter:declared(Class,List),
 	xmg_brick_mg_exporter:exports(Class,Exports),
+	%%xmg:send(info,Exports),
+	%%xmg:send(info,List),
+
 	list_exports(Exports,List,LExports),
 
 	import_calls(I,List,ICalls),
@@ -182,6 +185,10 @@ import_calls([import(id(Class,C),AS)|T],List,ICalls):--
 	Gen=ICall,
 	import_calls(T,List,T1),
 	ICalls=..[',',Gen,T1],!.
+import_calls([H|T],List,ICalls):--
+	xmg:send(info,' could not call '),
+	xmg:send(info,H),false,!.
+
 
 unify_exports([],_,_,[]):-- !.
 unify_exports([id(ID,C)-_|T],List,AS,[ID-V|T1]):--

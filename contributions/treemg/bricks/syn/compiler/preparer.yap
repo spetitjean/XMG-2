@@ -38,10 +38,10 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% écrire les lits
 	write_lits(SynD,Relations,TableOut),
 
-	xmg:send(info,'here'),
+	%%xmg:send(info,'here'),
 
 
-	%%xmg_compiler:send(debug,NodeNames),
+	%%xmg:send(debug,NodeNames),
 
 	write_colors_or_not(SynD,Colors,SynNC),
 
@@ -54,7 +54,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%%TagOps=[],
 
 	xmg_compiler:unicity(LUnicities),
-	%%xmg_compiler:send(info,LUnicities),
+	%%xmg:send(info,LUnicities),
 	write_unicities(SynNC,LUnicities,Unicities),
 	%%Unicities=[],
 	xmg_table:table_entries(TableOut,TableList),
@@ -296,8 +296,8 @@ count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	J is I+1,
 	xmg_brick_syn_nodename:nodename(N,Nodename),
 	xmg_table:table_get(TableIn,Nodename,_),
-	xmg_compiler:send(info,Nodename),
-	xmg_compiler:send(info,' CONFLICT '),!,
+	xmg:send(info,Nodename),
+	xmg:send(info,' CONFLICT '),!,
 
 	%% this should be done in a better way
 	xmg_brick_syn_nodename:nodename(M,id(new,c)),
@@ -367,12 +367,12 @@ add_constraint(node(_,Feats1,Node1),node(_,Feats2,Node2),L,[noteq(Nodename1,Node
 	xmg_brick_syn_nodename:nodename(Node1,Nodename1),
 	xmg_brick_syn_nodename:nodename(Node2,Nodename2),
 
-	%% xmg_compiler:send(info,Nodename1),
-	%% xmg_compiler:send_nl(info),
-	%% xmg_compiler:send(info,Nodename2),
+	%% xmg:send(info,Nodename1),
+	%% xmg:send_nl(info),
+	%% xmg:send(info,Nodename2),
 	%% xmg_brick_avm_avm:print_avm(Feats1),
 	%% xmg_brick_avm_avm:print_avm(Feats2),
-	%% xmg_compiler:send_nl(info,2),
+	%% xmg:send_nl(info,2),
 	!.
 
 inverse_table([],T,T):-!.
@@ -395,16 +395,16 @@ print_nodes([H|T]):-
 	print_nodes(T),!.
 
 print_node(node(P,F,N)):-
-	xmg_compiler:send(info,node(P,F,N)),
-	xmg_compiler:send_nl(info),
+	xmg:send(info,node(P,F,N)),
+	xmg:send_nl(info),
 	xmg_brick_syn_nodename:nodename(N,Name),
 	xmg_brick_avm_avm:avm(P,AP),
 	xmg_brick_avm_avm:avm(F,AF),
-	xmg_compiler:send(info,Name),
+	xmg:send(info,Name),
 	xmg_brick_avm_avm:print_avm(P),
 	xmg_brick_avm_avm:print_avm(F),
 	
-	xmg_compiler:send_nl(info,2),!.
+	xmg:send_nl(info,2),!.
 print_node(H):-
-	xmg_compiler:send(info,H),
-	xmg_compiler:send_nl(info,2),!.
+	xmg:send(info,H),
+	xmg:send_nl(info,2),!.

@@ -77,8 +77,8 @@ compile_file(File,Eval):-
 	xmg_brick_decls_principles:principles(Unfolded),!,
 	send(info,' priciples done '),
 
-	xmg_brick_mg_exporter:export_metagrammar(Unfolded),!,
-	send(info,' exported '),
+	%%xmg_brick_mg_exporter:export_metagrammar(Unfolded),!,
+	%%send(info,' exported '),
 
 	xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
 
