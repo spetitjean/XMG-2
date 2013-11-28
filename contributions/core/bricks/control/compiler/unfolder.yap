@@ -42,14 +42,26 @@ xmg:unfold_stmt(control:dimStmt(Dim,E2)):--
 	%%xmg_brick_mg_compiler:send(info,E2),
 	xmg:unfold_dimstmt(Dim,E2), %% in brick_unfolder_syn pour Dim=syn
 	!.
+xmg:unfold_stmt(control:eq(E1,E2)):--
+	xmg:new_target_var(V1),
+	xmg:new_target_var(V2),	
+	xmg:unfold_expr(E1,V1),
+	xmg:unfold_expr(E2,V2),
+	constraints::enq(eq(V1,V2)),
+	!.
 xmg:unfold_stmt(control:call(Class,Params)):--
 	xmg:new_target_var(CT),
-	xmg:unfold_expr(Class,UClass),
-	xmg:unfold_exprs(Params, Params2),
-	constraints::enq((CT,control:call(UClass,Params2))),
+	xmg:unfold_expr(Class,CT),
+	xmg:unfold_exprs(Params, P),
+	constraints::enq((control:call(CT,P))),
 	!.
 xmg:unfold_stmt(none):-- !.
 
+xmg:unfold_expr(control:call(token(_,id(Class)),Params),Target):--
+	%%xmg:unfold_expr(Class,CT),
+	xmg:unfold_exprs(Params, P),
+	constraints::enq((Target,control:call(Class,P))),
+	!.
 
 
 %% unfold('Stmts',[Stmt1,token(_,';'),Stmt2],conj(UStmt1,UStmt2)):- !,

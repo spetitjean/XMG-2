@@ -39,8 +39,11 @@ xmg:generate_instr(indim(Dim,Acc)):--
 	code::enq(xmg_acc:Dim::enq(Acc)),!.
 
 xmg:generate_instr((Var,control:call(Class,Params))):--
-	Call=..[Class,Params,_,_],
-	Instr=..['=',Var,Call],
+	decls::tget(Var,GV),
+	
+	Call=..[Class,params(Params),exports(_)],
+	code::enq(xmg_class:Call),
+	Instr=..['=',GV,GC],
 	code::enq(Instr),!.
 
 
