@@ -22,3 +22,4 @@
 
 :-use_module('xmg/brick/control/compiler/unfolder').
 :-use_module('xmg/brick/control/compiler/generator').
+:-use_module('xmg/brick/control/compiler/explorer').

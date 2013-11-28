@@ -22,9 +22,10 @@ declare ?X ?Y ?Z
 }
 
 class dummier
-import dummy[]
-declare ?T
+%%import dummy[]
+declare ?T ?C
 {
+	?C=dummy[];
 	<syn>{
 		node ?T (color=blue) [cat=whatever]
 		}

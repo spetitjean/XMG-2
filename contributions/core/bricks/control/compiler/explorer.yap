@@ -19,3 +19,30 @@
 
 :-module(xmg_brick_control_explorer).
 
+:-edcg:using(xmg_brick_mg_explorer:calls).
+
+xmg:find_calls(control:and(S1,S2)):--
+	xmg:find_calls(S1),
+	xmg:find_calls(S2),!.
+xmg:find_calls(control:or(S1,S2)):--
+	xmg:find_calls(S1),
+	xmg:find_calls(S2),!.
+
+xmg:find_calls(control:stmt(S1,S2)):--
+	%%xmg:send(info,S1),
+	xmg:find_calls(S1),!.
+
+xmg:find_calls(control:eq(E1,E2)):--
+	xmg:find_calls(E1),
+	xmg:find_calls(E2),
+	!.
+
+xmg:find_calls(control:dot(E1,E2)):--
+	xmg:find_calls(E1),
+	!.
+
+xmg:find_calls(control:call(token(_,id(Class)),Params)):--!,
+	calls::enq(Class),
+	!.
+
+xmg:find_calls(_):-- !.
