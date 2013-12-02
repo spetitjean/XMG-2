@@ -27,10 +27,10 @@ declare ?T ?C
 {
 	?C=dummy[];
 	<syn>{
-		node ?T (color=blue) %%[cat=whatever]
+		node ?T %%(color=blue) %%[cat=whatever]
 		}
-		%%;
-	%%?T=?C.?X
+		;
+	?T=?C.?X
 }
 
 value dummy

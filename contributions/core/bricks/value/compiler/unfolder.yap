@@ -24,8 +24,10 @@
 	
 xmg:unfold_expr(token(C,id(ID)),ID):--
 	vars::tget(ID,G),!.
-xmg:unfold_expr(token(C,id(ID)),Target):--
-	constraints::enq(eq(Target,id(ID,C))),!.
+xmg:unfold_expr(token(C,id(ID)),id(ID,C)):--
+	xmg:send(info,'\n\n WARNING : '),
+	xmg:send(info,ID),
+	!.
 	
 
  

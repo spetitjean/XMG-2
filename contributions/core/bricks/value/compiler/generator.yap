@@ -1,3 +1,8 @@
+%% -*- prolog -*-
+
+%% ========================================================================
+%% Copyright (C) 2013  Simon Petitjean
+
 %%  This program is distributed in the hope that it will be useful,
 %%  but WITHOUT ANY WARRANTY; without even the implied warranty of
 %%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,13 +18,21 @@ xmg:generate_instr(eq(Var,var(ID))):--
 	decls::tget(Var,GV),
 	decls::tget(ID,GV2),
 	Eq=..['=',GV,GV2], 
-	code::enq(Eq),!.
+
+	code::enq(Eq),
+
+	!.
 
 xmg:generate_instr(eq(Var,Var2)):--
 	decls::tget(Var,GV),
 	decls::tget(Var2,GV2),
 	Eq=..['=',GV,GV2], 
-	code::enq(Eq),!.
+
+
+	code::enq(Eq),
+
+	code::enq(xmg:send(info,' eq done ')),
+!.
 
 xmg:generate_instr(eq(Var,id(ID,C))):--
 	%%xmg:send(info,' trying eq '),

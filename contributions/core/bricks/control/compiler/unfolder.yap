@@ -45,6 +45,7 @@ xmg:unfold_stmt(control:dimStmt(Dim,E2)):--
 xmg:unfold_stmt(control:eq(E1,E2)):--
 	%%xmg:new_target_var(V1),
 	%%xmg:new_target_var(V2),
+	xmg:send(info,'\n\n'),
 	xmg:send(info,E1),
 	xmg:send(info,E2),
 	

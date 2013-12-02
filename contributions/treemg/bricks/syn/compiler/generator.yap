@@ -32,7 +32,7 @@
 xmg:generate_instr((TN,syn:node)):--
 	decls::tget(TN,TV),
 	%%xmg:send(info,TV),
-	code::enq(xmg_brick_syn_engine:inode(TV,TN)),
+	code::enq(xmg_brick_syn_engine:inode(TV,id(TN,_))),
 	Put=..[put,TV],
 	Acc='syn',
 	AccNode=..['::',xmg_acc:Acc,Put],
