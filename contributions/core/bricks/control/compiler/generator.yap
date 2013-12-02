@@ -46,6 +46,13 @@ xmg:generate_instr((Var,control:call(Class,Params))):--
 	Instr=..['=',GV,GC],
 	code::enq(Instr),!.
 
+xmg:generate_instr((Var,control:dot(Class,CVar))):--
+	decls::tget(Var,GV),
+	decls::tget(Class,GC),
+	decls::tget(CVar,GCVar),
+	
+	code::enq(lists:member(CVar-GV,GC)),!.
+
 
 
 
