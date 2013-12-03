@@ -27,11 +27,11 @@
 %% SPECIFIC RULES
 
 unfold(mg:mg(Decls,Classes,Values),mg(UDecls,UClasses,UValues)):-
-	xmg_brick_mg_exporter:export_metagrammar(Classes,EClasses),
+	%%xmg_brick_mg_exporter:export_metagrammar(Classes,EClasses),
 	unfold(Decls,UDecls),
 	%%xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
 	%%xmg_compiler:send(info,OUDecls),
-	unfold(EClasses,UClasses),
+	unfold(Classes,UClasses),
 	%%xmg_brick_mg_compiler:send(info,UClasses),
 	unfold(Values,UValues),
 	!.
