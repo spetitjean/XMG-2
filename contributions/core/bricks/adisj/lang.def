@@ -1,7 +1,7 @@
 
 %%
 
-ADISJ : '@' '{' (Val // ',')+ '}' {$$=adisj($3)} ;
+ADISJ : '@' '{' (Val // ',')+ '}' {$$=adisj:adisj($3)} ;
 
 Val : id {$$=$1}
     | int {$$=$1}

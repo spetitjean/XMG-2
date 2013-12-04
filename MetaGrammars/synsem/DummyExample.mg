@@ -15,7 +15,7 @@ export X Y Z
 declare ?X ?Y ?Z
 {
   <syn>{
-	node ?X [cat=s];
+	node ?X [cat=@{s,n}];
 	node ?Y [cat=n];
 	node ?Z [cat=v];
 	?X -> ?Y;

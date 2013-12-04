@@ -32,6 +32,7 @@ new_name(Prefixe, Name) :--
 
 xmlFeats([],[]):-- !.
 
+
 xmlFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))|T1]):--
 	atom(V),
 	xmlFeats(T,T1),!.
@@ -82,6 +83,22 @@ xmlFeats([A-sconst(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,feat
 	var(V),
 	new_name('!C',V),
 	xmlFeats(T,T1),!.
+
+xmlFeats([A-AD|T],[H1|T1]):--
+	%%write(AD),
+	xmg_brick_adisj_adisj:adisj(AD,LAD),
+	xmg_brick_adisj_adisj:const_adisj(AD,CLAD),!,
+	((
+	    var(CLAD),!,
+	    new_name('@AD',CLAD),
+	    xmlAdisj(LAD,LAD1),
+	    H1=elem(f, features([name-A]),children([elem(vAlt, features([coref-CLAD]),children(LAD1))]))
+	)
+    ;
+	(
+	    !,H1=elem(f, features([name-A]),children([elem(vAlt, features([coref-CLAD]))]))
+	)),
+	    xmlFeats(T,T1),!.
 
 xmlFeats([A-const(AD,_)|T],[H1|T1]):--
 	%%write(AD),
