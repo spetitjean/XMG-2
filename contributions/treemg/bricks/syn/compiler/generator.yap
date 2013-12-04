@@ -29,12 +29,12 @@
 :-edcg:weave([decls,name], [new_name/2,var_Stmt/3,var_or_const/2,generate_Stmt/5]).
 
 
-xmg:generate_instr((TN,syn:node)):--
+xmg:generate_instr((TN,syn:node,Syn)):--
 	decls::tget(TN,TV),
 	%%xmg:send(info,TV),
 	code::enq(xmg_brick_syn_engine:inode(TV,id(TN,_))),
 	Put=..[put,TV],
-	Acc='syn',
+	Acc=Syn,
 	AccNode=..['::',xmg_acc:Acc,Put],
 	code::enq(AccNode),
 	!.
@@ -48,14 +48,23 @@ xmg:generate_instr((N,syn:feats(F))):--
 	decls::tget(F,VF),
 	code::enq(xmg_brick_syn_engine:inodefeats(VN,VF)),
 	!.
-xmg:generate_instr((syn:dom(N1,Op,N2,C))):--
+xmg:generate_instr((syn:dom(N1,Op,N2,C),Syn)):--
 
 	decls::tget(N1,V1),
 	decls::tget(N2,V2),
 	Put=..[put,dom(V1,Op,V2,C)],
-	Acc='syn',
+	Acc=Syn,
 	AccDom=..['::',xmg_acc:Acc,Put],
 	code::enq(AccDom),	
+	!.
+xmg:generate_instr((syn:prec(N1,Op,N2,C),Syn)):--
+
+	decls::tget(N1,V1),
+	decls::tget(N2,V2),
+	Put=..[put,prec(V1,Op,V2,C)],
+	Acc=Syn,
+	AccPrec=..['::',xmg_acc:Acc,Put],
+	code::enq(AccPrec),	
 	!.
 
 

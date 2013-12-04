@@ -83,7 +83,7 @@ order_classes([Class|Classes],MClasses,Acc,OClasses,Laps,Calls):-
 class_before(mg:class(token(_,id(Class)),_,I,_,_,_),Acc,Calls):-
 	imports_before(I,Acc),
 	lists:member((Class,CCall),Calls),
-	calls_before(CCalls,Acc).
+	calls_before(CCall,Acc).
 
 imports_before([],_):-!.
 imports_before([mg:iclass(token(_,id(Class)),_,_)|T],Acc):-

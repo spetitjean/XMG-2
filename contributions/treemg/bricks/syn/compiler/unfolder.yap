@@ -53,7 +53,7 @@ xmg:unfold_dimstmt(Syn,syn:S1):--
 xmg:unfold_dimstmt(Syn,syn:node(N,P,F)):-- 
 	xmg:unfold_expr(N,TN),
 	
-	constraints::enq((TN,syn:node)),
+	constraints::enq((TN,syn:node,Syn)),
 	%%constraints::enq(indim(Syn,TN)),
 	xmg:new_target_var(T1),
 	xmg:new_target_var(T2),
@@ -64,12 +64,17 @@ xmg:unfold_dimstmt(Syn,syn:node(N,P,F)):--
 	xmg:unfold_expr(F,T2),
 	constraints::enq((TN,syn:feats(T2))),
 	!.
-xmg:unfold_dimstmt(Syn,dom(token(_,Op),N1,N2)):-- 
+xmg:unfold_dimstmt(Syn,syn:dom(token(_,Op),N1,N2)):-- 
 	%%xmg:new_target_var(T1),
 	%%xmg:new_target_var(T2),
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((syn:dom(T1,Op,T2,C))),
+	constraints::enq((syn:dom(T1,Op,T2,C),Syn)),
+	!.
+xmg:unfold_dimstmt(Syn,syn:prec(token(_,Op),N1,N2)):-- 
+	xmg:unfold_expr(N1,T1),
+	xmg:unfold_expr(N2,T2),
+	constraints::enq((syn:prec(T1,Op,T2,C),Syn)),
 	!.
 
 xmg:unfold_expr(none,_):-- !.

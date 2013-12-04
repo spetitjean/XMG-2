@@ -1,3 +1,15 @@
+class dummier
+%%import dummy[]
+declare ?T ?C
+{
+	?C=dummy[];
+	<syn>{
+		node ?T (color=blue) %%[cat=whatever]
+		}
+		;
+	?T=?C.?X
+}
+
 class dummy
 export X Y Z
 declare ?X ?Y ?Z
@@ -7,7 +19,8 @@ declare ?X ?Y ?Z
 	node ?Y [cat=n];
 	node ?Z [cat=v];
 	?X -> ?Y;
-	?X -> ?Z
+	?X -> ?Z;
+	?Y >> ?Z
   }
   |
   
@@ -21,17 +34,7 @@ declare ?X ?Y ?Z
  }
 }
 
-class dummier
-%%import dummy[]
-declare ?T ?C
-{
-	?C=dummy[];
-	<syn>{
-		node ?T %%(color=blue) %%[cat=whatever]
-		}
-		;
-	?T=?C.?X
-}
+
 
 value dummy
 value dummier
