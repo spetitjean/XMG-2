@@ -3,7 +3,6 @@
 %token edge
 
 %type Var Var
-%type Ids Ids
 %type FrameStmts FrameStmts
 %type FrameStmt FrameStmt
 %type Node Node
@@ -13,10 +12,8 @@
 %type PropChild PropChild
 %type Child Child
 
-%type MaybeId MaybeId
 %type MaybeProps MaybeProps
 %type Props Props
-%type Feats Feats
 %type Feat Feat
 %type Eq Eq
 %type Edge Edge
@@ -41,7 +38,7 @@ Node : node (Var)? MaybeProps (AVM)? {$$=frame:node($2,$3,$4)};
 Tree : Node '{' Children '}' {$$=frame:tree($1,$3)};
 
 Children : PropChild {$$=frame:children($1,none)}
-	 | PropChild Children {$$=frame:children($1,brothers($2,$3))};
+	 | PropChild Children {$$=frame:children($1,brothers($2))};
 
 PropChild : MaybeProps Child {$$=frame:propchild($1,$2)};
 
