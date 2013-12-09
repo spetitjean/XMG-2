@@ -4,17 +4,14 @@
 %type Hierarchy Hierarchy
 %type HierarchyDef HierarchyDef
 
-%type id_pairs id_pairs
 %type id_pair id_pair
 
 %%
 
-Hierarchy : hierarchy id '=' HierarchyDef;
+Hierarchy : hierarchy id '=' HierarchyDef {hierarchy:hierarchy($2,$4) };
 
-HierarchyDef : '{' id_pairs '}';
+HierarchyDef : '{' (id_pair // ',')+ '}' {$$=$2};
 
-id_pairs : id_pair | id_pair ',' id_pairs;
-
-id_pair : '(' id ',' id ')';
+id_pair : '(' id ',' id ')' {$$=frame:pair($2,$4)} ;
 
 %%
