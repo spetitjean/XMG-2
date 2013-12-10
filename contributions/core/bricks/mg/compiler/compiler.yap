@@ -81,7 +81,7 @@ compile_file(File,Eval):-
 	%%send(info,Unfolded),
 	send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
-	send(info,' priciples done '),
+	send(info,' principles done '),
 
 
 

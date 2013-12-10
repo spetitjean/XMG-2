@@ -27,11 +27,14 @@
 
 %% SPECIFIC RULES
 
-unfold(mg:mg(Decls,Classes,Values),mg(UDecls,UClasses,UValues)):-
+unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):-
 	xmg:send(info,' unfolding decls '),
 	xmg:unfold(Decls,UDecls),
-	%%xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
+	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),
 	%%xmg_compiler:send(info,OUDecls),
+	xmg:send(info,' \n\n checking types in classes \n'),
+	xmg_brick_mg_typer:type_classes(Classes),
+
 	xmg:send(info,' unfolding classes '),
 	xmg:send(info,Classes),
 	xmg:unfold(Classes,UClasses),

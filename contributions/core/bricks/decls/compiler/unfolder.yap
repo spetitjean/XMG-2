@@ -34,12 +34,14 @@ find(Head,[H|T],T1,[H|Rest]):-
 	find(Head,T,T1,Rest),!.
 
 
-xmg:unfold(decls:type(token(_,id(UType)),TypeDef),type(UType,UTypeDef)):-
+xmg:unfold(decls:type(token(_,id(UType)),TypeDef),type(UType,UTypeDef)):-	
 	unfold_typedef(TypeDef,UTypeDef),!.
 xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),Rename),type(UProp,UPropType)):-
 	!.
 xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 	unfold_id_or_constr(Pr,UPr),
+	xmg:send(info,Args),
+
 	unfold_args(Args,UArgs),
 	unfold_dims(Dims,UDims),
 	!.
@@ -62,6 +64,8 @@ unfold_enum([token(_,id(V))|T],[V|T1]):-
 	unfold_enum(T,T1),!.
 unfold_args([],[]):- !.
 unfold_args([token(_,id(V))|T],[V|T1]):-
+	unfold_args(T,T1),!.
+unfold_args([decls:principle_type(token(_,id(P1)))|T],[type(P1)|T1]):-
 	unfold_args(T,T1),!.
 unfold_dims([],[]):- !.
 unfold_dims([token(_,id(V))|T],[V|T1]):-

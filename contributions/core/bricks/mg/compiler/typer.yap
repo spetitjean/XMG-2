@@ -24,6 +24,35 @@
 :-dynamic(fieldprec/2).
 :-dynamic(feat/2).
 
+:-edcg:thread(types,edcg:table).
+:-edcg:weave([types],[type_stmt/1,put_in_table/1]).
+
+type_classes([]):--
+	!.
+type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
+	!,
+	xmg_brick_mg_exporter:declared(N,List),
+	xmg_table:table_new(TableIn),
+	put_in_table(List) with types(TableIn,TableOut),
+	type_stmt(S) with types(TableOut,_),
+	type_classes(T),!.
+type_classes([_|T]):--
+	type_classes(T),!.
+
+
+type_stmt(S):--
+	xmg:send(info,'\n\n'),
+	xmg:send(info,S),!.
+
+put_in_table([]):-- !.
+put_in_table([id(A,_)-B|T]):--
+	types::tput(A,var(B,Type)),
+	put_in_table(T),!.
+put_in_table([const(A,_)-const(N,_)|T]):--
+	%% skolemize ?
+	types::tput(A,sconst(N,_)),
+	put_in_table(T),!.
+
 %% type_metagrammar('MetaGrammar'(decls(Principles,Types,Properties,Feats,Fields,FieldPrecs),_,_)):-
 	
 %% 	%%xmg_brick_mg_compiler:send(info,'types : '),
@@ -41,6 +70,7 @@
 type_metagrammar(mg(Decls,_,_)):-
 	G=[gather(field,fieldprec,fields)],
 	gather_decls(Decls,G,GDecls),
+	xmg:send(info,' decls gathered '),
 	type_decls(GDecls),!.
 
 gather_decls(Decls,[],Decls):- !.
@@ -62,6 +92,7 @@ gather_one(Decls,_,Decls):-!.
 
 type_decls([]):- !.
 type_decls([H|T]):-
+	xmg:send(info,H),
 	type_decl(H),!,
 	type_decls(T),!.
 
