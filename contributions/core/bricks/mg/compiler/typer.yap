@@ -24,8 +24,10 @@
 :-dynamic(fieldprec/2).
 :-dynamic(feat/2).
 
+:-multifile(xmg:type_stmt/3).
+
 :-edcg:thread(types,edcg:table).
-:-edcg:weave([types],[type_stmt/1,put_in_table/1]).
+:-edcg:weave([types],[xmg:type_stmt/1,put_in_table/1]).
 
 type_classes([]):--
 	!.
@@ -34,15 +36,11 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	xmg_brick_mg_exporter:declared(N,List),
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with types(TableIn,TableOut),
-	type_stmt(S) with types(TableOut,_),
+	xmg:type_stmt(S) with types(TableOut,_),
 	type_classes(T),!.
 type_classes([_|T]):--
 	type_classes(T),!.
 
-
-type_stmt(S):--
-	xmg:send(info,'\n\n'),
-	xmg:send(info,S),!.
 
 put_in_table([]):-- !.
 put_in_table([id(A,_)-B|T]):--
