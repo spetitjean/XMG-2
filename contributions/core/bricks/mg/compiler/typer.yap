@@ -65,9 +65,10 @@ put_in_table([const(A,_)-const(N,_)|T]):--
 %% 	type_fields(OFields,1),
 %% 	xmg_brick_mg_compiler:send(info,' typed').
 
-type_metagrammar(mg(Decls,_,_)):-
+type_mg_decls(Decls):-
+	xmg:send(info,Decls),
 	G=[gather(field,fieldprec,fields)],
-	gather_decls(Decls,G,GDecls),
+	gather_decls(Decls,G,GDecls),!,
 	xmg:send(info,' decls gathered '),
 	type_decls(GDecls),!.
 
@@ -90,7 +91,7 @@ gather_one(Decls,_,Decls):-!.
 
 type_decls([]):- !.
 type_decls([H|T]):-
-	xmg:send(info,H),
+	%%xmg:send(info,H),
 	type_decl(H),!,
 	type_decls(T),!.
 
@@ -105,6 +106,7 @@ type_decl(property-Decls):-
 type_decl(feat-Decls):-
 	type_feats(Decls),!.
 type_decl(principle-Principle):-
+	type_principles(Principle),
 	!.
 type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):-
 	assert_field_precs(FieldPrecs),
@@ -123,6 +125,9 @@ type_decl(Type-Decls):-
 
 get_types([]).
 get_types([H|T]):-
+	xmg:send(info,'\n\nassert\n '),
+	xmg:send(info,H),
+	
 	get_type(H),
 	get_types(T).
 
@@ -133,6 +138,8 @@ get_type(type(Type,range(Inf,Sup))):-
 	asserta(type(Type,Range)).
 get_type(type(Type,label)):-
 	asserta(type(Type,label)),!.
+get_type(type(Type,struct(Obl,Opt,More))):-
+	asserta(type(Type,struct(Obl,Opt,More))),!.
 get_type(A):-
 	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
 
@@ -158,6 +165,15 @@ type_properties([H|T]):-
 
 type_property(property(G,T,_)):-
 	asserta(property(G,T)).
+
+type_principles([]).
+type_principles([H|T]):-
+	xmg:send(info,H),
+	type_principle(H),
+	type_principles(T).
+
+type_principle(principle(G,T,_)):-
+	asserta(principle(G,T)).
 
 assert_field_precs([]):- !.
 assert_field_precs([fieldprec(id(F1,_),id(F2,_))|T]):- 

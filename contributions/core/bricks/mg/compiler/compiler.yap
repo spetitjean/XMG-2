@@ -85,9 +85,9 @@ compile_file(File,Eval):-
 
 
 
-	xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
+	%%xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
 
-	send(info,' typed '),
+	%%send(info,' typed '),
 
 	xmg_brick_mg_generator:generate(Unfolded),!,
 	send_nl(info),	

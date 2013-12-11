@@ -36,7 +36,7 @@ find(Head,[H|T],T1,[H|Rest]):-
 
 xmg:unfold(decls:type(token(_,id(UType)),TypeDef),type(UType,UTypeDef)):-	
 	unfold_typedef(TypeDef,UTypeDef),!.
-xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),Rename),type(UProp,UPropType)):-
+xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),Rename),property(UProp,UPropType,none)):-
 	!.
 xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 	unfold_id_or_constr(Pr,UPr),
@@ -84,7 +84,7 @@ unfold_more(none,no):- !.
 unfold_more(_,yes):- !.
 
 unfold_id_or_constr(token(_,id(ID)),ID):- !.
-unfold_id_or_constr(decls:constructor(Dim,Constr),constructor(Dim,Constr)):- !.
+unfold_id_or_constr(decls:constructor(token(_,id(Dim)),token(_,Constr)),constructor(Dim,Constr)):- !.
 
 
 %% SPECIFIC RULES
