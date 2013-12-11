@@ -21,5 +21,9 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
+xmg:type_expr(avm:avm(Coord,Feats),Type):--
+	!.
+	
+
 
 

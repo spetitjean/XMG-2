@@ -25,9 +25,25 @@
 :-dynamic(feat/2).
 
 :-multifile(xmg:type_stmt/3).
+:-multifile(xmg:type_expr/4).
 
 :-edcg:thread(types,edcg:table).
-:-edcg:weave([types],[xmg:type_stmt/1,put_in_table/1,xmg:get_var_type/2]).
+:-edcg:weave([types],[xmg:type_stmt/1,xmg:type_expr/2,put_in_table/1,xmg:get_var_type/2]).
+
+xmg:check_types(T1,T1,Coord):- !.
+xmg:check_types(T1,T2,Coord):- 
+	not(T1=T2),
+	xmg:send(info,' incompatible types:'),
+	xmg:send(info,T1),
+	xmg:send(info,', '),
+	xmg:send(info,T2),
+	xmg:send(info,', '),
+	xmg:send(info,Coord),
+	!.
+
+xmg:type_expr(none,_):-- !.
+xmg:type_expr(some(E),T):-- 
+	xmg:type_expr(E,T),!.
 
 xmg:get_var_type(none,_):-- !.
 xmg:get_var_type(some(token(_,id(ID))),Var):-- 

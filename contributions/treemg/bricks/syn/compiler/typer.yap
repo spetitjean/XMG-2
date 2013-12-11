@@ -35,28 +35,37 @@ xmg:type_stmt(syn:or(S1,S2)):--
 xmg:type_stmt(syn:node(ID,Props,Feats)):--
 	%%get principle type
 	%%here, we need the dimension... 
-	xmg:principle(constructor(syn,node),Args,Dims),
+	xmg:principle(constructor(syn,node),[PropType,FeatType],Dims),
 	%% this syn should ba a variable
 	lists:member(syn,Dims),
-	xmg:send(info,Args),
+	%%xmg:send(info,FeatType),
+	%%xmg:send(info,Feats),
 	%%check props
 	%%check feats
+	xmg:type_expr(Feats,FType),
+	xmg:check_types(FType,FeatType,Coord),
+
 	xmg:get_var_type(ID,Type),
-	Type=syn:node,
+	xmg:check_types(Type,syn:node,Coord),
 	!.
 
 xmg:type_stmt(syn:dom(Dom,N1,N2)):--
-	xmg:get_var_type(ID,syn:node),
-	xmg:get_var_type(ID,syn:node),
+	xmg:get_var_type(N1,V1),
+	xmg:check_types(V1,syn:node,Coord),
+	xmg:get_var_type(N2,V2),
+	xmg:check_types(V2,syn:node,Coord),
 	!.
 
 xmg:type_stmt(syn:prec(Prec,N1,N2)):--
-	xmg:get_var_type(ID,syn:node),
-	xmg:get_var_type(ID,syn:node),
+	xmg:get_var_type(N1,V1),
+	xmg:check_types(V1,syn:node,Coord),
+	xmg:get_var_type(N2,V2),
+	xmg:check_types(V2,syn:node,Coord),
 	!.
 
 xmg:type_stmt(syn:eq(S1,S2)):--
-	xmg:get_var_type(ID,Type),
-	xmg:get_var_type(ID,Type),
+	xmg:get_var_type(S1,V1),
+	xmg:get_var_type(S2,V2),
+	xmg:check_types(V1,V2,Coord),
 	!.
 
