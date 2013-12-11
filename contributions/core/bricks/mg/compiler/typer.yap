@@ -27,7 +27,17 @@
 :-multifile(xmg:type_stmt/3).
 
 :-edcg:thread(types,edcg:table).
-:-edcg:weave([types],[xmg:type_stmt/1,put_in_table/1]).
+:-edcg:weave([types],[xmg:type_stmt/1,put_in_table/1,xmg:get_var_type/2]).
+
+xmg:get_var_type(none,_):-- !.
+xmg:get_var_type(some(token(_,id(ID))),Var):-- 
+	types::tget(ID,var(_,Var)),!.
+xmg:get_var_type(Get,_):--
+	xmg:send(info,'could not get type for var '),
+	xmg:send(info,Get),
+	false,
+	!.
+
 
 type_classes([]):--
 	!.
@@ -36,6 +46,8 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	xmg_brick_mg_exporter:declared(N,List),
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with types(TableIn,TableOut),
+	%%xmg:send(info,'\nTypes table:'),
+	%%xmg:send(info,TableOut),
 	xmg:type_stmt(S) with types(TableOut,_),
 	type_classes(T),!.
 type_classes([_|T]):--
