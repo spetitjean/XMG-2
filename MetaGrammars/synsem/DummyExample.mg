@@ -3,6 +3,7 @@ property color : COLOR
 use color with () dims (syn) %args (COLOR)
 
 type CAT = {v,n,s}
+type CAT = {t}
 %%feature cat : CAT
 
 type node_feats = [|cat:CAT]

@@ -125,23 +125,56 @@ type_decl(Type-Decls):-
 
 get_types([]).
 get_types([H|T]):-
-	xmg:send(info,'\n\nassert\n '),
-	xmg:send(info,H),
-	
 	get_type(H),
 	get_types(T).
 
 get_type(type(Type,enum(List))):-
-	asserta(type(Type,List)).
+	assert_type(type(Type,List)).
 get_type(type(Type,range(Inf,Sup))):-
 	get_range(Inf,Sup,Range),
-	asserta(type(Type,Range)).
+	assert_type(type(Type,Range)).
 get_type(type(Type,label)):-
-	asserta(type(Type,label)),!.
+	assert_type(type(Type,label)),!.
 get_type(type(Type,struct(Obl,Opt,More))):-
-	asserta(type(Type,struct(Obl,Opt,More))),!.
-get_type(A):-
-	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
+	get_feat_types(Obl),
+	get_feat_types(Opt),
+	assert_type(type(Type,struct(Obl,Opt,More))),!.
+%% get_type(A):-
+%% 	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
+
+get_feat_types([]):- !.
+get_feat_types([H|T]):-
+	get_feat_type(H),
+	get_feat_types(T),!.
+
+get_feat_type(F-T):-
+	assert_feat(feat(F,T)),!.
+
+assert_type(type(Id,Type)):-
+	type(Id,Type),!.
+assert_type(type(Id,Type)):-
+	type(Id,T),not(T=Type),!,
+	xmg:send(info,'\n Multiple definition of type '),
+	xmg:send(info,Id),
+	false,!.
+assert_type(type(Id,Type)):-
+	not(type(Id,_)),
+	xmg:send(info,'\n\nassert type\n '),
+	xmg:send(info,Id),
+	asserta(xmg:type(Id,Type)),!.
+
+assert_feat(feat(Id,Type)):-
+	type(Id,Type),!.
+assert_feat(feat(Id,Type)):-
+	feat(Id,T),not(T=Type),!,
+	xmg:send(info,'\n Multiple definition of feature '),
+	xmg:send(info,Id),
+	false,!.
+assert_feat(feat(Id,Type)):-
+	not(feat(Id,_)),
+	xmg:send(info,'\n\nassert feat \n '),
+	xmg:send(info,Id),
+	asserta(xmg:feat(Id,Type)),!.
 
 get_hierarchies([]):-!.
 get_hierarchies([H|T]):-
@@ -156,7 +189,7 @@ type_feats([H|T]):-
 	type_feats(T).
 
 type_feat(feat(G,T)):-
-	asserta(feat(G,T)).
+	assert_feat(feat(G,T)).
 
 type_properties([]).
 type_properties([H|T]):-
@@ -168,12 +201,11 @@ type_property(property(G,T,_)):-
 
 type_principles([]).
 type_principles([H|T]):-
-	xmg:send(info,H),
 	type_principle(H),
 	type_principles(T).
 
-type_principle(principle(G,T,_)):-
-	asserta(principle(G,T)).
+type_principle(principle(Principle,Args,Dims)):-
+	asserta(xmg:principle(Principle,Args,Dims)).
 
 assert_field_precs([]):- !.
 assert_field_precs([fieldprec(id(F1,_),id(F2,_))|T]):- 
