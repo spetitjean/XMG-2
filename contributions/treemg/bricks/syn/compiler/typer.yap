@@ -33,17 +33,30 @@ xmg:type_stmt(syn:or(S1,S2)):--
 	xmg:type_stmt(S2),!.	
 
 xmg:type_stmt(syn:node(ID,Props,Feats)):--
+	%%get principle type
+	%%here, we need the dimension... 
+	xmg:principle(constructor(syn,node),Args,Dims),
+	%% this syn should ba a variable
+	lists:member(syn,Dims),
+	xmg:send(info,Args),
+	%%check props
+	%%check feats
 	xmg:get_var_type(ID,Type),
-	xmg:send(info,Type),
 	Type=syn:node,
 	!.
 
 xmg:type_stmt(syn:dom(Dom,N1,N2)):--
+	xmg:get_var_type(ID,syn:node),
+	xmg:get_var_type(ID,syn:node),
 	!.
 
 xmg:type_stmt(syn:prec(Prec,N1,N2)):--
+	xmg:get_var_type(ID,syn:node),
+	xmg:get_var_type(ID,syn:node),
 	!.
 
 xmg:type_stmt(syn:eq(S1,S2)):--
+	xmg:get_var_type(ID,Type),
+	xmg:get_var_type(ID,Type),
 	!.
 

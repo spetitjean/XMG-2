@@ -48,7 +48,10 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	put_in_table(List) with types(TableIn,TableOut),
 	%%xmg:send(info,'\nTypes table:'),
 	%%xmg:send(info,TableOut),
-	xmg:type_stmt(S) with types(TableOut,_),
+	xmg:type_stmt(S) with types(TableOut,TypedTable),
+	xmg:send(info,'\nTyped table:'),
+	xmg:send(info,TypedTable),
+	xmg:send(info,'\n\n'),
 	type_classes(T),!.
 type_classes([_|T]):--
 	type_classes(T),!.
@@ -216,7 +219,7 @@ type_principles([H|T]):-
 	type_principle(H),
 	type_principles(T).
 
-type_principle(principle(Principle,Args,Dims)):-
+type_principle(principle(Principle,Args,Dims)):-	
 	asserta(xmg:principle(Principle,Args,Dims)).
 
 assert_field_precs([]):- !.
