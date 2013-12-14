@@ -1,4 +1,4 @@
-:- module(xmg_bricks_tag_tag, []).
+:- module(xmg_bricks_tag_solver, []).
 
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
