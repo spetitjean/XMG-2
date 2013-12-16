@@ -44,6 +44,7 @@ xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 
 	unfold_args(Args,UArgs),
 	unfold_dims(Dims,UDims),
+	asserta(xmg:principle(UPr)),
 	!.
 
 unfold_typedef(decls:enum(Enum),enum(UEnum)):-
