@@ -19,13 +19,12 @@
 
 :- module(xmg_brick_tree_preparer, []).
 
-prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Colors,Ranks,TagOps,Unicities,TableInvF,NodeList)):-  
+prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins([Colors,Ranks,TagOps,Unicities]),TableInvF,NodeList)):-  
 	lists:remove_duplicates(Syn,SynD),
 	%%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
 	add_constraints(SynD,SynD,[],SynDC),
-
 
 	%% écrire l'id de la classe courante
 	Trace=[Family|_],
@@ -38,30 +37,42 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% écrire les lits
 	write_lits(SynD,Relations,TableOut),
 
-	%%xmg:send(info,'here'),
+	prepare_plugins(SynD,[colors,rank,tag,unicity],prepared([Colors,Ranks,TagOps,Unicities],SynNC)),
 
+	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
+	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
+	%% xmg_brick_tag_preparer:prepare(SynNC,prepared(TagOps,SynNC)),
+	%% xmg_brick_unicity_preparer:prepare(SynNC,prepared(Unicities,SynNC)),
 
-	%%xmg:send(debug,NodeNames),
-
-	write_colors_or_not(SynD,Colors,SynNC),
 
 	%% écrire les noeuds
 
 	write_nodes(SynNC,NodeNames,NodeList,1,TableOut),
 
-	write_ranks(SynNC,Ranks),
-	write_tagops(SynNC,TagOps),
-	%%TagOps=[],
 
-	xmg_compiler:unicity(LUnicities),
-	%%xmg:send(info,LUnicities),
-	write_unicities(SynNC,LUnicities,Unicities),
 	%%Unicities=[],
 	xmg_table:table_entries(TableOut,TableList),
 	inverse_table(TableList,TableInv,TableInvF),
 
 	!.
 
+prepare_plugins(Syn,[],prepared([],Syn)):- !.
+prepare_plugins(Syn,[Plugin|T],prepared([Out|TOut],NNSyn)):-
+	prepare_plugin(Syn,Plugin,prepared(Out,NSyn)),
+	prepare_plugins(NSyn,T,prepared(TOut,NNSyn)),!.
+
+%% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
+prepare_plugin(Syn,Plugin,Out):-
+	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
+	Prepare=..[prepare,Syn,Out],
+	Do=..[':',Module,Prepare],
+	Do,
+	!.
+prepare_plugin(Syn,Plugin,Out):-
+	xmg:send(info,'\nUnknown plugin:'),
+	xmg:send(info,Plugin),
+	false,
+	!.
 
 write_notunif([],[],_):--
 	!.
@@ -179,90 +190,6 @@ write_node(node(PropAVM,FeatAVM,N),N2,Table):--
 
 write_node(A,'none',Table):-- !.
 
-write_colors_or_not(Nodes,Colors,NodesNC):-
-	xmg_brick_mg_compiler:principle(color),!,
-	write_colors(Nodes,Colors,NodesNC),!.
-write_colors_or_not(Nodes,[],Nodes):- !.
-
-write_colors([],[],[]):- !.
-
-write_colors([node(Prop,Feat,Name)|T],[H1|T1],[node(PropNC,Feat,Name)|T2]):-
-	write_color(Name,Prop,H1),!,
-	no_color(Prop,PropNC),!,
-	write_colors(T,T1,T2),!.
-
-write_colors([H|T],Colors,[H|T1]):-
-	write_colors(T,Colors,T1),!.
-
-write_color(Name,PropAVM,color(C)):-
-	xmg_brick_avm_avm:avm(PropAVM, Props),!,
-	xmg_brick_syn_nodename:nodename(Name,NodeName),!,
-	search_color(NodeName,Props,C),!.
-
-
-search_color(Name,[],none):-
-	throw(xmg(principle_error(undefined_color(Name)))),	
-
-	!.
-
-search_color(_,[color-const(C,_)|_],C):-!.
-
-search_color(Name,[_|T],C):-
-	search_color(Name,T,C),!.
-
-write_ranks([],[]):- !.
-
-write_ranks([node(Prop,_,_)|T],[H1|T1]):-
-	write_rank(Prop,H1),
-	write_ranks(T,T1),!.
-
-write_ranks([_|T],Ranks):-
-	write_ranks(T,Ranks),!.
-
-write_rank(PropAVM,rank(C)):-
-	xmg_brick_avm_avm:avm(PropAVM, Props),
-	search_rank(Props,C),
-	!.
-
-
-
-
-search_rank([],none):-
-	!.
-
-search_rank([rank-const(R,int)|_],R):-!.
-
-search_rank([_|T],C):-
-	search_rank(T,C),!.
-
-
-
-write_tagops([],[]):- !.
-
-write_tagops([node(Prop,_,_)|T],[H1|T1]):-
-	write_tagop(Prop,H1),
-	write_tagops(T,T1),!.
-
-write_tagops([_|T],Tagops):-
-	write_tagops(T,Tagops),!.
-
-write_tagop(PropAVM,tagop(C)):-
-	xmg_brick_avm_avm:avm(PropAVM, Props),
-	search_tagop(Props,C),
-	!.
-
-
-
-
-search_tagop([],none):-
-	!.
-search_tagop([mark-const(nadj,_)|_],none):-!.
-search_tagop([mark-const(adj,_)|_],none):-!.
-
-search_tagop([mark-Mark|_],Mark):-!.
-
-search_tagop([_|T],C):-
-	search_tagop(T,C),!.
 
 
 write_unicities(_,[],[]):- !.

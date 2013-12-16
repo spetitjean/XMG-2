@@ -36,11 +36,15 @@
 :-	use_module('xmg/brick/tree/compiler/preparer').
 :-	use_module('xmg/brick/tree/compiler/solver').
 
+:-	use_module('xmg/brick/unicity/compiler/preparer').
 :-	use_module('xmg/brick/unicity/compiler/solver').
 
+:-	use_module('xmg/brick/colors/compiler/preparer').
 :-	use_module('xmg/brick/colors/compiler/solver').
 
+:-	use_module('xmg/brick/rank/compiler/preparer').
 :-	use_module('xmg/brick/rank/compiler/solver').
 
+:-	use_module('xmg/brick/tag/compiler/preparer').
 :-	use_module('xmg/brick/tag/compiler/solver').
 

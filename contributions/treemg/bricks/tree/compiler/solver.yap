@@ -25,7 +25,7 @@
 :- op(500, xfx, ':=:').
 
 
-solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Colors,Ranks,TagOps,Unicities,Table,NodeList1),solution(UTree,Children,Table)):-
+solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins([Colors,Ranks,TagOps,Unicities]),Table,NodeList1),solution(UTree,Children,Table)):-
 	!,		
 	Space:=space,!,
 	
@@ -472,7 +472,7 @@ get_node(N,[M-_|T],Node):-
 get_rel(A,B,Rels,Rel):- 
 	B>A,!,
 	A1 is A - 1,
-	xmg_brick_tree_tree:nbNodes(NNodes),
+	xmg_brick_tree_solver:nbNodes(NNodes),
 	I is (A1*NNodes)-(A1*A//2)+B-A,
 	lists:nth(I,Rels,Rel),
 	!.
@@ -484,7 +484,7 @@ get_rel(A,B,Rels,Rel):-
 get_prel(A,B,Rels,Rel):- 
 	B>A,!,
 	A1 is A - 1,
-	xmg_brick_tree_tree:nbNodes(NNodes),
+	xmg_brick_tree_solver:nbNodes(NNodes),
 	I is 2*((A1*NNodes)-(A1*A//2)+B-A)-1,
 	lists:nth(I,Rels,Rel),
 	!.
@@ -492,7 +492,7 @@ get_prel(A,B,Rels,Rel):-
 get_prel(A,B,Rels,Rel):-
 	A>B,!,
 	B1 is B - 1,
-	xmg_brick_tree_tree:nbNodes(NNodes),
+	xmg_brick_tree_solver:nbNodes(NNodes),
 	I is 2*((B1*NNodes)-(B1*B//2)+A-B),
 	lists:nth(I,Rels,Rel),
 	!.

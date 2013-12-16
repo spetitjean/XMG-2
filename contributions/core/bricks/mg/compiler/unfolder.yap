@@ -37,7 +37,7 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):-
 	xmg_brick_mg_typer:type_mg_decls(OUDecls),!,
 
 	xmg:send(info,' \n\n checking types in classes \n'),
-	xmg_brick_mg_typer:type_classes(Classes),!,
+	%%xmg_brick_mg_typer:type_classes(Classes),!,
 
 	xmg:send(info,' unfolding classes '),
 	xmg:send(info,Classes),
