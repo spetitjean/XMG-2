@@ -39,9 +39,19 @@ xmg:generate_instr(indim(Dim,Acc)):--
 	code::enq(xmg_acc:Dim::enq(Acc)),!.
 
 xmg:generate_instr((Var,control:call(Class,Params))):--
-	Call=..[Class,Params,_,_],
-	Instr=..['=',Var,Call],
-	code::enq(Instr),!.
+	decls::tget(Var,GV),
+	
+	Call=..[Class,params(Params),exports(GV)],
+	code::enq(xmg_class:Call),!.
+
+xmg:generate_instr((Var,control:dot(Class,id(CVar,_)))):--
+	xmg:send(info,' generating dot '),
+	decls::tget(Var,GV),
+	decls::tget(Class,GC),
+	
+	Member=..[member,CVar-GV,GC],
+	code::enq(lists:Member),
+	code::enq(xmg:send(info,'member found')),!.
 
 
 

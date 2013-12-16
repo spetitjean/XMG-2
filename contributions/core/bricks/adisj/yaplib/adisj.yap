@@ -1,4 +1,4 @@
-:- module(xmg_adisj, [adisj/2, const_adisj/2]).
+:- module(xmg_brick_adisj_adisj, [adisj/2, const_adisj/2]).
 
 :- use_module(library(atts)).
 :- use_module(library(ordsets)).

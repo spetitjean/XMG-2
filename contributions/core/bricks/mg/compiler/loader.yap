@@ -11,4 +11,5 @@
 :- use_module('xmg/brick/mg/compiler/generator.yap').
 :- use_module('xmg/brick/mg/compiler/convert.yap').
 :- use_module('xmg/brick/mg/compiler/printer.yap').
+:- use_module('xmg/brick/mg/compiler/explorer.yap').
 :- use_module('xmg/brick/mg/pprint.yap').

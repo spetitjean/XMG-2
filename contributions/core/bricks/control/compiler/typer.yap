@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2013  Simon Petitjean
+%% Copyright (C) 2012  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,10 +17,32 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_control_typer).
 
-:-module(xmg_loader_control).
+:-edcg:using([xmg_brick_mg_typer:types]).
 
-:-use_module('xmg/brick/control/compiler/unfolder').
-:-use_module('xmg/brick/control/compiler/typer').
-:-use_module('xmg/brick/control/compiler/generator').
-:-use_module('xmg/brick/control/compiler/explorer').
+xmg:type_stmt(control:and(S1,S2)):--
+	xmg:type_stmt(S1),!,
+	xmg:type_stmt(S2),!.	
+
+xmg:type_stmt(control:or(S1,S2)):--
+	xmg:type_stmt(S1),!,
+	xmg:type_stmt(S2),!.
+
+xmg:type_stmt(control:stmt(S1,S2)):--
+	xmg:type_stmt(S1),!,
+	%%xmg:type_stmt(S2),
+	!.	
+
+xmg:type_stmt(control:dimStmt(Dim,S)):--
+	xmg:type_stmt(S),
+	!.
+
+xmg:type_stmt(control:eq(S1,S2)):--
+	!.
+
+xmg:type_stmt(control:call(S1,S2)):--
+	!.	
+
+xmg:type_stmt(control:dot(S1,S2)):--
+	!.

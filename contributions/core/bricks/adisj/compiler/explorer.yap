@@ -17,10 +17,5 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_adisj_explorer).
 
-:-module(xmg_loader_control).
-
-:-use_module('xmg/brick/control/compiler/unfolder').
-:-use_module('xmg/brick/control/compiler/typer').
-:-use_module('xmg/brick/control/compiler/generator').
-:-use_module('xmg/brick/control/compiler/explorer').

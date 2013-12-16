@@ -17,10 +17,13 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_avm_typer).
 
-:-module(xmg_loader_control).
+:-edcg:using([xmg_brick_mg_typer:types]).
 
-:-use_module('xmg/brick/control/compiler/unfolder').
-:-use_module('xmg/brick/control/compiler/typer').
-:-use_module('xmg/brick/control/compiler/generator').
-:-use_module('xmg/brick/control/compiler/explorer').
+xmg:type_expr(avm:avm(Coord,Feats),Type):--
+	!.
+	
+
+
+

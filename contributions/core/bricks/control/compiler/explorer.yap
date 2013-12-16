@@ -17,10 +17,32 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_control_explorer).
 
-:-module(xmg_loader_control).
+:-edcg:using(xmg_brick_mg_explorer:calls).
 
-:-use_module('xmg/brick/control/compiler/unfolder').
-:-use_module('xmg/brick/control/compiler/typer').
-:-use_module('xmg/brick/control/compiler/generator').
-:-use_module('xmg/brick/control/compiler/explorer').
+xmg:find_calls(control:and(S1,S2)):--
+	xmg:find_calls(S1),
+	xmg:find_calls(S2),!.
+xmg:find_calls(control:or(S1,S2)):--
+	xmg:find_calls(S1),
+	xmg:find_calls(S2),!.
+
+xmg:find_calls(control:stmt(S1,S2)):--
+	%%xmg:send(info,S1),
+	xmg:find_calls(S1),!.
+
+xmg:find_calls(control:eq(E1,E2)):--
+	xmg:find_calls(E1),
+	xmg:find_calls(E2),
+	!.
+
+xmg:find_calls(control:dot(E1,E2)):--
+	xmg:find_calls(E1),
+	!.
+
+xmg:find_calls(control:call(token(_,id(Class)),Params)):--!,
+	calls::enq(Class),
+	!.
+
+xmg:find_calls(_):-- !.

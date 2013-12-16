@@ -22,12 +22,17 @@
 :-dynamic(declared/2).
 :-dynamic(classNumber/1).
 
-export_metagrammar(Classes,OClasses):-
+export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
+	xmg:send(info,' exploring classes for calls '),
+	xmg_brick_mg_explorer:find_calls_in_classes(Classes,Calls),
+	xmg:send(info,' explored '),
+	xmg:send(info,Calls),
+
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
 	asserta(classNumber(L)),
 	xmg_brick_mg_compiler:send(info,' ordering classes '),xmg_brick_mg_compiler:send_nl(info),
-	order_classes(Classes,OClasses),!,
+	order_classes(Classes,Calls,OClasses),!,
 	xmg_brick_mg_compiler:send(info,' classes ordered '),xmg_brick_mg_compiler:send_nl(info),
 	xmg_brick_mg_compiler:send(info,OClasses),xmg_brick_mg_compiler:send_nl(info),
 	retract(classNumber(L)),
@@ -38,17 +43,17 @@ export_metagrammar(Classes,OClasses):-
 
 %% Order classes
 
-order_classes(Classes,OClasses):-
-	order_classes(Classes,[],[],OClasses,0),!.
+order_classes(Classes,Calls,OClasses):-
+	order_classes(Classes,[],[],OClasses,0,Calls),!.
 
-order_classes([],[],_,[],_):- !.
-order_classes([],Classes,Acc,OClasses,Laps):-!,
+order_classes([],[],_,[],_,_):- !.
+order_classes([],Classes,Acc,OClasses,Laps,Calls):-!,
 	classNumber(Num),
 	(
 	    ( 
 		Laps<Num,
 		MLaps is Laps+1,!,
-		order_classes(Classes,[],Acc,OClasses,MLaps)
+		order_classes(Classes,[],Acc,OClasses,MLaps,Calls)
 	    )
 	;
 	(
@@ -57,7 +62,7 @@ order_classes([],Classes,Acc,OClasses,Laps):-!,
 	    whatsWrong(Classes,Acc)
 	)
     ).
-order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps):-
+order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps,Calls):-
 	(
 	    Mutex=mg:mutex(_)
 	;
@@ -65,18 +70,20 @@ order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps):-
     ;
 	Mutex=mg:semantics
     ),
-	order_classes(Classes,MClasses,Acc,OClasses,Laps).
-order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps):-
-	class_before(Class,Acc),!,
+	order_classes(Classes,MClasses,Acc,OClasses,Laps,Calls).
+order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps,Calls):-
+	class_before(Class,Acc,Calls),!,
 	%%xmg:send(info,Class),
 	Class=mg:class(token(_,id(ClassId)),_,_,_,_,_),
 	%%xmg:send(info,ClassId),
-	order_classes(Classes,MClasses,[ClassId|Acc],OClasses,Laps).
-order_classes([Class|Classes],MClasses,Acc,OClasses,Laps):-
-	order_classes(Classes,[Class|MClasses],Acc,OClasses,Laps).
+	order_classes(Classes,MClasses,[ClassId|Acc],OClasses,Laps,Calls).
+order_classes([Class|Classes],MClasses,Acc,OClasses,Laps,Calls):-
+	order_classes(Classes,[Class|MClasses],Acc,OClasses,Laps,Calls).
 
-class_before(mg:class(_,_,I,_,_,_),Acc):-
-	imports_before(I,Acc).
+class_before(mg:class(token(_,id(Class)),_,I,_,_,_),Acc,Calls):-
+	imports_before(I,Acc),
+	lists:member((Class,CCall),Calls),
+	calls_before(CCall,Acc).
 
 imports_before([],_):-!.
 imports_before([mg:iclass(token(_,id(Class)),_,_)|T],Acc):-
@@ -91,6 +98,14 @@ imports_before(I,Acc):-
 	xmg:send(info,I),
 	xmg:send(info,Acc),
 	false,!.
+
+calls_before([],_):- !.
+calls_before([Call|T],Acc):-
+	xmg:send(info,Call),
+	xmg:send(info,Acc),
+	lists:member(Call,Acc),
+	calls_before(T,Acc).
+
 
 whatsWrong([],Acc):-!.
 whatsWrong([mg:class(token(_,id(Class)),_,I,_,_,_)|T],Acc):-

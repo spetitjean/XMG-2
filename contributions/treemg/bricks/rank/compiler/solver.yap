@@ -1,4 +1,4 @@
-:- module(xmg_brick_rank_rank, []).
+:- module(xmg_brick_rank_solver, []).
 
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').

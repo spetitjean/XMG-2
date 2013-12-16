@@ -23,9 +23,9 @@ eval(Syn,XML,Class):-
 	%%xmg_brick_mg_compiler:send(info,Syn),
 	xmg_brick_mg_compiler:send(info,' preparing '),
 
-	xmg_brick_syn_preparer:prepare(syn(Syn,[Class]),Prepared),
+	xmg_brick_tree_preparer:prepare(syn(Syn,[Class]),Prepared),
 	xmg_brick_mg_compiler:send(info,' prepared '),
-	xmg_brick_tree_tree:solve(Prepared,solution(UTree,Children,Table)),
+	xmg_brick_tree_solver:solve(Prepared,solution(UTree,Children,Table)),
 	%%send(info,UTree),
 	%%flush_output,
 	xmg_brick_mg_compiler:current(Previous),

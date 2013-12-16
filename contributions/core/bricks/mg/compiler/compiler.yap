@@ -67,22 +67,27 @@ compile_file(File,Eval):-
 	xmg_brick_mg_modules:load_modules(Modules),
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	send(info,' parsed '),
+	send_nl(info),
+
 	%%xmg_brick_mg_pprint:pprint(Parse),
 	%%send(info,Parse),
+
+	xmg_brick_mg_exporter:export_metagrammar(Parse,Ordered),!,
+	send(info,' exported '),
+
 	send_nl(info),
-	xmg_brick_mg_unfolder:unfold(Parse,Unfolded),!,
+	xmg_brick_mg_unfolder:unfold(Ordered,Unfolded),!,
 	send(info,' unfolded '),
 	%%send(info,Unfolded),
 	send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
-	send(info,' priciples done '),
+	send(info,' principles done '),
 
-	%%xmg_brick_mg_exporter:export_metagrammar(Unfolded),!,
-	%%send(info,' exported '),
 
-	xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
 
-	send(info,' typed '),
+	%%xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
+
+	%%send(info,' typed '),
 
 	xmg_brick_mg_generator:generate(Unfolded),!,
 	send_nl(info),	

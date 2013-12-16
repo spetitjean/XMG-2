@@ -20,6 +20,7 @@
 
 :-module(xmg_loader_avm).
 
+:-use_module('xmg/brick/avm/compiler/typer').
 :-use_module('xmg/brick/avm/compiler/unfolder').
 :-use_module('xmg/brick/avm/compiler/generator').
 :-use_module('xmg/brick/avm/compiler/convert').

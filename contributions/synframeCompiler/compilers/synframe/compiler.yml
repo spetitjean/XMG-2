@@ -1,0 +1,15 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+decls:
+  ODecl: feats
+  ODecl: hierarchy
+control:
+  IFace: avm
+  DimStmt: frame syn
+avm: 
+  _Value: value
+value: 
+  Else: avm adisj
+syn:
+  AVM: avm

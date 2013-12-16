@@ -17,10 +17,30 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_mg_explorer).
 
-:-module(xmg_loader_control).
+:-edcg:thread(calls,edcg:queue).
+:-edcg:thread(classes,edcg:queue).
 
-:-use_module('xmg/brick/control/compiler/unfolder').
-:-use_module('xmg/brick/control/compiler/typer').
-:-use_module('xmg/brick/control/compiler/generator').
-:-use_module('xmg/brick/control/compiler/explorer').
+:-multifile(xmg:find_calls/3).
+
+:-edcg:weave([classes],[xmg:find_calls_in_classes/1]).
+:-edcg:weave([calls],[xmg:find_calls/1]).
+
+
+find_calls_in_classes(MG,Classes):--
+	xmg:find_calls_in_classes(MG) with classes([]-Classes,[]-[]),!.
+
+xmg:find_calls_in_classes(mg:mg(Decls,Classes,Values)):--
+	%%xmg:send(info,Classes),
+	xmg:find_calls_in_classes(Classes),!.
+
+xmg:find_calls_in_classes([]):-- !.
+xmg:find_calls_in_classes([H|T]):-- 
+	xmg:find_calls_in_classes(H),
+	xmg:find_calls_in_classes(T),!.
+
+xmg:find_calls_in_classes(mg:class(token(_,id(Name)),Params,Imports,Exports,Decls,Stmts)):--
+	%%xmg:send(info,Name),
+	xmg:find_calls(Stmts) with calls([]-Calls,[]-[]),
+	classes::enq((Name,Calls)),!.

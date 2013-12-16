@@ -24,6 +24,64 @@
 :-dynamic(fieldprec/2).
 :-dynamic(feat/2).
 
+:-multifile(xmg:type_stmt/3).
+:-multifile(xmg:type_expr/4).
+
+:-edcg:thread(types,edcg:table).
+:-edcg:weave([types],[xmg:type_stmt/1,xmg:type_expr/2,put_in_table/1,xmg:get_var_type/2]).
+
+xmg:check_types(T1,T1,Coord):- !.
+xmg:check_types(T1,T2,Coord):- 
+	not(T1=T2),
+	xmg:send(info,' incompatible types:'),
+	xmg:send(info,T1),
+	xmg:send(info,', '),
+	xmg:send(info,T2),
+	xmg:send(info,', '),
+	xmg:send(info,Coord),
+	!.
+
+xmg:type_expr(none,_):-- !.
+xmg:type_expr(some(E),T):-- 
+	xmg:type_expr(E,T),!.
+
+xmg:get_var_type(none,_):-- !.
+xmg:get_var_type(some(token(_,id(ID))),Var):-- 
+	types::tget(ID,var(_,Var)),!.
+xmg:get_var_type(Get,_):--
+	xmg:send(info,'could not get type for var '),
+	xmg:send(info,Get),
+	false,
+	!.
+
+
+type_classes([]):--
+	!.
+type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
+	!,
+	xmg_brick_mg_exporter:declared(N,List),
+	xmg_table:table_new(TableIn),
+	put_in_table(List) with types(TableIn,TableOut),
+	%%xmg:send(info,'\nTypes table:'),
+	%%xmg:send(info,TableOut),
+	xmg:type_stmt(S) with types(TableOut,TypedTable),
+	xmg:send(info,'\nTyped table:'),
+	xmg:send(info,TypedTable),
+	xmg:send(info,'\n\n'),
+	type_classes(T),!.
+type_classes([_|T]):--
+	type_classes(T),!.
+
+
+put_in_table([]):-- !.
+put_in_table([id(A,_)-B|T]):--
+	types::tput(A,var(B,Type)),
+	put_in_table(T),!.
+put_in_table([const(A,_)-const(N,_)|T]):--
+	%% skolemize ?
+	types::tput(A,sconst(N,_)),
+	put_in_table(T),!.
+
 %% type_metagrammar('MetaGrammar'(decls(Principles,Types,Properties,Feats,Fields,FieldPrecs),_,_)):-
 	
 %% 	%%xmg_brick_mg_compiler:send(info,'types : '),
@@ -38,9 +96,11 @@
 %% 	type_fields(OFields,1),
 %% 	xmg_brick_mg_compiler:send(info,' typed').
 
-type_metagrammar(mg(Decls,_,_)):-
+type_mg_decls(Decls):-
+	xmg:send(info,Decls),
 	G=[gather(field,fieldprec,fields)],
-	gather_decls(Decls,G,GDecls),
+	gather_decls(Decls,G,GDecls),!,
+	xmg:send(info,' decls gathered '),
 	type_decls(GDecls),!.
 
 gather_decls(Decls,[],Decls):- !.
@@ -62,6 +122,7 @@ gather_one(Decls,_,Decls):-!.
 
 type_decls([]):- !.
 type_decls([H|T]):-
+	%%xmg:send(info,H),
 	type_decl(H),!,
 	type_decls(T),!.
 
@@ -76,6 +137,7 @@ type_decl(property-Decls):-
 type_decl(feat-Decls):-
 	type_feats(Decls),!.
 type_decl(principle-Principle):-
+	type_principles(Principle),
 	!.
 type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):-
 	assert_field_precs(FieldPrecs),
@@ -98,14 +160,52 @@ get_types([H|T]):-
 	get_types(T).
 
 get_type(type(Type,enum(List))):-
-	asserta(type(Type,List)).
+	assert_type(type(Type,List)).
 get_type(type(Type,range(Inf,Sup))):-
 	get_range(Inf,Sup,Range),
-	asserta(type(Type,Range)).
+	assert_type(type(Type,Range)).
 get_type(type(Type,label)):-
-	asserta(type(Type,label)),!.
-get_type(A):-
-	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
+	assert_type(type(Type,label)),!.
+get_type(type(Type,struct(Obl,Opt,More))):-
+	get_feat_types(Obl),
+	get_feat_types(Opt),
+	assert_type(type(Type,struct(Obl,Opt,More))),!.
+%% get_type(A):-
+%% 	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
+
+get_feat_types([]):- !.
+get_feat_types([H|T]):-
+	get_feat_type(H),
+	get_feat_types(T),!.
+
+get_feat_type(F-T):-
+	assert_feat(feat(F,T)),!.
+
+assert_type(type(Id,Type)):-
+	type(Id,Type),!.
+assert_type(type(Id,Type)):-
+	type(Id,T),not(T=Type),!,
+	xmg:send(info,'\n Multiple definition of type '),
+	xmg:send(info,Id),
+	false,!.
+assert_type(type(Id,Type)):-
+	not(type(Id,_)),
+	xmg:send(info,'\n\nassert type\n '),
+	xmg:send(info,Id),
+	asserta(xmg:type(Id,Type)),!.
+
+assert_feat(feat(Id,Type)):-
+	type(Id,Type),!.
+assert_feat(feat(Id,Type)):-
+	feat(Id,T),not(T=Type),!,
+	xmg:send(info,'\n Multiple definition of feature '),
+	xmg:send(info,Id),
+	false,!.
+assert_feat(feat(Id,Type)):-
+	not(feat(Id,_)),
+	xmg:send(info,'\n\nassert feat \n '),
+	xmg:send(info,Id),
+	asserta(xmg:feat(Id,Type)),!.
 
 get_hierarchies([]):-!.
 get_hierarchies([H|T]):-
@@ -120,7 +220,7 @@ type_feats([H|T]):-
 	type_feats(T).
 
 type_feat(feat(G,T)):-
-	asserta(feat(G,T)).
+	assert_feat(feat(G,T)).
 
 type_properties([]).
 type_properties([H|T]):-
@@ -129,6 +229,14 @@ type_properties([H|T]):-
 
 type_property(property(G,T,_)):-
 	asserta(property(G,T)).
+
+type_principles([]).
+type_principles([H|T]):-
+	type_principle(H),
+	type_principles(T).
+
+type_principle(principle(Principle,Args,Dims)):-	
+	asserta(xmg:principle(Principle,Args,Dims)).
 
 assert_field_precs([]):- !.
 assert_field_precs([fieldprec(id(F1,_),id(F2,_))|T]):- 

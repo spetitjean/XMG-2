@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_tree_tree, []).
+:- module(xmg_brick_tree_solver, []).
 
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
@@ -35,7 +35,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Color
 	%use_module(xmg_unicity),
 	xmg_brick_mg_compiler:send(info,' using unicity '),
 	%%xmg_brick_mg_compiler:send(info,Unicities),
-	xmg_brick_unicity_unicity:post_unicities(Space,NodeList,IntVars,Unicities),
+	xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
 	xmg_brick_mg_compiler:send(info,' posted unicity '),
 
 
@@ -44,7 +44,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Color
 	    (
 		%use_module('syn/xmg_colors'),
 		xmg_brick_mg_compiler:send(info,' using colors '),
-		xmg_brick_colors_colors:colors(Space,NodeList,Colors)
+		xmg_brick_colors_solver:colors(Space,NodeList,Colors)
 	    );
 	    true
 	),!,
@@ -54,7 +54,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Color
 	 	%use_module('syn/xmg_rank'),
 		xmg_brick_mg_compiler:send(info,' using rank '),
 		%%xmg_brick_mg_compiler:send(info,Ranks),
-	 	xmg_brick_rank_rank:ranks(Space,NodeList,IntVars,Ranks,RankRels)
+	 	xmg_brick_rank_solver:ranks(Space,NodeList,IntVars,Ranks,RankRels)
 	     );
 	     true
 	 ),!,
@@ -66,7 +66,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Color
 	%use_module(xmg_tag),
 	xmg_brick_mg_compiler:send(info,' using tag '),
 	%% xmg_brick_mg_compiler:send(info,TagOps),
-	%%xmg_brick_tag_tag:post_tags(Space,NodeList,TagOps),
+	%%xmg_brick_tag_solver:post_tags(Space,NodeList,TagOps),
 
 	xmg_brick_mg_compiler:send(info,' doing posts '),
 

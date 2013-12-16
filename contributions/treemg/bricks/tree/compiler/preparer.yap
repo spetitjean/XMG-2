@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_syn_preparer, []).
+:- module(xmg_brick_tree_preparer, []).
 
 prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Colors,Ranks,TagOps,Unicities,TableInvF,NodeList)):-  
 	lists:remove_duplicates(Syn,SynD),
@@ -127,21 +127,21 @@ write_lit(dom(node(_,_,A),'->*',node(_,_,C),_),vstep(any,A2,C2),Table):--
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
-write_lit(prec(node(_,_,A),'>>',node(_,_,C)),hstep(one,A2,C2),Table):--
+write_lit(prec(node(_,_,A),'>>',node(_,_,C),_),hstep(one,A2,C2),Table):--
 	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
 	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
-write_lit(prec(node(_,_,A),'>>+',node(_,_,C)),hstep(more,A2,C2),Table):--
+write_lit(prec(node(_,_,A),'>>+',node(_,_,C),_),hstep(more,A2,C2),Table):--
 	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
 	xmg_brick_syn_nodename:nodename(C,C1),
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
-write_lit(prec(node(_,_,A),'>>*',node(_,_,C)),hstep(any,A2,C2),Table):--
+write_lit(prec(node(_,_,A),'>>*',node(_,_,C),_),hstep(any,A2,C2),Table):--
 	xmg_brick_syn_nodename:nodename(A,A1),
 	xmg_table:table_get(Table,A1,A2),
 	xmg_brick_syn_nodename:nodename(C,C1),
@@ -320,7 +320,7 @@ count([dom(_,_,_,_)|T],Nodes,Doms,Precs,I,Table,TableOut):--
 	count(T,Nodes,DomsR,Precs,I,Table,TableOut),
 	Doms is DomsR +1,!.
 
-count([prec(_,_,_)|T],Nodes,Doms,Precs,I,Table,TableOut):--
+count([prec(_,_,_,_)|T],Nodes,Doms,Precs,I,Table,TableOut):--
 	count(T,Nodes,Doms,PrecsR,I,Table,TableOut),
 	Precs is PrecsR +1,!.
 
