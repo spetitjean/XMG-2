@@ -37,6 +37,9 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% écrire les lits
 	write_lits(SynD,Relations,TableOut),
 
+	xmg:get_plugins(Plugins),
+	xmg:send(info,Plugins),
+
 	prepare_plugins(SynD,[colors,rank,tag,unicity],prepared([Colors,Ranks,TagOps,Unicities],SynNC)),
 
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
@@ -55,6 +58,10 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	inverse_table(TableList,TableInv,TableInvF),
 
 	!.
+
+%% this should go somewhere else
+xmg:get_plugins(Plugins):-
+	findall(P-(Args,Dims),xmg:principle(P,Args,Dims),Plugins),!.
 
 prepare_plugins(Syn,[],prepared([],Syn)):- !.
 prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
