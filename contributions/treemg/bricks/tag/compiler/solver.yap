@@ -1,4 +1,4 @@
-:- module(xmg_bricks_tag_solver, []).
+:- module(xmg_brick_tag_solver, []).
 
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
@@ -6,6 +6,8 @@
 
 :- op(500, xfx, ':=:').
 
+post(Space,NodeList,IntVars,TagOps):-
+	post_tags(Space,NodeList,TagOps),!.
 
 post_tags(Space,NodeList,TagOps):-
 

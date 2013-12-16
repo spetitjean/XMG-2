@@ -24,6 +24,10 @@
 
 :- op(500, xfx, ':=:').
 
+post(Space,NodeList,IntVars,Unicities):-
+	post_unicities(Space,NodeList,IntVars,Unicities),!.
+
+
 post_unicities(Space,Nodelist,IntVars,[]):- !.
 post_unicities(Space,NodeList,IntVars,[U1|UT]):-
 	%%xmg_compiler:send(info,' one unicity '),

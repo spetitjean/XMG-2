@@ -38,32 +38,32 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 	xmg:send(info,' posting plugins '),
 	post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
 
-	(
-	    xmg_brick_mg_compiler:principle(color) ->
-	    (
-		%use_module('syn/xmg_colors'),
-		xmg_brick_mg_compiler:send(info,' using colors '),
-		xmg_brick_colors_solver:colors(Space,NodeList,Colors)
-	    );
-	    true
-	),!,
-	(
-	     xmg_brick_mg_compiler:principle(rank) ->
-	     (
-	 	%use_module('syn/xmg_rank'),
-		xmg_brick_mg_compiler:send(info,' using rank '),
-		%%xmg_brick_mg_compiler:send(info,Ranks),
-	 	xmg_brick_rank_solver:ranks(Space,NodeList,IntVars,Ranks,RankRels)
-	     );
-	     true
-	 ),!,
+	%% (
+	%%     xmg_brick_mg_compiler:principle(color) ->
+	%%     (
+	%% 	%use_module('syn/xmg_colors'),
+	%% 	xmg_brick_mg_compiler:send(info,' using colors '),
+	%% 	xmg_brick_colors_solver:colors(Space,NodeList,Colors)
+	%%     );
+	%%     true
+	%% ),!,
+	%% (
+	%%      xmg_brick_mg_compiler:principle(rank) ->
+	%%      (
+	%%  	%use_module('syn/xmg_rank'),
+	%% 	xmg_brick_mg_compiler:send(info,' using rank '),
+	%% 	%%xmg_brick_mg_compiler:send(info,Ranks),
+	%%  	xmg_brick_rank_solver:ranks(Space,NodeList,IntVars,Ranks,RankRels)
+	%%      );
+	%%      true
+	%%  ),!,
 
 	xmg_brick_mg_compiler:send(info,' doing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
 	%use_module(xmg_tag),
-	xmg_brick_mg_compiler:send(info,' using tag '),
+	%% xmg_brick_mg_compiler:send(info,' using tag '),
 	%% xmg_brick_mg_compiler:send(info,TagOps),
 	%%xmg_brick_tag_solver:post_tags(Space,NodeList,TagOps),
 
@@ -111,12 +111,15 @@ post_plugins([Plugin|T],Space,NodeList,IntVars,plugins(Plugins)):-
 post_plugin(Plugin,Space,NodeList,IntVars,PlugList):-
 	xmg:send(info,' posting '),
 	xmg:send(info,Plugin),
+	xmg:send(info,'\n'),
+	xmg:send(info,PlugList),
+
 	atom_concat(['xmg_brick_',Plugin,'_solver'],Module),
 	Post=..[post,Space,NodeList,IntVars,PlugList],
 	Do=..[':',Module,Post],
-	xmg:send(info,Do),
+	%%xmg:send(info,Do),
 	Do,
-	xmg:send(info,' posted '),
+	xmg:send(info,' posted\n'),
 		
 	!.
 

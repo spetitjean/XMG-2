@@ -8,7 +8,6 @@
 
 
 post(Space,NodeList,IntVars,Ranks):-
-	xmg:send(info,'here'),
 	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-
