@@ -57,7 +57,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	!.
 
 prepare_plugins(Syn,[],prepared([],Syn)):- !.
-prepare_plugins(Syn,[Plugin|T],prepared([Out|TOut],NNSyn)):-
+prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
 	prepare_plugin(Syn,Plugin,prepared(Out,NSyn)),
 	prepare_plugins(NSyn,T,prepared(TOut,NNSyn)),!.
 

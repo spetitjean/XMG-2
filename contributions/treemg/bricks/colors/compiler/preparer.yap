@@ -24,7 +24,7 @@ prepare(Syn,prepared(Colors,SynNC)):-
 	!.
 
 write_colors_or_not(Nodes,Colors,NodesNC):-
-	xmg_brick_mg_compiler:principle(color),!,
+	%%xmg_brick_mg_compiler:principle(color),!,
 	write_colors(Nodes,Colors,NodesNC),!.
 write_colors_or_not(Nodes,[],Nodes):- !.
 
@@ -45,7 +45,7 @@ write_color(Name,PropAVM,color(C)):-
 
 
 search_color(Name,[],none):-
-	throw(xmg(principle_error(undefined_color(Name)))),	
+	%%throw(xmg(principle_error(undefined_color(Name)))),	
 
 	!.
 

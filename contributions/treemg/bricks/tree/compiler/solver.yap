@@ -25,19 +25,18 @@
 :- op(500, xfx, ':=:').
 
 
-solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins([Colors,Ranks,TagOps,Unicities]),Table,NodeList1),solution(UTree,Children,Table)):-
+solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugins,Table,NodeList1),solution(UTree,Children,Table)):-
 	!,		
 	Space:=space,!,
 	
 	new_nodes(NodeList,Space,Nodes),!,
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
 
-	%use_module(xmg_unicity),
-	xmg_brick_mg_compiler:send(info,' using unicity '),
-	%%xmg_brick_mg_compiler:send(info,Unicities),
-	xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
-	xmg_brick_mg_compiler:send(info,' posted unicity '),
 
+	%%xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
+
+	xmg:send(info,' posting plugins '),
+	post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
 
 	(
 	    xmg_brick_mg_compiler:principle(color) ->
@@ -101,6 +100,25 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	unify_in_tree(Tree,UTree,NodeList1),
 	xmg_brick_mg_compiler:send(info,' tree unified ').
 
+
+post_plugins([],_,_,_,_):- !.
+post_plugins([Plugin|T],Space,NodeList,IntVars,plugins(Plugins)):-	
+	lists:member(Plugin-PlugList,Plugins),
+	post_plugin(Plugin,Space,NodeList,IntVars,PlugList),
+	post_plugins(T,Space,NodeList,IntVars,plugins(Plugins)),!.
+
+
+post_plugin(Plugin,Space,NodeList,IntVars,PlugList):-
+	xmg:send(info,' posting '),
+	xmg:send(info,Plugin),
+	atom_concat(['xmg_brick_',Plugin,'_solver'],Module),
+	Post=..[post,Space,NodeList,IntVars,PlugList],
+	Do=..[':',Module,Post],
+	xmg:send(info,Do),
+	Do,
+	xmg:send(info,' posted '),
+		
+	!.
 
 do_posts(_,IntVars,IntPVars,NodeList,[]):- !.
 

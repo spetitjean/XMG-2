@@ -26,6 +26,9 @@
 :- op(500, xfx, ':=:').
 
 
+post(Space,NodeList,IntVars,Plugin):-
+	colors(Space,NodeList,Plugin).
+
 colors(Space,NodeList,Colors):-
 	%xmg_compiler:send(info,Colors),
 	do_cposts(Space,NodeList,Colors,1).
@@ -50,7 +53,7 @@ do_cposts(Space,[Node|T],[color(white)|TC],N):-
 	do_cposts(Space,T,TC,M),!.
 
 do_cposts(Space,[Node|T],[color(none)|TC],N):-
-	xmg_compiler:send(info,'unknown color '),
+	xmg:send(info,'unknown color '),
 	post(Space,Node,isnone,N),
 	M is N+1,
 	do_cposts(Space,T,TC,M),!.
@@ -75,12 +78,12 @@ post(Space,X,iswhite,XN):-
 	RB :=: rb(X),
 	Space += rel(RB,'SRT_DISJ', IntVar),
 	Eq :=: eq(X),
-	xmg_tree:nbNodes(Nodes),
+	xmg_brick_tree_solver:nbNodes(Nodes),
 	Space += cardinality(Eq,2,Nodes),
 	!.
 
 post(Space,X,isnone,XN):-
 	Eq :=: eq(X),
-	xmg_tree:nbNodes(Nodes),
+	xmg_brick_tree_solver:nbNodes(Nodes),
 	Space += cardinality(Eq,2,Nodes),
 	!.

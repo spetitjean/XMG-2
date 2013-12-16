@@ -7,6 +7,10 @@
 :- op(500, xfx, ':=:').
 
 
+post(Space,NodeList,IntVars,Ranks):-
+	xmg:send(info,'here'),
+	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
+
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-
 
 	rposts(Space,NodeList,Ranks,1,RankList),!,
