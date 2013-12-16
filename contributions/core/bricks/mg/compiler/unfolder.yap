@@ -90,12 +90,11 @@ unfold_vars([H|T],[H1|T1]):-
 	unfold_var(H,H1),
 	unfold_vars(T,T1),!.
 
-unfold_var(value:var(token(Coord,id(VAR))),id(VAR,Coord)):-
-	!.
-unfold_var(value:var_or_const(token(Coord,id(VAR))),id(VAR,Coord)):-
-	!.
-unfold_var(mg:iclass(token(Coord,id(VAR)),AS,_),import(id(VAR,Coord),AS)):-
-	!.
+xmg:token_to_id(token(Coord,id(VAR)), id(VAR,Coord)).
+
+unfold_var(value:var(Token),ID):- xmg:token_to_id(Token,ID), !.
+unfold_var(value:var_or_const(Token),ID):- xmg:token_to_id(Token,ID), !.
+unfold_var(mg:iclass(Token,AS,_),import(ID,AS)):- xmg:token_to_id(Token,ID), !.
 
 build_context(I,E,D):--
 	add_decls(D),!.
