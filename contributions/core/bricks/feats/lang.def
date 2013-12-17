@@ -6,6 +6,6 @@
 
 %%
 
-Feat : feature id ':' id {$$=feat($2,$4)};
+Feat : feature id ':' id {$$=feats:feat($2,$4)};
 
 %%

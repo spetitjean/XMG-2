@@ -20,9 +20,13 @@
 
 :-module(xmg_brick_sem_unfolder).
 
-unfold('sem-DimStmt',[token(_,'<sem>'),token(_,'{'),DimStmt,token(_,'}')],'semStmt'(UStmt)):-
-	unfold(DimStmt,UStmt),
+:- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
+
+
+xmg:unfold_dimstmt(Sem,sem:pred(Label,Pred,Params)):--
+	constraints::enq((sem:pred(Label,Pred,Params),Sem)),
 	!.
+
 
 unfold('sem-SemStmt',[M],UM):- 
 	unfold(M,UM),!.

@@ -24,7 +24,7 @@
 
 xmg:unfold_expr(avm:avm(Coord, Feats), Target) :--
     constraints::enq((Target,avm:avm)),
-    unfold_feats(Feats, Target).
+	unfold_feats(Feats, Target)	.
 
 unfold_feats([], _):-- !.
 unfold_feats([Feat|Feats], Target) :--

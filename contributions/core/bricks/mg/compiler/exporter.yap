@@ -34,7 +34,7 @@ export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
 	xmg_brick_mg_compiler:send(info,' ordering classes '),xmg_brick_mg_compiler:send_nl(info),
 	order_classes(Classes,Calls,OClasses),!,
 	xmg_brick_mg_compiler:send(info,' classes ordered '),xmg_brick_mg_compiler:send_nl(info),
-	xmg_brick_mg_compiler:send(info,OClasses),xmg_brick_mg_compiler:send_nl(info),
+	%%xmg_brick_mg_compiler:send(info,OClasses),xmg_brick_mg_compiler:send_nl(info),
 	retract(classNumber(L)),
 	xmg_brick_mg_compiler:send(info,' exporting classes '),xmg_brick_mg_compiler:send_nl(info),
 	export_classes(OClasses),
@@ -57,7 +57,7 @@ order_classes([],Classes,Acc,OClasses,Laps,Calls):-!,
 	    )
 	;
 	(
-	    xmg_brick_mg_compiler:send(info,'Could not order classes for exports\n'),!,
+	    xmg_brick_mg_compiler:send(info,'\n\nCould not order classes for exports\n'),!,
 	    xmg_brick_mg_compiler:send(info,Classes),
 	    whatsWrong(Classes,Acc)
 	)
@@ -101,8 +101,8 @@ imports_before(I,Acc):-
 
 calls_before([],_):- !.
 calls_before([Call|T],Acc):-
-	xmg:send(info,Call),
-	xmg:send(info,Acc),
+	%%xmg:send(info,Call),
+	%%xmg:send(info,Acc),
 	lists:member(Call,Acc),
 	calls_before(T,Acc).
 
@@ -128,17 +128,19 @@ export_classes([H|T]):-
 	export_classes(T).
 
 export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
-	xmg:send(info,'untype '),
+	xmg:send(info,'exporting '),
+	xmg:send(info,Name),
+	xmg:send(info,': prepare\n'),
 
 	untype([P,I,E,D],[UP,UI,UE,UD]),
-	xmg:send(info,'imports exports '),
+	xmg:send(info,'imports exports\n'),
 	imports_exports(UI,UE,UD,Exps),
 	%% check exported variables have whether been declared or imported
-	xmg:send(info,[UE,UD]),
-	xmg:send(info,'exports declared '),
+	%%xmg:send(info,[UE,UD]),
+	xmg:send(info,'exports declared\n'),
 	exports_declared(UE,Exps,UD),!,
 
-	xmg:send(info,'add vars '),
+	xmg:send(info,'add vars \n'),
 
 	add_vars(Exps,UE,FExps),
 	asserta(exports(Name,FExps)),
@@ -150,6 +152,7 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 
 untype([],[]):-!.
 untype([H|T],[H1|T1]):-
+	%%xmg:send(info,H),
 	untype(H,H1),
 	untype(T,T1),!.
 untype(none,[]):-!.
@@ -157,6 +160,8 @@ untype(some(S),US):-
 	S=..[':',mg,MS],
 	MS=..[_,List],
 	untype_one(List,US),!.
+untype(some(S),US):-
+	untype_one(S,US),!.
 untype_one([],[]):-!.
 untype_one([H|T],[H1|T1]):-
 	untype_part(H,H1),
@@ -166,6 +171,16 @@ untype_part(value:var_or_const(token(C,id(ID))),id(ID,C)):-!.
 untype_part(value:var(token(C,id(ID))),id(ID,C)):-!.
 untype_part(mg:iclass(token(_,id(ID)),[],none),import(id(ID,C),[])):-
 	!.
+untype_part(token(C,id(ID)),id(ID,C)):-
+	!.
+untype_part(value:const(token(C,id(ID))),id(ID,C)):-
+	!.
+untype_part(Decl,_):-
+	xmg:send(info,'\n\nUnknown declaration: '),
+	xmg:send(info,Decl),
+	false,
+	!.
+
 
 add_vars(Exps,[],Exps).
 add_vars(Exps,[id(H,C)|T],T1):-

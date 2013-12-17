@@ -40,7 +40,7 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):-
 	%%xmg_brick_mg_typer:type_classes(Classes),!,
 
 	xmg:send(info,' unfolding classes '),
-	xmg:send(info,Classes),
+	%%xmg:send(info,Classes),
 	xmg:unfold(Classes,UClasses),
 	%%xmg_brick_mg_compiler:send(info,UClasses),
 	xmg:send(info,' unfolding values '),
@@ -51,15 +51,15 @@ xmg:unfold([H|T],[H1|T1]):-
 	xmg:unfold(H,H1),
 	xmg:unfold(T,T1),!.
 xmg:unfold([H|T],[H1|T1]):-
-	xmg:send(info,' could not unfold '),
+	xmg:send(info,'\n\ncould not unfold '),
 	xmg:send(info,H),
 	false,
 	!.
 
 
 xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Constraints,TableVF),Coord)):--
-	%% xmg:send(info,' unfolding class '),
-	%% xmg:send(info,N),
+	xmg:send(info,'\nUnfolding class '),
+	xmg:send(info,N),
 
 	xmg_table:table_new(TableV),
 	xmg_table:table_new(TableC),
@@ -70,6 +70,9 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 	unfold_vars(I,UI),
 	unfold_vars(E,UE),
 	unfold_vars(D,UD),
+	
+	%%xmg:send(info,'\nunfolded vars'),
+
 	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars(TableVO,TableVF), consts(TableCO,TableCF)),
 	%%xmg_brick_mg_compiler:send(info,Constraints),
 	!.
@@ -94,7 +97,9 @@ xmg:token_to_id(token(Coord,id(VAR)), id(VAR,Coord)).
 
 unfold_var(value:var(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(value:var_or_const(Token),ID):- xmg:token_to_id(Token,ID), !.
+unfold_var(value:const(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(mg:iclass(Token,AS,_),import(ID,AS)):- xmg:token_to_id(Token,ID), !.
+unfold_var(Token,ID):- xmg:token_to_id(Token,ID), !.
 
 build_context(I,E,D):--
 	add_decls(D),!.
@@ -105,7 +110,9 @@ add_decls(some(mg:declare(Decls))):--
 add_decls([]):-- !.
 add_decls([value:var(token(_,id(ID)))|T]):-- 
 	vars::tput(ID,_),
-	%%xmg_brick_mg_compiler:send(info,T),
+	add_decls(T),!.
+add_decls([value:const(token(_,id(ID)))|T]):-- 
+	consts::tput(ID,_),
 	add_decls(T),!.
 
 unfold_class(C):--

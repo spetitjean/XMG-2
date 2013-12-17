@@ -112,9 +112,14 @@ declare
 }
 
 class BinaryRel[Pred]
-declare !L !E ?X ?Y
-{ <sem>{!L:Pred(!E,?X,?Y)}
-*= [arg0 = ?X,arg1 = ?Y] }
+declare 
+	!L !E ?X ?Y
+ { 
+   <sem>{
+   !L:Pred(!E,?X,?Y)
+   }
+   *= [arg0 = ?X,arg1 = ?Y] 
+    }
 
 class lexemeManger 
 declare ?X ?Y

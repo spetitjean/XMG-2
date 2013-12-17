@@ -34,14 +34,17 @@ find(Head,[H|T],T1,[H|Rest]):-
 	find(Head,T,T1,Rest),!.
 
 
+xmg:unfold(decls:type(token(_,id(UType)),label),type(UType,label)):-	
+	!.
 xmg:unfold(decls:type(token(_,id(UType)),TypeDef),type(UType,UTypeDef)):-	
 	unfold_typedef(TypeDef,UTypeDef),!.
+
 xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),Rename),property(UProp,UPropType,none)):-
 	!.
+
 xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 	unfold_id_or_constr(Pr,UPr),
 	xmg:send(info,Args),
-
 	unfold_args(Args,UArgs),
 	unfold_dims(Dims,UDims),!,
 	!.
@@ -53,8 +56,10 @@ unfold_typedef(decls:struct(Obl,Opt,More),struct(UObl,UOpt,UMore)):-
 	unfold_maybe_pairs(Opt,UOpt),
 	unfold_more(More,UMore),
 	!.
+unfold_typedef(decls:range(token(_,int(I1)),token(_,int(I2))),range(I1,I2)):-
+	!.
 unfold_typedef(Def,_):-
-	xmg:send(info,' unknown type def: '),
+	xmg:send(info,'\n\nUnknown type def: '),
 	xmg:send(info,Def),
 	false,
 	!.
@@ -62,11 +67,22 @@ unfold_typedef(Def,_):-
 unfold_enum([],[]):- !.
 unfold_enum([token(_,id(V))|T],[V|T1]):-
 	unfold_enum(T,T1),!.
+unfold_enum([token(_,bool(B))|T],[B|T1]):-
+	unfold_enum(T,T1),!.
+
 unfold_args([],[]):- !.
 unfold_args([token(_,id(V))|T],[V|T1]):-
 	unfold_args(T,T1),!.
 unfold_args([decls:principle_type(token(_,id(P1)))|T],[type(P1)|T1]):-
 	unfold_args(T,T1),!.
+
+unfold_args([decls:eq(token(C,id(Prop)),token(C1,int(Int)))|T],[eq(Prop,Int)|T1]):-
+	unfold_args(T,T1),!.
+
+unfold_args([H|T],_):-
+	xmg:send(info,'\nUnknown principle arg: '),
+	xmg:send(info,H),
+	false,!.
 unfold_dims([],[]):- !.
 unfold_dims([token(_,id(V))|T],[V|T1]):-
 	unfold_dims(T,T1),!.

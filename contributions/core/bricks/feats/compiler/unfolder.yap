@@ -22,50 +22,6 @@
 
 %% SPECIFIC RULES
 
+xmg:unfold(feats:feat(token(_,id(Id)),token(_,id(Type))),feat(Id,Type)).
 
-unfold('Feat',[token(_,feature),token(_,id(Id)),token(_,':'),token(_,id(Type))],feat(Id,Type)).
-
-
-%% GENERIC RULES
-
-unfold(Term,UTerm):-
-	Term=..[Head|Params],
-	head_module(Head,Module),
-	head_name(Head,Name),
-	(
-	    (
-		Module=feats,
-		%%xmg_modules_def:module_def(Module,'feats'),
-		unfold(Name,Params,UTerm)
-	    )
-	;
-	(
-	    not(Module=feats),
-	    %%not(xmg_modules_def:module_def(Module,'feats')),
-	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
-	    UModule:unfold(Head,Params,UTerm)
-	)
-    ),!.
-
-unfold(Rule,_):- 
-	throw(xmg(unfolder_error(no_unfolding_rule(feats,Rule)))),	
-	!.
-
-
-unfold(Head,Params,UList):-
-	unfold_type(Head,list),
-	unfold_list(Params,UList),!.
-unfold(Head,Params,UList):-
-	unfold_type(Head,maybe),
-	unfold_maybe(Params,UList),!.
-
-head_module(Head,Module):-
-	atomic_list_concat(A,'-',Head),
-	A=[Module|_],!.
-
-head_name(Head,Name):-
-	atomic_list_concat(A,'-',Head),
-	A=[_,Name],!.
-
-unfold_type(_,none).
 
