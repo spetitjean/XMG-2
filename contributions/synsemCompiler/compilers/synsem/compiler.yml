@@ -4,8 +4,7 @@ mg:
 decls:
   ODecl: feats
 control:
-  IFace: avm
-  DimStmt: sem syn
+  _Stmt: caller sem syn
 avm: 
   _Value: value
 value: 

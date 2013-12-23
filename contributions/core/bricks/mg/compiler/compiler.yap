@@ -65,6 +65,8 @@ compile_file(File,Eval):-
 	xmg_compiler_conf:init,
 	findall(Module,xmg_modules_def:module_def(_,Module),Modules),
 	xmg_brick_mg_modules:load_modules(Modules),
+	send(info,' loaded '),
+
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	send(info,' parsed '),
 	send_nl(info),

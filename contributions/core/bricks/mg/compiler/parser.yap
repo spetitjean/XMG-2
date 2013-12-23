@@ -302,6 +302,7 @@ parse_sem(States,Tokens,Sem):--
 
 parse_file(File,Sem):--
 	xmg_brick_mg_compiler:encoding(Encoding),
+	xmg_brick_mg_compiler:send(info,'\ntokenizing\n'),
 	xmg_brick_mg_tokenizer:tokenize_file(File,Tokens,Encoding),
 	xmg_brick_mg_compiler:send(info,tokenized),
 	%%xmg_brick_mg_compiler:send(debug,Tokens),
