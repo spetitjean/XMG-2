@@ -2,6 +2,7 @@ import xmg.compgen.Symbol
 import xmg.compgen.Grammar
 import xmg.compgen.BrickTokenizer
 import xmg.compgen.Parser
+from xmg.compgen.Brick import Brick
 import xmg.compgen.brick_parser
 import warnings
 
@@ -95,12 +96,33 @@ class Unfold(object):
             
                 #print(G)
                 axiom=G.Rules[0].head
+
+                # the language brick is a dimension brick
                 if extg._dim:
                     tdim=xmg.compgen.Symbol.T('<'+extg._prefix+'>')
                     brick._punctuation.append('<'+extg._prefix+'>')
                     openStmt=xmg.compgen.Symbol.T('{')
                     closeStmt=xmg.compgen.Symbol.T('}')
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,axiom,closeStmt),action=('VAR__RESULT=control:dimStmt('+extg._prefix+',VAR__PARAM__3)',4)))
+
+                    # new instance of control brick
+                    newControl=Brick('control','newcontrol')
+                    NCL=newControl.language_brick
+                    NG=NCL._unfold
+                    NG.build_grammar()
+                    for rulenc in NG.Rules:
+                        self.Rules.append(rulenc)
+                    for rulenc in NG.macros:
+                        self.Rules.append(rulenc)   
+                    # extern NT _Stmt must be pluged into the dimension
+                    
+                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,NG.Rules[0].head,closeStmt),action=('VAR__RESULT=control:dimStmt('+extg._prefix+',VAR__PARAM__3)',4)))
+
+                    print(NG.EXTs)
+                    print(NG.NTs)
+                    self.Rules.append(xmg.compgen.Rule.Rule(NG.NTs['_Stmt'],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
+
+
+
                 else:
                     self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
   
