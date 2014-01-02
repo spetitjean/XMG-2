@@ -6,7 +6,6 @@
 %token bool
 
 %type Var Var
-%type SynStmts SynStmts
 %type SynStmt SynStmt
 %type Node Node
 %type MaybeProps MaybeProps
@@ -29,10 +28,6 @@
 
 %%
 
-SynStmts : SynStmt {$$=$1}
-	 | SynStmts ';' SynStmts {$$=syn:and($1,$3)}
-	 | SynStmts '|' SynStmts {$$=syn:or($1,$3)}
-	 | '{' SynStmts '}' {$$=$2};
 
 SynStmt : Node {$$=$1}
 	| Dom  {$$=$1}

@@ -23,17 +23,6 @@
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:code).
 
-:-edcg:weave([decls,name], [put_in_table/1, generate_Stmts/4, generate_Stmt/4, generate_iface/4, generate_EqPart/4, generate_dimStmt/4]).
-
-
-xmg:generate_instr(control:or([I1,I2])):--
-	xmg:generate_instr(I1) with code([]-C1,[]-[]),
-	xmg:generate_instr(I2) with code([]-C2,[]-[]),
-	code::enq(or(C1,C2)),
-	!.
-xmg:generate_instr(control:and(I)):--
-	xmg:generate_instrs(I),
-	!.
 
 xmg:generate_instr(indim(Dim,Acc)):--
 	code::enq(xmg_acc:Dim::enq(Acc)),!.

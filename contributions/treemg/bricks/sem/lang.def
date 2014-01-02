@@ -1,19 +1,11 @@
-%token sem
 %token id
 
-%type SemStmts SemStmts
 %type SemStmt SemStmt
 %type Pred Pred
 %type ScopeOver ScopeOver
 %type Var Var
 
 %%
-
-
-SemStmts : SemStmt {$$=$1} 
-	 | SemStmt ';' SemStmts {$$=sem:and($1,$3)} 
-	 | SemStmt '|' SemStmts {$$=sem:or($1,$3)}
-	 | '{' SemStmts '}'     {$$=$2};
 
 SemStmt : Pred {$$=$1} 
 	| ScopeOver {$$=$1};

@@ -105,7 +105,7 @@ class Unfold(object):
                     closeStmt=xmg.compgen.Symbol.T('}')
 
                     # new instance of control brick
-                    newControl=Brick('control','newcontrol')
+                    newControl=Brick('control',extg._prefix+'control')
                     NCL=newControl.language_brick
                     NG=NCL._unfold
                     NG.build_grammar()
