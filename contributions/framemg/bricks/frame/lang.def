@@ -3,7 +3,6 @@
 %token edge
 
 %type Var Var
-%type FrameStmts FrameStmts
 %type FrameStmt FrameStmt
 %type Node Node
 
@@ -22,11 +21,6 @@
 %ext AVM AVM
 
 %%
-
-FrameStmts : FrameStmt {$$=$1}
-	   | FrameStmt ';' FrameStmts {$$=frame:and($1,$3)} 
-	   | FrameStmt '|' FrameStmts {$$=frame:or($1,$3)}
-	   | '{' FrameStmts '}' {$$=$2};
 
 FrameStmt :  Node {$$=$1}
 	  | Tree {$$=$1}

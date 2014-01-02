@@ -129,6 +129,8 @@ coord(coord(F,L,C)) -->>
 
 more_tokens -->>
     token(T,C), !,
+	%%xmg:send(info,T),
+	%%xmg:send(info,'\n'),
     (T=include -> more_tokens_include ;
      T=macro   -> more_tokens_macro ;
      (toks::put(C), toks::put(T))),

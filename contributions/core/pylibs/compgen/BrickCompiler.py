@@ -194,6 +194,9 @@ class BrickCompiler(object):
     #     print("Configuration file generated in "+path)
 
     def generate_conf(self):
+        compPath=os.getcwd()
+        compSplit=compPath.split('/')
+        compName=compSplit[len(compSplit)-1]
         conffile=open(self._folder+"/conf.yap","w")
         conffile.write('%% -*- prolog -*-\n\n')
         conffile.write(':-module(xmg_compiler_conf).\n\n')
@@ -202,11 +205,11 @@ class BrickCompiler(object):
         conffile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
         conffile.write('init:-\n')
         #conffile.write('\tadd_to_path(\'' + os.path.abspath(os.path.dirname(sys.argv[0])) + '\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/synsem/' + self._parser_file + '\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/' + self._parser_file + '\'),\n')
         #conffile.write('\tadd_to_path(\'' + os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), self._folder) + '\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/synsem/generated/dimensions\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/synsem/generated/tokenizer_punct\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/synsem/generated/modules_def\').')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/dimensions\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_punct\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\').')
         conffile.close()
         print("Configuration file generated in "+self._folder)
 

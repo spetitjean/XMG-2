@@ -5,11 +5,12 @@ decls:
   ODecl: feats
   ODecl: hierarchy
 control:
-  IFace: avm
-  DimStmt: frame syn
+  _Stmt: caller frame syn
 avm: 
   _Value: value
 value: 
   Else: avm adisj
 syn:
+  AVM: avm
+frame:
   AVM: avm
