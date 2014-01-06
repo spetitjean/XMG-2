@@ -8,10 +8,10 @@
 
 %%
 
-Hierarchy : hierarchy id '=' HierarchyDef {hierarchy:hierarchy($2,$4) };
+Hierarchy : hierarchy id '=' HierarchyDef {$$=hierarchy:hierarchy($2,$4) };
 
 HierarchyDef : '{' (Id_pair // ',')+ '}' {$$=$2};
 
-Id_pair : '(' id ',' id ')' {$$=frame:pair($2,$4)} ;
+Id_pair : '(' id ',' id ')' {$$=hierarchy:pair($2,$4)} ;
 
 %%

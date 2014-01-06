@@ -4,9 +4,10 @@
 
 %%
 
-Stmts : _Stmt {$$=$1}
-      | _Stmt ';' Stmts {$$=control:and($1,$3)} 
-      | _Stmt '|' Stmts {$$=control:or($1,$3)}
+Stmts :
+        Stmts ';' Stmts {$$=control:and($1,$3)} 
+      | Stmts '|' Stmts {$$=control:or($1,$3)}
+      | _Stmt {$$=$1}
       | '{' Stmts '}' {$$=$2}
       | '(' Stmts ')' {$$=$2}; 
 

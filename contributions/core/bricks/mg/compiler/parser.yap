@@ -170,25 +170,20 @@ parse_sem([State|States],[Token|Tokens]):--
 	generated_parser:action(State,Tok,'reduce',NRule),
 	generated_parser:action(State,Tok,'shift',NState),
 	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
-parse_sem([State|States],[Token|Tokens]):--
-	generated_parser:action(State,'','reduce',NRule),
-	generated_parser:action(State,'','shift',NState),
-	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
-	generated_parser:action(State,Tok,'reduce',NRule),
-	generated_parser:action(State,'','shift',NState),
-	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
-	generated_parser:action(State,'','reduce',NRule),
-	generated_parser:action(State,Tok,'shift',NState),
-	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
+
 	
 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
+
 	generated_parser:action(State,Tok,'reduce',NRule),
+
+	%% xmg:send(info,'\nstate '),
+	%% xmg:send(info,State),
+	%% xmg:send(info,'\nreducing '),
+	%% xmg:send(info,Token),
+	%% xmg:send(info,NRule),
+
 	steps::incr ,
 	%% REDUCE
 	generated_parser:rule(NRule,Left,RightSize),
@@ -201,38 +196,24 @@ parse_sem([State|States],[Token|Tokens]):--
 	%%xmg_brick_mg_compiler:send(info,PreAction), 
 	makeAction(PreAction,OneLeft,NRule),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
-%% for the empty word
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
-	generated_parser:action(State,'','reduce',NRule),
-	%% REDUCE
-	generated_parser:rule(NRule,Left,RightSize),
-	pop2N([State|States],RightSize,Pop,Stack),
-	Stack=[Top|_],
-	generated_parser:next(Top,Left,Next),
-	%%generated_parser:ruleAction(NRule,Action),
-	preAction(RightSize) with stack2([],PreAction),
-	makeAction(PreAction,OneLeft,NRule),
-	parse_sem([Next,Left|Stack],[Token|Tokens]).
 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
+	
 	generated_parser:action(State,Tok,'shift',NState),
+
+	%% xmg:send(info,'\nstate '),
+	%% xmg:send(info,State),
+	%% xmg:send(info,'\nshifting '),
+	%% xmg:send(info,Token),
+	%% xmg:send(info,NState),
+
 	steps::incr,
 	%% SHIFT
 	acc(Token,A),
 	stack::push(A),
-	parse_sem([NState,Token,State|States],Tokens)
-    .
-%% for rules with empty word
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
-	generated_parser:action(State,'','shift',NState),
-	stack::push(''),
-	%% if we don't do that, errors are more precise, but parsing sometimes takes ages:
-	steps::incr,
-	parse_sem([NState,'',State|States],[Token|Tokens])
-    .
+	parse_sem([NState,Token,State|States],Tokens).
+
 
 
 parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
@@ -241,8 +222,13 @@ parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
 	lastError(Err,StepE),
 	%%errors::top(error(Err,StepE)),
 	Steps < StepE,
+	%% xmg:send(info,'\n\nstep n°'),
+	%% xmg:send(info,Steps),
+	%% xmg:send(info,'\nerror at step n°'),
+	%% xmg:send(info,StepE),
+
 	(
-	    StepE - Steps > 10 ->
+	    StepE - Steps > 100 ->
 	    throw_errors;true
 	),
 	fail.

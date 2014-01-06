@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2012  Simon Petitjean
+%% Copyright (C) 2013  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,38 +17,19 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_caller_generator).
 
-:-edcg:using(xmg_brick_mg_generator:name).
-:-edcg:using(xmg_brick_mg_generator:decls).
-:-edcg:using(xmg_brick_mg_generator:code).
+:-module(xmg_loader_frame).
 
+:-	use_module('xmg/brick/frame/compiler/typer').
+:-	use_module('xmg/brick/frame/compiler/unfolder').
+:-	use_module('xmg/brick/frame/compiler/generator').
 
-xmg:generate_instr(indim(Dim,Acc)):--
-	code::enq(xmg_acc:Dim::enq(Acc)),!.
+:-	use_module('xmg/brick/frame/engine').
+:-	use_module('xmg/brick/frame/nodename').
 
-xmg:generate_instr((Var,control:call(Class,Params))):--
-	decls::tget(Var,GV),
-	
-	Call=..[Class,params(Params),exports(GV)],
-	code::enq(xmg_class:Call),!.
-
-xmg:generate_instr((Var,control:dot(Class,id(CVar,_)))):--
-	xmg:send(info,' generating dot '),
-	decls::tget(Var,GV),
-	decls::tget(Class,GC),
-	
-	Member=..[member,CVar-GV,GC],
-	code::enq(lists:Member),
-	code::enq(xmg:send(info,'member found')),!.
-
-
-
-
-
-
-
-
+:-	use_module('xmg/brick/frame/compiler/convert').
+:-	use_module('xmg/brick/frame/compiler/preparer').
+:-	use_module('xmg/brick/frame/compiler/solver').
 
 
 

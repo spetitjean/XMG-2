@@ -2,8 +2,7 @@ mg:
   _Stmt: control
   _EDecls: decls
 decls:
-  ODecl: feats
-  ODecl: hierarchy
+  ODecl: feats hierarchy
 control:
   _Stmt: caller frame syn
 avm: 
