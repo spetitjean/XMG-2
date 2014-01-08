@@ -17,14 +17,13 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_typer_hierarchy).
+:-module(xmg_brick_hierarchy_typer).
 :-dynamic(hierarchy/3).
 
 type_hierarchy(_,[]):- !.
-type_hierarchy(Type,[id(ID1,_)-id(ID2,_)|T]):-
+type_hierarchy(Type,[ID1-ID2|T]):-
 	asserta(hierarchy(Type,ID1,ID2)),
-	xmg_compiler:send(info,hierarchy(Type,ID1,ID2)),
-	xmg_compiler:send_nl(info),
+	xmg:send(info,hierarchy(Type,ID1,ID2)),
 	type_hierarchy(Type,T),!.
 
 subtype(Type,T1,T2):-

@@ -212,7 +212,7 @@ get_hierarchies([H|T]):-
 	get_hierarchy(H),
 	get_hierarchies(T),!.
 get_hierarchy(hierarchy(Type,Pairs)):-
-	xmg_typer_hierarchy:type_hierarchy(Type,Pairs),!.
+	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
 
 type_feats([]).
 type_feats([H|T]):-

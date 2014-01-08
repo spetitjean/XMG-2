@@ -18,74 +18,90 @@
 %% ========================================================================
 
 
-:-module(xmg_unfolder_hierarchy).
-
-%% SPECIFIC RULES
-
-
-unfold('Hierarchy',[token(_,hierarchy),token(_,id(Id)),token(_,'='),HierarchyDef],hierarchy(Id,UHierarchyDef)):- 
-	unfold(HierarchyDef,UHierarchyDef),!.
-
-unfold('HierarchyDef',[token(_,'{'),Ids,token(_,'}')],UIds):-
-	unfold(Ids,UIds).
-
-
-unfold(token(C,id(ID)),id(ID,C)):-!.
-unfold(token(C,int(ID)),int(ID,C)):-!.
-unfold(token(C,bool(ID)),bool(ID,C)):-!.
-
-
-
-unfold('id_pairs',[Pair],[UPair]):-
-	unfold(Pair,UPair),!.
-unfold('id_pairs',[Pair,token(_,','),Pairs],[UPair|UPairs]):-
-	unfold(Pair,UPair),
-	unfold(Pairs,UPairs),!.
-
-unfold('id_pair',[token(_,'('),ID1,token(_,','),ID2,token(_,')')],UID1-UID2):-
-	unfold(ID1,UID1),
-	unfold(ID2,UID2),!.
+:-module(xmg_brick_hierarchy_unfolder).
 
 
 
 
-%% GENERIC RULES
+xmg:unfold(hierarchy:hierarchy(token(_,id(Id)),Pairs),hierarchy(Id,UPairs)):-
+	unfold_pairs(Pairs,UPairs),!.
 
-unfold(Term,UTerm):-
-	Term=..[Head|Params],
-	head_module(Head,Module),
-	head_name(Head,Name),
-	(
-	    (
-		xmg_modules_def:module_def(Module,'hierarchy'),
-		unfold(Name,Params,UTerm)
-	    )
-	;
-	(
-	    not(xmg_modules_def:module_def(Module,'hierarchy')),
-	    xmg_modules:get_module(Module,unfolder,UModule),
-	    UModule:unfold(Head,Params,UTerm)
-	)
-    ),!.
+unfold_pairs([],[]):- !.
+unfold_pairs([H|T],[UH|UT]):-
+	unfold_pair(H,UH),
+	unfold_pairs(T,UT),!.
 
-unfold(Rule,_):- 
-	throw(xmg(unfolder_error(no_unfolding_rule(hierarchy,Rule)))),	
+unfold_pair(hierarchy:pair(token(_,id(ID1)),token(_,id(ID2))),ID1-ID2):-
 	!.
 
 
-unfold(Head,Params,UList):-
-	unfold_type(Head,list),
-	unfold_list(Params,UList),!.
-unfold(Head,Params,UList):-
-	unfold_type(Head,maybe),
-	unfold_maybe(Params,UList),!.
 
-head_module(Head,Module):-
-	atomic_list_concat(A,'-',Head),
-	A=[Module|_],!.
 
-head_name(Head,Name):-
-	atomic_list_concat(A,'-',Head),
-	A=[_,Name],!.
 
-unfold_type(none,none):-!.
+
+%% unfold('Hierarchy',[token(_,hierarchy),token(_,id(Id)),token(_,'='),HierarchyDef],hierarchy(Id,UHierarchyDef)):- 
+%% 	unfold(HierarchyDef,UHierarchyDef),!.
+
+%% unfold('HierarchyDef',[token(_,'{'),Ids,token(_,'}')],UIds):-
+%% 	unfold(Ids,UIds).
+
+
+%% unfold(token(C,id(ID)),id(ID,C)):-!.
+%% unfold(token(C,int(ID)),int(ID,C)):-!.
+%% unfold(token(C,bool(ID)),bool(ID,C)):-!.
+
+
+
+%% unfold('id_pairs',[Pair],[UPair]):-
+%% 	unfold(Pair,UPair),!.
+%% unfold('id_pairs',[Pair,token(_,','),Pairs],[UPair|UPairs]):-
+%% 	unfold(Pair,UPair),
+%% 	unfold(Pairs,UPairs),!.
+
+%% unfold('id_pair',[token(_,'('),ID1,token(_,','),ID2,token(_,')')],UID1-UID2):-
+%% 	unfold(ID1,UID1),
+%% 	unfold(ID2,UID2),!.
+
+
+
+
+%% %% GENERIC RULES
+
+%% unfold(Term,UTerm):-
+%% 	Term=..[Head|Params],
+%% 	head_module(Head,Module),
+%% 	head_name(Head,Name),
+%% 	(
+%% 	    (
+%% 		xmg_modules_def:module_def(Module,'hierarchy'),
+%% 		unfold(Name,Params,UTerm)
+%% 	    )
+%% 	;
+%% 	(
+%% 	    not(xmg_modules_def:module_def(Module,'hierarchy')),
+%% 	    xmg_modules:get_module(Module,unfolder,UModule),
+%% 	    UModule:unfold(Head,Params,UTerm)
+%% 	)
+%%     ),!.
+
+%% unfold(Rule,_):- 
+%% 	throw(xmg(unfolder_error(no_unfolding_rule(hierarchy,Rule)))),	
+%% 	!.
+
+
+%% unfold(Head,Params,UList):-
+%% 	unfold_type(Head,list),
+%% 	unfold_list(Params,UList),!.
+%% unfold(Head,Params,UList):-
+%% 	unfold_type(Head,maybe),
+%% 	unfold_maybe(Params,UList),!.
+
+%% head_module(Head,Module):-
+%% 	atomic_list_concat(A,'-',Head),
+%% 	A=[Module|_],!.
+
+%% head_name(Head,Name):-
+%% 	atomic_list_concat(A,'-',Head),
+%% 	A=[_,Name],!.
+
+%% unfold_type(none,none):-!.
