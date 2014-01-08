@@ -39,7 +39,7 @@ PropChild : MaybeProps Child {$$=frame:propchild($1,$2)};
 Child : Node {$$=$1} 
       | Tree {$$=$1};
 
-MaybeProps : '(' Props ')' {$$=$2} 
+MaybeProps : '(' Props ')' {get_coord($1,Coord), $$=some(avm:avm(Coord,$2))}
 	   | {$$=none};
 
 Props : (Feat // ',')+ {$$=$1};

@@ -28,13 +28,10 @@ xmg:unfold_dimstmt(Frame,frame:tree(Root,Children)):--
 	!.
 
 
-xmg:unfold_dimstmt(Frame,frame:S1):-- 
-	xmg:unfold_dimstmt(Frame,S1),!.
-
 xmg:unfold_dimstmt(Frame,frame:node(N,P,F)):-- 
 	xmg:unfold_expr(N,TN),
 	
-	constraints::enq((TN,frame:node,Syn)),
+	constraints::enq((TN,frame:node,Frame)),
 	%%constraints::enq(indim(Syn,TN)),
 	xmg:new_target_var(T1),
 	xmg:new_target_var(T2),
@@ -45,15 +42,18 @@ xmg:unfold_dimstmt(Frame,frame:node(N,P,F)):--
 	xmg:unfold_expr(F,T2),
 	constraints::enq((TN,frame:feats(T2))),
 	!.
-xmg:unfold_dimstmt(Frame,frame:dom(token(_,Op),N1,N2)):-- 
-	%%xmg:new_target_var(T1),
-	%%xmg:new_target_var(T2),
+xmg:unfold_dimstmt(Frame,frame:edge(Props,N1,N2)):-- 
+	xmg:unfold_expr(Props,UProps),
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((frame:dom(T1,Op,T2,C),Frame)),
+	constraints::enq((frame:edge(UProps,T1,T2),Frame)),
 	!.
 
-
+%% xmg:unfold_dimstmt(Frame,Stmt):--
+%% 	xmg:send(info,'\nunable to unfold\n'),
+%% 	xmg:send(info,Stmt),
+%% 	false,!.
+	
 
 
 

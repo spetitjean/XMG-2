@@ -1,4 +1,4 @@
-:- module(xmg_nodename_frame,[nodename/2]).
+:- module(xmg_brick_frame_nodename,[nodename/2]).
 
 :- use_module(library(atts)).
 :- attribute nameval/1.

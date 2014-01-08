@@ -18,14 +18,51 @@
 %% ========================================================================
 
 
-:-module(xmg_generator_frame).
-:-use_module(xmg_engine_frame).
+:-module(xmg_brick_frame_generator).
+:-use_module('xmg/brick/frame/engine').
 
-:-edcg:using(xmg_generator:decls).
-:-edcg:using(xmg_generator:name).
-
+:-edcg:using(xmg_brick_mg_generator:decls).
+:-edcg:using(xmg_brick_mg_generator:name).
+:-edcg:using(xmg_brick_mg_generator:code).
 
 :-edcg:weave([decls,name], [new_name/2,var_Stmt/2,var_or_const/2,generate_Stmt/4]).
+
+
+xmg:generate_instr((TN,frame:node,Frame)):--
+	decls::tget(TN,TV),
+	%%xmg:send(info,TV),
+	code::enq(xmg_brick_frame_engine:inode(TV,id(TN,_))),
+	Put=..[put,TV],
+	Acc=Syn,
+	AccNode=..['::',xmg_acc:Acc,Put],
+	code::enq(AccNode),
+	!.
+xmg:generate_instr((N,frame:props(P))):--
+	decls::tget(N,VN),
+	decls::tget(P,VP),
+	code::enq(xmg_brick_frame_engine:inodeprops(VN,VP)),
+	!.
+xmg:generate_instr((N,frame:feats(F))):--
+	decls::tget(N,VN),
+	decls::tget(F,VF),
+	code::enq(xmg_brick_frame_engine:inodefeats(VN,VF)),
+	!.
+xmg:generate_instr((frame:edge(Props,N1,N2),Frame)):--
+
+	decls::tget(N1,V1),
+	decls::tget(N2,V2),
+	Put=..[put,edge(Props,V1,V2)],
+	Acc=Frame,
+	AccDom=..['::',xmg_acc:Acc,Put],
+	code::enq(AccDom),	
+	!.
+
+
+
+
+
+
+
 
 new_name(Name,Prefix):--
 	name::incr,

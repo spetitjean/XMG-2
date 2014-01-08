@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(xmg_engine_frame,[]).
+:- module(xmg_brick_frame_engine,[]).
 
 :- edcg:thread(cname,edcg:counter).
 
