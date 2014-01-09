@@ -43,10 +43,11 @@ xmg:unfold_dimstmt(Frame,frame:node(N,P,F)):--
 	constraints::enq((TN,frame:feats(T2))),
 	!.
 xmg:unfold_dimstmt(Frame,frame:edge(Props,N1,N2)):-- 
-	xmg:unfold_expr(Props,UProps),
+	xmg:new_target_var(V1),
+	xmg:unfold_expr(Props,V1),
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((frame:edge(UProps,T1,T2),Frame)),
+	constraints::enq((frame:edge(V1,T1,T2),Frame)),
 	!.
 
 %% xmg:unfold_dimstmt(Frame,Stmt):--

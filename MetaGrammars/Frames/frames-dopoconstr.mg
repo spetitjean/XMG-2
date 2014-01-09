@@ -60,8 +60,9 @@ declare ?THEME ?THEMEVAR ?GOAL ?GOALVAR ?CAUSE ?EFFECT ?EFFECTVAR ?INDIR ?PP ?CA
   {
 	?PP = DirPrepObj-to[];
   	?PP.?V = ?V;
-  	?PP.?ROOT = ?EFFECT;
-  	?PP.?GOALVAR = ?GOALVAR
+  	?PP.?ROOT = ?EFFECT
+	%%;
+  	%%?PP.?GOALVAR = ?GOALVAR
   }
  }
   ;

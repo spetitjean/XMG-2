@@ -42,7 +42,7 @@ xmg:unfold_dimstmt(Dim,control:and(S1,S2)):--
 xmg:unfold_dimstmt(Dim,control:or(S1,S2)):-- 
 	xmg:unfold_dimstmt(Dim,S1) with (constraints([]-C1,[]-[])),
 	xmg:unfold_dimstmt(Dim,S2) with (constraints([]-C2,[]-[])),
-	constraints::enq(or([and(C1),and(C2)])),
+	constraints::enq(control:or([control:and(C1),control:and(C2)])),
 	!.
 
 

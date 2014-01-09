@@ -21,10 +21,7 @@
 :-module(xmg_loader_avm).
 
 load_module:-
-	add_to_path('contributions/AVM/bricks/AVM/compiler'),
-	use_module('xmg_unfolder_avm'),
-	use_module('xmg_generator_avm'),
-	use_module('xmg_convert_avm'),
-	use_module('xmg_convert_h_avm'),
-	add_to_path('contributions/AVM/libraries'),
-	use_module('xmg_avm'),!.
+	use_module('xmg/brick/avm/compiler/unfolder'),
+	use_module('xmg/brick/avm/compiler/generator'),
+	use_module('xmg/brick/havm/compiler/convert'),
+	use_module('xmg/brick/avm/avm'),!.
