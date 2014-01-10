@@ -29,10 +29,10 @@
 
 
 xmg:generate_instr((TN,frame:node,Frame)):--
-	xmg:send(info,'\nHere is a nodevar:\n'),
-	xmg:send(info,TN),
+	%% xmg:send(info,'\nHere is a nodevar:\n'),
+	%% xmg:send(info,TN),
 	decls::tget(TN,TV),
-	xmg:send(info,TV),
+	%%xmg:send(info,TV),
 	code::enq(xmg_brick_frame_engine:inode(TV,id(TN,_))),
 	Put=..[put,TV],
 	Acc=Frame,

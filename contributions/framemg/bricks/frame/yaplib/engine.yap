@@ -40,9 +40,9 @@ gensym(Name) :--
 %% 	xmg_nodename:nodename(I,N1),
 %% 	X = node(P,T,I),!. 
 inode(X,N) :-
-	xmg_h_avm:h_avm(P,[]),
-	xmg_h_avm:h_avm(F,[]),
-	xmg_nodename_frame:nodename(I,N),
+	xmg_brick_havm_havm:h_avm(P,[]),
+	xmg_brick_havm_havm:h_avm(F,[]),
+	xmg_brick_frame_nodename:nodename(I,N),
 	X = node(P,F,I),!. 
 
 inodeprops(X,P) :-
@@ -53,7 +53,7 @@ inodefeats(X,F) :-
 
 
 feat(F,A,B,P) :-
-	xmg_h_avm:h_avm(N,[A-value(B,P)]),
+	xmg_brick_havm_havm:h_avm(N,[A-value(B,P)]),
 	F=N,
 	!.
 
