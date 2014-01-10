@@ -18,10 +18,11 @@
 %% ========================================================================
 
 :-module(xmg_brick_mg_unfolder).
-:-edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
+:-edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars, xmg_brick_mg_accs:consts]).
 
 :-edcg:weave([constraints, name, vars, consts],[unfold_class/1]).
-:-edcg:weave([vars, consts],[build_context/3, add_decls/1]).
+:-edcg:weave([vars],[put_in_table/1]).
+%%:-edcg:weave([vars],[build_context/3, add_decls/1]).
 
 :-multifile(xmg:unfold/2).
 
@@ -64,7 +65,13 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 	xmg_table:table_new(TableV),
 	xmg_table:table_new(TableC),
 
-	build_context(I,E,D) with (vars(TableV,TableVO), consts(TableC,TableCO)),
+	%%build_context(I,E,D) with (vars(TableV,TableVO), consts(TableC,TableCO)),
+
+	xmg_brick_mg_exporter:declared(N,List),
+
+	%%xmg_table:table_new(TableIn),
+	put_in_table(List) with vars(TableV,TableVO),
+
 	%%xmg_brick_mg_compiler:send(info,Vars),
 	unfold_vars(P,UP),
 	unfold_vars(I,UI),
@@ -73,7 +80,7 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 	
 	%%xmg:send(info,'\nunfolded vars'),
 
-	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars(TableVO,TableVF), consts(TableCO,TableCF)),
+	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars(TableVO,TableVF), consts(TableC,_)),
 	%%xmg_brick_mg_compiler:send(info,Constraints),
 	!.
 
@@ -101,26 +108,33 @@ unfold_var(value:const(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(mg:iclass(Token,AS,_),import(ID,AS)):- xmg:token_to_id(Token,ID), !.
 unfold_var(Token,ID):- xmg:token_to_id(Token,ID), !.
 
-build_context(I,E,D):--
-	add_decls(D),!.
+%% build_context(I,E,D):--
+%% 	add_decls(D),!.
 
-add_decls(none):-- !.
-add_decls(some(mg:declare(Decls))):-- 
-	add_decls(Decls),!.
-add_decls([]):-- !.
-add_decls([value:var(token(_,id(ID)))|T]):-- 
-	vars::tput(ID,_),
-	add_decls(T),!.
-add_decls([value:const(token(_,id(ID)))|T]):-- 
-	consts::tput(ID,_),
-	add_decls(T),!.
+%% add_decls(none):-- !.
+%% add_decls(some(mg:declare(Decls))):-- 
+%% 	add_decls(Decls),!.
+%% add_decls([]):-- !.
+%% add_decls([value:var(token(_,id(ID)))|T]):-- 
+%% 	vars::tput(ID,_),
+%% 	add_decls(T),!.
+%% add_decls([value:const(token(_,id(ID)))|T]):-- 
+%% 	consts::tput(ID,_),
+%% 	add_decls(T),!.
 
 unfold_class(C):--
 	%%xmg_brick_mg_compiler:send(info,C),!,
 	xmg:unfold_stmt(C),!,
 	!.
 
-
+put_in_table([]):-- !.
+put_in_table([id(A,_)-B|T]):--
+	vars::tput(A,B),
+	put_in_table(T),!.
+put_in_table([const(A,_)-const(N,_)|T]):--
+	%% skolemize ?
+	vars::tput(A,sconst(N,_)),
+	put_in_table(T),!.
 
 
 

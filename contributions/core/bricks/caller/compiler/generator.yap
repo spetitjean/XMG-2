@@ -42,6 +42,15 @@ xmg:generate_instr((Var,control:dot(Class,id(CVar,_)))):--
 	code::enq(lists:Member),
 	code::enq(xmg:send(info,'member found')),!.
 
+xmg:generate_instr((Var,control:dot(Class,CVar))):--
+	xmg:send(info,' generating dot '),
+	decls::tget(Var,GV),
+	decls::tget(Class,GC),
+	
+	Member=..[member,CVar-GV,GC],
+	code::enq(lists:Member),
+	code::enq(xmg:send(info,'member found')),!.
+
 
 
 
