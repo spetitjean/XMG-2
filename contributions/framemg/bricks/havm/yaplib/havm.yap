@@ -17,44 +17,45 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_havm_havm, [h_avm/2, const_h_avm/2]).
+:- module(xmg_brick_havm_havm, [h_avm/3, const_h_avm/2]).
 
 :- use_module(library(atts)).
 :- use_module(library(rbtrees)).
 
-:- attribute avmfeats/2.
+:- attribute avmfeats/3.
 
 verify_attributes(Var, Other, Goals) :-
-	get_atts(Var, avmfeats(T1,U)), !,
+	get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
-	( get_atts(Other, avmfeats(T2,U)) ->
-	  rb_visit(T1,Pairs),
-	  unify_entries(T2,Pairs,T3),
-	  put_atts(Other, avmfeats(T3,U)),
-	  Goals=[]
-	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(T1,U))).
+	( get_atts(Other, avmfeats(Type2,T2,U)) ->
+	    hierarchy(Type1,Type2,Type3),
+	    rb_visit(T1,Pairs),
+	    unify_entries(T2,Pairs,T3),
+	    put_atts(Other, avmfeats(Type3,T3,U)),
+	    Goals=[]
+	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
 
 verify_attributes(_, _, []).
 
 unify_entries(T,[],T).
 unify_entries(T1,[K-V0|L],T3) :-
-	(rb_lookup(K,V1,T1) -> hierarchy(V0,V1,V2), rb_update(T1,K,V2,T2); rb_insert(T1,K,V0,T2)),
+	(rb_lookup(K,V1,T1) -> V0=V1, T1=T2; rb_insert(T1,K,V0,T2)),
 	unify_entries(T2,L,T3).
 
-h_avm(X, L) :- var(L), !,
-	get_atts(X, avmfeats(T,_)),
+h_avm(X, Type, L) :- var(L), !,
+	get_atts(X, avmfeats(Type,T,_)),
 	rb_visit(T,L).
 
-h_avm(X, L) :-
+h_avm(X, Type, L) :-
 	list_to_rbtree(L,T),
-	put_atts(Y, avmfeats(T,_)),
+	put_atts(Y, avmfeats(Type,T,_)),
 	X = Y.
 
 const_h_avm(A,C) :-
-	get_atts(A, avmfeats(_, C)).
+	get_atts(A, avmfeats(_, _, C)).
 	
-attribute_goal(Var, h_avm(Var,L)) :-
-	get_atts(Var, avmfeats(T,_)),
+attribute_goal(Var, h_avm(Var,Type,L)) :-
+	get_atts(Var, avmfeats(Type,T,_)),
 	rb_visit(T,L).
 
 hierarchy(V0,V1,V0):-
@@ -65,18 +66,18 @@ hierarchy(V0,V1,V1):-
 	V1=const(VV1,T),
 
 	%%xmg_typer:hierarchy(T,VV0,VV1),!.
-	xmg_typer_hierarchy:subtype(T,VV0,VV1),!.
+	xmg_brick_hierarchy_typer:subtype(T,VV0,VV1),!.
 
 hierarchy(V0,V1,V0):-
 	V0=const(VV0,T),
 	V1=const(VV1,T),
 
 	%%xmg_typer:hierarchy(T,VV1,VV0),!.
-	xmg_typer_hierarchy:subtype(T,VV1,VV0),!.
+	xmg_brick_hierarchy_typer:subtype(T,VV1,VV0),!.
 
 hierarchy(V0,V1,V0):-
-	xmg_compiler:send(info,'Hierarchy type unification: do not know what to do with '),
-	xmg_compiler:send(info,V0),
-	xmg_compiler:send(info,V1),
-	xmg_compiler:send_nl(info,2),false.
+	xmg:send(info,'Hierarchy type unification: do not know what to do with '),
+	xmg:send(info,V0),
+	xmg:send(info,V1),
+	false.
 	

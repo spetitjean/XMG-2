@@ -22,6 +22,14 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
+xmg:unfold_dimstmt(Frame,frame:frame(Var,Type,Feats)):--
+	constraints::enq(),
+	!.
+
+
+
+
+%% an older try, 
 
 xmg:unfold_dimstmt(Frame,frame:tree(Root,Children)):--
 	%%xmg_brick_mg_compiler:send(info,Root),
