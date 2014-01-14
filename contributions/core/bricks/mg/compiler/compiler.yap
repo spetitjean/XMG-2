@@ -172,7 +172,7 @@ eval(sem,Sem,XML,_):-
 
 eval(frame,Frame,XML,_):-
 	Class=class_test,
-	xmg_brick_mg_preparer_frame:prepare(Frame,PFrame),
+	xmg_brick_frame_preparer:prepare(Frame,PFrame),
 	send(debug,PFrame),
 	xmg_solver_frame:solve(PFrame,solution(Tree)),
 	xmg_convert_frame:toXML(tree(Tree,Class),XML,0).

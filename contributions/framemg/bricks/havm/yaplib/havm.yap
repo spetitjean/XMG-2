@@ -27,11 +27,12 @@
 verify_attributes(Var, Other, Goals) :-
 	get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
-	( get_atts(Other, avmfeats(Type2,T2,U)) ->
+	( get_atts(Other, avmfeats(Type2,T2,U)) ->	    
 	    hierarchy(Type1,Type2,Type3),
 	    rb_visit(T1,Pairs),
 	    unify_entries(T2,Pairs,T3),
 	    put_atts(Other, avmfeats(Type3,T3,U)),
+	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
 
@@ -39,8 +40,9 @@ verify_attributes(_, _, []).
 
 unify_entries(T,[],T).
 unify_entries(T1,[K-V0|L],T3) :-
-	(rb_lookup(K,V1,T1) -> V0=V1, T1=T2; rb_insert(T1,K,V0,T2)),
+	(rb_lookup(K,V1,T1) ->  V0=V1, T1=T2; rb_insert(T1,K,V0,T2)),
 	unify_entries(T2,L,T3).
+
 
 h_avm(X, Type, L) :- var(L), !,
 	get_atts(X, avmfeats(Type,T,_)),
@@ -81,3 +83,11 @@ hierarchy(V0,V1,V0):-
 	xmg:send(info,V1),
 	false.
 	
+print_h_avm(AVM):-
+	h_avm(AVM,Type,Feats),
+	xmg:send(info,'\n[\n'),
+	xmg:send(info,Type),
+	xmg:send(info,',\n'),
+	xmg:send(info,Feats),
+	xmg:send(info,'\n]\n]'),
+	!.	

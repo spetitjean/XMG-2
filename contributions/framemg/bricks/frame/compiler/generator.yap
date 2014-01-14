@@ -27,6 +27,30 @@
 
 :-edcg:weave([decls,name], [new_name/2,var_Stmt/2,var_or_const/2,generate_Stmt/4]).
 
+xmg:generate_instr((TFrame,frame:topframe,Frame)):--
+	decls::tget(TFrame,VFrame),
+	Enq=..['::',xmg_acc:Frame,enq(VFrame)],
+	%%xmg:send(info,Enq),
+	code::enq(Enq),
+	!.
+
+xmg:generate_instr((TFrame,frame:frame,UType)):--
+	decls::tget(TFrame,VFrame),	
+	UType=id(Type,_),
+	code::enq(xmg_brick_havm_havm:h_avm(VFrame,Type,[])),
+	!.
+
+xmg:generate_instr((TFrame,frame:pair,Left-Right)):--
+	decls::tget(TFrame,VFrame),
+	Left=id(IDLeft,_),
+	%%xmg:send(info,'getting '),
+	%%xmg:send(info,Right),
+	decls::tget(Right,VRight),
+	code::enq(xmg_brick_havm_havm:h_avm(VFrame,_,[IDLeft-VRight])),
+	!.
+
+
+%% some older try:
 
 xmg:generate_instr((TN,frame:node,Frame)):--
 	%% xmg:send(info,'\nHere is a nodevar:\n'),

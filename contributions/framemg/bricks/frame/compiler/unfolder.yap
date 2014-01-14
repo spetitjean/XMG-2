@@ -22,10 +22,53 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-xmg:unfold_dimstmt(Frame,frame:frame(Var,Type,Feats)):--
-	constraints::enq(),
+:- edcg:weave([constraints,name,vars,consts],[unfold_frame/2,unfold_pairs/2,unfold_pair/2]).
+
+xmg:unfold_dimstmt(Frame,Stmt):--
+	xmg:new_target_var(TFrame),
+	unfold_frame(Stmt,UStmt),
+	constraints::enq((UStmt,frame:topframe,Frame)),
 	!.
 
+unfold_frame(frame:frame(Var,Type,Feats),TFrame):--
+	xmg:unfold_expr(Type,UType),
+	
+	(
+	    Var=none 
+	->
+	xmg:new_target_var(TFrame)
+    ;
+	xmg:unfold_expr(Var,TFrame)
+    ),
+
+	%%xmg:send(info,'\nFrame Var is\n'),
+	%%xmg:send(info,Var),
+
+	%%xmg:send(info,UVar),
+	constraints::enq((TFrame,frame:frame,UType)),
+
+	unfold_pairs(Feats,TFrame),
+
+	!.
+
+unfold_pairs([],_):-- !.
+unfold_pairs([H|T],TFrame):--
+	unfold_pair(H,TFrame),
+	xmg:send(info,' Pair unfolded'),
+	unfold_pairs(T,TFrame),!.
+
+unfold_pair(frame:pair(Left,Right),TFrame):--
+	xmg:unfold_expr(Left,ULeft),
+	xmg:unfold_expr(Right,URight),
+	xmg:new_target_var(TVar),
+	constraints::enq(eq(TVar,URight)),
+	constraints::enq((TFrame,frame:pair,ULeft-TVar)),
+	!.
+unfold_pair(frame:pair(Left,Right),TFrame):--
+	xmg:unfold_expr(Left,ULeft),
+	unfold_frame(Right,URight),
+	constraints::enq((TFrame,frame:pair,ULeft-URight)),
+	!.
 
 
 

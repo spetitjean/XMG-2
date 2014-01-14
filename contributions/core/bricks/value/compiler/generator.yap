@@ -31,11 +31,17 @@ xmg:generate_instr(eq(Var,Var2)):--
 
 	code::enq(Eq),
 
-	code::enq(xmg:send(info,' eq done ')),
+	%%code::enq(xmg:send(info,' eq done ')),
 !.
 
 xmg:generate_instr(eq(Var,id(ID,C))):--
 	%%xmg:send(info,' trying eq '),
 	decls::tget(Var,GV),
 	Eq=..['=',GV,const(ID,C)], 
-	code::enq(Eq),!.
+	%%Eq=..['=',GV,ID], 
+	%%code::enq(xmg:send(info,' eq const ')),
+	%%code::enq(xmg:send(info,Eq)),
+
+	code::enq(Eq),
+	%%code::enq(xmg:send(info,' eq done ')),
+!.

@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_preparer_frame, []).
+:- module(xmg_brick_frame_preparer, []).
 
 prepare(Frame,prepared(Nodes,Edges)):-  
 	lists:remove_duplicates(Frame,FrameD),
@@ -32,9 +32,8 @@ separate([edge(N1,N2,P)|T],T1,[edge(N1,N2,P)|T2]):-
 	check_node(N2),
 	separate(T,T1,T2),!.
 separate([H|T],T1,T2):-
-	xmg_compiler:send(info,'problem with '),
-	xmg_compiler:send(info,H),
-	xmg_compiler:send_nl(info,2),!,
+	xmg:send(info,'\n\nProblem with '),
+	xmg_brick_havm_havm:print_h_avm(H),
 	false,!,
 	separate(T,T1,T2),
 	!.
