@@ -13,6 +13,7 @@ class BrickCompiler(object):
         self._dims       = []
         self._dimsp      = []
         self._punctuation= []
+        self._keywords   = []
 
     def set_folder(self,folder):
         self._folder=folder
@@ -107,10 +108,26 @@ class BrickCompiler(object):
 
     def collect_punctuation(self):
         for lang in self._languages:
+            #print(lang._punctuation)
             for npunct in lang._punctuation:
                 if npunct not in self._punctuation and npunct > '':
+                    #print(npunct)
                     self._punctuation.append(npunct)
+        #print(self._punctuation)
         self._punctuation.sort(reverse=True)
+        #print(self._punctuation)
+
+    def collect_keywords(self):
+        for lang in self._languages:
+            #print(lang._punctuation)
+            for nkey in lang._unfold._Ts:
+                if nkey not in self._keywords and nkey > '':
+                    #print(npunct)
+                    self._keywords.append(nkey)
+        #print(self._punctuation)
+        self._keywords.sort(reverse=True)
+        #print(self._punctuation)
+
 
     def generate_tokenize_punctuation(self):
         self.collect_punctuation()
@@ -127,6 +144,25 @@ class BrickCompiler(object):
         for punct in self._punctuation:
             #tokenizefile.write('punctuation(\''+punct+'\') -->> input_gets("'+punct+'"), !.\n')
             tokenizefile.write('xmg:punctuation(\''+punct+'\').\n')
+
+        tokenizefile.close()
+        print("Part of tokenizer generated in "+self._folder)
+
+    def generate_tokenize_keywords(self):
+        self.collect_keywords()
+        tokenizefile=open(self._folder+"/tokenizer_keywords.yap","w")
+        tokenizefile.write('%% -*- prolog -*-\n\n')
+        tokenizefile.write(':-module(xmg_tokenizer_keywords).\n\n')
+        tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+        tokenizefile.write('%% Part of tokenizer\n')
+        tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
+        if not self._keywords:
+            tokenizefile.write('xmg:keyword(_):- false.\n')
+
+        
+        for key in self._keywords:
+            #tokenizefile.write('punctuation(\''+punct+'\') -->> input_gets("'+punct+'"), !.\n')
+            tokenizefile.write('xmg:keyword(\''+key+'\').\n')
 
         tokenizefile.close()
         print("Part of tokenizer generated in "+self._folder)
@@ -209,6 +245,7 @@ class BrickCompiler(object):
         #conffile.write('\tadd_to_path(\'' + os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), self._folder) + '\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/dimensions\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_punct\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_keywords\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\').')
         conffile.close()
         print("Configuration file generated in "+self._folder)
@@ -228,6 +265,7 @@ class BrickCompiler(object):
         if directory is not None:
             self.generate_dimensions()
             self.generate_tokenize_punctuation()
+            self.generate_tokenize_keywords()
             self.generate_tokenize_dims()
             self.generate_modules()
             self.generate_conf()

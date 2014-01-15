@@ -1,17 +1,8 @@
-%token hierarchy
-%token id
-
-%type Hierarchy Hierarchy
-%type HierarchyDef HierarchyDef
-
-%type Id_pair Id_pair
 
 %%
 
-Hierarchy : hierarchy id '=' HierarchyDef {$$=hierarchy:hierarchy($2,$4) };
+FConstraint : fconstraint id '(' IDList ',' IDList ',' IDList ',' IDList ')' {$$=hierarchy:fconstraint($2,$4,$6,$8,$10)} ;
 
-HierarchyDef : '{' (Id_pair // ',')+ '}' {$$=$2};
-
-Id_pair : '(' id ',' id ')' {$$=hierarchy:pair($2,$4)} ;
+IDList : '[' ( id // ',')* ']' {$$=$1} ;
 
 %%

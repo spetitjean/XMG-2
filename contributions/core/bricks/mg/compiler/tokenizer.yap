@@ -24,6 +24,7 @@
 :- use_module(library(lists)).
 
 :- multifile(xmg:punctuation/1).
+:- multifile(xmg:keyword/1).
 
 :- edcg:thread(macros  ,edcg:table  ). % table of macros
 :- edcg:thread(toks    ,edcg:queue  ). % accumulated tokens
@@ -215,10 +216,10 @@ macro_more_tokens -->> [].
 %%=============================================================================
 
 token(T,C) -->>    inserted(T,C), !.
+token(T,C) -->> punctuation(T,C), !.
 token(T,C) -->>  identifier(T,C), !.
 token(T,C) -->>      number(T,C), !.
 token(T,C) -->>      string(T,C), !.
-token(T,C) -->> punctuation(T,C), !.
 
 inserted(T,C) -->> tokbuf::get((T,C)). % was actually contributed by macro expansion
 
