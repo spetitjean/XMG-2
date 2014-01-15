@@ -27,6 +27,7 @@
 %%:-use_module(conf).
 
 :-dynamic(principle/1).
+:-dynamic(xmg:principle/3).
 :-dynamic(unicity/1).
 :-dynamic(mutex/1).
 :-dynamic(mutex_add/2).
@@ -174,8 +175,9 @@ eval(frame,Frame,XML,_):-
 	Class=class_test,
 	xmg_brick_frame_preparer:prepare(Frame,PFrame),
 	send(debug,PFrame),
-	xmg_solver_frame:solve(PFrame,solution(Tree)),
-	xmg_convert_frame:toXML(tree(Tree,Class),XML,0).
+	%%xmg_solver_frame:solve(PFrame,solution(Tree)),
+	%%xmg_convert_frame:toXML(tree(Tree,Class),XML,0).
+	xmg_brick_frame_convert:toXML(PFrame,XML,0).
 	%%send(debug,Tree).
 eval(frame,[], elem(tree, features([id-none])),_).
 

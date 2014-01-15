@@ -17,14 +17,14 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_convert_frame, []).
+:- module(xmg_brick_frame_convert, []).
 
 %%:- edcg:using(xmg_convert_avm:name).
-:- edcg:using(xmg_convert:name).
+:- edcg:using(xmg_brick_mg_convert:name).
 
 :- dynamic(dejavu/1).
 
-:- edcg:weave([name],[new_name/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2]).
+:- edcg:weave([name],[new_name/2, framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2]).
 
 new_name(Prefixe, Name) :--
 	name::incr,
@@ -33,6 +33,53 @@ new_name(Prefixe, Name) :--
 
 listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
+
+toXML(Frames, elem(frame, features([]), children(UFeats)),Number) :--
+	framesToXML(Frames,UFeats) with name(Number,_),
+	%%xmg:send(info,UFeats),
+	!.
+
+
+framesToXML([],[]):-- !.
+framesToXML([H|T],[H1|T1]):--
+	frameToXML(H,H1),
+	framesToXML(T,T1).
+
+frameToXML(Frame,elem(fs,features([coref-Const,type-Type]),children(XMLFeats)) ):--
+	xmg_brick_havm_havm:h_avm(Frame,Type,Feats),
+	xmg_brick_havm_havm:const_h_avm(Frame,Const),
+	(
+	    var(Const)->
+	    new_name('@Frame',New),
+	    xmg:send(info,New),
+	    New=Const
+	;
+	true
+	    ),
+	featsToXML(Feats,XMLFeats),
+	!.
+
+featsToXML([],[]):-- !.
+featsToXML([H|T],[H1|T1]):--
+	featToXML(H,H1),
+	featsToXML(T,T1),!.
+
+featToXML(Attr-Value,elem(f,features([name-Attr]),children([XMLValue]))):--
+	valToXML(Value,XMLValue),
+	!.
+
+
+valToXML(Frame,XMLFrame):--
+	frameToXML(Frame,XMLFrame),!.
+valToXML(Var,elem(sym,features([value-Var]))):--
+	var(Var),
+	new_name('@V',Var),
+	!.
+valToXML(const(Val,_),elem(sym,features([value-Val]))):-- !.
+valToXML(Val,elem(sym,features([value-Val]))):-- !.
+
+
+%% an older try
 
 toXML(tree(Tree,Family), elem(frame, features([id-Name]),children([Syn1])),Number) :--
 	%%xmg_compiler:send(info,Tree),

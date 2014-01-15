@@ -19,7 +19,7 @@
 
 :- module(xmg_solver_frame, []).
 
-
+solve(Frames,Frames).
 
 solve(prepared(Nodes, Edges),solution(Tree)):-
 	xmg_compiler:send(info,' solving frame '),
@@ -31,6 +31,7 @@ solve(prepared(Nodes, Edges),solution(Tree)):-
 		
 	%%xmg_compiler:send(info,Tree).
 	%%print_tree(Tree).
+
 
 find_root([Node],[],Node):-!.
 find_root(Nodes,[],Node):-
