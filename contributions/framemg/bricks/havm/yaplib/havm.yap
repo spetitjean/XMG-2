@@ -83,11 +83,38 @@ hierarchy(V0,V1,V0):-
 	xmg:send(info,V1),
 	false.
 	
-print_h_avm(AVM):-
+indent(0).
+indent(N):-
+	xmg:send(info,' '),
+	M is N - 1,
+	indent(M),!.
+
+print_h_avm(AVM,Indent):-
 	h_avm(AVM,Type,Feats),
-	xmg:send(info,'\n[\n'),
+	xmg:send(info,'\n'),
+	indent(Indent),
+	xmg:send(info,'[\n'),
+	indent(Indent),
 	xmg:send(info,Type),
 	xmg:send(info,',\n'),
-	xmg:send(info,Feats),
-	xmg:send(info,'\n]\n]'),
+	print_feats(Feats,Indent),
+	indent(Indent),
+	xmg:send(info,']\n'),
 	!.	
+
+print_feats([],I).
+print_feats([A-V|T],I):-
+	indent(I),
+	xmg:send(info,A),
+	xmg:send(info,':'),
+	print_value(V,I),
+	%%xmg:send(info,'\n'),
+	print_feats(T,I).
+
+print_value(AVM,I):-
+	J is I +2,
+	print_h_avm(AVM,J).
+print_value(V,I):-
+	xmg:send(info,V),
+	xmg:send(info,'\n'),
+	!.

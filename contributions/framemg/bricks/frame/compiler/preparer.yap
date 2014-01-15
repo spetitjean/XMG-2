@@ -19,10 +19,21 @@
 
 :- module(xmg_brick_frame_preparer, []).
 
-prepare(Frame,prepared(Nodes,Edges)):-  
-	lists:remove_duplicates(Frame,FrameD),
-	separate(FrameD,Nodes,Edges),
+prepare(Frames,FramesND):-  
+	lists:remove_duplicates(Frames,FramesND),
+	%%separate(FrameD,Nodes,Edges),
+	print_frames(FramesND),
 	!.
+
+print_frames([]).
+print_frames([H|T]):-
+	print_frame(H),
+	print_frames(T),!.
+
+print_frame(Frame):-
+	xmg_brick_havm_havm:print_h_avm(Frame,0).
+
+%% an older try
 
 separate([],[],[]):-!.
 separate([node(A,B,C)|T],[node(A,B,C)|T1],T2):-
@@ -33,7 +44,7 @@ separate([edge(N1,N2,P)|T],T1,[edge(N1,N2,P)|T2]):-
 	separate(T,T1,T2),!.
 separate([H|T],T1,T2):-
 	xmg:send(info,'\n\nProblem with '),
-	xmg_brick_havm_havm:print_h_avm(H),
+	xmg:send(info,H),
 	false,!,
 	separate(T,T1,T2),
 	!.
