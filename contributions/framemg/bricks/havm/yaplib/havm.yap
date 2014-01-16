@@ -84,7 +84,7 @@ unify_types(T1,T2,T):-
 	comp_types_types(T1,T2),!,
 	%% T1 and T2 should already be ordered set
 	ordsets:ord_union(T1,T2,T3),!,
-	reduce_set(T3,T),
+	reduce_set(T3,T3,T),
 	%%xmg:send(info,'\nreduced'),
 	!.
 
@@ -102,6 +102,8 @@ comp_type_type(Type,Type).
 comp_type_type(Type1,Type2):-
 	supertype(Type1,Type2,_),!.
 comp_type_type(Type1,Type2):-
+	compatible_types(Type1,Type2),!.
+comp_type_type(Type1,Type2):-
 	xmg:send(info,'\nError: types '),
 	xmg:send(info,Type1),
 	xmg:send(info,' and '),
@@ -112,23 +114,30 @@ comp_type_type(Type1,Type2):-
 %% compatible types are also the ones asserted with declarations, or the subtypes or supertypes
 
 
-reduce_set([],[]).
-reduce_set([H|T],[H|RSet]):-
-	%%xmg:send(info,'reducing '),
-	%%xmg:send(info,H),
-	%%xmg:send(info,T),
-	remove_supertypes(H,T,RT),!,
-	%%xmg:send(info,RT),
-	reduce_set(RT,RSet).
+
+compatible_types(Type1,Type2):-
+	xmg:fconstraint(Type1,comp,Type2),!.
+compatible_types(Type1,Type2):-
+	xmg:fconstraint(Type2,comp,Type1),!.
+
+
+reduce_set([],Set,Set).
+reduce_set([H|T],Set,RSet):-
+	%% xmg:send(info,'reducing '),
+	%% xmg:send(info,H),
+	%% xmg:send(info,Set),
+	remove_supertypes(H,Set,RT),!,
+	%% xmg:send(info,RT),
+	reduce_set(T,RT,RSet).
 %% the set can be reduced when some types are subtypes of others
 
 
 remove_supertypes(Type,[],[]).
 remove_supertypes(Type,[H|T],T1):-
-	supertype(Type,H,Type),!,
+	supertype(Type,H,H),!,
 	remove_supertypes(Type,T,T1).
 remove_supertypes(Type,[H|T],[H|T1]):-
-	not(supertype(Type,H,Type)),!,
+	not(supertype(Type,H,H)),!,
 	remove_supertypes(Type,T,T1).
 
 supertype(T1,T2,T2):-
