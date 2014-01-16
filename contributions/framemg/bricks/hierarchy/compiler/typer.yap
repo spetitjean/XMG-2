@@ -19,6 +19,23 @@
 
 :-module(xmg_brick_hierarchy_typer).
 :-dynamic(hierarchy/3).
+:-dynamic(xmg:fconstraint/3).
+
+type_fconstraint(Type,Must,Cant,Super,Comp):-
+	assert_constraints(Type,must,Must),
+	assert_constraints(Type,cant,Cant),
+	assert_constraints(Type,super,Super),
+	assert_constraints(Type,comp,Comp),
+	!.
+
+assert_constraints(Type,TConst,[]):-!.
+assert_constraints(Type,TConst,[H|T]):-
+	assert_constraint(Type,TConst,H),
+	assert_constraints(Type,TConst,T),!.
+
+assert_constraint(Type,TConst,Id):-
+	asserta(xmg:fconstraint(Type,TConst,Id)),!.
+
 
 type_hierarchy(_,[]):- !.
 type_hierarchy(Type,[ID1-ID2|T]):-

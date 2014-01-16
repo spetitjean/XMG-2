@@ -51,7 +51,7 @@ frameToXML(Frame,elem(fs,features([coref-Const,type-Type]),children(XMLFeats)) )
 	(
 	    var(Const)->
 	    new_name('@Frame',New),
-	    xmg:send(info,New),
+	    %%xmg:send(info,New),
 	    New=Const
 	;
 	true

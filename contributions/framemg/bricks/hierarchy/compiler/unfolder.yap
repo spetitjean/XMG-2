@@ -26,6 +26,25 @@
 xmg:unfold(hierarchy:hierarchy(token(_,id(Id)),Pairs),hierarchy(Id,UPairs)):-
 	unfold_pairs(Pairs,UPairs),!.
 
+xmg:unfold(hierarchy:fconstraint(Type,Must,Cant,Supertypes,Compatible),fconstraint(UType,UMust,UCant,USupertypes,UCompatible)):-
+	unfold_id(Type,UType),
+	unfold_list(Must,UMust),
+	unfold_list(Cant,UCant),
+	unfold_list(Supertypes,USupertypes),
+	unfold_list(Compatible,UCompatible),
+	!.
+
+unfold_id(token(_,id(ID)),ID).
+
+unfold_list(none,[]).
+unfold_list(some(List),UList):-
+	unfold_list(List,UList).
+unfold_list([],[]).
+unfold_list([H|T],[H1|T1]):-
+	unfold_id(H,H1),
+	unfold_list(T,T1),!.
+
+
 unfold_pairs([],[]):- !.
 unfold_pairs([H|T],[UH|UT]):-
 	unfold_pair(H,UH),

@@ -132,6 +132,8 @@ type_decl(type-Decls):-
 	get_types(Decls),!.
 type_decl(hierarchy-Decls):-
 	get_hierarchies(Decls),!.
+type_decl(fconstraint-Decls):-
+	get_fconstraints(Decls),!.
 type_decl(property-Decls):-
 	type_properties(Decls),!.
 type_decl(feat-Decls):-
@@ -213,6 +215,13 @@ get_hierarchies([H|T]):-
 	get_hierarchies(T),!.
 get_hierarchy(hierarchy(Type,Pairs)):-
 	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
+
+get_fconstraints([]):-!.
+get_fconstraints([H|T]):-
+	get_fconstraint(H),
+	get_fconstraints(T),!.
+get_fconstraint(fconstraint(Type,Must,Cant,Sub,Comp)):-
+	xmg_brick_hierarchy_typer:type_fconstraint(Type,Must,Cant,Sub,Comp),!.
 
 type_feats([]).
 type_feats([H|T]):-

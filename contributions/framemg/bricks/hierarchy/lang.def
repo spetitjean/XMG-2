@@ -3,6 +3,6 @@
 
 FConstraint : fconstraint id '(' IDList ',' IDList ',' IDList ',' IDList ')' {$$=hierarchy:fconstraint($2,$4,$6,$8,$10)} ;
 
-IDList : '[' ( id // ',')* ']' {$$=$1} ;
+IDList : '[' ( id // ',')* ']' {$$=$2} ;
 
 %%
