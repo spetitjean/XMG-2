@@ -216,7 +216,9 @@ get_hierarchies([H|T]):-
 get_hierarchy(hierarchy(Type,Pairs)):-
 	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
 
-get_fconstraints([]):-!.
+get_fconstraints([]):-
+	xmg_brick_hierarchy_typer:build_matrix(Matrix),
+	!.
 get_fconstraints([H|T]):-
 	get_fconstraint(H),
 	get_fconstraints(T),!.

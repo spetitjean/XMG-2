@@ -21,12 +21,52 @@
 :-dynamic(hierarchy/3).
 :-dynamic(xmg:fconstraint/3).
 
+build_matrix(Matrix):-
+	xmg:send(info,'\nBuilding vectors for types '),
+	findall(Type,xmg:ftype(Type),Types),
+	ordsets:list_to_ord_set(Types,OTypes),
+	xmg:send(info,OTypes),
+	build_vectors(OTypes,Vectors,OTypes),
+	xmg:send(info,Vectors),
+
+	xmg:send(info,'\nBuilding matrix\n'),
+	compute_matrix(Vectors,Matrix),
+	xmg:send(info,Matrix).
+
+build_vectors([],[],_).
+build_vectors([Type|Types],[Vector|Vectors],Ts):-
+	xmg:send(info,'\nBuilding vector for type '),
+	xmg:send(info,Type),
+	build_vector(Type,Vector,Ts),
+	build_vectors(Types,Vectors,Ts).
+
+build_vector(Type,[],[]).
+build_vector(Type,[Val|Vals],[Type1|Types]):-
+	subsumes(Type,Type1,Val),
+	build_vector(Type,Vals,Types).
+
+subsumes(Type,Type,1):-
+	!.
+subsumes(Type,Type1,1):-
+	xmg:fconstraint(Type1,super,Type),
+	!.
+subsumes(Type,Type1,0).
+
+compute_matrix(Vectors,Matrix):-
+	xmg_brick_hierarchy_boolMatrix:fixpoint(Vectors,Matrix).
+
 type_fconstraint(Type,Must,Cant,Super,Comp):-
+	%% this should be independant
+	assert_type(Type),
+
 	assert_constraints(Type,must,Must),
 	assert_constraints(Type,cant,Cant),
 	assert_constraints(Type,super,Super),
 	assert_constraints(Type,comp,Comp),
 	!.
+
+assert_type(Type):-
+	asserta(xmg:ftype(Type)).
 
 assert_constraints(Type,TConst,[]):-!.
 assert_constraints(Type,TConst,[H|T]):-
@@ -34,7 +74,21 @@ assert_constraints(Type,TConst,[H|T]):-
 	assert_constraints(Type,TConst,T),!.
 
 assert_constraint(Type,TConst,Id):-
+	xmg:send(info,'\nAssert '),
+	xmg:send(info,Type),
+	xmg:send(info,TConst),
+	xmg:send(info,Id),
+	
 	asserta(xmg:fconstraint(Type,TConst,Id)),!.
+
+
+
+
+
+
+
+
+
 
 
 type_hierarchy(_,[]):- !.

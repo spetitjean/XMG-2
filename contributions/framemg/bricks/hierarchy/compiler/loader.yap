@@ -22,4 +22,5 @@
 
 :-	use_module('xmg/brick/hierarchy/compiler/typer').
 :-	use_module('xmg/brick/hierarchy/compiler/unfolder').
+:-	use_module('xmg/brick/hierarchy/boolMatrices').
 
