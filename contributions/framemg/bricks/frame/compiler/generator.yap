@@ -37,7 +37,7 @@ xmg:generate_instr((TFrame,frame:topframe,Frame)):--
 xmg:generate_instr((TFrame,frame:frame,UType)):--
 	decls::tget(TFrame,VFrame),	
 	UType=id(Type,_),
-	code::enq(xmg_brick_havm_havm:h_avm(VFrame,[Type],[])),
+	code::enq(xmg_brick_havm_havm:h_avm(VFrame,Type,[])),
 	!.
 
 xmg:generate_instr((TFrame,frame:pair,Left-Right)):--
@@ -46,7 +46,7 @@ xmg:generate_instr((TFrame,frame:pair,Left-Right)):--
 	%%xmg:send(info,'getting '),
 	%%xmg:send(info,Right),
 	decls::tget(Right,VRight),
-	code::enq(xmg_brick_havm_havm:h_avm(VFrame,[],[IDLeft-VRight])),
+	code::enq(xmg_brick_havm_havm:h_avm(VFrame,_,[IDLeft-VRight])),
 	!.
 
 

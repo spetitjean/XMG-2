@@ -26,12 +26,23 @@ build_matrix(Matrix):-
 	findall(Type,xmg:ftype(Type),Types),
 	ordsets:list_to_ord_set(Types,OTypes),
 	xmg:send(info,OTypes),
+	
+	%% should do this with tables
+	build_indices_mappings(OTypes,TypeMap,ITypeMap,1),
 	build_vectors(OTypes,Vectors,OTypes),
 	xmg:send(info,Vectors),
 
 	xmg:send(info,'\nBuilding matrix\n'),
 	compute_matrix(Vectors,Matrix),
-	xmg:send(info,Matrix).
+	xmg:send(info,Matrix),
+	asserta(xmg:ftypeMatrix(Matrix)),
+	asserta(xmg:ftypeMap(TypeMap)),
+	asserta(xmg:ftypeIMap(ITypeMap)).
+
+build_indices_mappings([],[],[],_).
+build_indices_mappings([Type|Types],[Type-N|TypesMap],[N-Type|ITypesMap],N):-
+	M is N + 1,
+	build_indices_mappings(Types,TypesMap,ITypesMap,M).
 
 build_vectors([],[],_).
 build_vectors([Type|Types],[Vector|Vectors],Ts):-
