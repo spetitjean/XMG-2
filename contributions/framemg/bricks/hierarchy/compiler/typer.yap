@@ -21,28 +21,92 @@
 :-dynamic(hierarchy/3).
 :-dynamic(xmg:fconstraint/3).
 
-build_matrix(Matrix):-
-	xmg:send(info,'\nBuilding vectors for types '),
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Getting the hierarchy from the constraints
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% building all possible type sets
+
+build_types(types(OTypes,Sets)):-
+	%% get the list of elementary types
 	findall(Type,xmg:ftype(Type),Types),
 	ordsets:list_to_ord_set(Types,OTypes),
-	xmg:send(info,OTypes),
+	%% build all set combination of these elementary types
+	findall(Set,build_set(OTypes,Set),Sets),!.
+
+build_set([],[]).
+build_set([_|T],[Bool|T1]):-
+	build_bool(Bool),
+	build_set(T,T1).
+
+build_bool(0).
+build_bool(1).
+
+%% filtering sets by giving the shape of forbidden sets
+
+filter_sets([],_,[]).
+filter_sets([Set|Sets],Constraints,Sets1):-
+	filter_set(Set,Constraints),!,
+	filter_sets(Sets,Constraints,Sets1),!.
+filter_sets([Set|Sets],Constraints,[Set|Sets1]):-
+	filter_sets(Sets,Constraints,Sets1),!.
+
+%% should succeed if Set matches one of the shapes in Constraints
+filter_set(Set,[Constraint|_]):-
+	not(not(Set=Constraint)).
+filter_set(Set,[Constraint|T]):-
+	filter_set(Set,T).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Getting the unification rules from the hierarchy
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+build_matrix(Types,FSet,Matrix):-
+	xmg:send(info,'\nElementary types:'),
+	xmg:send(info,Types),
+	xmg:send(info,'\nType sets:'),
+	xmg:send(info,FSet),
+
+	build_sets_mappings(Types,FSet,Sets,Map,IMap,1),
+
+	xmg:send(info,'\nBuilding vectors for types '),
+	%% findall(Type,xmg:ftype(Type),Types),
+	%% ordsets:list_to_ord_set(Types,OTypes),
+	xmg:send(info,Sets),
 	
 	%% should do this with tables
-	build_indices_mappings(OTypes,TypeMap,ITypeMap,1),
-	build_vectors(OTypes,Vectors,OTypes),
+	%%build_indices_mappings(OTypes,TypeMap,ITypeMap,1),
+	build_vectors(Sets,Vectors,Sets),
 	xmg:send(info,Vectors),
 
 	xmg:send(info,'\nBuilding matrix\n'),
 	compute_matrix(Vectors,Matrix),
 	xmg:send(info,Matrix),
 	asserta(xmg:ftypeMatrix(Matrix)),
-	asserta(xmg:ftypeMap(TypeMap)),
-	asserta(xmg:ftypeIMap(ITypeMap)).
+	asserta(xmg:ftypeMap(Map)),
+	asserta(xmg:ftypeIMap(IMap)).
 
-build_indices_mappings([],[],[],_).
-build_indices_mappings([Type|Types],[Type-N|TypesMap],[N-Type|ITypesMap],N):-
-	M is N + 1,
-	build_indices_mappings(Types,TypesMap,ITypesMap,M).
+build_sets_mappings(_,[],[],[],[],_).
+build_sets_mappings(Types,[H|T],[Set|Sets],[Set-N|Maps],[N-Set|Imaps],N):-
+	vector_to_set(Types,H,Set),
+	M is N+1,
+	build_sets_mappings(Types,T,Sets,Maps,IMaps,M),!.
+
+vector_to_set([],[],[]).
+vector_to_set([Type|Types],[1|Vector],[Type|Set]):-
+	vector_to_set(Types,Vector,Set),
+	!.
+vector_to_set([Type|Types],[0|Vector],Set):-
+	vector_to_set(Types,Vector,Set),
+	!.
+
+%% build_indices_mappings([],[],[],_).
+%% build_indices_mappings([Type|Types],[Type-N|TypesMap],[N-Type|ITypesMap],N):-
+%% 	M is N + 1,
+%% 	build_indices_mappings(Types,TypesMap,ITypesMap,M).
 
 build_vectors([],[],_).
 build_vectors([Type|Types],[Vector|Vectors],Ts):-
@@ -99,7 +163,7 @@ assert_constraint(Type,TConst,Id):-
 
 
 
-
+%% Old stuff
 
 
 type_hierarchy(_,[]):- !.

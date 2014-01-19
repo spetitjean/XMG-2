@@ -86,10 +86,10 @@ unify_types(T1,T2,T3):-
 	T1=T2,
 	T3=T2,!.
 unify_types(T1,T2,T3):-
-	%%xmg:send(info,'\nUnifying '),
-	%%xmg:send(info,T1),
-	%%xmg:send(info,' and '),
-	%%xmg:send(info,T2),
+	%% xmg:send(info,'\nUnifying '),
+	%% xmg:send(info,T1),
+	%% xmg:send(info,' and '),
+	%% xmg:send(info,T2),
 
 	xmg:ftypeMap(TypeMap),
 	%%xmg:send(info,TypeMap),
@@ -119,7 +119,7 @@ unify_types(T1,T2,_):-
 	xmg:send(info,' are not compatible. Vectors are:\n'),
 
 	xmg:ftypeMap(TypeMap),
-	%%xmg:send(info,TypeMap),
+	xmg:send(info,TypeMap),
 	lists:member(T1-I1,TypeMap),
 	lists:member(T2-I2,TypeMap),
 	xmg:ftypeMatrix(Matrix),

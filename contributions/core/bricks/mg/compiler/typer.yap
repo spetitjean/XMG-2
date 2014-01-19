@@ -217,7 +217,16 @@ get_hierarchy(hierarchy(Type,Pairs)):-
 	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
 
 get_fconstraints([]):-
-	xmg_brick_hierarchy_typer:build_matrix(Matrix),
+	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
+
+	%% Constraints will be built from the metagrammar, but until then...
+	Constraints=[[0,_,_,_,_,_]],
+
+	xmg_brick_hierarchy_typer:filter_sets(Sets,Constraints,FSets),
+	xmg:send(info,'\nFiltered types:'),
+	xmg:send(info,FSets),
+
+	xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
 	!.
 get_fconstraints([H|T]):-
 	get_fconstraint(H),
