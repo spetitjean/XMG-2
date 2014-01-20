@@ -220,44 +220,49 @@ get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
 
 	%% Constraints will be built from the metagrammar, but until then...
-	Constraints=[
-           %% types are [action,action-reaction,activity,causation,reaction,supercausation]
+	
+	Constraints=[implies(action,supercausation),implies(reaction,supercausation),implies(activity,supercausation),implies(causation,supercausation),incomp(reaction,causation),incomp(activity,reaction),incomp(action,causation),incomp(action,activity),implies(action,reaction,'action-reaction'),implies('action-reaction',action),implies('action-reaction',reaction)],
+
+	%% CVectors=[
+        %%    %% types are [action,action-reaction,activity,causation,reaction,supercausation]
     
 
-	   %% supercausation is the root
+	%%    %% supercausation is the root
 
-           %% this one means action -> supercausation
-           [1,_,_,_,_,0],
-           %% this one means reaction -> supercausation
-           [_,_,_,_,1,0],
-           %% this one means activity -> supercausation
-           [_,_,1,_,_,0],
-           %% this one means causation -> supercausation
-           [_,_,_,1,_,0],
+        %%    %% this one means action -> supercausation
+        %%    [1,_,_,_,_,0],
+        %%    %% this one means reaction -> supercausation
+        %%    [_,_,_,_,1,0],
+        %%    %% this one means activity -> supercausation
+        %%    [_,_,1,_,_,0],
+        %%    %% this one means causation -> supercausation
+        %%    [_,_,_,1,_,0],
 
-	   %% amongst these children, only action and reaction are compatible
+	%%    %% amongst these children, only action and reaction are compatible
 
-	   %% %% this one means activity and causation are incompatible
-	   %% [_,_,1,1,_,_],
-	   %% this one means reaction and causation are incompatible
-	   [_,_,_,1,1,_],	   
-	   %% this one means activity and reaction are incompatible
-	   [_,_,1,_,1,_],
-	   %% this one means action and causation are incompatible
-	   [1,_,_,1,_,_],
-	   %% this one means action and activity are incompatible
-	   [1,_,1,_,_,_],
+	%%    %% %% this one means activity and causation are incompatible
+	%%    %% [_,_,1,1,_,_],
+	%%    %% this one means reaction and causation are incompatible
+	%%    [_,_,_,1,1,_],	   
+	%%    %% this one means activity and reaction are incompatible
+	%%    [_,_,1,_,1,_],
+	%%    %% this one means action and causation are incompatible
+	%%    [1,_,_,1,_,_],
+	%%    %% this one means action and activity are incompatible
+	%%    [1,_,1,_,_,_],
 	   
 
-           %% this one means action-reaction -> reaction	   
-	   [_,1,_,_,0,_],
-           %% this one means action-reaction -> action	   
-	   [0,1,_,_,_,_],
-           %% this one means action and reaction -> action-reaction	   
-	   [1,0,_,_,1,_]          
-        ],
-	
-	xmg_brick_hierarchy_typer:filter_sets(Sets,Constraints,FSets),
+        %%    %% this one means action-reaction -> reaction	   
+	%%    [_,1,_,_,0,_],
+        %%    %% this one means action-reaction -> action	   
+	%%    [0,1,_,_,_,_],
+        %%    %% this one means action and reaction -> action-reaction	   
+	%%    [1,0,_,_,1,_]          
+        %% ],
+
+	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
+		
+	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
 	xmg:send(info,'\nFiltered types:'),
 	xmg:send(info,FSets),
 

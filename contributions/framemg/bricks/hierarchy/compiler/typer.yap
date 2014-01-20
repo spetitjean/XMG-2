@@ -103,6 +103,48 @@ build_set([_|T],[Bool|T1]):-
 build_bool(0).
 build_bool(1).
 
+%% generate exclusion vectors from the constraints
+constraints_to_vectors([],Types,[]).
+constraints_to_vectors([H|T],Types,[H1|T1]):-
+	constraint_to_vector(H,Types,H1),
+	constraints_to_vectors(T,Types,T1).
+
+constraint_to_vector(incomp(T1,T2),Types,Vector):-
+	init_vector(Types,Vector),
+	set_to(1,T1,Types,Vector),
+	set_to(1,T2,Types,Vector),!.
+constraint_to_vector(implies(T1,T2),Types,Vector):-
+	init_vector(Types,Vector),
+	set_to(1,T1,Types,Vector),
+	set_to(0,T2,Types,Vector),!.
+constraint_to_vector(implies(T1,T2,T3),Types,Vector):-
+	init_vector(Types,Vector),
+	set_to(1,T1,Types,Vector),
+	set_to(1,T2,Types,Vector),
+	set_to(0,T3,Types,Vector),
+	!.
+constraint_to_vector(C,_,_):-
+	xmg:send(info,'\nCould not translate constraint '),
+	xmg:send(info,C),
+	
+	false.
+
+init_vector([],[]).
+init_vector([_|T],[_|T1]):-
+	init_vector(T,T1),!.
+
+set_to(Val,Type,[Type|T],[Val|T1]):-!.
+set_to(Val,Type,[_|T],[_|T1]):-
+	set_to(Val,Type,T,T1),!.
+set_to(Val,Type,Types,Vector):-
+	xmg:send(info,'\nCould not set to value '),
+	xmg:send(info,Val),
+	xmg:send(info,Type),
+	xmg:send(info,Types),
+	xmg:send(info,Vector),
+	false.
+
+
 %% filtering sets by giving the shape of forbidden sets
 
 filter_sets([],_,[]).
