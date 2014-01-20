@@ -46,7 +46,8 @@ framesToXML([H|T],[H1|T1]):--
 	framesToXML(T,T1).
 
 frameToXML(Frame,elem(fs,features([coref-Const,type-Type]),children(XMLFeats)) ):--
-	xmg_brick_havm_havm:h_avm(Frame,Type,Feats),
+	xmg_brick_havm_havm:h_avm(Frame,VType,Feats),
+	xmg_brick_hierarchy_typer:fVectorToType(VType,Type),
 	xmg_brick_havm_havm:const_h_avm(Frame,Const),
 	(
 	    var(Const)->

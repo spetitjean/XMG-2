@@ -220,13 +220,48 @@ get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
 
 	%% Constraints will be built from the metagrammar, but until then...
-	Constraints=[[0,_,_,_,_,_]],
+	Constraints=[
+           %% types are [action,action-reaction,activity,causation,reaction,supercausation]
+    
 
+	   %% supercausation is the root
+
+           %% this one means action -> supercausation
+           [1,_,_,_,_,0],
+           %% this one means reaction -> supercausation
+           [_,_,_,_,1,0],
+           %% this one means activity -> supercausation
+           [_,_,1,_,_,0],
+           %% this one means causation -> supercausation
+           [_,_,_,1,_,0],
+
+	   %% amongst these children, only action and reaction are compatible
+
+	   %% %% this one means activity and causation are incompatible
+	   %% [_,_,1,1,_,_],
+	   %% this one means reaction and causation are incompatible
+	   [_,_,_,1,1,_],	   
+	   %% this one means activity and reaction are incompatible
+	   [_,_,1,_,1,_],
+	   %% this one means action and causation are incompatible
+	   [1,_,_,1,_,_],
+	   %% this one means action and activity are incompatible
+	   [1,_,1,_,_,_],
+	   
+
+           %% this one means action-reaction -> reaction	   
+	   [_,1,_,_,0,_],
+           %% this one means action-reaction -> action	   
+	   [0,1,_,_,_,_],
+           %% this one means action and reaction -> action-reaction	   
+	   [1,0,_,_,1,_]          
+        ],
+	
 	xmg_brick_hierarchy_typer:filter_sets(Sets,Constraints,FSets),
 	xmg:send(info,'\nFiltered types:'),
 	xmg:send(info,FSets),
 
-	xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
+	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
 	!.
 get_fconstraints([H|T]):-
 	get_fconstraint(H),

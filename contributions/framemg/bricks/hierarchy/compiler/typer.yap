@@ -20,10 +20,68 @@
 :-module(xmg_brick_hierarchy_typer).
 :-dynamic(hierarchy/3).
 :-dynamic(xmg:fconstraint/3).
+:-dynamic(xmg:fReachableType/2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Getting the hierarchy from the constraints
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% convert a type list to a vector
+
+fTypeToVector(Type,SVector):-
+	xmg:ftypes(Types),
+	fTypeToVector(Type,Types,Vector),
+	%%xmg:send(info,Vector),
+	find_smaller_supertype(Vector,SVector),
+	!.
+
+find_smaller_supertype(Vector,FVector):-
+	find_smaller_supertype(Vector,SVector,0),
+	%%xmg:send(info,SVector),
+	replace_zeros(SVector,FVector),
+	!.
+
+find_smaller_supertype(Vector,Vector,N):-
+	xmg:fReachableType(Vector,N),!.
+find_smaller_supertype(Vector,SVector,N):-
+	M is N +1,
+	find_smaller_supertype(Vector,SVector,M),!.
+find_smaller_supertype(Vector,_,_):-
+	xmg:send(info,'\nDid not find supertype for vector '),
+	xmg:send(info,Vector),false.
+
+replace_zeros([],[]).
+replace_zeros([0|T],[_|T1]):-
+	replace_zeros(T,T1),!.
+replace_zeros([1|T],[1|T1]):-
+	replace_zeros(T,T1),!.
+
+fTypeToVector(_,[],[]).
+fTypeToVector(Type,[_|Types],[_|Vector]):-
+	var(Type),
+	fTypeToVector(Type,Types,Vector).
+fTypeToVector(Type,[Type|Types],[1|Vector]):-
+	fTypeToVector(Type,Types,Vector),!.
+fTypeToVector(Type,[_|Types],[_|Vector]):-
+	fTypeToVector(Type,Types,Vector),!.
+
+fVectorToType(Vector,Type):-
+	xmg:send(info,'Converting vector '),
+	xmg:send(info,Vector),
+	xmg:ftypes(Types),
+	%%xmg:send(info,Types),
+	fVectorToType(Vector,Types,Type),!.
+
+fVectorToType([],[],[]).
+fVectorToType([V|Vector],[_|Types],Types1):-
+	var(V),
+	fVectorToType(Vector,Types,Types1),!.
+fVectorToType([0|Vector],[_|Types],Types1):-
+	fVectorToType(Vector,Types,Types1),!.
+fVectorToType([1|Vector],[Type|Types],[Type|Types1]):-
+	fVectorToType(Vector,Types,Types1),!.
+
+
 
 %% building all possible type sets
 
@@ -31,6 +89,9 @@ build_types(types(OTypes,Sets)):-
 	%% get the list of elementary types
 	findall(Type,xmg:ftype(Type),Types),
 	ordsets:list_to_ord_set(Types,OTypes),
+	asserta(xmg:ftypes(OTypes)),
+	xmg:send(info,'\nTypes are '),
+	xmg:send(info,OTypes),
 	%% build all set combination of these elementary types
 	findall(Set,build_set(OTypes,Set),Sets),!.
 
@@ -49,7 +110,17 @@ filter_sets([Set|Sets],Constraints,Sets1):-
 	filter_set(Set,Constraints),!,
 	filter_sets(Sets,Constraints,Sets1),!.
 filter_sets([Set|Sets],Constraints,[Set|Sets1]):-
+	count_ones(Set,Len),
+	assert_valid_type(Set,Len),
 	filter_sets(Sets,Constraints,Sets1),!.
+
+count_ones([],0).
+count_ones([1|T],M):-
+	count_ones(T,N),
+	M is N + 1,!.
+count_ones([0|T],N):-
+	count_ones(T,N),!.
+
 
 %% should succeed if Set matches one of the shapes in Constraints
 filter_set(Set,[Constraint|_]):-
@@ -57,6 +128,11 @@ filter_set(Set,[Constraint|_]):-
 filter_set(Set,[Constraint|T]):-
 	filter_set(Set,T).
 
+assert_valid_type(Set,Len):-
+	xmg:send(info,'\nValid type: '),
+	xmg:send(info,Set),
+	xmg:send(info,Len),
+	asserta(xmg:fReachableType(Set,Len)),!.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,6 +145,7 @@ build_matrix(Types,FSet,Matrix):-
 	xmg:send(info,Types),
 	xmg:send(info,'\nType sets:'),
 	xmg:send(info,FSet),
+
 
 	build_sets_mappings(Types,FSet,Sets,Map,IMap,1),
 
@@ -111,8 +188,9 @@ vector_to_set([Type|Types],[0|Vector],Set):-
 build_vectors([],[],_).
 build_vectors([Type|Types],[Vector|Vectors],Ts):-
 	xmg:send(info,'\nBuilding vector for type '),
-	xmg:send(info,Type),
+	%%xmg:send(info,Type),
 	build_vector(Type,Vector,Ts),
+	%%xmg:send(info,Vector),
 	build_vectors(Types,Vectors,Ts).
 
 build_vector(Type,[],[]).

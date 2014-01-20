@@ -29,7 +29,9 @@ verify_attributes(Var, Other, Goals) :-
 	get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
 	( get_atts(Other, avmfeats(Type2,T2,U)) ->	    
+	    %%unify_types(Type1,Type2,Type3),
 	    unify_types(Type1,Type2,Type3),
+	    %%check_type(Type1),
 	    rb_visit(T1,Pairs),
 	    unify_entries(T2,Pairs,T3),
 	    put_atts(Other, avmfeats(Type3,T3,U)),
@@ -50,6 +52,14 @@ h_avm(X, Type, L) :- var(L), !,
 	rb_visit(T,L).
 
 h_avm(X, Type, L) :-
+	xmg:send(info,'\nConverting '),
+	xmg:send(info,Type),
+	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector),
+
+
+	xmg:send(info,' to '),
+	xmg:send(info,Vector),
+
 	get_constraints(Type,must,Must),
 	%%xmg:send(info,Must),
 	list_to_rbtree(L,T),
@@ -58,7 +68,7 @@ h_avm(X, Type, L) :-
 	add_must(Must,T,MT),
 	%%xmg:send(info,MT),
 
-	put_atts(Y, avmfeats(Type,MT,_)),
+	put_atts(Y, avmfeats(Vector,MT,_)),
 	X = Y.
 
 const_h_avm(A,C) :-
@@ -79,57 +89,85 @@ add_must([H|T],L,NewL):-
 	rb_insert(L,H,_,TL),
 	add_must(T,TL,NewL),!.
 	
+check_type(Vector):-
+	not(not(xmg:fReachableType(Vector,_))),!.
+check_type(Vector):-
+	xmg:send(info,'\nInvalid type vector:'),
+	xmg:send(info,Vector),false.
+
 unify_types(T1,T2,T3):-
-	(
-	    var(T1);var(T2)
-	),
 	T1=T2,
-	T3=T2,!.
-unify_types(T1,T2,T3):-
-	%% xmg:send(info,'\nUnifying '),
-	%% xmg:send(info,T1),
-	%% xmg:send(info,' and '),
-	%% xmg:send(info,T2),
+	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3),!.
+unify_types(T1,T2,_):-
+	xmg:send(info,'\nCould not unify frame types '),
+	xmg:send(info, T1),
+	xmg:send(info, T2),
+	false.
 
-	xmg:ftypeMap(TypeMap),
-	%%xmg:send(info,TypeMap),
-	lists:member(T1-I1,TypeMap),
-	lists:member(T2-I2,TypeMap),
-	xmg:ftypeMatrix(Matrix),
-	xmg_brick_hierarchy_boolMatrix:get_row(I1,Matrix,V1),
-	%%xmg:send(info,V1),
-	xmg_brick_hierarchy_boolMatrix:get_row(I2,Matrix,V2),
-	%%xmg:send(info,V2),
 
-	xmg_brick_hierarchy_boolMatrix:and_rows(V1,V2,V3),
-	%%xmg:send(info,V3),
-	%%xmg:send(info,'\n\n'),
-	%%xmg:send(info,Matrix),
+
+
+
+
+
+
+
+
+
+
+
+
+%% unify_types(T1,T2,T3):-
+%% 	(
+%% 	    var(T1);var(T2)
+%% 	),
+%% 	T1=T2,
+%% 	T3=T2,!.
+%% unify_types(T1,T2,T3):-
+%% 	%% xmg:send(info,'\nUnifying '),
+%% 	%% xmg:send(info,T1),
+%% 	%% xmg:send(info,' and '),
+%% 	%% xmg:send(info,T2),
+
+%% 	xmg:ftypeMap(TypeMap),
+%% 	%%xmg:send(info,TypeMap),
+%% 	lists:member(T1-I1,TypeMap),
+%% 	lists:member(T2-I2,TypeMap),
+%% 	xmg:ftypeMatrix(Matrix),
+%% 	xmg_brick_hierarchy_boolMatrix:get_row(I1,Matrix,V1),
+%% 	%%xmg:send(info,V1),
+%% 	xmg_brick_hierarchy_boolMatrix:get_row(I2,Matrix,V2),
+%% 	%%xmg:send(info,V2),
+
+%% 	xmg_brick_hierarchy_boolMatrix:and_rows(V1,V2,V3),
+%% 	%%xmg:send(info,V3),
+%% 	%%xmg:send(info,'\n\n'),
+%% 	%%xmg:send(info,Matrix),
 
 	
-	xmg_brick_hierarchy_boolMatrix:get_type(Matrix,V3,I3),
-	xmg:ftypeIMap(TypeIMap),
-	lists:member(I3-T3,TypeIMap),!.
+%% 	xmg_brick_hierarchy_boolMatrix:get_type(Matrix,V3,I3),
+%% 	xmg:ftypeIMap(TypeIMap),
+%% 	lists:member(I3-T3,TypeIMap),!.
 
-unify_types(T1,T2,_):-
-	xmg:send(info,'\n\nTypes '),
-	xmg:send(info,T1),
-	xmg:send(info,' and '),
-	xmg:send(info,T2),
-	xmg:send(info,' are not compatible. Vectors are:\n'),
+%% unify_types(T1,T2,_):-
+%% 	xmg:send(info,'\n\nTypes '),
+%% 	xmg:send(info,T1),
+%% 	xmg:send(info,' and '),
+%% 	xmg:send(info,T2),
+%% 	xmg:send(info,' are not compatible. Vectors are:\n'),
 
-	xmg:ftypeMap(TypeMap),
-	xmg:send(info,TypeMap),
-	lists:member(T1-I1,TypeMap),
-	lists:member(T2-I2,TypeMap),
-	xmg:ftypeMatrix(Matrix),
-	xmg_brick_hierarchy_boolMatrix:get_row(I1,Matrix,V1),
-	xmg:send(info,V1),
-	xmg:send(info,' and '),
-	xmg_brick_hierarchy_boolMatrix:get_row(I2,Matrix,V2),
-	xmg:send(info,V2),
+%% 	xmg:ftypeMap(TypeMap),
+%% 	xmg:send(info,TypeMap),
+%% 	lists:member(T1-I1,TypeMap),
+%% 	lists:member(T2-I2,TypeMap),
+%% 	xmg:ftypeMatrix(Matrix),
+%% 	xmg_brick_hierarchy_boolMatrix:get_row(I1,Matrix,V1),
+%% 	xmg:send(info,V1),
+%% 	xmg:send(info,' and '),
+%% 	xmg_brick_hierarchy_boolMatrix:get_row(I2,Matrix,V2),
+%% 	xmg:send(info,V2),
 
-	false.
+%% 	false.
 	
 
 %% unify_types(T,T,T):- !.
