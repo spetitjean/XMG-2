@@ -132,6 +132,8 @@ type_decl(type-Decls):-
 	get_types(Decls),!.
 type_decl(hierarchy-Decls):-
 	get_hierarchies(Decls),!.
+type_decl(ftype-Decls):-
+	get_ftypes(Decls),!.
 type_decl(fconstraint-Decls):-
 	get_fconstraints(Decls),!.
 type_decl(property-Decls):-
@@ -216,54 +218,32 @@ get_hierarchies([H|T]):-
 get_hierarchy(hierarchy(Type,Pairs)):-
 	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
 
+
+get_ftypes([]):-!.
+get_ftypes([H|T]):-
+	get_ftype(H),
+	get_ftypes(T),!.
+get_ftype(ftype(Type)):-
+	xmg_brick_hierarchy_typer:type_ftype(Type),!.
+
+
 get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
 
 	%% Constraints will be built from the metagrammar, but until then...
 	
-	Constraints=[implies(action,supercausation),implies(reaction,supercausation),implies(activity,supercausation),implies(causation,supercausation),incomp(reaction,causation),incomp(activity,reaction),incomp(action,causation),incomp(action,activity),implies(action,reaction,'action-reaction'),implies('action-reaction',action),implies('action-reaction',reaction)],
+	%% Constraints=[implies([action],supercausation),implies([reaction],supercausation),implies([activity],supercausation),implies([causation],supercausation),implies([reaction,causation],false),implies([activity,reaction],false),implies([action,causation],false),implies([action,activity],false),implies([action,reaction],'action-reaction'),implies(['action-reaction'],action),implies(['action-reaction'],reaction)],
 
-	%% CVectors=[
-        %%    %% types are [action,action-reaction,activity,causation,reaction,supercausation]
-    
-
-	%%    %% supercausation is the root
-
-        %%    %% this one means action -> supercausation
-        %%    [1,_,_,_,_,0],
-        %%    %% this one means reaction -> supercausation
-        %%    [_,_,_,_,1,0],
-        %%    %% this one means activity -> supercausation
-        %%    [_,_,1,_,_,0],
-        %%    %% this one means causation -> supercausation
-        %%    [_,_,_,1,_,0],
-
-	%%    %% amongst these children, only action and reaction are compatible
-
-	%%    %% %% this one means activity and causation are incompatible
-	%%    %% [_,_,1,1,_,_],
-	%%    %% this one means reaction and causation are incompatible
-	%%    [_,_,_,1,1,_],	   
-	%%    %% this one means activity and reaction are incompatible
-	%%    [_,_,1,_,1,_],
-	%%    %% this one means action and causation are incompatible
-	%%    [1,_,_,1,_,_],
-	%%    %% this one means action and activity are incompatible
-	%%    [1,_,1,_,_,_],
-	   
-
-        %%    %% this one means action-reaction -> reaction	   
-	%%    [_,1,_,_,0,_],
-        %%    %% this one means action-reaction -> action	   
-	%%    [0,1,_,_,_,_],
-        %%    %% this one means action and reaction -> action-reaction	   
-	%%    [1,0,_,_,1,_]          
-        %% ],
-
+	findall(fconstraint(TC,T1s,T2s),xmg:fconstraint(TC,T1s,T2s),Constraints),
+	xmg:send(info,'\n\nConstraints:'),
+	xmg:send(info,Constraints),
 	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
-		
+	
+	xmg:send(info,'\n\nConstraint vectors:'),
+	xmg:send(info,CVectors),
+	
 	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
-	xmg:send(info,'\nFiltered types:'),
+	xmg:send(info,'\n\nFiltered types:'),
 	xmg:send(info,FSets),
 
 	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
@@ -271,8 +251,10 @@ get_fconstraints([]):-
 get_fconstraints([H|T]):-
 	get_fconstraint(H),
 	get_fconstraints(T),!.
-get_fconstraint(fconstraint(Type,Must,Cant,Sub,Comp)):-
-	xmg_brick_hierarchy_typer:type_fconstraint(Type,Must,Cant,Sub,Comp),!.
+
+get_fconstraint(fconstraint(implies,Left,Right)):-
+	xmg_brick_hierarchy_typer:type_fconstraint(implies,Left,Right),!.
+
 
 type_feats([]).
 type_feats([H|T]):-

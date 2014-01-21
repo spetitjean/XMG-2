@@ -109,20 +109,18 @@ constraints_to_vectors([H|T],Types,[H1|T1]):-
 	constraint_to_vector(H,Types,H1),
 	constraints_to_vectors(T,Types,T1).
 
-constraint_to_vector(incomp(T1,T2),Types,Vector):-
+
+%% each symbol on the left means: put a 1 in for this symbol
+%% each symbol on the right means: create a new vector with 0 in this symbol's column (and the 1s from the left).
+%% true on the right or false on the left means: Vector is [_,_..._]
+%% false on the right or true on the left means: put nothing
+
+
+constraint_to_vector(fconstraint(implies,Ts1,T2),Types,Vector):-
 	init_vector(Types,Vector),
-	set_to(1,T1,Types,Vector),
-	set_to(1,T2,Types,Vector),!.
-constraint_to_vector(implies(T1,T2),Types,Vector):-
-	init_vector(Types,Vector),
-	set_to(1,T1,Types,Vector),
-	set_to(0,T2,Types,Vector),!.
-constraint_to_vector(implies(T1,T2,T3),Types,Vector):-
-	init_vector(Types,Vector),
-	set_to(1,T1,Types,Vector),
-	set_to(1,T2,Types,Vector),
-	set_to(0,T3,Types,Vector),
-	!.
+	set_to(left,Ts1,Types,Vector),
+	set_to(right,T2,Types,Vector),!.
+
 constraint_to_vector(C,_,_):-
 	xmg:send(info,'\nCould not translate constraint '),
 	xmg:send(info,C),
@@ -133,12 +131,36 @@ init_vector([],[]).
 init_vector([_|T],[_|T1]):-
 	init_vector(T,T1),!.
 
-set_to(Val,Type,[Type|T],[Val|T1]):-!.
-set_to(Val,Type,[_|T],[_|T1]):-
-	set_to(Val,Type,T,T1),!.
-set_to(Val,Type,Types,Vector):-
+set_to(Side,[],Types,Vector).
+set_to(left,[Type1|Types1],Types,Vector):-
+	is_type(Type1),
+	set_to(left,Type1,Types,Vector),
+	set_to(left,Types1,Types,Vector),!.
+%% for right side with multiple symbols, need to return a list of vectors (ToDo)
+set_to(right,[Type1],Types,Vector):-
+	is_type(Type1),
+	set_to(right,Type1,Types,Vector),!.
+
+is_type(true):-!.
+is_type(false):-!.
+is_type(T):-
+	xmg:ftype(T),!.
+is_type(T):-
+	xmg:send(info,'\n\nError: '),
+	xmg:send(info,T),
+	xmg:send(info,' is not a ftype.'),
+	false.
+
+
+set_to(right,false,[Type|T],[_|T1]):-!.
+set_to(left,true,[Type|T],[_|T1]):-!.
+set_to(right,Type,[Type|T],[0|T1]):-!.
+set_to(left,Type,[Type|T],[1|T1]):-!.
+set_to(Side,Type,[_|T],[_|T1]):-
+	set_to(Side,Type,T,T1),!.
+set_to(Side,Type,Types,Vector):-
 	xmg:send(info,'\nCould not set to value '),
-	xmg:send(info,Val),
+	xmg:send(info,Side),
 	xmg:send(info,Type),
 	xmg:send(info,Types),
 	xmg:send(info,Vector),
@@ -250,15 +272,21 @@ subsumes(Type,Type1,0).
 compute_matrix(Vectors,Matrix):-
 	xmg_brick_hierarchy_boolMatrix:fixpoint(Vectors,Matrix).
 
-type_fconstraint(Type,Must,Cant,Super,Comp):-
-	%% this should be independant
-	assert_type(Type),
+type_ftype(Type):-
+	assert_type(Type),!.
 
-	assert_constraints(Type,must,Must),
-	assert_constraints(Type,cant,Cant),
-	assert_constraints(Type,super,Super),
-	assert_constraints(Type,comp,Comp),
-	!.
+type_fconstraint(implies,Ts1,Ts2):-
+	asserta(xmg:fconstraint(implies,Ts1,Ts2)),!.
+
+%% type_fconstraint(Type,Must,Cant,Super,Comp):-
+%% 	%% this should be independant
+%% 	assert_type(Type),
+
+%% 	assert_constraints(Type,must,Must),
+%% 	assert_constraints(Type,cant,Cant),
+%% 	assert_constraints(Type,super,Super),
+%% 	assert_constraints(Type,comp,Comp),
+%% 	!.
 
 assert_type(Type):-
 	asserta(xmg:ftype(Type)).

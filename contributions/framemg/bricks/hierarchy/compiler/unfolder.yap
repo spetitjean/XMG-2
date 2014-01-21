@@ -21,18 +21,25 @@
 :-module(xmg_brick_hierarchy_unfolder).
 
 
-
-
-xmg:unfold(hierarchy:hierarchy(token(_,id(Id)),Pairs),hierarchy(Id,UPairs)):-
-	unfold_pairs(Pairs,UPairs),!.
-
-xmg:unfold(hierarchy:fconstraint(Type,Must,Cant,Supertypes,Compatible),fconstraint(UType,UMust,UCant,USupertypes,UCompatible)):-
-	unfold_id(Type,UType),
-	unfold_list(Must,UMust),
-	unfold_list(Cant,UCant),
-	unfold_list(Supertypes,USupertypes),
-	unfold_list(Compatible,UCompatible),
+xmg:unfold(hierarchy:ftype(T1),ftype(UT1)):-
+	unfold_id(T1,UT1),
 	!.
+
+%% xmg:unfold(hierarchy:hierarchy(token(_,id(Id)),Pairs),hierarchy(Id,UPairs)):-
+%% 	unfold_pairs(Pairs,UPairs),!.
+
+xmg:unfold(hierarchy:fconstraint(implies,Ts1,Ts2),fconstraint(implies,UTs1,UTs2)):-
+	unfold_list(Ts1,UTs1),
+	unfold_list(Ts2,UTs2),
+	!.
+
+%% xmg:unfold(hierarchy:fconstraint(Type,Must,Cant,Supertypes,Compatible),fconstraint(UType,UMust,UCant,USupertypes,UCompatible)):-
+%% 	unfold_id(Type,UType),
+%% 	unfold_list(Must,UMust),
+%% 	unfold_list(Cant,UCant),
+%% 	unfold_list(Supertypes,USupertypes),
+%% 	unfold_list(Compatible,UCompatible),
+%% 	!.
 
 unfold_id(token(_,id(ID)),ID).
 
