@@ -28,10 +28,15 @@ xmg:unfold(hierarchy:ftype(T1),ftype(UT1)):-
 %% xmg:unfold(hierarchy:hierarchy(token(_,id(Id)),Pairs),hierarchy(Id,UPairs)):-
 %% 	unfold_pairs(Pairs,UPairs),!.
 
-xmg:unfold(hierarchy:fconstraint(implies,Ts1,Ts2),fconstraint(implies,UTs1,UTs2)):-
+xmg:unfold(hierarchy:fconstraint(Op,Ts1,Ts2),fconstraint(UOp,UTs1,UTs2)):-
+	unfold_op(Op,UOp),
 	unfold_list(Ts1,UTs1),
 	unfold_list(Ts2,UTs2),
 	!.
+
+unfold_op(token(_,'->'),implies).
+unfold_op(token(_,'<->'),is_equivalent).
+
 
 %% xmg:unfold(hierarchy:fconstraint(Type,Must,Cant,Supertypes,Compatible),fconstraint(UType,UMust,UCant,USupertypes,UCompatible)):-
 %% 	unfold_id(Type,UType),

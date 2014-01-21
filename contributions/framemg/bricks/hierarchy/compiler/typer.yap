@@ -105,9 +105,10 @@ build_bool(1).
 
 %% generate exclusion vectors from the constraints
 constraints_to_vectors([],Types,[]).
-constraints_to_vectors([H|T],Types,[H1|T1]):-
-	constraint_to_vector(H,Types,H1),
-	constraints_to_vectors(T,Types,T1).
+constraints_to_vectors([H|T],Types,Vectors):-
+	constraint_to_vectors(H,Types,H1),
+	constraints_to_vectors(T,Types,T1),
+	lists:append(H1,T1,Vectors).
 
 
 %% each symbol on the left means: put a 1 in for this symbol
@@ -116,12 +117,18 @@ constraints_to_vectors([H|T],Types,[H1|T1]):-
 %% false on the right or true on the left means: put nothing
 
 
-constraint_to_vector(fconstraint(implies,Ts1,T2),Types,Vector):-
+constraint_to_vectors(fconstraint(implies,Ts1,Ts2),Types,Vectors):-
 	init_vector(Types,Vector),
-	set_to(left,Ts1,Types,Vector),
-	set_to(right,T2,Types,Vector),!.
+	set_to_left(Ts1,Types,Vector),
+	set_to_right(Ts2,Types,Vector,Vectors),!.
 
-constraint_to_vector(C,_,_):-
+constraint_to_vectors(fconstraint(is_equivalent,Ts1,Ts2),Types,Vectors):-
+	constraint_to_vectors(fconstraint(implies,Ts1,Ts2),Types,Vectors1),
+	constraint_to_vectors(fconstraint(implies,Ts2,Ts1),Types,Vectors2),	
+	lists:append(Vectors1,Vectors2,Vectors),
+	!.
+
+constraint_to_vectors(C,_,_):-
 	xmg:send(info,'\nCould not translate constraint '),
 	xmg:send(info,C),
 	
@@ -131,15 +138,20 @@ init_vector([],[]).
 init_vector([_|T],[_|T1]):-
 	init_vector(T,T1),!.
 
-set_to(Side,[],Types,Vector).
-set_to(left,[Type1|Types1],Types,Vector):-
+set_to_left([],Types,Vector).
+set_to_left([Type1|Types1],Types,Vector):-
 	is_type(Type1),
-	set_to(left,Type1,Types,Vector),
-	set_to(left,Types1,Types,Vector),!.
+	set_to_left(Type1,Types,Vector),
+	set_to_left(Types1,Types,Vector),!.
+
+
 %% for right side with multiple symbols, need to return a list of vectors (ToDo)
-set_to(right,[Type1],Types,Vector):-
+set_to_right([],Types,Vector,[]).
+set_to_right([Type1|Types1],Types,Vector,[RVector|Vectors]):-
 	is_type(Type1),
-	set_to(right,Type1,Types,Vector),!.
+	set_to_right(Type1,Types,Vector,RVector),
+	set_to_right(Types1,Types,Vector,Vectors),
+	!.
 
 is_type(true):-!.
 is_type(false):-!.
@@ -152,20 +164,30 @@ is_type(T):-
 	false.
 
 
-set_to(right,false,[Type|T],[_|T1]):-!.
-set_to(left,true,[Type|T],[_|T1]):-!.
-set_to(right,Type,[Type|T],[0|T1]):-!.
-set_to(left,Type,[Type|T],[1|T1]):-!.
-set_to(Side,Type,[_|T],[_|T1]):-
-	set_to(Side,Type,T,T1),!.
-set_to(Side,Type,Types,Vector):-
-	xmg:send(info,'\nCould not set to value '),
-	xmg:send(info,Side),
+
+
+set_to_left(true,[Type|T],[_|T1]):-!.
+set_to_left(Type,[Type|T],[1|T1]):-!.
+
+set_to_left(Type,[_|T],[_|T1]):-
+	set_to_left(Type,T,T1),!.
+set_to_left(Type,Types,Vector):-
+	xmg:send(info,'\n\nCould not set on left to value '),
 	xmg:send(info,Type),
 	xmg:send(info,Types),
 	xmg:send(info,Vector),
 	false.
 
+set_to_right(false,[Type|T],[V1|VT],[V1|VT]):-!.
+set_to_right(Type,[Type|T],[V1|VT],[0|VT]):-!.
+set_to_right(Type,[_|T],[V1|VT],[V1|VT1]):-
+	set_to_right(Type,T,VT,VT1),!.
+set_to_right(Type,Types,Vector,Vectors):-
+	xmg:send(info,'\n\nCould not set on right to value '),
+	xmg:send(info,Type),
+	xmg:send(info,Types),
+	xmg:send(info,Vector),
+	false.
 
 %% filtering sets by giving the shape of forbidden sets
 
@@ -275,8 +297,9 @@ compute_matrix(Vectors,Matrix):-
 type_ftype(Type):-
 	assert_type(Type),!.
 
-type_fconstraint(implies,Ts1,Ts2):-
-	asserta(xmg:fconstraint(implies,Ts1,Ts2)),!.
+type_fconstraint(CT,Ts1,Ts2):-
+	asserta(xmg:fconstraint(CT,Ts1,Ts2)),!.
+
 
 %% type_fconstraint(Type,Must,Cant,Super,Comp):-
 %% 	%% this should be independant

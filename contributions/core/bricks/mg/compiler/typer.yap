@@ -252,8 +252,8 @@ get_fconstraints([H|T]):-
 	get_fconstraint(H),
 	get_fconstraints(T),!.
 
-get_fconstraint(fconstraint(implies,Left,Right)):-
-	xmg_brick_hierarchy_typer:type_fconstraint(implies,Left,Right),!.
+get_fconstraint(fconstraint(CT,Left,Right)):-
+	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
 
 
 type_feats([]).

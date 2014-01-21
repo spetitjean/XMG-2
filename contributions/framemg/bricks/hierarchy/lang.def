@@ -5,7 +5,9 @@ Hierarchy : FType {$$=$1} | FConstraint {$$=$1};
 
 FType : ftype id {$$=hierarchy:ftype($2)};
 
-FConstraint : fconstraint IDs '->' IDs {$$=hierarchy:fconstraint(implies,$2,$4)};
+FConstraint : fconstraint IDs FOp IDs {$$=hierarchy:fconstraint($3,$2,$4)};
+
+FOp : '->' {$$=$1} | '<->' {$$=$1} ;
 
 /* FConstraint : fconstraint id '(' IDList ',' IDList ',' IDList ',' IDList ')' {$$=hierarchy:fconstraint($2,$4,$6,$8,$10)} ; */
 
