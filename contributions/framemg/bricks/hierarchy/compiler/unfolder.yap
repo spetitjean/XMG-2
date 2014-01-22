@@ -30,8 +30,8 @@ xmg:unfold(hierarchy:ftype(T1),ftype(UT1)):-
 
 xmg:unfold(hierarchy:fconstraint(Op,Ts1,Ts2),fconstraint(UOp,UTs1,UTs2)):-
 	unfold_op(Op,UOp),
-	unfold_list(Ts1,UTs1),
-	unfold_list(Ts2,UTs2),
+	unfold_idsOrAttr(Ts1,UTs1),
+	unfold_idsOrAttr(Ts2,UTs2),
 	!.
 
 unfold_op(token(_,'->'),implies).
@@ -48,9 +48,17 @@ unfold_op(token(_,'<->'),is_equivalent).
 
 unfold_id(token(_,id(ID)),ID).
 
-unfold_list(none,[]).
-unfold_list(some(List),UList):-
-	unfold_list(List,UList).
+unfold_idsOrAttr(ids(IDS),types(UIDS)):-
+	unfold_list(IDS,UIDS),!.
+
+unfold_idsOrAttr(attrType(ID1,ID2),attrType(UID1,UID2)):-
+	unfold_id(ID1,UID1),
+	unfold_id(ID2,UID2),!.
+
+unfold_idsOrAttr(pathEq(ID1,ID2),pathEq(UID1,UID2)):-
+	unfold_id(ID1,UID1),
+	unfold_id(ID2,UID2),!.
+
 unfold_list([],[]).
 unfold_list([H|T],[H1|T1]):-
 	unfold_id(H,H1),

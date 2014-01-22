@@ -54,14 +54,14 @@ h_avm(X, Type, L) :- var(L), !,
 h_avm(X, Type, L) :-
 	xmg:send(info,'\nConverting '),
 	xmg:send(info,Type),
-	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector),
+	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector,CVector),
 
 
 	xmg:send(info,' to '),
 	xmg:send(info,Vector),
 
-	get_constraints(Type,must,Must),
-	%%xmg:send(info,Must),
+	get_attrconstraints(CVector,Must),
+	xmg:send(info,Must),
 	list_to_rbtree(L,T),
 	%%xmg:send(info,T),
 	
@@ -79,14 +79,12 @@ attribute_goal(Var, h_avm(Var,Type,L)) :-
 	rb_visit(T,L).
 
 
-get_constraints(Type,_,[]):-
-	var(Type),!.
-get_constraints(Type,CType,List):-
-	findall(A,xmg:fconstraint(Type,CType,A),List),!.
+get_attrconstraints(Type,C):-
+	xmg:fattrconstraint(Type,C),!.
 
 add_must([],L,L).
-add_must([H|T],L,NewL):-
-	rb_insert(L,H,_,TL),
+add_must([H-V|T],L,NewL):-
+	rb_insert(L,H,V,TL),
 	add_must(T,TL,NewL),!.
 	
 check_type(Vector):-
@@ -97,7 +95,7 @@ check_type(Vector):-
 
 unify_types(T1,T2,T3):-
 	T1=T2,
-	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3),!.
+	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3,_),!.
 unify_types(T1,T2,_):-
 	xmg:send(info,'\nCould not unify frame types '),
 	xmg:send(info, T1),

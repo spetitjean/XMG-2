@@ -26,27 +26,27 @@
 %% Getting the hierarchy from the constraints
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% convert a type list to a vector
+%% convert a type list to a vector (with _) and a constant vector (with 0)
 
-fTypeToVector(Type,SVector):-
+fTypeToVector(Type,SVector,FVector):-
 	xmg:ftypes(Types),
-	fTypeToVector(Type,Types,Vector),
-	%%xmg:send(info,Vector),
-	find_smaller_supertype(Vector,SVector),
+	fTypeToSomeVector(Type,Types,Vector),
+	xmg:send(info,Vector),
+	find_smaller_supertype(Vector,SVector,FVector),
 	!.
 
-find_smaller_supertype(Vector,FVector):-
-	find_smaller_supertype(Vector,SVector,0),
-	%%xmg:send(info,SVector),
+find_smaller_supertype(Vector,FVector,SVector):-
+	find_smaller_supertype_from(Vector,SVector,0),
+	xmg:send(info,SVector),
 	replace_zeros(SVector,FVector),
 	!.
 
-find_smaller_supertype(Vector,Vector,N):-
+find_smaller_supertype_from(Vector,Vector,N):-
 	xmg:fReachableType(Vector,N),!.
-find_smaller_supertype(Vector,SVector,N):-
+find_smaller_supertype_from(Vector,SVector,N):-
 	M is N +1,
-	find_smaller_supertype(Vector,SVector,M),!.
-find_smaller_supertype(Vector,_,_):-
+	find_smaller_supertype_from(Vector,SVector,M),!.
+find_smaller_supertype_from(Vector,_,_):-
 	xmg:send(info,'\nDid not find supertype for vector '),
 	xmg:send(info,Vector),false.
 
@@ -56,14 +56,14 @@ replace_zeros([0|T],[_|T1]):-
 replace_zeros([1|T],[1|T1]):-
 	replace_zeros(T,T1),!.
 
-fTypeToVector(_,[],[]).
-fTypeToVector(Type,[_|Types],[_|Vector]):-
+fTypeToSomeVector(_,[],[]).
+fTypeToSomeVector(Type,[_|Types],[_|Vector]):-
 	var(Type),
-	fTypeToVector(Type,Types,Vector).
-fTypeToVector(Type,[Type|Types],[1|Vector]):-
-	fTypeToVector(Type,Types,Vector),!.
-fTypeToVector(Type,[_|Types],[_|Vector]):-
-	fTypeToVector(Type,Types,Vector),!.
+	fTypeToSomeVector(Type,Types,Vector).
+fTypeToSomeVector(Type,[Type|Types],[1|Vector]):-
+	fTypeToSomeVector(Type,Types,Vector),!.
+fTypeToSomeVector(Type,[_|Types],[_|Vector]):-
+	fTypeToSomeVector(Type,Types,Vector),!.
 
 fVectorToType(Vector,Type):-
 	xmg:send(info,'Converting vector '),
@@ -222,6 +222,45 @@ assert_valid_type(Set,Len):-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Handling attribute constraints
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+attrConstraints_to_vectors([],_,[]).
+attrConstraints_to_vectors([A|AT],Types,[A1|AT1]):-
+	attrConstraint_to_vector(A,Types,A1),
+	attrConstraints_to_vectors(AT,Types,AT1),!.
+
+attrConstraint_to_vector(attrconstraint(implies,Ts1,Attr,Value),Types,(Vector,Attr-CValue)):-
+	attr_value(Value,CValue),
+	init_vector(Types,Vector),
+	set_to_left(Ts1,Types,Vector),
+	!.
+
+attr_value(true,_):-!.
+attr_value(Value,Value).
+
+generate_vectors_attrs([],_):- !.
+generate_vectors_attrs([V1|VT],AttConstraints):- 
+	generate_vector_attrs(V1,AttConstraints,Feats),
+	asserta(xmg:fattrconstraint(V1,Feats)),
+
+	xmg:send(info,'\nAsserted '),
+	xmg:send(info,xmg:fattrconstraint(V1,Feats)),
+
+	generate_vectors_attrs(VT,AttConstraints),!.
+
+generate_vector_attrs(Vector,[],[]):-!.
+generate_vector_attrs(Vector,[(AVector,Feat)|ACT],[Feat|ACT1]):-
+	not(not(Vector=AVector)),
+	generate_vector_attrs(Vector,ACT,ACT1),!.
+generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
+	generate_vector_attrs(Vector,ACT,ACT1),!.
+
+	
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Getting the unification rules from the hierarchy
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -294,12 +333,35 @@ subsumes(Type,Type1,0).
 compute_matrix(Vectors,Matrix):-
 	xmg_brick_hierarchy_boolMatrix:fixpoint(Vectors,Matrix).
 
+
+
+
+
+
 type_ftype(Type):-
 	assert_type(Type),!.
 
-type_fconstraint(CT,Ts1,Ts2):-
-	asserta(xmg:fconstraint(CT,Ts1,Ts2)),!.
 
+
+type_fconstraint(CT,types(Ts1),types(Ts2)):-
+	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
+
+type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
+	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
+
+type_fconstraint(CT,types(Ts1),pathEq(Attr1,Attr2)):-
+	asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+
+
+
+type_fconstraint(CT,C1,C2):-
+	xmg:send(info,'\n\nUnsupported constraint:'),
+	xmg:send(info,CT),
+	xmg:send(info,' with '),
+	xmg:send(info,C1),
+	xmg:send(info,' and '),
+	xmg:send(info,C2),
+	false.
 
 %% type_fconstraint(Type,Must,Cant,Super,Comp):-
 %% 	%% this should be independant

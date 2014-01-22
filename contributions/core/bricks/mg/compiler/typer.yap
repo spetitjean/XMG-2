@@ -234,17 +234,26 @@ get_fconstraints([]):-
 	
 	%% Constraints=[implies([action],supercausation),implies([reaction],supercausation),implies([activity],supercausation),implies([causation],supercausation),implies([reaction,causation],false),implies([activity,reaction],false),implies([action,causation],false),implies([action,activity],false),implies([action,reaction],'action-reaction'),implies(['action-reaction'],action),implies(['action-reaction'],reaction)],
 
-	findall(fconstraint(TC,T1s,T2s),xmg:fconstraint(TC,T1s,T2s),Constraints),
-	xmg:send(info,'\n\nConstraints:'),
+	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+	xmg:send(info,'\n\nType constraints:'),
 	xmg:send(info,Constraints),
 	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
 	
 	xmg:send(info,'\n\nConstraint vectors:'),
 	xmg:send(info,CVectors),
-	
+
 	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
 	xmg:send(info,'\n\nFiltered types:'),
 	xmg:send(info,FSets),
+
+	findall(attrconstraint(TAC,TAs,TAT,TATT),xmg:fAttrConstraint(TAC,TAs,TAT,TATT),AttConstraints),
+
+	xmg:send(info,'\n\nAttr constraints:'),
+	xmg:send(info,AttConstraints),
+	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttConstraints,Types,VAttConstraints),
+	xmg:send(info,'\n\nAttr constraints vectors:'),
+	xmg:send(info,VAttConstraints),
+	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
 
 	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
 	!.
