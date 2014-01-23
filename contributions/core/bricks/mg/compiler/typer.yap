@@ -250,7 +250,15 @@ get_fconstraints([]):-
 
 	xmg:send(info,'\n\nAttr constraints:'),
 	xmg:send(info,AttConstraints),
-	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttConstraints,Types,VAttConstraints),
+
+	findall(pathconstraint(TACP,TAsP,TATP1,TATP2),xmg:fPathConstraint(TACP,TAsP,TATP1,TATP2),PathConstraints),
+
+	xmg:send(info,'\n\Path constraints:'),
+	xmg:send(info,PathConstraints),
+
+	lists:append(AttConstraints,PathConstraints,AttPathConstraints),
+
+	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttPathConstraints,Types,VAttConstraints),
 	xmg:send(info,'\n\nAttr constraints vectors:'),
 	xmg:send(info,VAttConstraints),
 	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),

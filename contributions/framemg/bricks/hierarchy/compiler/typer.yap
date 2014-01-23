@@ -236,6 +236,12 @@ attrConstraint_to_vector(attrconstraint(implies,Ts1,Attr,Value),Types,(Vector,At
 	set_to_left(Ts1,Types,Vector),
 	!.
 
+attrConstraint_to_vector(pathconstraint(implies,Ts1,Attr1,Attr2),Types,(Vector,Attr1,Attr2)):-
+	attr_value(Value,CValue),
+	init_vector(Types,Vector),
+	set_to_left(Ts1,Types,Vector),
+	!.
+
 attr_value(true,_):-!.
 attr_value(Value,Value).
 
@@ -250,14 +256,18 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 	generate_vectors_attrs(VT,AttConstraints),!.
 
 generate_vector_attrs(Vector,[],[]):-!.
+%% path constraints
+generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],[A1-V,A2-V|ACT1]):-
+	not(not(Vector=AVector)),
+	generate_vector_attrs(Vector,ACT,ACT1),!.
+generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
+	generate_vector_attrs(Vector,ACT,ACT1),!.	
+%% attribute constraints
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],[Feat|ACT1]):-
 	not(not(Vector=AVector)),
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
-
-	
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
