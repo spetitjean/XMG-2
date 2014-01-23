@@ -30,6 +30,7 @@
 
 fTypeToVector(Type,SVector,FVector):-
 	xmg:ftypes(Types),
+	typeExists(Type,Types),
 	fTypeToSomeVector(Type,Types,Vector),
 	xmg:send(info,Vector),
 	find_smaller_supertype(Vector,SVector,FVector),
@@ -49,6 +50,15 @@ find_smaller_supertype_from(Vector,SVector,N):-
 find_smaller_supertype_from(Vector,_,_):-
 	xmg:send(info,'\nDid not find supertype for vector '),
 	xmg:send(info,Vector),false.
+
+typeExists(Type,Types):-
+	var(Type),!.
+typeExists(Type,Types):-
+	lists:member(Type,Types),!.
+typeExists(Type,Types):-
+	xmg:send(info,'\n\nError: '),
+	xmg:send(info,Type),
+	xmg:send(info,' is not a type.'),false.
 
 replace_zeros([],[]).
 replace_zeros([0|T],[_|T1]):-
