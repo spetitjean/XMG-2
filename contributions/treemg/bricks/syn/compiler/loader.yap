@@ -35,6 +35,7 @@
 	%% this should be done optionally
 :-	use_module('xmg/brick/tree/compiler/preparer').
 :-	use_module('xmg/brick/tree/compiler/solver').
+:-	use_module('xmg/brick/tree/compiler/extractor').
 
 :-	use_module('xmg/brick/unicity/compiler/preparer').
 :-	use_module('xmg/brick/unicity/compiler/solver').
