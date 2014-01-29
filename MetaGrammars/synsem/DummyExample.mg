@@ -29,21 +29,21 @@ class dummy
 export X Y Z
 declare ?X ?Y ?Z
 {
-  <syn>{
-	node ?X (color=black) [cat=@{s,n}];
-	node ?Y (color=black) [cat=n];
-	node ?Z (color=black) [cat=v];
-	?X -> ?Y;
-	?X -> ?Z;
-	?Y >> ?Z
-  }
-  |
+  % <syn>{
+  % 	node ?X (color=black) [cat=@{s,n}];
+  % 	node ?Y (color=black) [cat=n];
+  % 	node ?Z (color=black) [cat=v];
+  % 	?X -> ?Y;
+  % 	?X -> ?Z;
+  % 	?Y >> ?Z
+  % }
+  % |
   
   {<syn>{
-	node ?X (color=black) [cat=s];
-	node ?Y (color=black) [cat=n];
-	?X ->+ ?Y
-	} 
+	node ?X (color=black) [cat=s]{ ...+
+	     node ?Y (color=black) [cat=n]
+	     	} 
+	}
 	% ;
 	% dummier[]
  }

@@ -199,29 +199,6 @@ write_node(A,'none',Table):-- !.
 
 
 
-write_unicities(_,[],[]):- !.
-
-write_unicities(Nodes,[U1|UT],[H1|T1]):-
-	write_unicity(Nodes,U1,H1),
-	write_unicities(Nodes,UT,T1),!.
-
-write_unicity([],_,[]):-!.
-write_unicity([Node|T],feat(A,V),['true'|T1]):-
-	Node=node(Prop,Feat,_),
-	xmg_brick_avm_avm:avm(Prop,PL),
-	lists:member(A-const(V,_),PL),!,	
-	write_unicity(T,feat(A,V),T1),!.
-write_unicity([Node|T],feat(A,V),['true'|T1]):-
-	Node=node(Prop,Feat,_),
-	xmg_brick_avm_avm:avm(Feat,PL),
-	lists:member(A-const(V,_),PL),!,	
-	write_unicity(T,feat(A,V),T1),!.
-write_unicity([Node|T],feat(A,V),['false'|T1]):-
-	Node=node(Prop,Feat,_),
-	write_unicity(T,feat(A,V),T1),!.
-write_unicity([_|T],feat(A,V),T1):-
-	write_unicity(T,feat(A,V),T1),!.
-
 
 
 count([],0,0,0,_,Table,Table):-- !.
