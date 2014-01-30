@@ -22,7 +22,7 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-:- edcg:weave([constraints,name,vars,consts],[unfold_tree/3, unfold_children/3]).
+:- edcg:weave([constraints,name,vars,consts],[unfold_tree/4, unfold_children/4, unfold_child/4, unfold_node/3, unfold_brothers/4, unfold_node_or_tree/3]).
 
 
 %%:-add_to_path('../AVM').
@@ -35,7 +35,7 @@
 
 xmg:unfold_dimstmt(Syn,syn:tree(Root,Children)):--
 	%%xmg_brick_mg_compiler:send(info,Root),
-	unfold_tree(Syn,Root,Children),
+	unfold_tree(Syn,Root,Children,_),
 	!.
 xmg:unfold_dimstmt(Syn,syn:and(S1,S2)):-- 
 	%%xmg_brick_mg_compiler:send(info,S1),
@@ -84,18 +84,70 @@ xmg:unfold_expr(some(E),Target):--
 
 
 
-unfold_tree(Syn,Root,Children):--
-	%%xmg:unfold_expr(Root,URoot),
+unfold_tree(Syn,Root,Children,URoot):--
+	unfold_node(Syn,Root,URoot),
+	%%xmg:send(info,Children),
+	unfold_children(Syn,URoot,Children,_),!.
+
+unfold_children(Syn,URoot,syn:children(Child,Brothers),UChild):--
+	unfold_child(Syn,URoot,Child,UChild),
+	%%xmg:send(info,'\n\nHERE\n\n'),
+	unfold_brothers(Syn,URoot,UChild,Brothers),!.
+unfold_children(Syn,URoot,Children):--
+	xmg:send(info,'\n\nCould not unfold Children:\n'),
 	xmg:send(info,Children),
-	unfold_children(Syn,Root,Children),!.
+	xmg:send(info,'\n\n'),
+	!.
 
-unfold_children(Syn,Root,syn:child(Op,Child,Brothers)):--
+unfold_child(Syn,URoot,syn:child(Op,Child),UChild):--
+	unfold_treeDomOp(Op,UOp),
+	unfold_node_or_tree(Syn,Child,UChild),
+	constraints::enq((syn:dom(URoot,UOp,UChild,C),Syn)),
+	!.
+unfold_child(Syn,URoot,Child,UChild):--
+	xmg:send(info,'\n\nCould not unfold Child:\n'),
+	xmg:send(info,Child),
+	xmg:send(info,'\n\n'),
+	false,
+	!.
 
-	constraints::enq((syn:dom(T1,Op,T2,C),Syn)),
-	unfold_brothers(Syn,Root,Brothers),!.
+	
+unfold_brothers(Syn,URoot,UChild,none):-- !.
+unfold_brothers(Syn,URoot,UChild,brothers(Op,Children)):--
+	unfold_treePrecOp(Op,UOp),
+	%%xmg:send(info,'\n\n'),
+	%%xmg:send(info,Children),
+	unfold_children(Syn,URoot,Children,UChild1),
+	constraints::enq((syn:prec(UChild,UOp,UChild1,C),Syn)),
+	!.
+
+unfold_node_or_tree(Syn,NodeOrTree,UNodeOrTree):--
+	unfold_node(Syn,NodeOrTree,UNodeOrTree),!.
+unfold_node_or_tree(Syn,syn:tree(Root,Children),URoot):--
+	unfold_tree(Syn,Root,Children,URoot),!.
 
 
+unfold_node(Syn,syn:node(N,P,F),TN):-- 
+	xmg:unfold_expr(N,TN),
+	
+	constraints::enq((TN,syn:node,Syn)),
+	%%constraints::enq(indim(Syn,TN)),
+	xmg:new_target_var(T1),
+	xmg:new_target_var(T2),
+	%%xmg_brick_mg_compiler:send(info,P),
+	%%xmg_brick_mg_compiler:send(info,F),
+	xmg:unfold_expr(P,T1),
+	constraints::enq((TN,syn:props(T1))),	
+	xmg:unfold_expr(F,T2),
+	constraints::enq((TN,syn:feats(T2))),
+	!.
 
+unfold_treeDomOp(none,'->').
+unfold_treeDomOp(token(_,'...'),'->*').
+unfold_treeDomOp(token(_,'...+'),'->+').
+unfold_treePrecOp(none,'>>').
+unfold_treePrecOp(token(_,',,,'),'>>*').
+unfold_treePrecOp(token(_,',,,+'),'>>+').
 
 
 

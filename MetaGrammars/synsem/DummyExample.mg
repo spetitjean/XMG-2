@@ -26,8 +26,8 @@ declare ?T ?C
 }
 
 class dummy
-export X Y Z
-declare ?X ?Y ?Z
+export X Y Z 
+declare ?X ?Y ?Z ?T
 {
   % <syn>{
   % 	node ?X (color=black) [cat=@{s,n}];
@@ -42,6 +42,11 @@ declare ?X ?Y ?Z
   {<syn>{
 	node ?X (color=black) [cat=s]{ ...+
 	     node ?Y (color=black) [cat=n]
+	     ,,, 
+	     node ?Z (color=black) [cat=v]{
+	     	  node ?T (color=black) [cat=v]
+		  }
+	     
 	     	} 
 	}
 	% ;
