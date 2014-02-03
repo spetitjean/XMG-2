@@ -1,6 +1,6 @@
 type COLOR = {red,black,white}
 property color : COLOR
-use color with () dims (syn) %args (COLOR)
+%% use color with () dims (syn) %args (COLOR)
 
 type CAT = {v,n,s}
 type CAT = {t}
@@ -10,7 +10,7 @@ type node_feats = [|cat:CAT]
 type node_props = [color:COLOR]
 
 %%use syn:node with () dims (syn) args (node_props, node_feats)
-use syn:node with (node_props, node_feats) dims (syn) 
+%% use syn:node with (node_props, node_feats) dims (syn) 
 
 
 class dummier
@@ -27,7 +27,7 @@ declare ?T ?C
 
 class dummy
 export X Y Z 
-declare ?X ?Y ?Z ?T
+declare ?X ?Y ?Z ?T ?L
 {
   % <syn>{
   % 	node ?X (color=black) [cat=@{s,n}];
@@ -44,13 +44,17 @@ declare ?X ?Y ?Z ?T
 	     node ?Y (color=black) [cat=n]
 	     ,,, 
 	     node ?Z (color=black) [cat=v]{
-	     	  node ?T (color=black) [cat=v]
+	     	  node ?T (color=black) [cat=?L]
 		  }
 	     
 	     	} 
 	}
 	% ;
 	% dummier[]
+ }
+ ;
+ <iface>{ 
+		[cat=v, arg1=?L]
  }
 }
 

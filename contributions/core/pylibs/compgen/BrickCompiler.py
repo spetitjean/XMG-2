@@ -83,7 +83,7 @@ class BrickCompiler(object):
 
         dimfile.write('dims([')
         dimfile.write(", ".join(self._dimsp))
-        dimfile.write(', iface-IFace, trace-Trace]).\n\n')
+        dimfile.write(', trace-Trace]).\n\n')
         dimfile.close()
         print("Dimensions generated in "+self._folder)
 

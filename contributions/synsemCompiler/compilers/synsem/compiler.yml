@@ -4,10 +4,12 @@ mg:
 decls:
   ODecl: feats
 control:
-  _Stmt: caller sem syn
+  _Stmt: caller sem syn iface
 avm: 
   _Value: value
 value: 
   Else: avm adisj
 syn:
   AVM: avm
+iface:
+  _AVM: avm

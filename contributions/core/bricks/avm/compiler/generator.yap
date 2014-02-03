@@ -30,11 +30,13 @@ xmg:generate_instr((Target,avm:avm)) :--
 	decls::tget(Target,Var),
     code::enq(xmg_brick_avm_avm:avm(Var,[])),
     !.
-xmg:generate_instr((Target,avm:feat(id(F,_),Target2))):--
+xmg:generate_instr((Target,avm:feat(id(F,_),id(Target2,_)))):--
 	decls::tget(Target,Var),
+	xmg:send(info,'\n\nHere:'),
+	xmg:send(info,Target2),
 	(
 	    decls::tget(Target2,Var2);
-	    id(Var2,_)=Target2
+	    Var2=Target2
 	    ),
     code::enq(xmg_brick_avm_avm:avm(Var,[F-Var2])),	
     !.

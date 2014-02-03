@@ -40,6 +40,9 @@ new_name(Name,Prefix):--
 threads_([]):- !.
 %% threads_([skolem-_|T]):-
 %% 	threads_(T),!.
+threads_([iface-_|T]):-
+	edcg:edcg_thread(xmg_acc:iface, edcg:value),
+	threads_(T),!.
 threads_([Dim-_|T]):-
 	edcg:edcg_thread(xmg_acc:Dim, edcg:queue),
 	threads_(T),!.
@@ -216,7 +219,7 @@ get_params([id(ID,_)|T],List,[Var|T1]):--
 	get_params(T,List,T1),!.
 
 callDims([],[]):-!.
-callDims([iface-IFace|T],[[IFace]-[I],[I]-[I]|T1]):-
+callDims([iface-IFace|T],[IFace,_|T1]):-
 	callDims(T,T1),!.
 callDims([Dim-CDim|T],[_-CDim,[]-[]|T1]):-
 	callDims(T,T1),!.
