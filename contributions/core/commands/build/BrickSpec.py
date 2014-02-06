@@ -26,7 +26,7 @@ class BrickSpec:
     def create_brick(self):
         from xmg.compgen.Brick import Brick
         # prefix voir si self.name != self.brick_name
-        self.brick = Brick(self.brick_name)
+        self.brick = Brick(self.brick_name, prefix=self.name)
         
 
 def yaml_to_specs(desc):
