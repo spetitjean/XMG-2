@@ -9,6 +9,10 @@ class BrickSpec:
         self.name = re.sub("[^A-Za-z0-9]", "_", name)
         self.brick_name = m.group(1)
         self.plugs = plugs
+        self.params = []
+        if "_" in plugs:
+            self.params = plugs["_"]
+            del plugs["_"]
 
     def deref_plugs(self, table):
         plugs = {}
