@@ -9,9 +9,10 @@ class Brick(object):
     def connect(self, ext, brick, sym=None):
         self.language_brick.connect(ext,brick.language_brick, sym)
 
-    def __init__(self, name, prefix=None):
+    def __init__(self, name, prefix=None, text=None):
         self._name = name
         self._lang = None
+        self._text = text
         self._prefix = name if prefix is None else prefix
         self._is_dimension = None
         self._config = None
@@ -33,7 +34,11 @@ class Brick(object):
     def language_brick(self):
         if self._lang is None:
             from xmg.compgen.BrickGrammar import BrickGrammar
-            self._lang = BrickGrammar(self.lang_def_pathname, dim=self.is_dimension, prefix=self._prefix)
+            pathname = self.lang_def_pathname
+            if self._text:
+                import io
+                pathname = io.StringIO(self._text)
+            self._lang = BrickGrammar(pathname, dim=self.is_dimension, prefix=self._prefix)
         return self._lang
         
     @property
