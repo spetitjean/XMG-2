@@ -68,6 +68,7 @@ class ContribInstaller:
     def install_brick(self, name, path):
         brick_dir_yap = os.path.join(self.yap_rootdir, "xmg/brick", name)
         brick_dir_data = os.path.join(self.data_rootdir, "xmg/brick", name)
+        brick_dir_py = os.path.join(self.python_rootdir, "xmg/brick", name)
         self.link_file_if_exists(
             os.path.join(path, "lang.def"),
             os.path.join(brick_dir_data, "lang.def"))
@@ -77,6 +78,9 @@ class ContribInstaller:
         self.link_directory_if_exists(
             os.path.join(path, "compiler"),
             os.path.join(brick_dir_yap, "compiler"))
+        self.link_directory_if_exists(
+            os.path.join(path, "pylib"),
+            brick_dir_py)
         yaplib = os.path.join(path, "yaplib")
         for subdir in self.subdirs(yaplib):
             self.link_directory(
