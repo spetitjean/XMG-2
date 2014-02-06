@@ -59,7 +59,7 @@ class Unfold(object):
     def build_grammar(self):
 
         # check whether every given parameter is an extern non terminal
-        for param in self.params:
+        for (param,sym) in self.params:
             if param not in self.EXTs:
                 raise Exception("\n\n"+param+" is not an extern non terminal in "+self._brick._file+"\n\n")
 
@@ -78,13 +78,14 @@ class Unfold(object):
             #if self.prefix in self.params and i in self.params[self.prefix]:
                 extf=self.params[i]
                 print("Using bricks ")
-                for brick in extf:
+                for (brick,sym) in extf:
                     print(brick._prefix)
+                    print(sym)
             else:
                 warnings.warn("\n\n No brick set for "+i+" in "+self._brick._file+"\n\n")
                 continue
             
-            for extg in extf: 
+            for (extg,sym) in extf: 
                 G=extg._unfold
                 if not extg._unfolded:
                     extg._unfolded=True
@@ -95,7 +96,13 @@ class Unfold(object):
                         self.Rules.append(rule)                        
             
                 #print(G)
-                axiom=G.Rules[0].head
+                if not sym:
+                    axiom=G.Rules[0].head
+                else:
+                    if sym in self.NTs:
+                        axiom=self.NTs[sym]
+                    else:
+                        raise Exception("Non Terminal "+sym+" unknown in brick "+extg._prefix)
 
                 # the language brick is a dimension brick
                 if extg._dim:

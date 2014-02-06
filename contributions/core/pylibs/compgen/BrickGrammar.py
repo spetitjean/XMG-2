@@ -19,10 +19,10 @@ class BrickGrammar(object):
         self._unfolded=False
         self._unfold=xmg.compgen.Unfold.Unfold(self)
 
-    def connect(self, ext, brick):
+    def connect(self, ext, brick, sym):
         if not ext in self._connections:
             self._connections[ext]=[]
-        self._connections[ext].append(brick)
+        self._connections[ext].append((brick,sym))
 
 
     def generate_parser(self, file):

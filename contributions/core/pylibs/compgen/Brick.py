@@ -6,8 +6,8 @@ class Brick(object):
 #        self.language_brick=language_brick
 #        self.compiler_brick=compiler_brick
 
-    def connect(self, ext, brick):
-        self.language_brick.connect(ext,brick.language_brick)
+    def connect(self, ext, brick, sym=None):
+        self.language_brick.connect(ext,brick.language_brick, sym)
 
     def __init__(self, name, prefix=None):
         self._name = name
