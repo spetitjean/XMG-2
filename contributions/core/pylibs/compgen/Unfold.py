@@ -59,7 +59,7 @@ class Unfold(object):
     def build_grammar(self):
 
         # check whether every given parameter is an extern non terminal
-        for (param,sym) in self.params:
+        for param in self.params:
             if param not in self.EXTs:
                 raise Exception("\n\n"+param+" is not an extern non terminal in "+self._brick._file+"\n\n")
 
