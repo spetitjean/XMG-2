@@ -6,7 +6,7 @@ class BrickSpec:
         m = name_regex.match(name)
         if not m:
             raise RuntimeError("unparseable identifier in compiler.yml: %s" % name)
-        self.name = "[^A-Za-z0-9]".sub("_", name)
+        self.name = re.sub("[^A-Za-z0-9]", "_", name)
         self.brick_name = m.group(1)
         self.plugs = plugs
 
