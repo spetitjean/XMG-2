@@ -124,8 +124,8 @@ class Unfold(object):
                     
                     self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,NG.Rules[0].head,closeStmt),action=('VAR__RESULT=control:dimStmt('+extg._prefix+',VAR__PARAM__3)',4)))
 
-                    print(NG.EXTs)
-                    print(NG.NTs)
+                    #print(NG.EXTs)
+                    #print(NG.NTs)
                     self.Rules.append(xmg.compgen.Rule.Rule(NG.NTs['_Stmt'],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
 
 
