@@ -35,8 +35,12 @@ class FileProxy:
     __slots__ = ("filename","_stream","colno","lineno","line")
 
     def __init__(self, filename, encoding="UTF-8"):
-        self.filename = filename
-        self._stream = open(filename, encoding=encoding)
+        if isinstance(filename, str):
+            self.filename = filename
+            self._stream = open(filename, encoding=encoding)
+        else:
+            self.filename = "<unknown>"
+            self._stream = filename
         self.colno = 0
         self.lineno = 0
         self.line = self._stream.readline()
