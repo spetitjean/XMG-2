@@ -11,8 +11,6 @@ def yaml_to_specs(desc):
         spec.deref_plugs(table)
     return table
 
-# BUG!!!
-# this should now return a set of pairs (brick,symbol)
 def determine_axioms(table):
     used = set()
     for s in table.values():
