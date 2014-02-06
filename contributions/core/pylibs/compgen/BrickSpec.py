@@ -41,7 +41,10 @@ class BrickSpec:
         from xmg.compgen.Brick import Brick
         # prefix voir si self.name != self.brick_name
         self.brick = Brick(self.brick_name, prefix=self.name)
+        self.init_brick(self.brick)
 
+    def init_brick(self, brick):
+        pass
 
 class Plug:
 
@@ -53,3 +56,9 @@ class Plug:
         else:
             self.brick_name = spec
             self.symbol_name = None
+
+_COUNTER = 0
+def counter():
+    global _COUNTER
+    _COUNTER += 1
+    return _COUNTER

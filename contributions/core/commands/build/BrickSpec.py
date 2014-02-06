@@ -16,7 +16,7 @@ def determine_axioms(table):
     for s in table.values():
         for ps in s.plugs.values():
             for p in ps:
-                used.add(p.name)
+                used.add(p.brickspec.name)
     axioms = set(table.keys()) - used
     return axioms
 
