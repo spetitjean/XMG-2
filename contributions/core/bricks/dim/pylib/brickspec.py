@@ -24,7 +24,7 @@ class DimBrickSpec(BrickSpec):
         brick._text = """
 %%%%
 
-Dim : %s '{' _Extern '}' {$$=dim:dim($1,$3)};
+Dim : '<%s>' '{' _Extern '}' {$$=dim:dim($1,$3)};
 
 %%%%
 """ % self.tag

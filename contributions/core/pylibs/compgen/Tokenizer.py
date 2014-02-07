@@ -41,6 +41,7 @@ class FileProxy:
         else:
             self.filename = "<unknown>"
             self._stream = filename
+            print(self._stream.getvalue())
         self.colno = 0
         self.lineno = 0
         self.line = self._stream.readline()
