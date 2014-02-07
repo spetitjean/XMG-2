@@ -5,7 +5,11 @@ class DimBrickSpec(BrickSpec):
     @classmethod
     def create(cls, name, brick_name, plugs):
         control_name = "control__%d" % counter()
-        yield BrickSpec.make(control_name, "control", {"Stmt": plugs["Stmt"]})
+        Ctrl=BrickSpec.make(control_name, {"_Stmt": plugs["Stmt"]})
+        #print(Ctrl)
+        #yield Ctrl
+        for CtrlPart in Ctrl:
+            yield CtrlPart
         yield DimBrickSpec(name, brick_name, plugs, control_name)
 
     def __init__(self, name, brick_name, plugs, control_name):
@@ -18,10 +22,10 @@ class DimBrickSpec(BrickSpec):
 
     def init_brick(self, brick):
         brick._text = """
-%%
+%%%%
 
-Dim : %s '{' _Extern '}' {$$=dim:dim($1,$3)}
+Dim : %s '{' _Extern '}' {$$=dim:dim($1,$3)};
 
-%%
+%%%%
 """ % self.tag
         

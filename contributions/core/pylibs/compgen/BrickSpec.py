@@ -10,12 +10,17 @@ class BrickSpec:
         name = re.sub("[^A-Za-z0-9]", "_", name)
         brick_name = m.group(1)
         try:
-            mod = importlib.import_module("xmg.brick.%s.brickspec")
+            mod = importlib.import_module("xmg.brick.%s.brickspec" % brick_name)
             clsname = brick_name.capitalize() + "BrickSpec"
+            #print(clsname)
             cls = getattr(mod, clsname)
         except ImportError:
             cls = BrickSpec
-        return cls.create(name, brick_name, plugs)
+        #print(name)
+        #print(str(cls))
+        ret=cls.create(name, brick_name, plugs)
+        #print(ret)
+        return ret
 
     @classmethod
     def create(cls, *args):

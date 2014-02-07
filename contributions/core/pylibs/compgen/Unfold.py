@@ -104,34 +104,35 @@ class Unfold(object):
                     else:
                         raise Exception("Non Terminal "+sym+" unknown in brick "+extg._prefix)
 
-                # the language brick is a dimension brick
-                if extg._dim:
-                    tdim=xmg.compgen.Symbol.T('<'+extg._prefix+'>')
-                    brick._punctuation.append('<'+extg._prefix+'>')
-                    openStmt=xmg.compgen.Symbol.T('{')
-                    closeStmt=xmg.compgen.Symbol.T('}')
+                # # the language brick is a dimension brick
+                # if extg._dim:
+                #     tdim=xmg.compgen.Symbol.T('<'+extg._prefix+'>')
+                #     brick._punctuation.append('<'+extg._prefix+'>')
+                #     openStmt=xmg.compgen.Symbol.T('{')
+                #     closeStmt=xmg.compgen.Symbol.T('}')
 
-                    # new instance of control brick
-                    newControl=Brick('control',extg._prefix+'control')
-                    NCL=newControl.language_brick
-                    NG=NCL._unfold
-                    NG.build_grammar()
-                    for rulenc in NG.Rules:
-                        self.Rules.append(rulenc)
-                    for rulenc in NG.macros:
-                        self.Rules.append(rulenc)   
-                    # extern NT _Stmt must be pluged into the dimension
+                #     # new instance of control brick
+                #     newControl=Brick('control',extg._prefix+'control')
+                #     NCL=newControl.language_brick
+                #     NG=NCL._unfold
+                #     NG.build_grammar()
+                #     for rulenc in NG.Rules:
+                #         self.Rules.append(rulenc)
+                #     for rulenc in NG.macros:
+                #         self.Rules.append(rulenc)   
+                #     # extern NT _Stmt must be pluged into the dimension
                     
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,NG.Rules[0].head,closeStmt),action=('VAR__RESULT=control:dimStmt('+extg._prefix+',VAR__PARAM__3)',4)))
+                #     self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(tdim,openStmt,NG.Rules[0].head,closeStmt),action=('VAR__RESULT=control:dimStmt('+extg._prefix+',VAR__PARAM__3)',4)))
 
-                    #print(NG.EXTs)
-                    #print(NG.NTs)
-                    self.Rules.append(xmg.compgen.Rule.Rule(NG.NTs['_Stmt'],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
+                #     #print(NG.EXTs)
+                #     #print(NG.NTs)
+                #     self.Rules.append(xmg.compgen.Rule.Rule(NG.NTs['_Stmt'],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
 
 
 
-                else:
-                    self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
+                #else:
+                 
+                self.Rules.append(xmg.compgen.Rule.Rule(self.NTs[i],(axiom,),action=('VAR__RESULT=VAR__PARAM__1',1)))
   
                 # check that every non terminal appears in the left part of a rule
                 for g_nt in G.NTs:

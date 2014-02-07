@@ -293,9 +293,9 @@ class TokenizerEngine:
 
         keyword argument "encoding" defaults to "UTF-8".
         """
-        filename = os.path.abspath(filename)
-        if not os.path.exists(filename):
-            raise TokenizerError("input file not found: %s" % filename, None)
+        #filename = os.path.abspath(filename)
+        #if not os.path.exists(filename):
+        #    raise TokenizerError("input file not found: %s" % filename, None)
         self.encoding = encoding
         self.proxy = FileProxy(filename, encoding=encoding)
         self.stack = []

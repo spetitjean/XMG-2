@@ -2,10 +2,14 @@ from xmg.compgen.BrickSpec import BrickSpec
 
 def yaml_to_specs(desc):
     table = {}
+    # print(desc.items())
     for name, plugs in desc.items():
         for bs in BrickSpec.make(name, plugs):
+            #print("BS:")
+            #print(bs)
             if bs.name in table:
                 raise Exception("BrickSpec collision: %s" % br.name)
+            #print('OK')
             table[bs.name] = bs
     for spec in tuple(table.values()):
         spec.deref_plugs(table)
@@ -22,6 +26,7 @@ def determine_axioms(table):
 
 def build_and_connect(table):
     for b in table.values():
+        print(b)
         b.create_brick()
     for b in table.values():
         for k,plugs in b.plugs.items():
