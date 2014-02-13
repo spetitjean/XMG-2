@@ -22,6 +22,6 @@
 
 
 xmg:unfold_stmt(dim:dim(Dim,Stmt)):--
-	xmg:unfold_dimstmt(Dim,S2) ,
+	xmg:unfold_dimstmt(Dim,Stmt) ,
 	!.
 
