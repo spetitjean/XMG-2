@@ -4,7 +4,7 @@ mg:
 decls:
   ODecl: feats
 control:
-  _Stmt: caller sem syn iface
+  _Stmt: caller dim_sem dim_syn dim_iface
 avm: 
   _Value: value
 value: 
@@ -13,3 +13,12 @@ syn:
   AVM: avm
 iface:
   _AVM: avm
+dim_syn:
+  tag: "syn"
+  Stmt: syn
+dim_sem:
+  tag: "sem"
+  Stmt: sem
+dim_iface:
+  tag: "iface"
+  Stmt: iface
