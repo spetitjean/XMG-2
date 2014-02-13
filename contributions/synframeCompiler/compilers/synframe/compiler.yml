@@ -4,10 +4,16 @@ mg:
 decls:
   ODecl: feats hierarchy
 control:
-  _Stmt: caller frame syn
+  _Stmt: caller dim_frame dim_syn
 avm: 
   _Value: value
 value: 
   Else: avm adisj
 syn:
   AVM: avm
+dim_frame:
+  tag: "frame"
+  Stmt: frame
+dim_syn:
+  tag: "syn"
+  Stmt: syn
