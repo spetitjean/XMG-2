@@ -65,6 +65,9 @@ term_expansion( (H-->>B), Clause ) :- !,
 term_expansion( (H:--B) , Clause ) :- !,
     edcg_clause(H, B, Clause).
 
+term_expansion( (:- edcg:class_alias(Alias, Class)), [] ) :- !,
+    edcg_class_alias(Alias, Class).
+
 %% ============================================================================
 %% CURRENTLY LOADING MODULE INFO
 %% ============================================================================
@@ -137,6 +140,25 @@ assert_is_method(ModMeth) :-
     ; edcg_error("unknown method: ~w", [ModMeth]).
 
 %% ============================================================================
+%% CLASS ALIAS DECLARATION
+%%
+%% invoked as:
+%%     :- edcg:class_alias(Alias, Class).
+%% ============================================================================
+
+edcg_class_alias(Alias, Class) :-
+    maybe_prefix_with_loading_module(Alias, ModAlias),
+    maybe_prefix_with_loading_module(Class, ModClass),
+    assert_is_class(ModClass),
+    assert(edcg:edcg_info(ModAlias, class_alias(ModClass))).
+
+is_class_alias(ModAlias) :-
+    edcg:edcg_info(ModAlias, class_alias(_)).
+
+edcg_class_alias_deref(ModAlias, ModClass) :-
+    edcg:edcg_info(ModAlias, class_alias(ModClass)).
+
+%% ============================================================================
 %% CLASS DECLARATION
 %%
 %% invoked as:
@@ -206,8 +228,10 @@ assert_is_name(X) :-
 
 edcg_thread(Thread, Class) :-
     maybe_prefix_with_loading_module(Thread, ModThread),
-    maybe_prefix_with_loading_module(Class , ModClass),
+    maybe_prefix_with_loading_module(Class , ModAlias),
     assert_is_not_thread(ModThread),
+    (edcg_class_alias_deref(ModAlias, ModClass)
+     -> true ; ModAlias=ModClass )
     assert_is_class(ModClass),
     assert(edcg:edcg_info(ModThread, thread(ModClass))).
 
