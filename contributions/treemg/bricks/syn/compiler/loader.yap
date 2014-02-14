@@ -20,6 +20,8 @@
 
 :-module(xmg_loader_syn).
 
+:-	use_module('xmg/brick/syn/compiler/edcg').
+
 :-	use_module('xmg/brick/syn/compiler/compiler').
 :-	use_module('xmg/brick/syn/compiler/typer').
 :-	use_module('xmg/brick/syn/compiler/unfolder').

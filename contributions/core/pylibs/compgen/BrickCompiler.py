@@ -12,6 +12,7 @@ class BrickCompiler(object):
         self._links      = []
         self._dims       = []
         self._dimsp      = []
+        self._dimbricks  = dict()
         self._punctuation= []
         self._keywords   = []
 
@@ -70,6 +71,7 @@ class BrickCompiler(object):
             dim=brick._prefix.lower()
             self._dimsp.append(dim+'-'+dim.capitalize())
             self._dims.append(dim)
+            self._dimbricks[dim]=brick._name
 
     def generate_dimensions(self):
         dimfile=open(self._folder+"/dimensions.yap","w")
@@ -86,6 +88,28 @@ class BrickCompiler(object):
         dimfile.write(', trace-Trace]).\n\n')
         dimfile.close()
         print("Dimensions generated in "+self._folder)
+
+    def generate_edcg(self):
+        dimfile=open(self._folder+"/edcg.yap","w")
+        dimfile.write('%% -*- prolog -*-\n\n')
+        dimfile.write(':-module(xmg_edcg).\n\n')
+        dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+        dimfile.write('%% Threads initialization\n')
+        dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
+        
+        for dim in self._dims:
+            dimbrick=self._dimbricks[dim]
+            import xmg
+            yapdir=xmg.config['DEFAULT']['xmg_yap_rootdir']
+            print(yapdir)
+            if os.path.exists(yapdir+'/xmg/brick/'+dimbrick+'/compiler/edcg.yap'):
+                dimfile.write(':-edcg:thread(xmg_acc:'+dim+', xmg_brick_'+dimbrick+'_edcg:accu_type).\n\n')
+            else:
+                dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:queue).\n\n')
+
+
+        print("Threads generated in "+self._folder)
+        dimfile.close()
 
         
     def generate_tokenize_dims(self):
@@ -268,6 +292,7 @@ class BrickCompiler(object):
             self.generate_tokenize_keywords()
             self.generate_tokenize_dims()
             self.generate_modules()
+            self.generate_edcg()
             self.generate_conf()
         else:
             raise Exception("No directory set for the compiler")

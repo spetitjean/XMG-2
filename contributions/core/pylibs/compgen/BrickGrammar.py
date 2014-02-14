@@ -7,7 +7,8 @@ import xmg.compgen.Grammar
 
 class BrickGrammar(object):
 
-    def __init__(self, file, dim=False, prefix=None):
+    def __init__(self, name, file, dim=False, prefix=None):
+        self._name = name
         self._file = file
         self._prefix=prefix
         self._dim=dim
