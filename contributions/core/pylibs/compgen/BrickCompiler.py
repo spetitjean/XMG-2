@@ -11,9 +11,9 @@ class BrickCompiler(object):
         #self._links      = dict()
         self._links      = []
         self._dims       = []
-        self._dimsp      = []
-        self._accs       = []
-        self._accs_init  = []
+        self._dimsp      = ['trace-TRACE']
+        self._accs       = ['xmg_acc:trace']
+        self._accs_init  = ['xmg_acc:trace(TRACE)']
         self._dimbricks  = dict()
         self._punctuation= []
         self._keywords   = []
@@ -72,7 +72,7 @@ class BrickCompiler(object):
             # Create accumulator in yap, and do the add_path and use_module
             dim=brick._prefix.lower()
             DIM=dim.capitalize()
-            self._dimsp.append('xmg_acc:'+dim+'-'+dim.capitalize())
+            self._dimsp.append(dim+'-'+dim.capitalize())
             self._dims.append(dim)
             self._accs.append('xmg_acc:'+dim)
             self._accs_init.append('xmg_acc:'+dim+'('+DIM+')')
@@ -110,7 +110,11 @@ class BrickCompiler(object):
             if os.path.exists(yapdir+'/xmg/brick/'+dimbrick+'/compiler/edcg.yap'):
                 dimfile.write(':-edcg:thread(xmg_acc:'+dim+', xmg_brick_'+dimbrick+'_edcg:accu_type).\n\n')
             else:
-                dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:queue).\n\n')
+                dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:stack).\n\n')
+
+        dimfile.write(':-edcg:thread(xmg_acc:trace, edcg:stack).\n\n')
+
+
 
         dimfile.write(':-edcg:weave(['+", ".join(self._accs)+'],[xmg:value_class/3]).\n\n')
 

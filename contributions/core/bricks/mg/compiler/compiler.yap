@@ -107,12 +107,17 @@ compile_file(File,Eval):-
 eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),
 	xmg:value_all(Computed),
-	xmg_dimensions:dims(Dims),
+	
+	send(info,Computed),
+
+	%% xmg_dimensions:dims(Dims),
 
 	%% Computed=dims([morph-Morph,syn-Syn,pg-PG,sem-Sem]),
-	Computed=dims(Dims),
+	%% Computed=dims(Dims),
 
-	get_dim(trace,Dims,Trace),
+	get_dim(trace,Computed,Trace),
+
+	send(info,' got trace\n'),
 
 	findall(Mutex,mutex(Mutex),Mutexes),
 	%%send(info,Trace),
@@ -120,9 +125,9 @@ eval:-
 
 	send_nl(info),send_nl(info),send(info,'                Computed '),send(info,Class),send_nl(info),send_nl(info),
 
-	send(info,Dims),
+	send(info,Computed),
 	
-	eval_dims(Dims,EDims,Class),
+	eval_dims(Computed,EDims,Class),
 	current(Previous),
 	Current is Previous + 1,
 	retract(current(Previous)),

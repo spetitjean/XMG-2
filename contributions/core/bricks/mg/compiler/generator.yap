@@ -158,7 +158,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	edcg:edcg_clause(xmg:Head, Gen, Clause),
 	xmg:send(info,Clause),
-	asserta(xmg_class:Clause),
+	asserta(Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
 	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),
 	%%xmg_brick_mg_compiler:send(info,Clause),
@@ -185,15 +185,15 @@ generate_values([]).
 %% 	generate_values(T).
 generate_values([value(Value)|T]):-
 	%% Value part
-	asserta('xmg:value(Value)'),
+	asserta(xmg:value(Value)),
 	generate_values(T).
 
 import_calls([],_,true):--!.
 import_calls([import(id(Class,C),AS)|T],List,ICalls):--
 	xmg_brick_mg_exporter:exports(Class,E),
 	unify_exports(E,List,AS,Exports),
-	Call=..[Class,params(_),exports(Exports)],
-	ICall=..[':',xmg_class,Call],
+	Call=..[value_class,Class,params(_),exports(Exports)],
+	ICall=..[':',xmg,Call],
 	%% add Call to Trace
 	%%Put=..[put,Class],
 	%%Trace=..['::',xmg_generator:trace,Put],

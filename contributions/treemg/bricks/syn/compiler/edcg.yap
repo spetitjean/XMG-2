@@ -23,4 +23,4 @@
 %% À générer dans un fichier du compiler
 %% :-edcg:thread(xmg_acc:nom_dim, xmg_brick_syn_edcg:accu_type).
 
-:-edcg:class_alias(accu_type, edcg:queue).
+:-edcg:class_alias(accu_type, edcg:stack).

@@ -24,4 +24,4 @@
 %% :-edcg:thread(xmg_acc:nom_dim, xmg_brick_syn_edcg:accu_type).
 
 %%:-edcg:class_alias(accu_type, edcg:value).
-:- edcg:class( accu_type,   [edcg:set], _ ).
+:- edcg:class( accu_type,   [edcg:set,edcg:get], _ ).
