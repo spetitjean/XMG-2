@@ -66,6 +66,8 @@ compile_file(File,Eval):-
 	xmg_compiler_conf:init,
 	findall(Module,xmg_modules_def:module_def(_,Module),Modules),
 	xmg_brick_mg_modules:load_modules(Modules),
+	xmg_compiler_conf:init_threads,
+
 	send(info,' loaded '),
 
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
@@ -103,7 +105,8 @@ compile_file(File,Eval):-
 	eval.	
 
 eval:-
-	xmg_brick_mg_generator:compute(Class,Computed),
+	%%xmg_brick_mg_generator:compute(Class,Computed),
+	xmg:value_all(Computed),
 	xmg_dimensions:dims(Dims),
 
 	%% Computed=dims([morph-Morph,syn-Syn,pg-PG,sem-Sem]),

@@ -32,6 +32,10 @@
 %% :- edcg:thread(xmg_generator:skolem, edcg:counter).
 %% :- edcg:weave([xmg_generator:skolem],[xmg_generator:init_skolems/1]).
 
+xmg:value_all(Value):-
+	xmg:value(Class),
+	xmg:start_value_class(Class,Value).
+
 new_name(Name,Prefix):--
 	name::incr,
 	name::get(Get),
@@ -61,13 +65,14 @@ xmg:generate_instrs([H|T]):--
 
 
 generate(mg(_,Classes,Values)):-
-	xmg_dimensions:dims(Dims),
-	threads_(Dims),
-	xmg_table:table_new(TableIn),
-	xmg_brick_mg_compiler:send_nl(info),
-	xmg_brick_mg_compiler:send(info,' threading classes'),
-	thread_classes(Classes),
+	%% xmg_dimensions:dims(Dims),
+	%% threads_(Dims),
+	%% xmg_table:table_new(TableIn),
+	%% xmg_brick_mg_compiler:send_nl(info),
+	%% xmg_brick_mg_compiler:send(info,' threading classes'),
+	%% thread_classes(Classes),
 	xmg_brick_mg_compiler:send(info,' generating classes'),
+	
 	generate_classes(Classes),
 	generate_values(Values).
 
@@ -139,7 +144,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	%%xmg:send(info,EGenerated),
 
-	Head=..[Class,params(GP),exports(LExports)],
+	Head=..[value_class,Class,params(GP),exports(LExports)],
 	IGenerated=..[',',ICalls,EGenerated],
 
 	%% add Class to Trace
@@ -151,7 +156,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	%%xmg:send(info,IGenerated),
 
-	edcg:edcg_clause(xmg_class:Head, Gen, Clause),
+	edcg:edcg_clause(xmg:Head, Gen, Clause),
 	xmg:send(info,Clause),
 	asserta(xmg_class:Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
@@ -169,14 +174,18 @@ extract_code([H|T],Code):-
 	Code=..[',',H,ECode],!.
 
 generate_values([]).
+%% generate_values([value(Value)|T]):-
+%% 	%% Value part
+%% 	xmg_dimensions:dims(Dims),
+%% 	callDims(Dims,CDims),
+%% 	Head=..[compute,Value,dims(Dims)],
+%% 	Call=..[Value,params(_),exports(_)|CDims],
+%% 	Compute=..[':-',Head,xmg_class:Call],
+%% 	asserta(Compute),
+%% 	generate_values(T).
 generate_values([value(Value)|T]):-
 	%% Value part
-	xmg_dimensions:dims(Dims),
-	callDims(Dims,CDims),
-	Head=..[compute,Value,dims(Dims)],
-	Call=..[Value,params(_),exports(_)|CDims],
-	Compute=..[':-',Head,xmg_class:Call],
-	asserta(Compute),
+	asserta('xmg:value(Value)'),
 	generate_values(T).
 
 import_calls([],_,true):--!.

@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2013  Simon Petitjean
+%% Copyright (C) 2014  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -18,11 +18,10 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_iface).
+:-module(xmg_brick_iface_edcg).
 
-:-	use_module('xmg/brick/iface/compiler/edcg').
-:-	use_module('xmg/brick/iface/compiler/compiler').
-:-	use_module('xmg/brick/iface/compiler/typer').
-:-	use_module('xmg/brick/iface/compiler/unfolder').
-:-	use_module('xmg/brick/iface/compiler/generator').
+%% À générer dans un fichier du compiler
+%% :-edcg:thread(xmg_acc:nom_dim, xmg_brick_syn_edcg:accu_type).
 
+%%:-edcg:class_alias(accu_type, edcg:value).
+:- edcg:class( accu_type,   [edcg:set], _ ).

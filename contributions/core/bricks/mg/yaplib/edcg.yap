@@ -231,7 +231,7 @@ edcg_thread(Thread, Class) :-
     maybe_prefix_with_loading_module(Class , ModAlias),
     assert_is_not_thread(ModThread),
     (edcg_class_alias_deref(ModAlias, ModClass)
-     -> true ; ModAlias=ModClass )
+     -> true ; ModAlias=ModClass ),
     assert_is_class(ModClass),
     assert(edcg:edcg_info(ModThread, thread(ModClass))).
 

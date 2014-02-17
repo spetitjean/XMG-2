@@ -12,6 +12,8 @@ class BrickCompiler(object):
         self._links      = []
         self._dims       = []
         self._dimsp      = []
+        self._accs       = []
+        self._accs_init  = []
         self._dimbricks  = dict()
         self._punctuation= []
         self._keywords   = []
@@ -69,8 +71,11 @@ class BrickCompiler(object):
         for brick in self._dimensions:
             # Create accumulator in yap, and do the add_path and use_module
             dim=brick._prefix.lower()
-            self._dimsp.append(dim+'-'+dim.capitalize())
+            DIM=dim.capitalize()
+            self._dimsp.append('xmg_acc:'+dim+'-'+dim.capitalize())
             self._dims.append(dim)
+            self._accs.append('xmg_acc:'+dim)
+            self._accs_init.append('xmg_acc:'+dim+'('+DIM+')')
             self._dimbricks[dim]=brick._name
 
     def generate_dimensions(self):
@@ -107,6 +112,17 @@ class BrickCompiler(object):
             else:
                 dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:queue).\n\n')
 
+        dimfile.write(':-edcg:weave(['+", ".join(self._accs)+'],[xmg:value_class/3]).\n\n')
+
+        dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+        dimfile.write('%% Starting valuation\n')
+        dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
+
+        accs=", ".join(self._dimsp)
+
+        dimfile.write('xmg:start_value_class(Class,['+accs+']):--\n')
+        dimfile.write('  xmg:value_class(Class,_,_) with ('+", ".join(self._accs_init))
+        dimfile.write(').')
 
         print("Threads generated in "+self._folder)
         dimfile.close()
@@ -270,7 +286,9 @@ class BrickCompiler(object):
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/dimensions\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_punct\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_keywords\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\').')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\').\n\n')
+        conffile.write('init_threads:-\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/edcg\').')
         conffile.close()
         print("Configuration file generated in "+self._folder)
 
