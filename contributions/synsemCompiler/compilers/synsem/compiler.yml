@@ -7,7 +7,6 @@ control:
   _Stmt: caller stardim
 stardim:
   _Dim: dim_sem dim_syn dim_iface
-  _Constraint: iface
   proxy: dim_iface
 avm: 
   _Value: value

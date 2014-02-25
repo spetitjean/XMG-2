@@ -99,8 +99,8 @@ class Unfold(object):
                 if not sym:
                     axiom=G.Rules[0].head
                 else:
-                    if sym in self.NTs:
-                        axiom=self.NTs[sym]
+                    if sym in G.NTs:
+                        axiom=G.NTs[sym]
                     else:
                         raise Exception("Non Terminal "+sym+" unknown in brick "+extg._prefix)
 
