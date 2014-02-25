@@ -64,8 +64,9 @@ xmg:xml_convert_term(Node,Root):--
     ),!.
 
 
-xmg:xml_convert_term(syn:props(Props),props(Name,N,XMLMark)):--
+xmg:xml_convert_term(syn:props(Props),props(NName,N,XMLMark)):--
 	xmlName(Props,Name,N),
+	Name=id(NName,_),
 	xmlMark(Props,XMLMark),!.
 
 xmlMark([],'std'):-!.

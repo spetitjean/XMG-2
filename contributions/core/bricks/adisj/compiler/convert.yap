@@ -43,6 +43,7 @@ xmlAdisj([H|T],[elem(sym,features([value-Bool]))|T1]):--
 	H=bool(Bool),
 	not(var(Bool)),!,
 	xmlAdisj(T,T1),!.
-xmlAdisj([H|T],[elem(sym,features([value-H]))|T1]):--
+xmlAdisj([H|T],[elem(sym,features([value-Val]))|T1]):--
+	H=id(Val,_),
 	xmlAdisj(T,T1),!.
 
