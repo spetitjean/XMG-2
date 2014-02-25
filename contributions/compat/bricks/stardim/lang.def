@@ -1,0 +1,6 @@
+
+%%
+
+Stmt : _Dim {$$=$1} | _Dim '*=' _DimStar {$$=control:and($1,$3)} ;
+
+%%
