@@ -1,6 +1,0 @@
-
-%%
-
-Stmt : _Dim {$$=$1} | _Dim '*=' _Constraint {$$=control:and($1,$3)} ;
-
-%%
