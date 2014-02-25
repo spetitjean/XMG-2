@@ -4,7 +4,11 @@ mg:
 decls:
   ODecl: feats
 control:
-  _Stmt: caller dim_sem dim_syn dim_iface
+  _Stmt: caller dimstar
+dimstar:
+  _Dim: dim_sem dim_syn dim_iface
+  _Constraint: iface
+  proxy: dim_iface
 avm: 
   _Value: value
 value: 
