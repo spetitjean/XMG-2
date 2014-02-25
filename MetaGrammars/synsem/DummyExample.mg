@@ -2,7 +2,7 @@ type COLOR = {red,black,white}
 property color : COLOR
 %% use color with () dims (syn) %args (COLOR)
 
-type CAT = {v,n,s}
+type CAT = {v,n,s,cl}
 type CAT = {t}
 %%feature cat : CAT
 
@@ -38,10 +38,9 @@ declare ?X ?Y ?Z ?T ?L
   % 	?Y >> ?Z
   % }
   % |
-  
   {<syn>{
 	node ?X (color=black) [cat=s]{ ...+
-	     node ?Y (color=black) [cat=n]
+	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
 	     node ?Z (color=black) [cat=v]{
 	     	  node ?T (color=black) [cat=?L]

@@ -22,7 +22,7 @@
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
-xmg:unfold_expr(adisj:adisj(Adisj),Target):--
+xmg:unfold_expr(adisj:adisj(Adisj),id(Target,_)):--
 	xmg:new_target_var(Target),
 	xmg:unfold_exprs(Adisj,UAdisj),
 	constraints::enq((Target,adisj:adisj,UAdisj)),
