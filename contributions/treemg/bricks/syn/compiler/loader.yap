@@ -51,3 +51,5 @@
 :-	use_module('xmg/brick/tag/compiler/preparer').
 :-	use_module('xmg/brick/tag/compiler/solver').
 
+:-	use_module('xmg/brick/tree/compiler/convert').
+

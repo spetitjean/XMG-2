@@ -33,6 +33,6 @@ eval(Syn,XML,Class):-
 	%% Current is Previous + 1,
 	%% retract(current(Previous)),
 	%% asserta(current(Current)),
-	xmg_brick_syn_convert:toXML(tree(Tree,Class),XML,Previous).
+	xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML).
 eval([], elem(tree, features([id-none])),_).
 

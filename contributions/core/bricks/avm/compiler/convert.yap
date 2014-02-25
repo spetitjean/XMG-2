@@ -23,12 +23,15 @@
 
 :- edcg:using(xmg_brick_mg_convert:name).
 
-:- edcg:weave([name],[xmlFeats/2, new_name/2]).
+:- edcg:weave([name],[xmlFeats/2]).
 
-new_name(Prefixe, Name) :--
-	name::incr,
-	name::get(N),
-	atomic_concat([Prefixe,N],Name).
+%% new_name(Prefixe, Name) :--
+%% 	name::incr,
+%% 	name::get(N),
+%% 	atomic_concat([Prefixe,N],Name).
+
+xmg:xml_convert_term(avm:avm(Feats),Convert):--
+	xmlFeats(Feats,Convert),!.
 
 xmlFeats([],[]):-- !.
 
@@ -59,7 +62,7 @@ xmlFeats([A-AVM|T],[H1|T1]):--
 	xmg_brick_avm_avm:const_avm(AVM,CAVM),
 	((
 	    var(CAVM),!,
-	    new_name('@AVM',CAVM),
+	    xmg:convert_new_name('@AVM',CAVM),
 	    xmlFeats(LAVM,LAVM1),
 	    H1=elem(f, features([name-A]),children([elem(fs,features([coref-CAVM]),children(LAVM1))]))
 	)
@@ -71,17 +74,17 @@ xmlFeats([A-AVM|T],[H1|T1]):--
 
 xmlFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))|T1]):--
 	var(V),
-	new_name('@V',V),
+	xmg:convert_new_name('@V',V),
 	xmlFeats(T,T1),!.
 
 xmlFeats([A-const(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-V]))]))|T1]):--
 	var(V),
-	new_name('@V',V),
+	xmg:convert_new_name('@V',V),
 	xmlFeats(T,T1),!.
 
 xmlFeats([A-sconst(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-V]))]))|T1]):--
 	var(V),
-	new_name('!C',V),
+	xmg:convert_new_name('!C',V),
 	xmlFeats(T,T1),!.
 
 xmlFeats([A-AD|T],[H1|T1]):--
@@ -90,8 +93,8 @@ xmlFeats([A-AD|T],[H1|T1]):--
 	xmg_brick_adisj_adisj:const_adisj(AD,CLAD),!,
 	((
 	    var(CLAD),!,
-	    new_name('@AD',CLAD),
-	    xmlAdisj(LAD,LAD1),
+	    xmg:convert_new_name('@AD',CLAD),
+	    xmg:xml_convert(adisj:adisj(LAD),LAD1),
 	    H1=elem(f, features([name-A]),children([elem(vAlt, features([coref-CLAD]),children(LAD1))]))
 	)
     ;
@@ -106,8 +109,8 @@ xmlFeats([A-const(AD,_)|T],[H1|T1]):--
 	xmg_brick_adisj_adisj:const_adisj(AD,CLAD),!,
 	((
 	    var(CLAD),!,
-	    new_name('@AD',CLAD),
-	    xmlAdisj(LAD,LAD1),
+	    xmg:convert_new_name('@AD',CLAD),
+	    xmg:xml_convert(adisj:adisj(LAD),LAD1),
 	    H1=elem(f, features([name-A]),children([elem(vAlt, features([coref-CLAD]),children(LAD1))]))
 	)
     ;
@@ -121,21 +124,4 @@ xmlFeats(Feats,_):--
 
 
 
-xmlAdisj([],[]) :-- !.
-
-xmlAdisj([H|T],[elem(sym,features([value-Val]))|T1]):--
-	H=string(String),
-	not(var(String)),!,
-	atom_codes(Val,String),
-	xmlAdisj(T,T1),!.
-xmlAdisj([H|T],[elem(sym,features([value-Int]))|T1]):--
-	H=int(Int),
-	not(var(Int)),!,
-	xmlAdisj(T,T1),!.
-xmlAdisj([H|T],[elem(sym,features([value-Bool]))|T1]):--
-	H=bool(Bool),
-	not(var(Bool)),!,
-	xmlAdisj(T,T1),!.
-xmlAdisj([H|T],[elem(sym,features([value-H]))|T1]):--
-	xmlAdisj(T,T1),!.
 

@@ -17,10 +17,32 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:- module(xmg_brick_adisj_convert).
 
-:-module(xmg_loader_adisj).
-:- use_module('../../../brick/adisj/compiler/unfolder').
-:- use_module('../../../brick/adisj/compiler/generator').
-:- use_module('../../../brick/adisj/compiler/convert').
-:- use_module('../../../brick/adisj/adisj.yap').
+%%:- edcg:thread(name,edcg:counter).
+
+:- edcg:using(xmg_brick_mg_convert:name).
+
+:- edcg:weave([name],[xmlAdisj/2]).
+
+xmg:xml_convert_term(adisj:adisj(ADisj),Convert):--
+	xmlAdisj(ADisj,Convert),!.
+
+xmlAdisj([],[]) :-- !.
+
+xmlAdisj([H|T],[elem(sym,features([value-Val]))|T1]):--
+	H=string(String),
+	not(var(String)),!,
+	atom_codes(Val,String),
+	xmlAdisj(T,T1),!.
+xmlAdisj([H|T],[elem(sym,features([value-Int]))|T1]):--
+	H=int(Int),
+	not(var(Int)),!,
+	xmlAdisj(T,T1),!.
+xmlAdisj([H|T],[elem(sym,features([value-Bool]))|T1]):--
+	H=bool(Bool),
+	not(var(Bool)),!,
+	xmlAdisj(T,T1),!.
+xmlAdisj([H|T],[elem(sym,features([value-H]))|T1]):--
+	xmlAdisj(T,T1),!.
 

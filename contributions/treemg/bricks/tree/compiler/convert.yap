@@ -22,13 +22,16 @@
 
 %% deal with the constructor 'tree'
 
-toXML(tree(Tree,Family), elem(tree, features([id-Name]),children([Syn1])),Number) :--
+xmg:xml_convert_term(tree:tree(Tree,Family,Number), elem(tree, features([id-Name]),children([Syn1]))):--
 	lists:remove_duplicates(Sem,SemD),!,
-	xmlSyn(Tree,Syn1) with name(1,_),!,
-	atomic_concat([Family,'_',Number],Name),
-	!.
-
-xmlSyn(tree(H,Trees),Root):--
+ 	xmg:xml_convert(Tree,Syn1),!,
+	xmg:send(info,Syn1),
+	xmg:send(info,Family),
+	xmg:send(info,Number),
+ 	atomic_concat([Family,'_',Number],Name),
+ 	!.
+	
+xmg:xml_convert_term(tree:tree(H,Trees), Root):--
 	H=node(PropAVM,FeatAVM,N),
 
 	xmg_brick_avm_avm:avm(PropAVM, Props),
@@ -36,14 +39,13 @@ xmlSyn(tree(H,Trees),Root):--
 
 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
 	%%xmg_brick_nodename_nodename:nodename(N,Name),
-	xmlName(Props,Name,N),
-	xmlMark(Props,XMLMark),
+	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark)),
 	(
 	    var(CAVM)->
 	    
 	    (
-		new_name('@AVM',CAVM),
-		xmg_brick_avm_convert:xmlFeats(Feats,XMLFeats),!,
+		xmg:convert_new_name('@AVM',CAVM),
+		xmg:xml_convert(avm:avm(Feats),XMLFeats),!,
 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
 	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))|Trees1]))
 		)
@@ -53,6 +55,35 @@ xmlSyn(tree(H,Trees),Root):--
 	!,Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]))]))|Trees1]))
 	)
     ),
-	xmlSynList(Trees,Trees1),!.
+	xmg:xml_convert(Trees,Trees1),!.
+	
+
+
+%% xmlSyn(tree(H,Trees),Root):--
+%% 	H=node(PropAVM,FeatAVM,N),
+
+%% 	xmg_brick_avm_avm:avm(PropAVM, Props),
+%% 	xmg_brick_avm_avm:avm(FeatAVM, Feats),
+
+%% 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
+%% 	%%xmg_brick_nodename_nodename:nodename(N,Name),
+%% 	xmlName(Props,Name,N),
+%% 	xmlMark(Props,XMLMark),
+%% 	(
+%% 	    var(CAVM)->
+	    
+%% 	    (
+%% 		new_name('@AVM',CAVM),
+%% 		xmg_brick_avm_convert:xmlFeats(Feats,XMLFeats),!,
+%% 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
+%% 	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))|Trees1]))
+%% 		)
+%% 	;
+%% 	(
+%% 	    %%Elem=elem(fs,features([coref-CAVM]))
+%% 	!,Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]))]))|Trees1]))
+%% 	)
+%%     ),
+%% 	xmlSynList(Trees,Trees1),!.
 
 

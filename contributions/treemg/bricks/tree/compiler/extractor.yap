@@ -30,7 +30,7 @@ extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
 
 %% Converting sets to a tree
 
-make_tree(IsRoot,Eq,Children,Left,tree(Root,Trees)):-  %% Trees : list of children trees
+make_tree(IsRoot,Eq,Children,Left,tree:tree(Root,Trees)):-  %% Trees : list of children trees
 	search_root(IsRoot,Eq,Root),!,
 	search_children(Root,Children,NChildren),!,
 	children_eqs(NChildren,NChildrenEqs,Eq),!,
@@ -56,7 +56,7 @@ make_subtree(Node,Eq,Children,Left,Tree):- !,
 	    search_lefts(NChildrenEqs,Left,ChildrenLefts),!,
 	    sort_children(NChildrenEqs,ChildrenLefts,NChildrenSorted),!,
 	    make_subtrees(NChildrenSorted,Eq,Children,Left,Trees),!,
-	    Tree=tree(Node,Trees)
+	    Tree=tree:tree(Node,Trees)
 	)),
 	
 	!.
@@ -133,7 +133,7 @@ unify_in_trees([H|T],[H1|T1], NodeList):-
 	unify_in_tree(H,H1,NodeList),!,
 	unify_in_trees(T,T1,NodeList),!.
 
-unify_in_tree(tree(T,Trees), tree(T1,Trees1), NodeList):-
+unify_in_tree(tree:tree(T,Trees), tree:tree(T1,Trees1), NodeList):-
 	unify_node(T,T1,NodeList),!,
 	unify_in_trees(Trees,Trees1,NodeList),!.
 unify_in_tree(A,A1,NodeList):-

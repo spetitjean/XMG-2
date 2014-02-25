@@ -106,7 +106,7 @@ compile_file(File,Eval):-
 
 eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),
-	xmg:value_all(Computed),
+	xmg:value_all(Computed,Class),
 	
 	send(info,Computed),
 
@@ -132,7 +132,7 @@ eval:-
 	Current is Previous + 1,
 	retract(current(Previous)),
 	asserta(current(Current)),
-	xmg_brick_mg_convert:toXML(entry(Trace,EDims),XML,Previous),
+	xmg:do_xml_convert(mg:entry(Trace,EDims,Previous),XML),
 	xmg_brick_mg_printer:printXML([XML],1),
 	send(info,Previous),send_nl(info),send_nl(info),
 

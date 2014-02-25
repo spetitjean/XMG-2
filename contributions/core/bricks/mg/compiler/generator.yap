@@ -32,7 +32,7 @@
 %% :- edcg:thread(xmg_generator:skolem, edcg:counter).
 %% :- edcg:weave([xmg_generator:skolem],[xmg_generator:init_skolems/1]).
 
-xmg:value_all(Value):-
+xmg:value_all(Value,Class):-
 	xmg:value(Class),
 	xmg:start_value_class(Class,Value).
 
