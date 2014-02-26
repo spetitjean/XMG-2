@@ -1,11 +1,3 @@
-%token id
-%token int
-%token string 
-%token bool
-
-%type Value Value
-
-%ext Else Else
 
 %%
 
@@ -15,6 +7,6 @@ Value : id {$$=$1}
       | bool {$$=$1}
       | int {$$=$1}
       | string {$$=$1}
-      | Else {$$=$1};
+      | _Else {$$=$1};
 
 %%

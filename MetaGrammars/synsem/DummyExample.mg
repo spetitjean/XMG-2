@@ -6,8 +6,8 @@ type CAT = {v,n,s,cl}
 type CAT = {t}
 %%feature cat : CAT
 
-type node_feats = [|cat:CAT]
-type node_props = [color:COLOR]
+%type node_feats = [|cat:CAT]
+%type node_props = [color:COLOR]
 
 %%use syn:node with () dims (syn) args (node_props, node_feats)
 %% use syn:node with (node_props, node_feats) dims (syn) 
@@ -15,12 +15,12 @@ type node_props = [color:COLOR]
 
 class dummier
 %%import dummy[]
-declare ?T ?C
+declare ?T ?C ?A
 {
 	?C=dummy[];
 	<syn>{
 		node ?T (color=black) %%[cat=whatever]
-		}
+		}*=[arg1=?A]
 		;
 	?T=?C.?X
 }

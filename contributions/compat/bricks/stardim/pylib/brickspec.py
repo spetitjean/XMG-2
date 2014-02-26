@@ -10,7 +10,8 @@ class StardimBrickSpec(BrickSpec):
     def deref_plugs(self, table):
         proxy = table[self.proxy]
         ctrl = proxy.control_name
-        self.plugs["_Constraint"] = Plug(ctrl + "._Stmt")
+        self.tag = proxy.tag
+        self.plugs["_Constraint"] = [Plug(ctrl + "._Stmt")]
         super().deref_plugs(table)
 
     def init_brick(self, brick):
@@ -20,4 +21,4 @@ class StardimBrickSpec(BrickSpec):
 Stmt : _Dim {$$=$1} | _Dim '*=' _Constraint {$$=control:and($1,dim:dim('%s',$3))} ;
 
 %%%%
-""" % self.proxy
+""" % self.tag

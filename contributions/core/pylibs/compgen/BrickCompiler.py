@@ -312,7 +312,7 @@ class BrickCompiler(object):
             self.generate_dimensions()
             self.generate_tokenize_punctuation()
             self.generate_tokenize_keywords()
-            self.generate_tokenize_dims()
+            #self.generate_tokenize_dims()
             self.generate_modules()
             self.generate_edcg()
             self.generate_conf()

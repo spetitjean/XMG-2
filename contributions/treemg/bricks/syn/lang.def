@@ -1,30 +1,3 @@
-%token syn
-%token string
-%token id
-%token node
-%token int
-%token bool
-
-%type Var Var
-%type SynStmt SynStmt
-%type Node Node
-%type MaybeProps MaybeProps
-%type Props Props
-%type Feat Feat
-%type Dom Dom
-%type DomOp DomOp
-%type Prec Prec
-%type PrecOp PrecOp
-%type IdOrNode IdOrNode
-%type Eq Eq
-%type Expr Expr
-%type Tree Tree
-%type Children Children
-%type Child Child
-%type TreePrecOp TreePrecOp
-%type TreeDomOp TreeDomOp
-
-%ext AVM AVM
 
 %%
 
@@ -35,7 +8,7 @@ SynStmt : Node {$$=$1}
 	| Eq   {$$=$1}
 	| Tree {$$=$1};
 
-Node : node (Var)? MaybeProps (AVM)? {$$=syn:node($2,$3,$4)};
+Node : 'node' (Var)? MaybeProps (_AVM)? {$$=syn:node($2,$3,$4)};
 
 MaybeProps : '(' Props ')' {get_coord($1,Coord), $$=some(avm:avm(Coord,$2))}
 	   | {$$=none};

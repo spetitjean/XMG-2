@@ -1,34 +1,3 @@
-%token use
-%token dims
-%token id
-%token with
-%token int
-%token string
-%token bool
-%token type
-%token property
-
-%type Decls Decls
-%type Decl Decl
-
-%type Principle Principle
-%type PrincipleParam PrincipleParam
-%type PrincipleFeat PrincipleFeat
-
-%type Type Type
-%type TypeDef TypeDef
-%type FacStruct FacStruct
-%type Struct Struct
-
-%type Property Property
-%type MaybeAbbrev MaybeAbbrev
-%type Abbrev Abbrev
-
-%type Val Val
-
-%type Id_or_constr Id_or_constr
-
-%ext ODecl ODecl
 
 %%
 
@@ -37,9 +6,9 @@ Decls : (Decl)* {$$=$1} ;
 Decl : Principle {$$=$1} 
      | Type {$$=$1}
      | Property {$$=$1}
-     | ODecl {$$=$1};
+     | _ODecl {$$=$1};
 
-Principle : use Id_or_constr with '(' (PrincipleParam // ',')* ')' dims '(' (id)+ ')' {$$=decls:principle($2,$5,$9)}; 
+Principle : 'use' Id_or_constr 'with' '(' (PrincipleParam // ',')* ')' 'dims' '(' (id)+ ')' {$$=decls:principle($2,$5,$9)}; 
 
 PrincipleParam : PrincipleFeat {$$=$1} |  id {$$=decls:principle_type($1)};
 
@@ -49,8 +18,8 @@ PrincipleFeat : id '=' id {$$=decls:eq($1,$3)}
 	      | id '=' bool {$$=decls:eq($1,$3)} ;
 
 
-Type : type id '=' TypeDef {$$=decls:type($2,$4)} 
-     | type id '!' {$$=decls:type($2,label)}; 
+Type : 'type' id '=' TypeDef {$$=decls:type($2,$4)} 
+     | 'type' id '!' {$$=decls:type($2,label)}; 
 
 TypeDef : '{' (Val // ',')+ '}' {$$=decls:enum($2)} 
 	| '[' int '.' '.' int ']' {$$=decls:range($2,$5)} 
@@ -61,7 +30,7 @@ FacStruct : '|' (Struct // ',')+ {$$=$2};
 Struct : id ':' id {$$=decls:structpair($1,$3)};
 
 
-Property : property id ':' id MaybeAbbrev {$$=decls:property($2,$4,$5)};
+Property : 'property' id ':' id MaybeAbbrev {$$=decls:property($2,$4,$5)};
 
 MaybeAbbrev : '{' (Abbrev // ',')+ '}' {$$=$2} 
 	    | {$$=none};
@@ -77,6 +46,6 @@ Val : id {$$=$1}
 
 Id_or_constr :  id {$$=$1} 
 	     /*| id ':' id {$$=constr($1,$3)}  the second id is a keyword */ 
-	     | id ':' node {$$=decls:constructor($1,$3)};
+	     | id ':' 'node' {$$=decls:constructor($1,$3)};
 	     
 %%
