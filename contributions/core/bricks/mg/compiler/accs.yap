@@ -58,3 +58,22 @@ xmg:unfold_exprs([E|Es],[R|Rs]) :--
 	fail
 	),
     xmg:unfold_exprs(Es,Rs).
+
+%% ============================================================================
+%% provide a simpler way for bricks to use xmg accs.
+%% A file unfolder.yap now simply needs to do:
+%%
+%% :- xmg:unfolder_accs.
+%% ============================================================================
+
+unfolder_accs([xmg_brick_mg_accs:constraints,
+	       xmg_brick_mg_accs:name,
+	       xmg_brick_mg_accs:vars,
+	       xmg_brick_mg_accs:consts]).
+
+:- multifile user:term_expansion/2.
+
+term_expansion((:- xmg:unfolder_accs), R) :-
+    !, unfolder_accs(L), edcg:term_expansion((:- edcg:using(L)), R).
+
+user:term_expansion(X,Y) :- xmg_brick_mg_accs:term_expansion(X,Y).
