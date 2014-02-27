@@ -1,5 +1,6 @@
 import xmg.compgen.Grammar
 import xmg.compgen.Tokenizer
+import re, string
 from xmg.compgen.convert import convert
 from xmg.compgen.brick_parser import sqstring
 
@@ -19,13 +20,21 @@ class Parser(object):
         tokenizer=tokenizer(filename,encoding=encoding)
         self.sem=[]
         self.punctuation=[]
+        self.keywords=[]
         self.states=[grammar.lr1.begin]
         self.table=grammar.lr1.table
         self.grammar=grammar
         for token in tokenizer:
             token,sem,coord=convert(token)
             if token == sqstring:
-                self.punctuation.append(sem)
+                id_regex = re.compile(r"^([A-Za-z][A-Za-z0-9]*)$")
+                m = id_regex.match(sem)
+                if m:
+                    self.keywords.append(sem)
+                elif sem[-1] in string.punctuation:
+                    self.punctuation.append(sem)
+                else:
+                  raise Exception("Forbidden token: "+sem+coord)                 
             while True:
                 state=self.states[len(self.states)-1]
                 if token in self.table[state]:
