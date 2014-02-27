@@ -34,7 +34,7 @@ class Parser(object):
                 elif sem[-1] in string.punctuation:
                     self.punctuation.append(sem)
                 else:
-                  raise Exception("Forbidden token: "+sem+coord)                 
+                  raise Exception("Forbidden token:\n"+sem+", "+str(coord))                 
             while True:
                 state=self.states[len(self.states)-1]
                 if token in self.table[state]:

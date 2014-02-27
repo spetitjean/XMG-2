@@ -4,14 +4,16 @@ mg:
 decls:
   _ODecl: feats
 control:
-  _Stmt: caller stardim
+  _Stmt: dim_sem dim_syn dim_iface stardim
+  _Expr: value
 stardim:
-  _Dim: dim_sem dim_syn dim_iface
+  _Stmt: control
   proxy: dim_iface
 avm: 
   _Value: value
+  _Expr: value
 value: 
-  _Else: avm adisj
+  _Else: avm adisj avm.Dot control.Call
 syn:
   _AVM: avm
 iface:
@@ -19,9 +21,12 @@ iface:
 dim_syn:
   tag: "syn"
   Stmt: syn
+  Expr: value
 dim_sem:
   tag: "sem"
   Stmt: sem
+  Expr: value
 dim_iface:
   tag: "iface"
   Stmt: iface
+  Expr: value

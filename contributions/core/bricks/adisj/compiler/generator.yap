@@ -29,7 +29,7 @@
 
 %%:-edcg:weave([decls,name], [new_name/2,var_or_const/3,generate/6]).
 
-xmg:generate_instr((Target,adisj:adisj,Adisj)) :--
+xmg:generate_instr((v(Target),adisj:adisj,Adisj)) :--
 	decls::tget(Target,Var),
     code::enq(xmg_brick_adisj_adisj:adisj(Var,Adisj)),
     !.

@@ -4,8 +4,8 @@
 AVM : '[' (Feat // ',')* ']' {get_coord($1,Coord), $$=avm:avm(Coord,$2)};
 
 Feat : id '=' _Value {$$=avm:feat($1,$3)}; 
-     /*| id {$$=avm:feat($1)};*/
-     /*| id '=' AVM {$$=feat($1,$3)};*/
-
+  
+Dot : _Expr '.' id {$$=avm:dot($1,$3)}; 
+/* should _Expr and _Value be the same? */
 
 %%

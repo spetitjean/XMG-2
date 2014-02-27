@@ -43,6 +43,14 @@ xmg:generate_instr((Var,control:dot(Class,id(CVar,_)))):--
 	code::enq(xmg:send(info,'member found')),!.
 
 xmg:generate_instr((Var,control:dot(Class,CVar))):--
+	(
+	    atom(CVar)-> true
+	;
+	xmg:send(info,'\nError:'),
+	xmg:send(info,CVar),
+	fail
+	)
+	,
 	xmg:send(info,' generating dot '),
 	decls::tget(Var,GV),
 	decls::tget(Class,GC),

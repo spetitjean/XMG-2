@@ -34,13 +34,13 @@
 
 
 
-xmg:new_target_var(Name,Prefix):--
+xmg:new_target_var(v(Name),Prefix):--
 	name::incr,
 	name::get(Get),
 	atomic_concat([Prefix,Get],Name),
 	vars::tput(Name,_),!.
 
-xmg:new_target_var(Name):--
+xmg:new_target_var(v(Name)):--
 	name::incr,
 	name::get(Get),
 	atomic_concat(['XMG_VAR_',Get],Name),
@@ -50,5 +50,11 @@ xmg:new_target_var(Name):--
 
 xmg:unfold_exprs([],[]) :-- !.
 xmg:unfold_exprs([E|Es],[R|Rs]) :--
-    xmg:unfold_expr(E,R),
+    (
+	xmg:unfold_expr(E,R)->true
+    ;
+	xmg:send(info,'\nCould not unfold expr'),
+	xmg:send(info,E),
+	fail
+	),
     xmg:unfold_exprs(Es,Rs).

@@ -164,7 +164,7 @@ class BrickCompiler(object):
     def collect_keywords(self):
         for lang in self._languages:
             #print(lang._punctuation)
-            for nkey in lang._unfold._Ts:
+            for nkey in lang._keywords:
                 if nkey not in self._keywords and nkey > '':
                     #print(npunct)
                     self._keywords.append(nkey)

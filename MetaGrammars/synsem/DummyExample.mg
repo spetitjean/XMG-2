@@ -22,7 +22,7 @@ declare ?T ?C ?A
 		node ?T (color=black) %%[cat=whatever]
 		}*=[arg1=?A]
 		;
-	?T=?C.?X
+	?T=?C.X
 }
 
 class dummy
@@ -53,7 +53,7 @@ declare ?X ?Y ?Z ?T ?L
  }
  ;
  <iface>{ 
-		[cat=v, arg1=?L]
+ 		[cat=v, arg1=?L]
  }
 }
 

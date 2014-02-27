@@ -11,6 +11,7 @@ class Unfold(object):
     def __init__(self,brick):
         self._brick=brick
         self._punctuation=brick._punctuation
+        self._keywords=brick._keywords
         self._Ts=dict()
         self._NTs=dict()
         self._EXTs=dict()

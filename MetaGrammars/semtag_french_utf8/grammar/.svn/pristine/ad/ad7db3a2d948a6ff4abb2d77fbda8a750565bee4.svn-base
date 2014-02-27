@@ -1,3 +1,0 @@
-;		
-	     node xV(mark=anchor,color=white,rank=7)[cat=v];
-	     xVN -> xV}

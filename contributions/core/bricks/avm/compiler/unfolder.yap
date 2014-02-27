@@ -23,7 +23,7 @@
 :- edcg:weave([constraints,name,vars,consts],[unfold_expr/2,unfold_feats/2,unfold_feat/2]).
 
 xmg:unfold_expr(avm:avm(Coord, Feats), Target) :--
-    constraints::enq((Target,avm:avm)),
+    constraints::enq((Target,avm:avm(Coord))),
 	unfold_feats(Feats, Target)	.
 
 unfold_feats([], _):-- !.
@@ -41,7 +41,12 @@ unfold_feat(avm:feat(F,V), Target) :--
 	constraints::enq((Target,avm:feat(Target1,Target2))),!.
 
 
-
+xmg:unfold_expr(avm:dot(Var1,Var2),Target):--
+	xmg:new_target_var(Target),	
+	xmg:unfold_expr(Var1,T1),
+	xmg:unfold_expr(Var2,T2),
+	constraints::enq((Target,avm:dot(T1,T2))),
+	!.
 
 
 

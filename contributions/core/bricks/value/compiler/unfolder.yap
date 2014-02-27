@@ -22,9 +22,31 @@
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
 	
-xmg:unfold_expr(token(C,id(ID)),ID):--
+xmg:unfold_expr(token(C,id(ID)),v(ID)):--
 	vars::tget(ID,G),!.
-xmg:unfold_expr(token(C,id(ID)),id(ID,C)):--
+xmg:unfold_expr(token(C,int(Int)),c(Int)):--
+	!.
+xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
+	vars::tget(ID,G),!.
+xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
+	%%consts::tget(ID,G),
+	!.
+
+
+%% control:eq(
+%% 	value:var(token(coord(MetaGrammars/synsem/DummyExample.mg,20,3),id(C))),
+%% 	value:var(token(coord(MetaGrammars/synsem/DummyExample.mg,20,6),id(A)))
+%%     )
+
+xmg:unfold_expr(token(C,id(ID)),c(ID)):--
+	xmg:send(info,'\n\n WARNING : '),
+	xmg:send(info,ID),
+	!.
+xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
+	xmg:send(info,'\n\n WARNING : '),
+	xmg:send(info,ID),
+	!.
+xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	xmg:send(info,'\n\n WARNING : '),
 	xmg:send(info,ID),
 	!.

@@ -26,20 +26,40 @@
 
 :-edcg:weave([decls,name], [new_name/2,var_or_const/2,generate/5]).
 
-xmg:generate_instr((Target,avm:avm)) :--
+xmg:generate_instr((v(Target),avm:avm(Coord))) :--
 	decls::tget(Target,Var),
-    code::enq(xmg_brick_avm_avm:avm(Var,[])),
-    !.
-xmg:generate_instr((Target,avm:feat(id(F,_),id(Target2,_)))):--
+	code::enq(xmg_brick_avm_avm:avm(Var,[])),
+	!.
+xmg:generate_instr((v(Target),avm:feat(c(F),v(Target2)))):--
 	decls::tget(Target,Var),
-	xmg:send(info,'\n\nHere:'),
-	xmg:send(info,Target2),
-	(
-	    decls::tget(Target2,Var2);
-	    Var2=Target2
-	    ),
-    code::enq(xmg_brick_avm_avm:avm(Var,[F-Var2])),	
-    !.
+	decls::tget(Target2,Var2);
+	code::enq(xmg_brick_avm_avm:avm(Var,[F-Var2])),	
+	!.
+xmg:generate_instr((v(Target),avm:feat(c(F),c(Target2)))):--
+	decls::tget(Target,Var),
+	Var2=Target2,
+	code::enq(xmg_brick_avm_avm:avm(Var,[F-Var2])),	
+	!.
+
+
+xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
+	xmg:send(info,' generating dot '),
+	decls::tget(Var,GV),
+	decls::tget(Class,GC),
+	
+	Member=..[member,CVar-GV,GC],
+	code::enq(lists:Member),
+	code::enq(xmg:send(info,'member found')),!.
+
+xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
+	xmg:send(info,' generating dot '),
+	decls::tget(Var,GV),
+	decls::tget(Class,GC),
+	
+	Member=..[member,CVar-GV,GC],
+	code::enq(lists:Member),
+	code::enq(xmg:send(info,'member found')),!.
+
 
 %% new_name(Name,Prefix):--
 %% 	name::incr,

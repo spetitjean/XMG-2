@@ -18,7 +18,7 @@ class StardimBrickSpec(BrickSpec):
         brick._text = """
 %%%%
 
-Stmt : _Dim {$$=$1} | _Dim '*=' _Constraint {$$=control:and($1,dim:dim('%s',$3))} ;
+Stmt : _Stmt '*=' _Constraint {$$=control:and($1,dim:dim('%s',$3))} ;
 
 %%%%
 """ % self.tag

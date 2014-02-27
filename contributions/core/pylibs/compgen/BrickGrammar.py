@@ -17,6 +17,7 @@ class BrickGrammar(object):
         self._dims=[]
         self._dimsp=[]
         self._punctuation=self._grammar.punctuation
+        self._keywords=self._grammar.keywords
         self._unfolded=False
         self._unfold=xmg.compgen.Unfold.Unfold(self)
 

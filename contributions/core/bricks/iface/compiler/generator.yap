@@ -28,7 +28,7 @@
 
 
 
-xmg:generate_instr(unify(IFace,AVM)):--
+xmg:generate_instr(unify(IFace,v(AVM))):--
 	decls::tget(AVM,VAVM),
 	code::enq(xmg:send(info,'unifying interface')),
 	Set=..['::',xmg_acc:IFace,get(VAVM)],

@@ -2,8 +2,8 @@
 %%
 
 Value : id {$$=$1} 
-      | '?' id {$$=var($2)} 
-      | '!' id {$$=const($2)}
+      | '?' id {$$=value:var($2)} 
+      | '!' id {$$=value:const($2)}
       | bool {$$=$1}
       | int {$$=$1}
       | string {$$=$1}

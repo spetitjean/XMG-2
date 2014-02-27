@@ -14,7 +14,7 @@
 
 :-module(xmg_brick_mg_generator).
 
-xmg:generate_instr(eq(Var,var(ID))):--
+xmg:generate_instr(eq(v(Var),v(ID))):--
 	decls::tget(Var,GV),
 	decls::tget(ID,GV2),
 	Eq=..['=',GV,GV2], 
@@ -23,25 +23,22 @@ xmg:generate_instr(eq(Var,var(ID))):--
 
 	!.
 
-xmg:generate_instr(eq(Var,Var2)):--
-	decls::tget(Var,GV),
-	decls::tget(Var2,GV2),
-	Eq=..['=',GV,GV2], 
+%% xmg:generate_instr(eq(Var,Var2)):--
+%% 	decls::tget(Var,GV),
+%% 	decls::tget(Var2,GV2),
+%% 	Eq=..['=',GV,GV2], 
 
 
-	code::enq(Eq),
+%% 	code::enq(Eq),
 
-	%%code::enq(xmg:send(info,' eq done ')),
-!.
+%% 	%%code::enq(xmg:send(info,' eq done ')),
+%% !.
 
-xmg:generate_instr(eq(Var,id(ID,C))):--
+xmg:generate_instr(eq(v(Var),c(ID))):--
 	%%xmg:send(info,' trying eq '),
 	decls::tget(Var,GV),
-	Eq=..['=',GV,const(ID,C)], 
-	%%Eq=..['=',GV,ID], 
-	%%code::enq(xmg:send(info,' eq const ')),
-	%%code::enq(xmg:send(info,Eq)),
 
-	code::enq(Eq),
+	code::enq((GV=ID)),
 	%%code::enq(xmg:send(info,' eq done ')),
 !.
+
