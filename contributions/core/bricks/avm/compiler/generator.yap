@@ -32,7 +32,7 @@ xmg:generate_instr((v(Target),avm:avm(Coord))) :--
 	!.
 xmg:generate_instr((v(Target),avm:feat(c(F),v(Target2)))):--
 	decls::tget(Target,Var),
-	decls::tget(Target2,Var2);
+	decls::tget(Target2,Var2),
 	code::enq(xmg_brick_avm_avm:avm(Var,[F-Var2])),	
 	!.
 xmg:generate_instr((v(Target),avm:feat(c(F),c(Target2)))):--

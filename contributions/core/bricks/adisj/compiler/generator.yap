@@ -27,12 +27,20 @@
 %%:-edcg:using(xmg_generator:decls).
 %%:-edcg:using(xmg_generator:name).
 
-%%:-edcg:weave([decls,name], [new_name/2,var_or_const/3,generate/6]).
+:-edcg:weave([decls], [extract/2, extract_one/2]).
 
 xmg:generate_instr((v(Target),adisj:adisj,Adisj)) :--
 	decls::tget(Target,Var),
-    code::enq(xmg_brick_adisj_adisj:adisj(Var,Adisj)),
-    !.
+	extract(Adisj,EAdisj),
+	code::enq(xmg_brick_adisj_adisj:adisj(Var,EAdisj)),
+	!.
+
+extract([],[]):--!.
+extract([H|T],[H1|T1]):--
+	extract_one(H,H1),
+	extract(T,T1).
+
+extract_one(c(C),C):-- !.
 
 %% new_name(Name,Prefix):--
 %% 	name::incr,

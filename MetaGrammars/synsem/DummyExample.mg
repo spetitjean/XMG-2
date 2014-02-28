@@ -20,7 +20,7 @@ declare ?T ?C ?A
 	%%?C=dummy[];
 	<syn>{
 		node ?T (color=black) [cat=whatever]
-		}*=[arg1=?A]
+		}*=[arg2=?A]
 		%%;
 	%%?T=?C.X
 }
@@ -53,7 +53,7 @@ declare ?X ?Y ?Z ?T ?L
  }
  ;
  <iface>{ 
- 		[cat=v, arg1=?L]
+ 		[cat=v]
  }
 }
 

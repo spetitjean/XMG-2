@@ -40,12 +40,8 @@ xmg:generate_instr((v(TN),syn:node,Syn)):--
 	!.
 xmg:generate_instr((v(N),syn:props(v(P)))):--
 	!,
-	xmg:send(info,'HERE'),
-	xmg:send(info,N),
-	xmg:send(info,P),
 	decls::tget(N,VN),
 	decls::tget(P,VP),
-	xmg:send(info,VP),
 	code::enq(xmg_brick_syn_engine:inodeprops(VN,VP)),
 	!.
 xmg:generate_instr((v(N),syn:feats(v(F)))):--
@@ -103,11 +99,6 @@ var_Stmt(eq(Left,Right),Generated,Acc):--
 var_Stmt(synnode(N,props(Props),feats(Feats),C),Generated,Acc):--
 	var_or_const(N,VN),
 	VNode=xmg_brick_syn_engine:inode(VN,N),
-
-	xmg_brick_mg_compiler:send(info,Props),
-	xmg_brick_mg_compiler:send_nl(info),
-
-	xmg_brick_mg_compiler:send(info,Feats),
 	
 	xmg_brick_avm_generator:generate(avm,Feats,GFeats,FOut,C),
 	xmg_brick_avm_generator:generate(avm,Props,GProps,POut,C),

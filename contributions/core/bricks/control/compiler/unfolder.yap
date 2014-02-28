@@ -64,7 +64,6 @@ xmg:unfold_stmt(control:eq(E1,E2)):--
 	%%xmg:send(info,'\n\n'),
 	%%xmg:send(info,E1),
 	%%xmg:send(info,E2),
-	xmg:send(info,'HERE'),
 	xmg:unfold_expr(E1,V1),
 	xmg:unfold_expr(E2,V2),
 	constraints::enq(eq(V1,V2)),
