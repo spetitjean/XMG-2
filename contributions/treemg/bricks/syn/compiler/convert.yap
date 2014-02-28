@@ -65,8 +65,13 @@ xmg:xml_convert_term(Node,Root):--
 
 
 xmg:xml_convert_term(syn:props(Props),props(NName,N,XMLMark)):--
+	%% xmg:send(info,'\n\nWe are here:'),
+	%% xmg:send(info,Props),
 	xmlName(Props,Name,N),
-	Name=id(NName,_),
+	%% xmg:send(info,Name),
+	%% xmg:send(info,N),
+	
+	Name=NName,
 	xmlMark(Props,XMLMark),!.
 
 xmlMark([],'std'):-!.

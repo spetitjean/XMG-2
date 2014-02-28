@@ -39,8 +39,13 @@ xmg:generate_instr((v(TN),syn:node,Syn)):--
 	code::enq(AccNode),
 	!.
 xmg:generate_instr((v(N),syn:props(v(P)))):--
+	!,
+	xmg:send(info,'HERE'),
+	xmg:send(info,N),
+	xmg:send(info,P),
 	decls::tget(N,VN),
 	decls::tget(P,VP),
+	xmg:send(info,VP),
 	code::enq(xmg_brick_syn_engine:inodeprops(VN,VP)),
 	!.
 xmg:generate_instr((v(N),syn:feats(v(F)))):--
