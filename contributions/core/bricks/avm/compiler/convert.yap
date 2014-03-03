@@ -37,23 +37,10 @@ xmlFeats([],[]):-- !.
 
 
 xmlFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))|T1]):--
-	atom(V),
-	xmlFeats(T,T1),!.
-
-xmlFeats([A-const(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-Val]))]))|T1]):--
-	(
-	    atom(V);
-	    integer(V)
-	
-	),!, Val=V,
-	xmlFeats(T,T1),!.
-
-xmlFeats([A-sconst(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-Val]))]))|T1]):--
-	(
-	    atom(V);
-	    integer(V)
-	
-	),!, Val=V,
+	(atom(V)
+        ;
+	integer(V)
+	),
 	xmlFeats(T,T1),!.
 
 
@@ -77,15 +64,6 @@ xmlFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varname
 	xmg:convert_new_name('@V',V),
 	xmlFeats(T,T1),!.
 
-xmlFeats([A-const(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-V]))]))|T1]):--
-	var(V),
-	xmg:convert_new_name('@V',V),
-	xmlFeats(T,T1),!.
-
-xmlFeats([A-sconst(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-V]))]))|T1]):--
-	var(V),
-	xmg:convert_new_name('!C',V),
-	xmlFeats(T,T1),!.
 
 xmlFeats([A-AD|T],[H1|T1]):--
 	xmg_brick_adisj_adisj:adisj(AD,LAD),
@@ -104,6 +82,7 @@ xmlFeats([A-AD|T],[H1|T1]):--
 
 
 xmlFeats(Feats,_):--
+	xmg:send(info,'\nUnexpected feature:\n'),
 	xmg:send(info,Feats),false.
 
 

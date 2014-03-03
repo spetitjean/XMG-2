@@ -27,7 +27,7 @@ eval(Syn,XML,Class):-
 	xmg_brick_mg_compiler:send(info,' prepared '),
 	xmg_brick_tree_solver:solve(Prepared,solution(IsRoot,Eq, Children, Left, NodeList1)),
 	xmg_brick_tree_extractor:extract(IsRoot,Eq, Children, Left, NodeList1,Tree),
-	xmg:send(info,Tree),
+	%%xmg:send(info,Tree),
 	%%flush_output,
 	xmg_brick_mg_compiler:current(Previous),
 	%% Current is Previous + 1,

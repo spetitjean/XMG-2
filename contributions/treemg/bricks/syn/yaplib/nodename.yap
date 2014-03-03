@@ -12,10 +12,16 @@ nodename(X, P) :-
 	put_atts(Y, nameval(P)),
 	X = Y.
 
-unify_nodenames(id(A,CA),id(B,CB),id(C,CA)) :-
+unify_nodenames(A,B,C) :-
 	atom_concat(A,B,C),				   
 	%atom_concat(CA,CB,C),
 	!.
+unify_nodenames(A,B,_) :-
+	xmg:send(info,'\nUnification failed:\n'),
+	xmg:send(info,A),
+	xmg:send(info,B),
+	fail.
+
 
 
 verify_attributes(V1, V2, Goals) :-

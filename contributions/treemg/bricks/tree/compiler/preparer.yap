@@ -38,7 +38,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	write_lits(SynD,Relations,TableOut),
 
 	xmg:get_plugins(Plugins),
-	xmg:send(info,Plugins),
+	%%xmg:send(info,Plugins),
 
 	prepare_plugins(SynD,[colors,rank,tag,unicity],prepared([Colors,Ranks,TagOps,Unicities],SynNC)),
 
@@ -211,7 +211,7 @@ count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	xmg:send(info,' CONFLICT '),!,
 
 	%% this should be done in a better way
-	xmg_brick_syn_nodename:nodename(M,id(new,c)),
+	xmg_brick_syn_nodename:nodename(M,new),
 	M=N,
 	xmg_brick_syn_nodename:nodename(N,NewNodename),
 	xmg_table:table_put(TableIn,NewNodename,J,Table),

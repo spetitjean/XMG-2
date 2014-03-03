@@ -170,7 +170,7 @@ unify_node([N1],node(P2,F2,NN2),NodeList):-
 	false,
 	!.
 unify_node([NNode|T],node(P,F,N),NodeList):-
-	get_node(NNode,NodeList,node(P,F,N)),!,
+	xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),!,
 	unify_node(T,node(P,F,N),NodeList),
 	!.
 unify_node([N1|T],node(P2,F2,NN2),NodeList):-

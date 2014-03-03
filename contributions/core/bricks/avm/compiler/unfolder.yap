@@ -52,8 +52,8 @@ unfold_feat(avm:feat(F,V), Target) :--
 xmg:unfold_expr(avm:dot(Var1,Var2),Target):--
 	xmg:new_target_var(Target),	
 	xmg:unfold_expr(Var1,T1),
-	xmg:unfold_expr(Var2,T2),
-	constraints::enq((Target,avm:dot(T1,T2))),
+	xmg:unfold_expr(Var2,c(T2)),
+	constraints::enq((Target,avm:dot(T1,c(T2)))),
 	!.
 
 

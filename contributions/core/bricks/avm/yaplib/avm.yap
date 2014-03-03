@@ -22,10 +22,13 @@ verify_attributes(Var, Other, Goals) :-
 
 verify_attributes(_, _, []).
 
+
 unify_entries(T,[],T).
 unify_entries(T1,[K-V0|L],T3) :-
 	(rb_lookup(K,V1,T1) -> V0=V1, T1=T2; rb_insert(T1,K,V0,T2)),
 	unify_entries(T2,L,T3).
+
+
 
 avm(X, L) :-
     var(L), !,

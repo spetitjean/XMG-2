@@ -21,6 +21,8 @@
 :-dynamic(exports/2).
 :-dynamic(declared/2).
 :-dynamic(classNumber/1).
+:-dynamic(xmg:mutex/1).
+:-dynamic(xmg:mutex_add/2).
 
 export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
 	xmg:send(info,' exploring classes for calls '),
@@ -43,6 +45,20 @@ export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
 
 %% Order classes
 
+mutex(mg:mutex(token(_,id(Mutex)))):-
+	xmg:send(info,'\nMutex: '),
+	xmg:send(info,Mutex),
+	asserta(xmg:mutex(Mutex)),!.
+
+mutex(mg:mutex_add(token(_,id(M)),token(_,id(V)))):-
+	xmg:send(info,'\nMutex add: '),
+	xmg:send(info,M),
+	xmg:send(info,V),
+	asserta(xmg:mutex_add(M,V)),!.
+
+mutex(mg:semantics).
+
+
 order_classes(Classes,Calls,OClasses):-
 	order_classes(Classes,[],[],OClasses,0,Calls),!.
 
@@ -63,13 +79,7 @@ order_classes([],Classes,Acc,OClasses,Laps,Calls):-!,
 	)
     ).
 order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps,Calls):-
-	(
-	    Mutex=mg:mutex(_)
-	;
-	Mutex=mg:mutex_add(_,_)
-    ;
-	Mutex=mg:semantics
-    ),
+	mutex(Mutex),
 	order_classes(Classes,MClasses,Acc,OClasses,Laps,Calls).
 order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps,Calls):-
 	class_before(Class,Acc,Calls),!,

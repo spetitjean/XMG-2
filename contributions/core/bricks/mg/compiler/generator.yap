@@ -34,6 +34,8 @@
 
 xmg:value_all(Value,Class):-
 	xmg:value(Class),
+	%%xmg:send(info,'\nValue class '),
+	%%xmg:send(info,Class),
 	xmg:start_value_class(Class,Value).
 
 new_name(Name,Prefix):--
@@ -117,8 +119,8 @@ generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 	%%xmg:send(info,TableOut),
 	%%xmg:send(info,'\n\n'),
 
-	xmg:send(info,Vars),
-	xmg:send(info,'\n\n'),
+	%%xmg:send(info,Vars),
+	%%xmg:send(info,'\n\n'),
 
 	generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List) with (decls(Vars,_),name(0,_)),!,
 	%%xmg:send(info,TableOut),
@@ -151,13 +153,22 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	Put=..[put,Class],
 	Trace=..['::',xmg_acc:trace,Put],
 
+	%% add Debug info
+	Debug=(xmg:send(info,Class),xmg:send(info,'\n'),xmg:send(info,IGenerated),xmg:send(info,'\n\n')),
+	%% Debug=(xmg:send(info,Class),xmg:send(info,'\n\n')),
+
+	DebugEnd=(xmg:send(info,Class),xmg:send(info,' executed \n'),xmg:send(info,'\n\n')),
 
 	Gen=..[',',Trace,IGenerated],
+
+	GenDebug=..[',',Debug,Gen],
+
+	GenDebugEnd=..[',',GenDebug,DebugEnd],
 
 	%%xmg:send(info,IGenerated),
 
 	edcg:edcg_clause(xmg:Head, Gen, Clause),
-	xmg:send(info,Clause),
+	%%xmg:send(info,Clause),
 	asserta(Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
 	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),
@@ -165,10 +176,16 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	!.
 
 extract_code([],true).
-extract_code([or(A,B)],Code):-
+%% extract_code([or(A,B)],Code):-
+%% 	extract_code(A,EA),
+%% 	extract_code(B,EB),
+%% 	Code=..[';',EA,EB],!.
+extract_code([or(A,B)|T],Code):-
 	extract_code(A,EA),
 	extract_code(B,EB),
-	Code=..[';',EA,EB],!.
+	DCode=..[';',EA,EB],
+	extract_code(T,ECode),
+	Code=..[',',DCode,ECode],!.
 extract_code([H|T],Code):-
 	extract_code(T,ECode),
 	Code=..[',',H,ECode],!.

@@ -29,8 +29,6 @@
 :-dynamic(principle/1).
 :-dynamic(xmg:principle/3).
 :-dynamic(unicity/1).
-:-dynamic(mutex/1).
-:-dynamic(mutex_add/2).
 :-dynamic(current/1).
 :-dynamic(debug_mode/0).
 
@@ -98,6 +96,9 @@ compile_file(File,Eval):-
 	send_nl(info),	
 	send(info,' generated '),
 	send_nl(info),	
+
+	retractall(xmg_brick_mg_exporter:declared(_,_)),
+	retractall(xmg_brick_mg_exporter:exports(_,_)),
 	
 	asserta(current(0)),
 
@@ -108,7 +109,9 @@ eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),
 	xmg:value_all(Computed,Class),
 	
-	send(info,Computed),
+	send(info,'\nClass executed:'),
+	%%send(info,Computed),
+	send(info,Class),
 
 	%% xmg_dimensions:dims(Dims),
 
@@ -117,15 +120,16 @@ eval:-
 
 	get_dim(trace,Computed,Trace),
 
-	send(info,' got trace\n'),
+	send(info,'\ngot trace\n'),
 
-	findall(Mutex,mutex(Mutex),Mutexes),
-	%%send(info,Trace),
+	findall(Mutex,xmg:mutex(Mutex),Mutexes),
+	send(info,'\nMutexes:'),
+	send(info,Mutexes),
 	check_mutexes(Trace,Mutexes),
 
 	send_nl(info),send_nl(info),send(info,'                Computed '),send(info,Class),send_nl(info),send_nl(info),
 
-	send(info,Computed),
+	%%send(info,Computed),
 	
 	eval_dims(Computed,EDims,Class),
 	current(Previous),
@@ -137,7 +141,10 @@ eval:-
 	send(info,Previous),send_nl(info),send_nl(info),
 
 
-	send(info,'________________________________________________'),send_nl(info),send_nl(info),
+	send(info,'________________________________________________\nDone class '),
+	send(info,Class),
+	send_nl(info),
+	send_nl(info),
 	fail.
 
 eval:- send(out,'</grammar>\n'),!.
@@ -163,7 +170,7 @@ eval(morph,Morph,XML,_):-
 
 
 eval(syn,Syn,XML,Class):-
-	send(info,Syn),
+	%%send(info,Syn),
 	xmg_brick_syn_compiler:eval(Syn,XML,Class).
 eval(syn1,Syn,XML,Class):-
 	xmg_compiler_syn:eval(Syn,XML,Class).
@@ -214,10 +221,10 @@ check_mutexes(Trace,[H|T]):-
 
 check_mutex([],_):- !.
 check_mutex([Class|T],Mutex):-
-	mutex_add(Mutex,Class),!,
+	xmg:mutex_add(Mutex,Class),!,
 	fail_if_mutex(T,Class,Mutex),!.
 check_mutex([Class|T],Mutex):-
-	not(mutex_add(Mutex,Class)),!,
+	not(xmg:mutex_add(Mutex,Class)),!,
 	check_mutex(T,Mutex),!.
 
 fail_if_mutex([],_,_):- !.
@@ -225,7 +232,7 @@ fail_if_mutex([Class|T],Class,Mutex):-
 	!,
 	fail_if_mutex(T,Class,Mutex),!.
 fail_if_mutex([Class|T],First,Mutex):-
-	mutex_add(Mutex,Class),!,
+	xmg:mutex_add(Mutex,Class),!,
 	send(info,' mutex fail '),
 	fail.
 fail_if_mutex([Class|T],First,Mutex):-

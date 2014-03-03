@@ -47,17 +47,20 @@ xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
 	decls::tget(Var,GV),
 	decls::tget(Class,GC),
 	
-	Member=..[member,CVar-GV,GC],
-	code::enq(lists:Member),
-	code::enq(xmg:send(info,'member found')),!.
+	Dot=..[avm_dot,CVar-GV,GC],
+	code::enq(xmg:Dot),!.
 
-xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
-	xmg:send(info,' generating dot '),
-	decls::tget(Var,GV),
-	decls::tget(Class,GC),
+
+xmg:avm_dot(Member-Value,List) :-
+	lists:member(Member-Value,List),
+	xmg:send(info,'\nFound key '),
+	xmg:send(info,Member),
+	xmg:send(info,' in '),
+	xmg:send(info,List).
+xmg:avm_dot(Member-_,List):-
+	not(lists:member(Member-Value,List)),
+	xmg:send(info,'\nDid not find key '),
+	xmg:send(info,Member),
+	xmg:send(info,' in '),
+	xmg:send(info,List).
 	
-	Member=..[member,CVar-GV,GC],
-	code::enq(lists:Member),
-	code::enq(xmg:send(info,'member found')),!.
-
-

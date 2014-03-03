@@ -40,7 +40,7 @@ write_colors([H|T],Colors,[H|T1]):-
 
 write_color(Name,PropAVM,color(C)):-
 	xmg_brick_avm_avm:avm(PropAVM, Props),!,
-	xmg:send(info,Props),
+	%%xmg:send(info,Props),
 	xmg_brick_syn_nodename:nodename(Name,NodeName),!,
 	search_color(NodeName,Props,C),!.
 
