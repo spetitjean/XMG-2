@@ -59,21 +59,27 @@ xmg:unfold_stmt(control:dimStmt(Dim,E2)):--
 	xmg:unfold_dimstmt(Dim,E2), %% in brick_unfolder_syn pour Dim=syn
 	!.
 xmg:unfold_stmt(control:eq(E1,E2)):--
-	%%xmg:new_target_var(V1),
-	%%xmg:new_target_var(V2),
-	%%xmg:send(info,'\n\n'),
-	%%xmg:send(info,E1),
-	%%xmg:send(info,E2),
 	xmg:unfold_expr(E1,V1),
 	xmg:unfold_expr(E2,V2),
 	constraints::enq(eq(V1,V2)),
 	!.
 xmg:unfold_stmt(control:call(token(_,id(Class)),Params)):--
 	xmg:new_target_var(Target),
-	%%xmg:unfold_expr(Class,CT),
 	xmg:unfold_exprs(Params, P),
 	constraints::enq((Target,control:call(CT,P))),
 	!.
+
+xmg:unfold_dimstmt(control:eq(E1,E2)):--
+	xmg:unfold_expr(E1,V1),
+	xmg:unfold_expr(E2,V2),
+	constraints::enq(eq(V1,V2)),
+	!.
+xmg:unfold_dimstmt(control:call(token(_,id(Class)),Params)):--
+	xmg:new_target_var(Target),
+	xmg:unfold_exprs(Params, P),
+	constraints::enq((Target,control:call(CT,P))),
+	!.
+
 xmg:unfold_stmt(none):-- !.
 
 xmg:unfold_expr(control:call(token(_,id(Class)),Params),Target):--

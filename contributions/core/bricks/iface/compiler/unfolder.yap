@@ -26,7 +26,7 @@
 
 
 xmg:unfold_dimstmt(IFace,AVM):--
-	xmg:send(info,AVM),
+	%%xmg:send(info,AVM),
 	xmg:new_target_var(UAVM),
 	xmg:unfold_expr(AVM,UAVM),
 	constraints::enq(unify(IFace,UAVM)),

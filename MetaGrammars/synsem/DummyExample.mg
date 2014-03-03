@@ -6,6 +6,7 @@ type CAT = {v,n,s,cl}
 %%type CAT = {t}
 
 type AGR = {m,f}
+type NUM = {s,p}
 
 
 %%feature cat : CAT
@@ -31,7 +32,7 @@ declare ?T ?C ?A
 
 class dummy
 export X Y Z 
-declare ?X ?Y ?Z ?T ?L
+declare ?X ?Y ?Z ?T ?L ?C
 {
   % <syn>{
   % 	node ?X (color=black) [cat=@{s,n}];
@@ -43,10 +44,10 @@ declare ?X ?Y ?Z ?T ?L
   % }
   % |
   {<syn>{
-	node ?X (color=black) [cat=s]{ ...+
+	node ?X (color=black) [cat=s, extracted= +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
-	     node ?Z (color=black) [cat=v, agr=m]{
+	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=s]]{
 	     	  node ?T (color=black) [cat=?L]
 		  }
 	     
@@ -57,7 +58,7 @@ declare ?X ?Y ?Z ?T ?L
  }
  ;
  <iface>{ 
- 		[cat=v]
+ 		[cat=v,arg1=?L]
  }
 }
 

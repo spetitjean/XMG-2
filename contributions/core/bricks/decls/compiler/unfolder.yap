@@ -44,7 +44,7 @@ xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),Rename),prop
 
 xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 	unfold_id_or_constr(Pr,UPr),
-	xmg:send(info,Args),
+	%%xmg:send(info,Args),
 	unfold_args(Args,UArgs),
 	unfold_dims(Dims,UDims),!,
 	!.
@@ -77,6 +77,9 @@ unfold_args([decls:principle_type(token(_,id(P1)))|T],[type(P1)|T1]):-
 	unfold_args(T,T1),!.
 
 unfold_args([decls:eq(token(C,id(Prop)),token(C1,int(Int)))|T],[eq(Prop,Int)|T1]):-
+	unfold_args(T,T1),!.
+
+unfold_args([decls:eq(token(C,id(Prop)),token(C1,id(Prop2)))|T],[eq(Prop,Prop2)|T1]):-
 	unfold_args(T,T1),!.
 
 unfold_args([H|T],_):-

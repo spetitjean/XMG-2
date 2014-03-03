@@ -194,8 +194,11 @@ eval(iface,I, elem(interface, children([elem(fs, children(XML))])),_):-
 	%%send(info,'\n Here comes the interface'),
 	xmg_brick_avm_avm:avm(I,IAVM),
 	%%send(info,IAVM),
-	xmg_brick_avm_convert:xmlFeats(IAVM,XML,1,_).
-    	%%send(info,'\nDone').
+	%%xmg_brick_avm_convert:xmlFeats(IAVM,XML,1,_).
+    	xmg:do_xml_convert(avm:avm(IAVM),XML)
+	%%send(info,'\nDone')
+	.
+	%%send(info,'\nDone').
 eval(iface,[], elem(interface, features([])),_).
 		
 get_dim(Dim,[Dim-CDim|_],CDim):-!.

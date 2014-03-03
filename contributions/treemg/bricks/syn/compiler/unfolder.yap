@@ -97,6 +97,7 @@ unfold_children(Syn,URoot,Children):--
 	xmg:send(info,'\n\nCould not unfold Children:\n'),
 	xmg:send(info,Children),
 	xmg:send(info,'\n\n'),
+	false,
 	!.
 
 unfold_child(Syn,URoot,syn:child(Op,Child),UChild):--
