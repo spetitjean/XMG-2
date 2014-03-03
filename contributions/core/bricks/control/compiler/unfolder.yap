@@ -35,8 +35,10 @@ xmg:unfold_stmt(control:or(E1,E2)):--
 	!.
 
 xmg:unfold_dimstmt(Dim,control:and(S1,S2)):-- 
-	%%xmg_brick_mg_compiler:send(info,S1),
+	xmg_brick_mg_compiler:send(info,'\n\nunfolding:\n'),
+	xmg_brick_mg_compiler:send(info,S1),
 	xmg:unfold_dimstmt(Dim,S1) ,
+	xmg:send(info,'\nDone'),
 	xmg:unfold_dimstmt(Dim,S2) ,
 	!.
 xmg:unfold_dimstmt(Dim,control:or(S1,S2)):-- 
@@ -46,14 +48,7 @@ xmg:unfold_dimstmt(Dim,control:or(S1,S2)):--
 	!.
 
 
-xmg:unfold_stmt(control:stmt(E1,E2)):--
-	%%xmg_brick_mg_compiler:send(info,E1),
- 	xmg:unfold_stmt(E1),
-	%%xmg:send(info,'\nUnfolding interface\n'),
-	%%xmg:send(info,E2),
-	xmg:new_target_var(AVM),
- 	xmg:unfold_expr(E2,AVM), %% this is the interface
- 	!.
+
 xmg:unfold_stmt(control:dimStmt(Dim,E2)):--
 	%%xmg_brick_mg_compiler:send(info,E2),
 	xmg:unfold_dimstmt(Dim,E2), %% in brick_unfolder_syn pour Dim=syn
@@ -69,12 +64,12 @@ xmg:unfold_stmt(control:call(token(_,id(Class)),Params)):--
 	constraints::enq((Target,control:call(CT,P))),
 	!.
 
-xmg:unfold_dimstmt(control:eq(E1,E2)):--
+xmg:unfold_dimstmt(Dim,control:eq(E1,E2)):--
 	xmg:unfold_expr(E1,V1),
 	xmg:unfold_expr(E2,V2),
 	constraints::enq(eq(V1,V2)),
 	!.
-xmg:unfold_dimstmt(control:call(token(_,id(Class)),Params)):--
+xmg:unfold_dimstmt(Dim,control:call(token(_,id(Class)),Params)):--
 	xmg:new_target_var(Target),
 	xmg:unfold_exprs(Params, P),
 	constraints::enq((Target,control:call(CT,P))),
@@ -96,4 +91,4 @@ xmg:unfold_expr(control:call(token(_,id(Class)),Params),Target):--
 %% 	constraints::enq((Target,control:dot(T1,T2))),
 %% 	!.
 
-xmg:unfold_expr(var(token(C,id(ID))),id(ID,C)):-- !.
+%%xmg:unfold_expr(var(token(C,id(ID))),id(ID,C)):-- !.

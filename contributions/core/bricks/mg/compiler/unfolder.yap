@@ -127,6 +127,9 @@ unfold_class(C):--
 	xmg:unfold_stmt(C),!,
 	!.
 
+xmg:unfold_stmt(none):--
+	!.
+
 put_in_table([]):-- !.
 put_in_table([id(A,_)-B|T]):--
 	vars::tput(A,B),
