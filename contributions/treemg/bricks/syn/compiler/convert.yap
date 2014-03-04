@@ -75,9 +75,9 @@ xmg:xml_convert_term(syn:props(Props),props(NName,N,XMLMark)):--
 	xmlMark(Props,XMLMark),!.
 
 xmlMark([],'std'):-!.
-xmlMark([mark-const('flex',_)|T],'lex'):-!.
+xmlMark([mark-'flex'|T],'lex'):-!.
 
-xmlMark([mark-const(Prop,_)|T],Prop):-!.
+xmlMark([mark-Prop|T],Prop):-!.
 
 xmlMark([_-_|T],Props):-
 	xmlMark(T,Props),!.
@@ -86,7 +86,7 @@ xmlName([],Name,N):-
 	xmg_brick_syn_nodename:nodename(N,Name),
 	!.
 
-xmlName([name-value(Prop,_)|T],Prop,_):-!.
+xmlName([name-Prop|T],Prop,_):-!.
 
 xmlName([_-_|T],Props,N):-
 	xmlName(T,Props,N),!.
@@ -99,135 +99,4 @@ xmlBound([bound-Prop|T],Bound):-
 
 xmlBound([_-_|T],Props):-
 	xmlBound(T,Props),!.
-
-%% toXML(tree(Tree,Family), elem(tree, features([id-Name]),children([Syn1])),Number) :--
-%% 	lists:remove_duplicates(Sem,SemD),!,
-%% 	xmlSyn(Tree,Syn1) with name(1,_),!,
-%% 	atomic_concat([Family,'_',Number],Name),
-%% 	!.
-
-%% xmlSynList([],[]):-- !.
-%% xmlSynList([H|T],[H1|T1]):--
-%% 	xmlSyn(H,H1),
-%% 	xmlSynList(T,T1),!.
-
-
-%% xmlSyn([],[]):-- !.
-
-
-%% %% For nodes
-%% xmlSyn(Node,Root):--
-%% 	Node=node(PropAVM,FeatAVM,N),
-
-%% 	xmg_brick_avm_avm:avm(PropAVM, Props),
-%% 	xmg_brick_avm_avm:avm(FeatAVM, Feats),
-
-%% 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
-%% 	%%xmg_brick_nodename_nodename:nodename(N,Name),
-%% 	xmlName(Props,Name,N),
-%% 	xmlMark(Props,XMLMark),
-%% 	%%xmlBound(Props,XMLBound),
-%% 	%% fs const is var
-%% 	(
-%% 	    var(CAVM)->
-	    
-%% 	    (
-%% 		new_name('@AVM',CAVM),
-%% 		xmg_brick_avm_convert:xmlFeats(Feats,XMLFeats),!,
-%% 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
-%% 	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))]))
-%% 		)
-%% 	;
-%% 	(
-%% 	    %%Elem=elem(fs,features([coref-CAVM]))
-%% 	!,Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]))]))]))
-%% 	)
-%%     ),!.
-
-%% xmlSyn(tree(H,Trees),Root):--
-%% 	H=node(PropAVM,FeatAVM,N),
-
-%% 	xmg_brick_avm_avm:avm(PropAVM, Props),
-%% 	xmg_brick_avm_avm:avm(FeatAVM, Feats),
-
-%% 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
-%% 	%%xmg_brick_nodename_nodename:nodename(N,Name),
-%% 	xmlName(Props,Name,N),
-%% 	xmlMark(Props,XMLMark),
-%% 	(
-%% 	    var(CAVM)->
-	    
-%% 	    (
-%% 		new_name('@AVM',CAVM),
-%% 		xmg_brick_avm_convert:xmlFeats(Feats,XMLFeats),!,
-%% 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
-%% 	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))|Trees1]))
-%% 		)
-%% 	;
-%% 	(
-%% 	    %%Elem=elem(fs,features([coref-CAVM]))
-%% 	!,Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]))]))|Trees1]))
-%% 	)
-%%     ),
-%% 	xmlSynList(Trees,Trees1),!.
-
-
-
-
-%% xmlAdisj([],[]) :-- !.
-
-%% xmlAdisj([H|T],[elem(sym,features([value-Val]))|T1]):--
-%% 	H=string(String),
-%% 	not(var(String)),!,
-%% 	atom_codes(Val,String),
-%% 	xmlAdisj(T,T1),!.
-%% xmlAdisj([H|T],[elem(sym,features([value-Int]))|T1]):--
-%% 	H=int(Int),
-%% 	not(var(Int)),!,
-%% 	xmlAdisj(T,T1),!.
-%% xmlAdisj([H|T],[elem(sym,features([value-Bool]))|T1]):--
-%% 	H=bool(Bool),
-%% 	not(var(Bool)),!,
-%% 	xmlAdisj(T,T1),!.
-%% xmlAdisj([H|T],[elem(sym,features([value-H]))|T1]):--
-%% 	xmlAdisj(T,T1),!.
-
-%% aritychildren([],[]):-- !.
-%% aritychildren([H|T],[H1|T1]):--
-%% 	H=node(A,_,_),
-%% 	H1=elem(child,features([num-A])),
-%% 	aritychildren(T,T1),!.
-
-%% convertPolarity('=','0'):-- !.
-%% convertPolarity('=-','~1'):-- !.
-%% convertPolarity('=~','0v'):-- !.
-%% convertPolarity('=+','1'):-- !.
-
-%% handle_most([],[]):--!.
-
-%% handle_most([dom(A,'-L>',C,D)|T],[dom(A,'->',C,D)|T1]):--
-%% 	C=node(P,_,_),
-%% 	xmg_most:most(Most,left),
-%% 	xmg_brick_avm_avm:avm(P,[bound-Most]),
-%% 	handle_most(T,T1),!.
-
-%% handle_most([dom(A,'-R>',C,D)|T],[dom(A,'->',C,D)|T1]):--
-%% 	C=node(P,_,_),
-%% 	xmg_most:most(Most,right),
-%% 	xmg_brick_avm_avm:avm(P,[bound-Most]),
-%% 	handle_most(T,T1),!.
-
-%% handle_most([node(P,A,B)|T],[node(P,A,B)|T1]):--
-%% 	xmg_most:most(Most,none),
-%% 	xmg_brick_avm_avm:avm(P,[bound-Most]),
-%% 	handle_most(T,T1),!.
-
-%% handle_most([H|T],[H|T1]):--
-%% 	handle_most(T,T1),!.
-
-%% retrace([],[]):- !.
-%% retrace([Class|T],[Class1|T1]):-
-%% 	atom_concat('class_',Class1,Class),
-%% 	retrace(T,T1),!.
-		
 

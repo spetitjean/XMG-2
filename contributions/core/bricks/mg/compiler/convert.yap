@@ -54,10 +54,9 @@ xmg:xml_convert_free(Free,Convert):--
 	var(Free),
 	new_name("@V",Convert).
 
-xmg:xml_convert_term(mg:entry(Trace,Dims,Number),elem(entry, features([name-Name]),children([elem(family, data(Family)),elem(trace, children(Trace1))|Dims]))):--
+xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),elem(entry, features([name-Name]),children([elem(family, data(Class)),elem(trace, children(Trace1))|Dims]))):--
 	xmlTrace(Trace,Trace1),!,
-	Trace=[Family|T],!,
-	atomic_concat([Family,'_',Number],Name),
+	atomic_concat([Class,'_',Number],Name),
 	!.
 
 xmg:xml_convert_term([],[]):-- !.

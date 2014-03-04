@@ -136,7 +136,7 @@ eval:-
 	Current is Previous + 1,
 	retract(current(Previous)),
 	asserta(current(Current)),
-	xmg:do_xml_convert(mg:entry(Trace,EDims,Previous),XML),
+	xmg:do_xml_convert(mg:entry(Class,Trace,EDims,Previous),XML),
 	xmg_brick_mg_printer:printXML([XML],1),
 	send(info,Previous),send_nl(info),send_nl(info),
 
@@ -206,7 +206,7 @@ eval(iface,I, elem(interface, children([elem(fs, children(XML))])),_):-
 	%%send(info,'\nDone')
 	.
 	%%send(info,'\nDone').
-eval(iface,[], elem(interface, features([])),_).
+eval(iface,[], elem(interface, children([])),_).
 		
 get_dim(Dim,[Dim-CDim|_],CDim):-!.
 get_dim(Dim,[_|T],CDim):-
