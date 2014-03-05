@@ -50,7 +50,7 @@ search_color(Name,[],none):-
 
 	!.
 
-search_color(_,[color-const(C,_)|_],C):-!.
+%%search_color(_,[color-const(C,_)|_],C):-!.
 search_color(_,[color-C|_],C):-!.
 
 search_color(Name,[_|T],C):-

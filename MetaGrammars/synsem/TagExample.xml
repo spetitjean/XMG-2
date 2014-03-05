@@ -1,0 +1,148 @@
+<grammar>
+  <entry name="lexemeManger_0">
+    <family>lexemeManger</family>
+    <trace>
+      <class>BinaryRel</class>
+      <class>activeMorph</class>
+      <class>objCan</class>
+      <class>subjCan</class>
+      <class>transitifDirect</class>
+      <class>lexemeManger</class>
+    </trace>
+    <interface>
+      <fs>
+        <f name="anch">
+          <sym varname="manger"/>
+        </f>
+        <f name="arg0">
+          <sym varname="@V1"/>
+        </f>
+        <f name="arg1">
+          <sym varname="@V2"/>
+        </f>
+        <f name="obj">
+          <sym varname="@V2"/>
+        </f>
+        <f name="suj">
+          <sym varname="@V1"/>
+        </f>
+      </fs>
+    </interface>
+    <semantics>
+      <literal negated="no">
+        <predicate>
+          <sym varname="@V1"/>
+        </predicate>
+        <arg>
+          <sym varname="@V2"/>
+        </arg>
+        <arg>
+          <sym varname="@V1"/>
+        </arg>
+        <arg>
+          <sym varname="@V2"/>
+        </arg>
+      </literal>
+    </semantics>
+    <tree id="lexemeManger_0">
+      <node type="std" name="XMG_VAR_1SS">
+        <narg>
+          <fs coref="@AVM1">
+            <f name="cat">
+              <sym varname="s"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="subst" name="X3NN">
+          <narg>
+            <fs coref="@AVM2">
+              <f name="cat">
+                <sym varname="n"/>
+              </f>
+              <f name="top">
+                <fs coref="@AVM3">
+                  <f name="idx">
+                    <sym varname="@V1"/>
+                  </f>
+                  <f name="num">
+                    <sym varname="@V4"/>
+                  </f>
+                  <f name="pers">
+                    <sym varname="@V5"/>
+                  </f>
+                </fs>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="NVX1NVX2NV">
+          <narg>
+            <fs coref="@AVM6">
+              <f name="bot">
+                <fs coref="@AVM7">
+                  <f name="mode">
+                    <sym varname="@V8"/>
+                  </f>
+                </fs>
+              </f>
+              <f name="cat">
+                <sym varname="v"/>
+              </f>
+              <f name="top">
+                <fs coref="@AVM9">
+                  <f name="num">
+                    <sym varname="@V4"/>
+                  </f>
+                  <f name="pers">
+                    <sym varname="@V5"/>
+                  </f>
+                </fs>
+              </f>
+            </fs>
+          </narg>
+          <node type="std" name="NVV">
+            <narg>
+              <fs coref="@AVM10">
+                <f name="cat">
+                  <sym varname="v"/>
+                </f>
+                <f name="top">
+                  <fs coref="@AVM11">
+                    <f name="mode">
+                      <sym varname="@V8"/>
+                    </f>
+                  </fs>
+                </f>
+              </fs>
+            </narg>
+            <node type="std" name="NPh">
+              <narg>
+                <fs coref="@AVM12">
+                  <f name="phon">
+                    <sym varname="manger"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+          </node>
+        </node>
+        <node type="subst" name="NN">
+          <narg>
+            <fs coref="@AVM13">
+              <f name="cat">
+                <sym varname="n"/>
+              </f>
+              <f name="top">
+                <fs coref="@AVM14">
+                  <f name="idx">
+                    <sym varname="@V2"/>
+                  </f>
+                </fs>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+  </entry>
+</grammar>

@@ -20,7 +20,12 @@
 :- module(xmg_brick_unicity_preparer, []).
 
 prepare(Syn,prepared(Unicities,Syn)):- 
-	xmg_compiler:unicity(LUnicities), 
+	xmg:unicity(LUnicities), 
+	xmg:send(info,'\nUnicity:\n'),
+	xmg:send(info,LUnicities),
+	xmg:send(info,'\n'),
+
+
 	write_unicities(Syn,LUnicities,Unicities),
 	!.
 
@@ -31,21 +36,21 @@ write_unicities(Nodes,[U1|UT],[H1|T1]):-
 	write_unicities(Nodes,UT,T1),!.
 
 write_unicity([],_,[]):-!.
-write_unicity([Node|T],feat(A,V),['true'|T1]):-
+write_unicity([Node|T],feat(A,V,_),['true'|T1]):-
 	Node=node(Prop,Feat,_),
 	xmg_brick_avm_avm:avm(Prop,PL),
-	lists:member(A-const(V,_),PL),!,	
-	write_unicity(T,feat(A,V),T1),!.
-write_unicity([Node|T],feat(A,V),['true'|T1]):-
+	lists:member(A-V,PL),!,	
+	write_unicity(T,feat(A,V,_),T1),!.
+write_unicity([Node|T],feat(A,V,_),['true'|T1]):-
 	Node=node(Prop,Feat,_),
 	xmg_brick_avm_avm:avm(Feat,PL),
-	lists:member(A-const(V,_),PL),!,	
-	write_unicity(T,feat(A,V),T1),!.
-write_unicity([Node|T],feat(A,V),['false'|T1]):-
+	lists:member(A-V,PL),!,	
+	write_unicity(T,feat(A,V,_),T1),!.
+write_unicity([Node|T],feat(A,V,_),['false'|T1]):-
 	Node=node(Prop,Feat,_),
-	write_unicity(T,feat(A,V),T1),!.
-write_unicity([_|T],feat(A,V),T1):-
-	write_unicity(T,feat(A,V),T1),!.
+	write_unicity(T,feat(A,V,_),T1),!.
+write_unicity([_|T],feat(A,V,_),T1):-
+	write_unicity(T,feat(A,V,_),T1),!.
 
 
 

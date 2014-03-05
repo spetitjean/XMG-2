@@ -85,24 +85,20 @@ cavm_dot(cavm(T),F,V) :-        %% should signal an error if not applicable
 
 print_avm(AVM):-
     avm(AVM,LAVM),!,
-    xmg_compiler:send_nl(info),
-    xmg_compiler:send(info,'['),
+    xmg:send(info,'\n'),
+    xmg:send(info,'['),
     print_inside(LAVM),
-    xmg_compiler:send(info,']'),
-    xmg_compiler:send_nl(info),!.
-print_avm(const(AVM,T)):-
-    xmg_adisj:adisj(AVM,LAVM),
-    xmg_compiler:send(info,'const('),
-    xmg_compiler:send(info,LAVM),
-    xmg_compiler:send(info,','),
-    xmg_compiler:send(info,T),
-    xmg_compiler:send(info,')'),!.
+    xmg:send(info,']'),
+    xmg:send(info,'\n'),!.
 print_avm(AVM):-
-    xmg_compiler:send(info,AVM),!.
+    xmg_brick_adisj_adisj:adisj(AVM,LAVM),
+    xmg:send(info,LAVM),!.
+print_avm(AVM):-
+    xmg:send(info,AVM),!.
 
 print_inside([]):- !.
 print_inside([A-V|T]):-
-    xmg_compiler:send(info,A),
-    xmg_compiler:send(info,':'),
+    xmg:send(info,A),
+    xmg:send(info,':'),
     print_avm(V),
     print_inside(T),!.

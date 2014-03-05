@@ -22,23 +22,37 @@
 
 principles(mg(Decls,_,_)):- 
 	get_principles(Decls,Principles),!,
+	list_principles(Principles,[],ListPrinciples),
+	xmg:send(info,'\nPrinciples:\n'),
+	xmg:send(info,ListPrinciples),
 	unicities(Principles,Unicities),
-	%%xmg_compiler:send(info,Unicities),
-	asserta(xmg_compiler:unicity(Unicities)),!.
+	xmg:send(info,'\nUnicities:\n'),
+	xmg:send(info,Unicities),
+	asserta(xmg:unicity(Unicities)),
+	asserta(xmg:principles(ListPrinciples)),!.
 
 get_principles([],[]):- !.
-get_principles([decls(principle,Principles)|_],Principles):-!.
-get_principles([_|T],Principles):-
+get_principles([principle-Principles|_],Principles):-!.
+get_principles([H|T],Principles):-
 	get_principles(T,Principles),!.
 
 unicities([],[]):- !.
-unicities([principle(unicity,eq(ID1,ID2),_)|T],[feat(V1,V2)|T1]):-
-	get_val(ID1,V1),
-	get_val(ID2,V2),
+unicities([principle(unicity,[eq(ID1,ID2)],Dim)|T],[feat(ID1,ID2,Dim)|T1]):-
+	unicities(T,T1),!.
+unicities([principle(unicity,[type(ID1)],Dim)|T],[feat(ID1,'+',Dim)|T1]):-
 	unicities(T,T1),!.
 unicities([H|T],T1):- 
+	xmg:send(info,H),
+	xmg:send(info,'\n\n'),
 	unicities(T,T1),!.
 
+list_principles([],_,[]).
+list_principles([principle(P,_,Dim)|T],Seen,[Pr|T1]):-
+	Pr=principle(P,Dim),
+	not(lists:member(Pr,Seen)),!,
+	list_principles(T,[Pr|Seen],T1).
+list_principles([H|T],Seen,T1):-
+	list_principles(T,Seen,T1),!.
 
 get_val(id(ID,_),ID):- !.
 get_val(int(Int,_),Int):- !.

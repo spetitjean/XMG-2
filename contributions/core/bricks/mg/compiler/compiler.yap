@@ -120,11 +120,11 @@ eval:-
 
 	get_dim(trace,Computed,Trace),
 
-	send(info,'\ngot trace\n'),
+	%% send(info,'\ngot trace\n'),
 
 	findall(Mutex,xmg:mutex(Mutex),Mutexes),
-	send(info,'\nMutexes:'),
-	send(info,Mutexes),
+	%% send(info,'\nMutexes:'),
+	%% send(info,Mutexes),
 	check_mutexes(Trace,Mutexes),
 
 	send_nl(info),send_nl(info),send(info,'                Computed '),send(info,Class),send_nl(info),send_nl(info),
@@ -150,14 +150,14 @@ eval:-
 eval:- send(out,'</grammar>\n'),!.
 
 eval_dims([],[],_).
-eval_dims([trace-Acc|T],T1,Class):-
+eval_dims([trace-Acc|T],T1,Class):-!,
 	eval_dims(T,T1,Class).
 eval_dims([skolem-Acc|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	send(info,Dim),
 	eval(Dim,Acc,XML,Class),
-	send(info,' done '),
+	send(info,' done\n'),
 	eval_dims(T,T1,Class).
 
 eval(morph,Morph,XML,_):-

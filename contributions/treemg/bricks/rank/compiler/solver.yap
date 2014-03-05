@@ -1,3 +1,22 @@
+%% -*- prolog -*-
+
+%% ========================================================================
+%% Copyright (C) 2012  Simon Petitjean
+
+%%  This program is free software: you can redistribute it and/or modify
+%%  it under the terms of the GNU General Public License as published by
+%%  the Free Software Foundation, either version 3 of the License, or
+%%  (at your option) any later version.
+
+%%  This program is distributed in the hope that it will be useful,
+%%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%  GNU General Public License for more details.
+
+%%  You should have received a copy of the GNU General Public License
+%%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%% ========================================================================
+
 :- module(xmg_brick_rank_solver, []).
 
 :- use_module(library(gecode)).
@@ -98,13 +117,13 @@ do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
 	    N2>N1
 	->
 	(
-	    xmg_tree:get_rel(N1,N2,IntVars,IntVar),
+	    xmg_brick_tree_solver:get_rel(N1,N2,IntVars,IntVar),
 	    Space += dom(IntVar,4,RL2)
 	
 	)
     ;
 	(
-	    xmg_tree:get_rel(N2,N1,IntVars,IntVar),
+	    xmg_brick_tree_solver:get_rel(N2,N1,IntVars,IntVar),
 	    Space += dom(IntVar,5,RL2)
 	)
     ),

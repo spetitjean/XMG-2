@@ -54,6 +54,15 @@ xmg:unfold_dimstmt(Syn,syn:S1):--
 xmg:unfold_dimstmt(Syn,syn:node(N,P,F)):-- 
 	xmg:unfold_expr(N,TN),
 	
+	(
+	    var(TN)
+	->
+	    xmg:new_target_var(TN)
+	    ;
+	    true
+        ),
+
+
 	constraints::enq((TN,syn:node,Syn)),
 	%%constraints::enq(indim(Syn,TN)),
 	xmg:new_target_var(T1),
@@ -130,6 +139,14 @@ unfold_node_or_tree(Syn,syn:tree(Root,Children),URoot):--
 
 unfold_node(Syn,syn:node(N,P,F),TN):-- 
 	xmg:unfold_expr(N,TN),
+
+	(
+	    var(TN)
+	->
+	    xmg:new_target_var(TN)
+	    ;
+	    true
+        ),
 	
 	constraints::enq((TN,syn:node,Syn)),
 	%%constraints::enq(indim(Syn,TN)),

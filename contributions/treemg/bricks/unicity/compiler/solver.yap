@@ -55,7 +55,7 @@ post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
 	%% EqY       :=: eq(NodeU),      
 	%% Space += rel(EqX,'SRT_EQ',EqY),
 
-	xmg_tree:get_rel(I1,I2,IntVars,IntVar),
+	xmg_brick_tree_solver:get_rel(I1,I2,IntVars,IntVar),
 	Space += dom(IntVar,1),
     
 	I3 is I2+1,

@@ -41,8 +41,8 @@ write_tagop(PropAVM,tagop(C)):-
 
 search_tagop([],none):-
 	!.
-search_tagop([mark-const(nadj,_)|_],none):-!.
-search_tagop([mark-const(adj,_)|_],none):-!.
+search_tagop([mark-nadj|_],none):-!.
+search_tagop([mark-adj|_],none):-!.
 
 search_tagop([mark-Mark|_],Mark):-!.
 

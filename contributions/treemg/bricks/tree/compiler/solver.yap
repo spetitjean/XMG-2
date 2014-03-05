@@ -36,55 +36,26 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 	%%xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
 
 	xmg:send(info,' posting plugins '),
-	post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
-
-	%% (
-	%%     xmg_brick_mg_compiler:principle(color) ->
-	%%     (
-	%% 	%use_module('syn/xmg_colors'),
-	%% 	xmg_brick_mg_compiler:send(info,' using colors '),
-	%% 	xmg_brick_colors_solver:colors(Space,NodeList,Colors)
-	%%     );
-	%%     true
-	%% ),!,
-	%% (
-	%%      xmg_brick_mg_compiler:principle(rank) ->
-	%%      (
-	%%  	%use_module('syn/xmg_rank'),
-	%% 	xmg_brick_mg_compiler:send(info,' using rank '),
-	%% 	%%xmg_brick_mg_compiler:send(info,Ranks),
-	%%  	xmg_brick_rank_solver:ranks(Space,NodeList,IntVars,Ranks,RankRels)
-	%%      );
-	%%      true
-	%%  ),!,
+	
+	%%post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
+	post_plugins([colors,rank,unicity],Space,NodeList,IntVars,Plugins),
 
 	xmg_brick_mg_compiler:send(info,' doing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
-	%use_module(xmg_tag),
-	%% xmg_brick_mg_compiler:send(info,' using tag '),
-	%% xmg_brick_mg_compiler:send(info,TagOps),
-	%%xmg_brick_tag_solver:post_tags(Space,NodeList,TagOps),
-
 	xmg_brick_mg_compiler:send(info,' doing posts '),
-
 
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
-	%%color_branch(Space,NodeList),
+	xmg_brick_mg_compiler:send(info,' branching '),
 
-	%% (
-	%%     xmg_parser:principle(rank) ->
-	%%     (
-	%% 	xmg_rank:branch_ranks(Space,RankRels)
-	%%     );
-	%%     true
-	%% ),!,
 
 	global_branch(Space,IntVars),!,
 	global_pbranch(Space,IntPVars),!,
 	do_branch(Space,NodeList),!,	
+
+	xmg_brick_mg_compiler:send(info,' branched '),
 
 	SolSpace := search(Space),
 
@@ -93,10 +64,6 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 
 	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
 
-	%% make_tree(IsRoot,Eq,Children,Left,Tree),
-	%% xmg_brick_mg_compiler:send(info,' tree made '),
-	%% unify_in_tree(Tree,UTree,NodeList1),
-	%% xmg_brick_mg_compiler:send(info,' tree unified ').
 
 
 post_plugins([],_,_,_,_):- !.
@@ -248,6 +215,12 @@ do_nposts(Space,Rels,[noteq(A,B)|T]):-
 	IntVarEq :=  intvar(Space,1,1),
 	Space+=rel(Rel,'IRT_NQ',IntVarEq),
 	do_nposts(Space,Rels,T),!.
+
+do_nposts(Space,Rels,[H|T]):-
+	xmg:send(info,'\nCould not post this:\n'),
+	xmg:send(info,H),
+	do_nposts(Space,Rels,T),!.
+
 
 
 color_branch(_,[]):- !.

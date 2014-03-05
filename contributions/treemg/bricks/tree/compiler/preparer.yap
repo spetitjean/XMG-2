@@ -19,7 +19,15 @@
 
 :- module(xmg_brick_tree_preparer, []).
 
-prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins([Colors,Ranks,TagOps,Unicities]),TableInvF,NodeList)):-  
+:-edcg:thread(name,edcg:counter).
+:-edcg:weave([name],[count/7,new_name/1]).
+
+new_name(Name):--
+	name::incr,
+	name::get(N),
+	atomic_concat(['X',N],Name).
+
+prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins([Colors,Ranks,TagOps,Unicities]),TableInvF,NodeList)):--  
 	lists:remove_duplicates(Syn,SynD),
 	%%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
@@ -28,7 +36,10 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 
 	%% écrire l'id de la classe courante
 	Trace=[Family|_],
-	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) ,
+	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
+
+	xmg:send(info,TableOut),
+
 	count_noteqs(SynDC,Noteqs),
 
 	%% écrire les couples de noeuds qui ne peuvent pas unifier
@@ -210,11 +221,13 @@ count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	xmg:send(info,Nodename),
 	xmg:send(info,' CONFLICT '),!,
 
-	%% this should be done in a better way
-	xmg_brick_syn_nodename:nodename(M,new),
+	new_name(New),
+	xmg_brick_syn_nodename:nodename(M,New),
 	M=N,
 	xmg_brick_syn_nodename:nodename(N,NewNodename),
+	xmg:send(info,' New Id given\n'),
 	xmg_table:table_put(TableIn,NewNodename,J,Table),
+	xmg:send(info,Table),
 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
 	Nodes is NodesR +1,!.
 
@@ -279,11 +292,11 @@ add_constraint(node(_,Feats1,Node1),node(_,Feats2,Node2),L,[noteq(Nodename1,Node
 	xmg_brick_syn_nodename:nodename(Node2,Nodename2),
 
 	%% xmg:send(info,Nodename1),
-	%% xmg:send_nl(info),
+	%% xmg:send(info,'\n'),
 	%% xmg:send(info,Nodename2),
 	%% xmg_brick_avm_avm:print_avm(Feats1),
 	%% xmg_brick_avm_avm:print_avm(Feats2),
-	%% xmg:send_nl(info,2),
+	%% xmg:send(info,'\n\n'),
 	!.
 
 inverse_table([],T,T):-!.

@@ -40,7 +40,7 @@ write_rank(PropAVM,rank(C)):-
 search_rank([],none):-
 	!.
 
-search_rank([rank-const(R,int)|_],R):-!.
+search_rank([rank-R|_],R):-!.
 
 search_rank([_|T],C):-
 	search_rank(T,C),!.
