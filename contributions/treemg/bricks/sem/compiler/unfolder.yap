@@ -24,11 +24,17 @@
 
 
 xmg:unfold_dimstmt(Sem,sem:pred(Label,Pred,Params)):--
-	xmg:unfold_expr(Label,ULabel),
+	xmg:unfold_expr(Label,ULabel),	    
 	xmg:unfold_expr(Pred,UPred),
 	xmg:unfold_exprs(Params,UParams),
-	constraints::enq((sem:pred(ULabel,UPred,UParams),Sem)),
-	!.
+	(
+	    var(ULabel) 
+	->
+	    ULabel=none
+        ;
+	    true
+	),
+	constraints::enq((sem:pred(ULabel,UPred,UParams),Sem)),!.
 
 
 unfold('sem-SemStmt',[M],UM):- 

@@ -26,11 +26,31 @@
 
 :-edcg:weave(decls,generate_params/2).
 
+xmg:generate_instr((sem:pred(none,v(P),Args),Sem)):--
+	decls::tget(P,VP),
+	generate_params(Args,GArgs),
+	APred=..['@',VP,GArgs],
+	Generated=..['::',xmg_acc:Sem,put(APred)],
+	code::enq(Generated),!.
+
+xmg:generate_instr((sem:pred(none,c(P),Args),Sem)):--
+	generate_params(Args,GArgs),
+	APred=..['@',P,GArgs],
+	Generated=..['::',xmg_acc:Sem,put(APred)],
+	code::enq(Generated),!.
+
 xmg:generate_instr((sem:pred(v(L),v(P),Args),Sem)):--
 	decls::tget(L,VL),
 	decls::tget(P,VP),
 	generate_params(Args,GArgs),
-	APred=..['@',CPred,GArgs],
+	APred=..['@',VP,GArgs],
+	Generated=..['::',xmg_acc:Sem,put(APred)],
+	code::enq(Generated),!.
+
+xmg:generate_instr((sem:pred(v(L),c(P),Args),Sem)):--
+	decls::tget(L,VL),
+	generate_params(Args,GArgs),
+	APred=..['@',P,GArgs],
 	Generated=..['::',xmg_acc:Sem,put(APred)],
 	code::enq(Generated),!.
 

@@ -131,7 +131,9 @@ eval:-
 
 	%%send(info,Computed),
 	
-	eval_dims(Computed,EDims,Class),
+	iface_last(Computed,OComputed),
+
+	eval_dims(OComputed,EDims,Class),
 	current(Previous),
 	Current is Previous + 1,
 	retract(current(Previous)),
@@ -146,6 +148,12 @@ eval:-
 	send_nl(info),
 	send_nl(info),
 	fail.
+
+iface_last([],[]).
+iface_last([iface-I|T],T1):-
+	lists:append(T,[iface-I],T1),!.
+iface_last([H|T],[H|T1]):-
+	iface_last(T,T1),!.
 
 eval:- send(out,'</grammar>\n'),!.
 

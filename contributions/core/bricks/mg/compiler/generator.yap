@@ -26,7 +26,7 @@
 :-multifile(xmg:generate_instr/7).
 
 
-:-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, import_calls/3,  unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
+:-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, import_calls/3,  unify_exports/3, unify_exports_as/4, do_unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
 :-edcg:weave([decls,name,code],[xmg:generate_instr/1, xmg:generate_instrs/1]).
 
 %% :- edcg:thread(xmg_generator:skolem, edcg:counter).
@@ -168,7 +168,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	%%xmg:send(info,IGenerated),
 
 	edcg:edcg_clause(xmg:Head, Gen, Clause),
-	%%xmg:send(info,Clause),
+	xmg:send(info,Clause),
 	asserta(Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
 	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),
@@ -208,7 +208,7 @@ generate_values([value(Value)|T]):-
 import_calls([],_,true):--!.
 import_calls([import(id(Class,C),AS)|T],List,ICalls):--
 	xmg_brick_mg_exporter:exports(Class,E),
-	unify_exports(E,List,AS,Exports),
+	do_unify_exports(E,List,AS,Exports),
 	Call=..[value_class,Class,params(_),exports(Exports)],
 	ICall=..[':',xmg,Call],
 	%% add Call to Trace
@@ -222,15 +222,31 @@ import_calls([H|T],List,ICalls):--
 	xmg:send(info,H),false,!.
 
 
-unify_exports([],_,_,[]):-- !.
-unify_exports([id(ID,C)-_|T],List,AS,[ID-V|T1]):--
-	lists:member(id(ID,_)-id(IDA,_),AS),!,
-	lists:member(id(IDA,_)-V,List),
-	unify_exports(T,List,AS,T1),!.
-unify_exports([id(ID,C)-_|T],List,AS,[ID-V|T1]):--
+do_unify_exports(E,List,none,Exports):--
+	unify_exports(E,List,Exports),!.
+do_unify_exports(E,List,AS,Exports):--
+	unify_exports_as(E,List,AS,Exports),!.
+
+unify_exports([],_,[]):-- !.
+unify_exports([id(ID,C)-_|T],List,[ID-V|T1]):--
 	decls::tget(ID,V),
 	%%lists:member(id(ID,_)-V,List),
-	unify_exports(T,List,AS,T1),!.
+	unify_exports(T,List,T1),!.
+
+unify_exports_as([],_,_,[]):-- !.
+unify_exports_as([id(A,C)-_|T],List,AS,[A-VA|T1]):--
+	lists:member(v(A)-none,AS),!,
+	%%xmg:send(info,'\nAS none'),
+	decls::tget(A,VA),	
+	unify_exports_as(T,List,AS,T1),!.
+unify_exports_as([id(A,C)-_|T],List,AS,[A-VA|T1]):--
+	lists:member(v(A)-v(B),AS),!,
+	%%xmg:send(info,'\nAS value'),
+	decls::tget(B,VA),
+	unify_exports_as(T,List,AS,T1),!.
+unify_exports_as([id(A,C)-_|T],List,AS,[A-_|T1]):--
+	unify_exports_as(T,List,AS,T1),!.
+
 
 list_exports([],_,[]):-- !.
 list_exports([id(ID,C)-_|T],List,[ID-V|T1]):--

@@ -28,7 +28,7 @@ export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
 	xmg:send(info,' exploring classes for calls '),
 	xmg_brick_mg_explorer:find_calls_in_classes(Classes,Calls),
 	xmg:send(info,' explored '),
-	xmg:send(info,Calls),
+	%%xmg:send(info,Calls),
 
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
@@ -104,9 +104,11 @@ imports_before(none,_):-!.
 imports_before(some(mg:import(I)),Acc):-
 	imports_before(I,Acc),!.
 imports_before(I,Acc):-
-	xmg:send(info,'do not know what to do with '),
-	xmg:send(info,I),
-	xmg:send(info,Acc),
+	%% xmg:send(info,'\n\nDo not know what to do with import: '),
+	%% xmg:send(info,I),
+	%% xmg:send(info,Acc),
+	%% xmg:send(info,'\n'),
+
 	false,!.
 
 calls_before([],_):- !.
@@ -158,6 +160,7 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 	add_vars_no_duplicates(Exps,UD,Decls),
 
 	add_vars_no_duplicates(Decls,UP,AllDecls),
+	xmg:send(info,declared(Name,AllDecls)),
 	asserta(declared(Name,AllDecls)),!.
 
 untype([],[]):-!.
@@ -179,7 +182,7 @@ untype_one([H|T],[H1|T1]):-
 
 untype_part(value:var_or_const(token(C,id(ID))),id(ID,C)):-!.
 untype_part(value:var(token(C,id(ID))),id(ID,C)):-!.
-untype_part(mg:iclass(token(_,id(ID)),[],none),import(id(ID,C),[])):-
+untype_part(mg:iclass(token(_,id(ID)),[],AS),import(id(ID,C),AS)):-
 	!.
 untype_part(token(C,id(ID)),id(ID,C)):-
 	!.
@@ -221,16 +224,23 @@ imports_exports([import(id(I,C),AS)|TI],E,D,Exps):-
 	)
     ),
 	!,
+	%%xmg:send(info,Exps1),
+	%%xmg:send(info,AS),
 	replace_as(Exps1,AS,Exps1as),
 	imports_exports(TI,E,D,Exps2),
 	lists:append(Exps1as,Exps2,Exps).
 
-replace_as([],_,[]):- !.
-replace_as([id(H,_)-Var|T],AS,[R-Var|T1]):-
-	lists:member(id(H,_)-R,AS),!,
-	replace_as(T,AS,T1),!.
-replace_as([H|T],AS,[H|T1]):-
-	replace_as(T,AS,T1),!.
+replace_as(Exps,none,Exps):- !.
+replace_as(Exps,some(List),NExps):- 
+	replace_as(Exps,List,NExps),!.
+replace_as(Exps,[],[]).
+replace_as(Exps,[mg:ias(value:var(token(C,id(H))),none)|T],[id(H,C)-Var|T1]):-
+	%%xmg:send(info,'HERE NONE'),
+	lists:member(id(H,_)-Var,Exps),!,
+	replace_as(Exps,T,T1),!.
+replace_as(Exps,[mg:ias(value:var(token(C,id(H))),value:var(token(_,id(H2))))|T],[id(H2,C)-Var|T1]):-
+	%%xmg:send(info,'HERE VAR'),
+	replace_as(Exps,T,T1),!.
 
 import_exports(I,Exp):-
 	exports(I,Exp).

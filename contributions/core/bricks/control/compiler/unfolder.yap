@@ -35,10 +35,10 @@ xmg:unfold_stmt(control:or(E1,E2)):--
 	!.
 
 xmg:unfold_dimstmt(Dim,control:and(S1,S2)):-- 
-	xmg_brick_mg_compiler:send(info,'\n\nunfolding:\n'),
-	xmg_brick_mg_compiler:send(info,S1),
+	%% xmg_brick_mg_compiler:send(info,'\n\nunfolding:\n'),
+	%% xmg_brick_mg_compiler:send(info,S1),
 	xmg:unfold_dimstmt(Dim,S1) ,
-	xmg:send(info,'\nDone'),
+	%% xmg:send(info,'\nDone'),
 	xmg:unfold_dimstmt(Dim,S2) ,
 	!.
 xmg:unfold_dimstmt(Dim,control:or(S1,S2)):-- 

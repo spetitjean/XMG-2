@@ -47,8 +47,12 @@ xmg:find_calls_in_classes(mg:class(token(_,id(Name)),Params,Imports,Exports,Decl
 	xmg:find_calls(Stmts) with calls([]-Calls,[]-[]),
 	classes::enq((Name,Calls)),!.
 
+xmg:find_calls_in_classes(mg:mutex(_)):-- !.
+xmg:find_calls_in_classes(mg:mutex_add(_,_)):-- !.
+
 xmg:find_calls_in_classes(Class):--
 	xmg:send(info,'\n\nDo not know what to do with '),
 	xmg:send(info,Class),
+	xmg:send(info,'\n\n'),
 	
 	!.

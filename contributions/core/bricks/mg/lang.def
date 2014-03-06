@@ -18,10 +18,10 @@ Imports	    : 'import' (IClass)+ {$$=mg:import($2)};
 
 IClass	    : id '[' (id)* ']' MaybeAs {$$=mg:iclass($1,$3,$5)};
 
-MaybeAs	    : 'as' '[' (AsElem)+  ']' {$$=$3} | {$$=none};
+MaybeAs	    : 'as' '[' (AsElem)+  ']' {$$=some($3)} | {$$=none};
 
-AsElem	    : Var '=' Var {$$=mg:as($1,$3)} 
-	    | Var {$$=mg:as($1,none)};
+AsElem	    : Var '=' Var {$$=mg:ias($1,$3)} 
+	    | Var {$$=mg:ias($1,none)};
 
 Exports	    : 'export' (Var)+ {$$=mg:export($2)};
 

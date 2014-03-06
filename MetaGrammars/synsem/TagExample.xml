@@ -9,25 +9,6 @@
       <class>transitifDirect</class>
       <class>lexemeManger</class>
     </trace>
-    <interface>
-      <fs>
-        <f name="anch">
-          <sym varname="manger"/>
-        </f>
-        <f name="arg0">
-          <sym varname="@V1"/>
-        </f>
-        <f name="arg1">
-          <sym varname="@V2"/>
-        </f>
-        <f name="obj">
-          <sym varname="@V2"/>
-        </f>
-        <f name="suj">
-          <sym varname="@V1"/>
-        </f>
-      </fs>
-    </interface>
     <semantics>
       <literal negated="no">
         <predicate>
@@ -37,10 +18,10 @@
           <sym varname="@V2"/>
         </arg>
         <arg>
-          <sym varname="@V1"/>
+          <sym varname="@V3"/>
         </arg>
         <arg>
-          <sym varname="@V2"/>
+          <sym varname="@V4"/>
         </arg>
       </literal>
     </semantics>
@@ -62,7 +43,7 @@
               <f name="top">
                 <fs coref="@AVM3">
                   <f name="idx">
-                    <sym varname="@V1"/>
+                    <sym varname="@V3"/>
                   </f>
                   <f name="num">
                     <sym varname="@V4"/>
@@ -135,7 +116,7 @@
               <f name="top">
                 <fs coref="@AVM14">
                   <f name="idx">
-                    <sym varname="@V2"/>
+                    <sym varname="@V4"/>
                   </f>
                 </fs>
               </f>
@@ -144,5 +125,24 @@
         </node>
       </node>
     </tree>
+    <interface>
+      <fs>
+        <f name="anch">
+          <sym varname="manger"/>
+        </f>
+        <f name="arg0">
+          <sym varname="@V3"/>
+        </f>
+        <f name="arg1">
+          <sym varname="@V4"/>
+        </f>
+        <f name="obj">
+          <sym varname="@V4"/>
+        </f>
+        <f name="suj">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </interface>
   </entry>
 </grammar>

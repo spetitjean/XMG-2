@@ -41,16 +41,16 @@ xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 %%     )
 
 xmg:unfold_expr(token(C,id(ID)),c(ID)):--
-	xmg:send(info,'\n\n WARNING : '),
-	xmg:send(info,ID),
+	%%xmg:send(info,'\n\n WARNING : '),
+	%%xmg:send(info,ID),
 	!.
 xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
-	xmg:send(info,'\n\n WARNING : '),
-	xmg:send(info,ID),
+	%%xmg:send(info,'\n\n WARNING : '),
+	%%xmg:send(info,ID),
 	!.
 xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
-	xmg:send(info,'\n\n WARNING : '),
-	xmg:send(info,ID),
+	%%xmg:send(info,'\n\n WARNING : '),
+	%%xmg:send(info,ID),
 	!.
 	
 

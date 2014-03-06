@@ -105,10 +105,29 @@ xmg:token_to_id(token(Coord,id(VAR)), id(VAR,Coord)).
 unfold_var(value:var(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(value:var_or_const(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(value:const(Token),ID):- xmg:token_to_id(Token,ID), !.
-unfold_var(mg:iclass(Token,AS,_),import(ID,AS)):- xmg:token_to_id(Token,ID), !.
+unfold_var(mg:iclass(Token,Params,AS),import(ID,UAS)):- xmg:token_to_id(Token,ID), unfold_as(AS,UAS),!.
 unfold_var(Token,ID):- xmg:token_to_id(Token,ID), !.
 
+unfold_as(none,none).
+unfold_as(some(AS),UAS):-
+	unfold_some_as(AS,UAS).
 
+unfold_some_as([],[]).
+unfold_some_as([P|T],[P1|T1]):-
+	unfold_as_pair(P,P1),
+	unfold_some_as(T,T1),!.
+
+unfold_as_pair(mg:ias(E1,none),UE1-none):-
+	unfold_as_elem(E1,UE1),!.
+unfold_as_pair(mg:ias(E1,E2),UE1-UE2):-
+	unfold_as_elem(E1,UE1),
+	unfold_as_elem(E2,UE2),!.
+
+
+unfold_as_elem(value:var(token(_,id(X))),v(X)).
+unfold_as_elem(value:var_or_const(token(_,id(X))),v(X)).
+unfold_as_elem(value:const(token(_,id(X))),c(X)).
+unfold_as_elem(none,none).
 
 unfold_class(C):--
 	%%xmg_brick_mg_compiler:send(info,C),!,

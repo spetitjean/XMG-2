@@ -38,7 +38,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	Trace=[Family|_],
 	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
 
-	xmg:send(info,TableOut),
+	%%xmg:send(info,TableOut),
 
 	count_noteqs(SynDC,Noteqs),
 
@@ -227,7 +227,7 @@ count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	xmg_brick_syn_nodename:nodename(N,NewNodename),
 	xmg:send(info,' New Id given\n'),
 	xmg_table:table_put(TableIn,NewNodename,J,Table),
-	xmg:send(info,Table),
+	%%xmg:send(info,Table),
 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
 	Nodes is NodesR +1,!.
 
