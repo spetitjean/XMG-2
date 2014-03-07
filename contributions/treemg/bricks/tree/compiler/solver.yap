@@ -77,7 +77,7 @@ post_plugin(Plugin,Space,NodeList,IntVars,PlugList):-
 	xmg:send(info,' posting '),
 	xmg:send(info,Plugin),
 	xmg:send(info,'\n'),
-	xmg:send(info,PlugList),
+	%%xmg:send(info,PlugList),
 
 	atom_concat(['xmg_brick_',Plugin,'_solver'],Module),
 	Post=..[post,Space,NodeList,IntVars,PlugList],

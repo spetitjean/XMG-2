@@ -72,7 +72,6 @@ generate(mg(_,Classes,Values)):-
 	%% xmg_table:table_new(TableIn),
 	%% xmg_brick_mg_compiler:send_nl(info),
 	%% xmg_brick_mg_compiler:send(info,' threading classes'),
-	%% thread_classes(Classes),
 	xmg_brick_mg_compiler:send(info,' generating classes'),
 	
 	generate_classes(Classes),
@@ -80,18 +79,6 @@ generate(mg(_,Classes,Values)):-
 
 
 
-thread_classes([]):- !.
-thread_classes([class(Class,_,_,_,_,_,_)|T]):-
-	%% this part should be done before (for calls to classes that occur after)
-	xmg_dimensions:dims(Dims),!,
-	prefix_for_weave(Dims,PDims),	
-	edcg:edcg_weave(PDims,[xmg_class:Class/2]),!,
-	
-	thread_classes(T).
-thread_classes([H|T]):-
-	xmg:send(info,'\n\ndid not thread class '),
-	xmg:send(info,H),
-	thread_classes(T).
 
 
 generate_classes([]):-- !.
@@ -168,7 +155,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	%%xmg:send(info,IGenerated),
 
 	edcg:edcg_clause(xmg:Head, Gen, Clause),
-	xmg:send(info,Clause),
+	%%xmg:send(info,Clause),
 	asserta(Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
 	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),

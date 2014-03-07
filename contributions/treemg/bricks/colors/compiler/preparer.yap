@@ -47,7 +47,9 @@ write_color(Name,PropAVM,color(C)):-
 
 search_color(Name,[],none):-
 	%%throw(xmg(principle_error(undefined_color(Name)))),	
-
+	xmg:send(info,'\No color for node '),
+	xmg:send(info,Name),
+	xmg:send(info,'\. This should not happen.\n\n'),
 	!.
 
 %%search_color(_,[color-const(C,_)|_],C):-!.

@@ -87,10 +87,17 @@ class BrickCompiler(object):
         dimfile.write('%% Dimensions initialization\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
 
+        for dim in self._dims:
+            dimfile.write('xmg:dimbrick(')
+            dimfile.write(dim)
+            dimfile.write(',')
+            dimfile.write(self._dimbricks[dim])
+            dimfile.write(').\n')
+            
 
-        dimfile.write('dims([')
-        dimfile.write(", ".join(self._dimsp))
-        dimfile.write(', trace-Trace]).\n\n')
+        # dimfile.write('dims([')
+        # dimfile.write(", ".join(self._dimsp))
+        # dimfile.write(']).\n\n')
         dimfile.close()
         print("Dimensions generated in "+self._folder)
 

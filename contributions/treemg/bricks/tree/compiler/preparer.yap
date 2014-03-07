@@ -27,7 +27,7 @@ new_name(Name):--
 	name::get(N),
 	atomic_concat(['X',N],Name).
 
-prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins([Colors,Ranks,TagOps,Unicities]),TableInvF,NodeList)):--  
+prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)):--  
 	lists:remove_duplicates(Syn,SynD),
 	%%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
@@ -48,10 +48,12 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% écrire les lits
 	write_lits(SynD,Relations,TableOut),
 
-	xmg:get_plugins(Plugins),
+	xmg:get_plugins(Plugins,OutPlugins),
+	
+	%%xmg:send(info,'\nPlugins: '),
 	%%xmg:send(info,Plugins),
 
-	prepare_plugins(SynD,[colors,rank,tag,unicity],prepared([Colors,Ranks,TagOps,Unicities],SynNC)),
+	prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)),
 
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
@@ -71,8 +73,22 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	!.
 
 %% this should go somewhere else
-xmg:get_plugins(Plugins):-
-	findall(P-(Args,Dims),xmg:principle(P,Args,Dims),Plugins),!.
+xmg:get_plugins(TreePlugins,OutPlugins):-
+	findall(P,xmg:principle(P,Args,Dims),Plugins),
+	filter_tree_plugins(Plugins,[],TreePlugins,OutPlugins),!.
+
+filter_tree_plugins([],_,[],[]).
+filter_tree_plugins([H|T],Mem,[NH|T1],[_|T2]):-
+	is_tree_plugin(H,NH),
+	not(lists:member(NH,Mem)),!,
+	filter_tree_plugins(T,[NH|Mem],T1,T2).
+filter_tree_plugins([H|T],Mem,T1,T2):-
+	filter_tree_plugins(T,Mem,T1,T2),!.
+
+is_tree_plugin(tag,tag).
+is_tree_plugin(color,colors).
+is_tree_plugin(rank,rank).
+is_tree_plugin(unicity,unicity).
 
 prepare_plugins(Syn,[],prepared([],Syn)):- !.
 prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
@@ -82,6 +98,7 @@ prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
 %% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
 prepare_plugin(Syn,Plugin,Out):-
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
+	xmg:send(info,Module),
 	Prepare=..[prepare,Syn,Out],
 	Do=..[':',Module,Prepare],
 	Do,

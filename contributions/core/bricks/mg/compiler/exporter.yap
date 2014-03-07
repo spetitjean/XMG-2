@@ -160,7 +160,7 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 	add_vars_no_duplicates(Exps,UD,Decls),
 
 	add_vars_no_duplicates(Decls,UP,AllDecls),
-	xmg:send(info,declared(Name,AllDecls)),
+	%%xmg:send(info,declared(Name,AllDecls)),
 	asserta(declared(Name,AllDecls)),!.
 
 untype([],[]):-!.

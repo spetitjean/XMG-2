@@ -164,7 +164,8 @@ eval_dims([skolem-Acc|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	send(info,Dim),
-	eval(Dim,Acc,XML,Class),
+	xmg:dimbrick(Dim,DimBrick),
+	eval(DimBrick,Acc,XML,Class),
 	send(info,' done\n'),
 	eval_dims(T,T1,Class).
 

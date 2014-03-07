@@ -52,11 +52,11 @@ xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
 
 
 xmg:avm_dot(Member-Value,List) :-
-	lists:member(Member-Value,List),
-	xmg:send(info,'\nFound key '),
-	xmg:send(info,Member),
-	xmg:send(info,' in '),
-	xmg:send(info,List).
+	lists:member(Member-Value,List).
+	%%xmg:send(info,'\nFound key '),
+	%%xmg:send(info,Member),
+	%%xmg:send(info,' in '),
+	%%xmg:send(info,List).
 xmg:avm_dot(Member-_,List):-
 	not(lists:member(Member-Value,List)),
 	xmg:send(info,'\nDid not find key '),

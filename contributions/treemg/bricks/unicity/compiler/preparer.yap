@@ -21,9 +21,9 @@
 
 prepare(Syn,prepared(Unicities,Syn)):- 
 	xmg:unicity(LUnicities), 
-	xmg:send(info,'\nUnicity:\n'),
-	xmg:send(info,LUnicities),
-	xmg:send(info,'\n'),
+	%%xmg:send(info,'\nUnicity:\n'),
+	%%xmg:send(info,LUnicities),
+	%%xmg:send(info,'\n'),
 
 
 	write_unicities(Syn,LUnicities,Unicities),
