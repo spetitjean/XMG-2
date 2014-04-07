@@ -24,7 +24,7 @@
 :-dynamic(fieldprec/2).
 :-dynamic(feat/2).
 
-:-multifile(xmg:type_stmt/3).
+:-multifile(xmg:type_stmt/4).
 :-multifile(xmg:type_expr/4).
 
 :-edcg:thread(types,edcg:table).

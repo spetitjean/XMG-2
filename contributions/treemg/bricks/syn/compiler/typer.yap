@@ -21,49 +21,44 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
-xmg:type_stmt(syn:and(S1,S2)):--
+xmg:type_stmt(syn:and(S1,S2),SynType):--
 
-	xmg:type_stmt(S1),!,
+	xmg:type_stmt(S1,SynType),!,
 
 
-	xmg:type_stmt(S2),!.	
+	xmg:type_stmt(S2,SynType),!.	
 
-xmg:type_stmt(syn:or(S1,S2)):--
-	xmg:type_stmt(S1),!,
-	xmg:type_stmt(S2),!.	
+xmg:type_stmt(syn:or(S1,S2),SynType):--
+	xmg:type_stmt(S1,SynType),!,
+	xmg:type_stmt(S2,SynType),!.	
 
-xmg:type_stmt(syn:node(ID,Props,Feats)):--
-	%%get principle type
-	%%here, we need the dimension... 
-	xmg:principle(constructor(syn,node),[PropType,FeatType],Dims),
-	%% this syn should ba a variable
-	lists:member(syn,Dims),
-	%%xmg:send(info,FeatType),
-	%%xmg:send(info,Feats),
-	%%check props
-	%%check feats
+xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
+
 	xmg:type_expr(Feats,FType),
 	xmg:check_types(FType,FeatType,Coord),
 
+	xmg:type_expr(Props,PType),
+	xmg:check_types(PType,PropType,Coord),
+
 	xmg:get_var_type(ID,Type),
-	xmg:check_types(Type,syn:node,Coord),
+	xmg:check_types(Type,syn:node(tree(FType,PType)),Coord),
 	!.
 
-xmg:type_stmt(syn:dom(Dom,N1,N2)):--
+xmg:type_stmt(syn:dom(Dom,N1,N2),syn:tree(FType,PType)):--
 	xmg:get_var_type(N1,V1),
-	xmg:check_types(V1,syn:node,Coord),
+	xmg:check_types(V1,syn:node(tree(FType,PType)),Coord),
 	xmg:get_var_type(N2,V2),
-	xmg:check_types(V2,syn:node,Coord),
+	xmg:check_types(V2,syn:node(tree(FType,PType)),Coord),
 	!.
 
-xmg:type_stmt(syn:prec(Prec,N1,N2)):--
+xmg:type_stmt(syn:prec(Prec,N1,N2),syn:tree(FType,PType)):--
 	xmg:get_var_type(N1,V1),
-	xmg:check_types(V1,syn:node,Coord),
+	xmg:check_types(V1,syn:node(tree(FType,PType)),Coord),
 	xmg:get_var_type(N2,V2),
-	xmg:check_types(V2,syn:node,Coord),
+	xmg:check_types(V2,syn:node(tree(FType,PType)),Coord),
 	!.
 
-xmg:type_stmt(syn:eq(S1,S2)):--
+xmg:type_stmt(syn:eq(S1,S2),void):--
 	xmg:get_var_type(S1,V1),
 	xmg:get_var_type(S2,V2),
 	xmg:check_types(V1,V2,Coord),
