@@ -17,16 +17,14 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_avm_typer).
+:-module(xmg_brick_sem_typer).
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
-xmg:stmt_type(iface,avm).
 
-xmg:type_expr(avm:avm(Coord,Feats),Type):--
+xmg:stmt_type(sem,sem).
+
+xmg:type_stmt(sem:_,_):--
 	!.
-	
-xmg:type_stmt(avm:avm(Coord,Feats),Type):--
-	xmg:type_expr(avm:avm(Coord,Feats),Type),!.
 
 

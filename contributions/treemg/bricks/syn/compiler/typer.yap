@@ -21,46 +21,58 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
-xmg:type_stmt(syn:and(S1,S2),SynType):--
+%% le type associé à la dimension est a priori inconnu, ce sont des variables contraintes (au départ pas contraintes)
+%% dans l'environnement, on a toutes les variables de type contraintes
 
-	xmg:type_stmt(S1,SynType),!,
-
-
-	xmg:type_stmt(S2,SynType),!.	
-
-xmg:type_stmt(syn:or(S1,S2),SynType):--
-	xmg:type_stmt(S1,SynType),!,
-	xmg:type_stmt(S2,SynType),!.	
+%% ici, quelque part, il faut dire que le type des expressions de cette brique est syn:tree(FType,PType)
+xmg:stmt_type(syn,syn:tree(FType,PType)).
 
 xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
-
 	xmg:type_expr(Feats,FType),
-	xmg:check_types(FType,FeatType,Coord),
 
 	xmg:type_expr(Props,PType),
-	xmg:check_types(PType,PropType,Coord),
 
 	xmg:get_var_type(ID,Type),
-	xmg:check_types(Type,syn:node(tree(FType,PType)),Coord),
+	Type=syn:node(syn:tree(FType,PType)),
+
+
 	!.
 
 xmg:type_stmt(syn:dom(Dom,N1,N2),syn:tree(FType,PType)):--
-	xmg:get_var_type(N1,V1),
-	xmg:check_types(V1,syn:node(tree(FType,PType)),Coord),
-	xmg:get_var_type(N2,V2),
-	xmg:check_types(V2,syn:node(tree(FType,PType)),Coord),
+	xmg:get_var_type(N1,T1),
+	T1=syn:node(syn:tree(FType,PType)),
+	xmg:get_var_type(N2,T2),
+	T2=syn:node(syn:tree(FType,PType)),
+
 	!.
 
 xmg:type_stmt(syn:prec(Prec,N1,N2),syn:tree(FType,PType)):--
-	xmg:get_var_type(N1,V1),
-	xmg:check_types(V1,syn:node(tree(FType,PType)),Coord),
-	xmg:get_var_type(N2,V2),
-	xmg:check_types(V2,syn:node(tree(FType,PType)),Coord),
+	xmg:get_var_type(N1,T1),
+	T1=syn:node(syn:tree(FType,PType)),
+	xmg:get_var_type(N2,T2),
+	T2=syn:node(syn:tree(FType,PType)),
 	!.
 
-xmg:type_stmt(syn:eq(S1,S2),void):--
-	xmg:get_var_type(S1,V1),
-	xmg:get_var_type(S2,V2),
-	xmg:check_types(V1,V2,Coord),
+xmg:type_stmt(syn:tree(Node,Children),Type):--
+	xmg:type_stmt(Node,Type),
+	xmg:type_stmt(Children,Type),
 	!.
+
+xmg:type_stmt(syn:children(Tree,none),Type):--
+	xmg:type_stmt(Tree,Type),
+	!.
+xmg:type_stmt(syn:children(Tree,brothers(_,Brothers)),Type):--
+	xmg:type_stmt(Tree,Type),
+	xmg:type_stmt(Brothers,Type),
+	!.
+
+xmg:type_stmt(syn:child(Op,Tree),Type):--
+	xmg:type_stmt(Tree,Type),
+	!.
+
+
+xmg:type_stmt(syn:X,_):--
+	xmg:send(info,'\n\nDid not type syn statement:\n'),
+	xmg:send(info,X),!,
+	fail.
 

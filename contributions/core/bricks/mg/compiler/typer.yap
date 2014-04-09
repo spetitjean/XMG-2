@@ -25,10 +25,11 @@
 :-dynamic(feat/2).
 
 :-multifile(xmg:type_stmt/4).
+:-multifile(xmg:stmt_type/2).
 :-multifile(xmg:type_expr/4).
 
 :-edcg:thread(types,edcg:table).
-:-edcg:weave([types],[xmg:type_stmt/1,xmg:type_expr/2,put_in_table/1,xmg:get_var_type/2]).
+:-edcg:weave([types],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,xmg:get_var_type/2]).
 
 xmg:check_types(T1,T1,Coord):- !.
 xmg:check_types(T1,T2,Coord):- 
@@ -54,17 +55,23 @@ xmg:get_var_type(Get,_):--
 	false,
 	!.
 
+type_metagrammar(MG):-
+	xmg:send(info,'Typing classes'),
+	xmg:send(info,MG).
+	
+
 
 type_classes([]):--
 	!.
 type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	!,
+	xmg:send(info,N),
 	xmg_brick_mg_exporter:declared(N,List),
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with types(TableIn,TableOut),
-	%%xmg:send(info,'\nTypes table:'),
-	%%xmg:send(info,TableOut),
-	xmg:type_stmt(S) with types(TableOut,TypedTable),
+	xmg:send(info,'\nTypes table:'),
+	xmg:send(info,TableOut),
+	xmg:type_stmt(S,void) with types(TableOut,TypedTable),
 	xmg:send(info,'\nTyped table:'),
 	xmg:send(info,TypedTable),
 	xmg:send(info,'\n\n'),
@@ -75,11 +82,11 @@ type_classes([_|T]):--
 
 put_in_table([]):-- !.
 put_in_table([id(A,_)-B|T]):--
-	types::tput(A,var(B,Type)),
+	types::tput(A,B),
 	put_in_table(T),!.
 put_in_table([const(A,_)-const(N,_)|T]):--
 	%% skolemize ?
-	types::tput(A,sconst(N,_)),
+	types::tput(A,N),
 	put_in_table(T),!.
 
 %% type_metagrammar('MetaGrammar'(decls(Principles,Types,Properties,Feats,Fields,FieldPrecs),_,_)):-
@@ -194,8 +201,8 @@ assert_type(type(Id,Type)):-
 	false,!.
 assert_type(type(Id,Type)):-
 	not(type(Id,_)),
-	xmg:send(info,'\n\nassert type\n '),
-	xmg:send(info,Id),
+	%%xmg:send(info,'\n\nassert type\n '),
+	%%xmg:send(info,Id),
 	asserta(xmg:type(Id,Type)),!.
 
 assert_feat(feat(Id,Type)):-
@@ -207,8 +214,8 @@ assert_feat(feat(Id,Type)):-
 	false,!.
 assert_feat(feat(Id,Type)):-
 	not(feat(Id,_)),
-	xmg:send(info,'\n\nassert feat \n '),
-	xmg:send(info,Id),
+	%%xmg:send(info,'\n\nassert feat \n '),
+	%%xmg:send(info,Id),
 	asserta(xmg:feat(Id,Type)),!.
 
 get_hierarchies([]):-!.

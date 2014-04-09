@@ -77,8 +77,12 @@ compile_file(File,Eval):-
 
 	xmg_brick_mg_exporter:export_metagrammar(Parse,Ordered),!,
 	send(info,' exported '),
-
 	send_nl(info),
+
+	%% xmg_brick_mg_typer:type_metagrammar(Ordered),!,
+	%% send(info,' typed '),
+	%% send_nl(info),
+
 	xmg_brick_mg_unfolder:unfold(Ordered,Unfolded),!,
 	send(info,' unfolded '),
 	%%send(info,Unfolded),
@@ -86,11 +90,6 @@ compile_file(File,Eval):-
 	xmg_brick_decls_principles:principles(Unfolded),!,
 	send(info,' principles done '),
 
-
-
-	%%xmg_brick_mg_typer:type_metagrammar(Unfolded),!,
-
-	%%send(info,' typed '),
 
 	xmg_brick_mg_generator:generate(Unfolded),!,
 	send_nl(info),	

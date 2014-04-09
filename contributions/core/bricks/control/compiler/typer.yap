@@ -21,28 +21,40 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
-xmg:type_stmt(control:and(S1,S2)):--
-	xmg:type_stmt(S1),!,
-	xmg:type_stmt(S2),!.	
+xmg:type_stmt(control:and(S1,S2),Type):--
+	xmg:type_stmt(S1,Type),!,
+	xmg:type_stmt(S2,Type),!.	
 
-xmg:type_stmt(control:or(S1,S2)):--
-	xmg:type_stmt(S1),!,
-	xmg:type_stmt(S2),!.
+xmg:type_stmt(control:or(S1,S2),Type):--
+	xmg:type_stmt(S1,Type),!,
+	xmg:type_stmt(S2,Type),!.
 
-xmg:type_stmt(control:stmt(S1,S2)):--
-	xmg:type_stmt(S1),!,
-	%%xmg:type_stmt(S2),
+%% this should be in dim brick:
+xmg:type_stmt(dim:dim(Dim,S),void):--
+	xmg:send(info,'\n\ndim statement:\n'),
+	xmg:send(info,S),
+	xmg:send(info,Dim),
+
+	xmg:stmt_type(Dim,Type),
+	xmg:send(info,'\nexpected type:\n'),
+	xmg:send(info,Type),
+
+	xmg:type_stmt(S,Type),
+	xmg:send(info,'\ndim typed\n'),
+
+	!.
+
+xmg:type_stmt(control:eq(S1,S2),void):--
+	!.
+
+xmg:type_stmt(control:call(S1,S2),void):--
 	!.	
 
-xmg:type_stmt(control:dimStmt(Dim,S)):--
-	xmg:type_stmt(S),
+xmg:type_stmt(control:dot(S1,S2),void):--
 	!.
 
-xmg:type_stmt(control:eq(S1,S2)):--
-	!.
+xmg:type_stmt(control:X,void):--
+	xmg:send(info,'\n\nDid not type control statement:\n'),
+	xmg:send(info,X),
+	fail.
 
-xmg:type_stmt(control:call(S1,S2)):--
-	!.	
-
-xmg:type_stmt(control:dot(S1,S2)):--
-	!.
