@@ -24,12 +24,19 @@
 :-dynamic(fieldprec/2).
 :-dynamic(feat/2).
 
-:-multifile(xmg:type_stmt/4).
+:-multifile(xmg:type_stmt/6).
 :-multifile(xmg:stmt_type/2).
-:-multifile(xmg:type_expr/4).
+:-multifile(xmg:type_expr/6).
 
 :-edcg:thread(types,edcg:table).
-:-edcg:weave([types],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,xmg:get_var_type/2]).
+:-edcg:thread(global_context,edcg:table).
+:-edcg:thread(imported_context,edcg:table).
+
+
+:-edcg:weave([types,global_context],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2]).
+:-edcg:weave([global_context],[type_classes/1]).
+:-edcg:weave([types,global_context,imported_context],[import_exports/1, import_export/1]).
+
 
 xmg:check_types(T1,T1,Coord):- !.
 xmg:check_types(T1,T2,Coord):- 
@@ -48,7 +55,7 @@ xmg:type_expr(some(E),T):--
 
 xmg:get_var_type(none,_):-- !.
 xmg:get_var_type(some(token(_,id(ID))),Var):-- 
-	types::tget(ID,var(_,Var)),!.
+	types::tget(ID,Var),!.
 xmg:get_var_type(Get,_):--
 	xmg:send(info,'could not get type for var '),
 	xmg:send(info,Get),
@@ -60,6 +67,10 @@ type_metagrammar(MG):-
 	xmg:send(info,MG).
 	
 
+do_type_classes(Classes):--
+	xmg_table:table_new(TableIn),
+	type_classes(Classes) with global_context(TableIn,TableOut).
+
 
 type_classes([]):--
 	!.
@@ -69,12 +80,15 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	xmg_brick_mg_exporter:declared(N,List),
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with types(TableIn,TableOut),
+	unify_imports(I) with types(TableOut,UTableOut),
 	xmg:send(info,'\nTypes table:'),
-	xmg:send(info,TableOut),
-	xmg:type_stmt(S,void) with types(TableOut,TypedTable),
+	xmg:send(info,UTableOut),
+	%%xmg:send(info,S),
+	xmg:type_stmt(S,void) with types(UTableOut,TypedTable),
 	xmg:send(info,'\nTyped table:'),
 	xmg:send(info,TypedTable),
 	xmg:send(info,'\n\n'),
+	global_context::tput(N,TypedTable),
 	type_classes(T),!.
 type_classes([_|T]):--
 	type_classes(T),!.
@@ -88,6 +102,30 @@ put_in_table([const(A,_)-const(N,_)|T]):--
 	%% skolemize ?
 	types::tput(A,N),
 	put_in_table(T),!.
+
+unify_imports(none):-- !.
+unify_imports(some(mg:import(I))):-- 
+	unify_imports(I),!.
+unify_imports([]):-- !.
+unify_imports([I|T]):--
+	unify_import(I),
+	unify_imports(T).
+
+unify_import(mg:iclass(token(_,id(A)),[],none)):--
+	global_context::tget(A,Exports),
+	xmg_brick_mg_exporter:exports(N,List),
+	import_exports(List) with imported_context(Exports,_).
+
+import_exports([]):-- !.
+import_exports([H|T]):--
+	import_export(H),
+	import_exports(T).
+
+import_export(id(A,_)-_):--
+	xmg:send(info,'exporting '),
+	xmg:send(info,A),
+	imported_context::tget(A,Type),
+	types::tget(A,Type),!.
 
 %% type_metagrammar('MetaGrammar'(decls(Principles,Types,Properties,Feats,Fields,FieldPrecs),_,_)):-
 	

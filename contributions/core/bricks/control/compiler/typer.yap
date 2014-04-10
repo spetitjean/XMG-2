@@ -19,7 +19,7 @@
 
 :-module(xmg_brick_control_typer).
 
-:-edcg:using([xmg_brick_mg_typer:types]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context]).
 
 xmg:type_stmt(control:and(S1,S2),Type):--
 	xmg:type_stmt(S1,Type),!,

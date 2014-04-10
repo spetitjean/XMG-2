@@ -19,7 +19,7 @@ type NUM = {s,p}
 
 
 class dummier
-%%import dummy[]
+import dummy[]
 declare ?T ?C ?A
 {
 	%%?C=dummy[];
