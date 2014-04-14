@@ -16,7 +16,11 @@ class DimBrickSpec(BrickSpec):
 
     def __init__(self, name, brick_name, plugs, control_name):
         self.tag = plugs["tag"]
-        self.solver = plugs["solver"]
+        if "solver" in plugs:
+            self.solver = plugs["solver"]
+            del plugs["solver"]
+        else:
+            self.solver = None
         del plugs["tag"]
         del plugs["Stmt"]
         del plugs["Expr"]
@@ -32,4 +36,6 @@ Dim : '<%s>' '{' _Extern '}' {$$=dim:dim(%s,$3)};
 
 %%%%
 """ % (self.tag, self.tag)
+        
+        brick._solver=self.solver
         

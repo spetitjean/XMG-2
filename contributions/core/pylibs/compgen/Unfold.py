@@ -78,10 +78,10 @@ class Unfold(object):
             if i in self.params:
             #if self.prefix in self.params and i in self.params[self.prefix]:
                 extf=self.params[i]
-                print("Using bricks ")
-                for (brick,sym) in extf:
-                    print(brick._prefix)
-                    print(sym)
+                # print("Using bricks ")
+                # for (brick,sym) in extf:
+                #     print(brick._prefix)
+                #     print(sym)
             else:
                 warnings.warn("\n\n No brick set for "+i+" in "+self._brick._file+"\n\n")
                 continue
@@ -362,17 +362,17 @@ class Unfold(object):
             elif r in self._punctuation:
                 R.append(xmg.compgen.Symbol.T(r))
             else:
-                print("\nUndefined symbol :"+r+"\n")
+                # print("\nUndefined symbol :"+r+"\n")
                 if r[0].isupper():
-                    print('non-terminal')
+                    # print('non-terminal')
                     self.add_non_terminal(r)
                     R.append(self.NTs[r])
                 elif r[0] == '_':
-                    print('extern')  
+                    # print('extern')  
                     self.add_extern(r)
                     R.append(self.NTs[r])
                 else:
-                    print('terminal')
+                    # print('terminal')
                     self.add_terminal(r)
                     R.append(self.Ts[r])
         return xmg.compgen.Rule.Rule(self.NTs[Left],tuple(R),action=Action)

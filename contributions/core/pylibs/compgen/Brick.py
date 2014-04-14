@@ -16,6 +16,7 @@ class Brick(object):
         self._prefix = name if prefix is None else prefix
         self._is_dimension = None
         self._config = None
+        self._solver = None
 
     @property
     def lang_def_pathname(self):
@@ -38,7 +39,7 @@ class Brick(object):
             if self._text:
                 import io
                 pathname = io.StringIO(self._text)
-            self._lang = BrickGrammar(self._name, pathname, dim=self.is_dimension, prefix=self._prefix)
+            self._lang = BrickGrammar(self._name, pathname, dim=self.is_dimension, prefix=self._prefix, solver=self._solver)
         return self._lang
         
     @property

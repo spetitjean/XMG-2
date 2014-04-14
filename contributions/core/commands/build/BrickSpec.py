@@ -26,7 +26,7 @@ def determine_axioms(table):
 
 def build_and_connect(table):
     for b in table.values():
-        print(b)
+        #print(b)
         b.create_brick()
     for b in table.values():
         for k,plugs in b.plugs.items():

@@ -17,6 +17,7 @@ class BrickCompiler(object):
         self._dimbricks  = dict()
         self._punctuation= []
         self._keywords   = []
+        self._solvers    = dict()
 
     def set_folder(self,folder):
         self._folder=folder
@@ -43,7 +44,7 @@ class BrickCompiler(object):
         
 
     def add_link(self,language,compiler):
-        print(language)
+        # print(language)
         if not language in self._languages:
             raise Exception("Brick "+language._prefix+" is not part of the compiler, try one of "+self._languages)
         if not compiler in self._compilers:
@@ -64,6 +65,8 @@ class BrickCompiler(object):
         self.add_language(brick.language_brick,dim)
         self.add_compiler(brick.compiler_brick)
         self.add_link(brick.language_brick,brick.compiler_brick)
+        if brick._solver is not None:
+            self._solvers[brick._name]=brick._solver
 
     def init_dims(self):
         if self._dimensions == [] :
@@ -77,6 +80,7 @@ class BrickCompiler(object):
             self._accs.append('xmg_acc:'+dim)
             self._accs_init.append('xmg_acc:'+dim+'('+DIM+')')
             self._dimbricks[dim]=brick._name
+ 
 
     def generate_dimensions(self):
         dimfile=open(self._folder+"/dimensions.yap","w")
@@ -100,6 +104,24 @@ class BrickCompiler(object):
         # dimfile.write(']).\n\n')
         dimfile.close()
         print("Dimensions generated in "+self._folder)
+
+    def generate_solvers(self):
+        dimfile=open(self._folder+"/solvers.yap","w")
+        dimfile.write('%% -*- prolog -*-\n\n')
+        dimfile.write(':-module(xmg_solvers).\n\n')
+        self.init_dims()
+        dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+        dimfile.write('%% Solvers bindings to dimensions\n')
+        dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
+
+        for solver in self._solvers:
+            dimfile.write('xmg:solver(')
+            dimfile.write(solver)
+            dimfile.write(',')
+            dimfile.write(self._solvers[solver])
+            dimfile.write(').\n')
+        dimfile.close()
+        print("Solvers bindings generated in "+self._folder)
 
     def generate_edcg(self):
         dimfile=open(self._folder+"/edcg.yap","w")
@@ -159,14 +181,10 @@ class BrickCompiler(object):
 
     def collect_punctuation(self):
         for lang in self._languages:
-            #print(lang._punctuation)
             for npunct in lang._punctuation:
                 if npunct not in self._punctuation and npunct > '':
-                    #print(npunct)
                     self._punctuation.append(npunct)
-        #print(self._punctuation)
         self._punctuation.sort(reverse=True)
-        #print(self._punctuation)
 
     def collect_keywords(self):
         for lang in self._languages:
@@ -317,6 +335,7 @@ class BrickCompiler(object):
             os.makedirs(directory)            
         if directory is not None:
             self.generate_dimensions()
+            self.generate_solvers()
             self.generate_tokenize_punctuation()
             self.generate_tokenize_keywords()
             #self.generate_tokenize_dims()
