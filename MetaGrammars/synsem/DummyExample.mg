@@ -19,15 +19,15 @@ type NUM = {s,p}
 
 
 class dummier
-import dummy[]
+%%import dummy[]
 declare ?T ?C ?A
 {
-	%%?C=dummy[];
+	?C=dummy[];
 	<syn>{
-		node ?T (color=black) [cat=whatever]
+		node ?T (color=black) %[cat=whatever]
 		}*=[arg2=?A]
-		%%;
-	%%?T=?C.X
+		;
+	?T=?C.X
 }
 
 class dummy

@@ -31,27 +31,32 @@ xmg:type_stmt(control:or(S1,S2),Type):--
 
 %% this should be in dim brick:
 xmg:type_stmt(dim:dim(Dim,S),void):--
-	xmg:send(info,'\n\ndim statement:\n'),
-	xmg:send(info,S),
-	xmg:send(info,Dim),
+	%% xmg:send(info,'\n\ndim statement:\n'),
+	%% xmg:send(info,S),
+	%% xmg:send(info,Dim),
 
 	xmg:stmt_type(Dim,Type),
-	xmg:send(info,'\nexpected type:\n'),
-	xmg:send(info,Type),
+	%% xmg:send(info,'\nexpected type:\n'),
+	%% xmg:send(info,Type),
 
 	xmg:type_stmt(S,Type),
-	xmg:send(info,'\ndim typed\n'),
+	%% xmg:send(info,'\ndim typed\n'),
 
 	!.
 
 xmg:type_stmt(control:eq(S1,S2),void):--
+	xmg:type_expr(S1,Type),
+	xmg:type_expr(S2,Type2),
+	Type=Type2,
 	!.
 
 xmg:type_stmt(control:call(S1,S2),void):--
+	xmg:type_expr(control:call(S1,S2),_),
 	!.	
 
-xmg:type_stmt(control:dot(S1,S2),void):--
-	!.
+xmg:type_expr(control:call(token(_,id(S1)),S2),Type):--
+	types::tget(S1,Type),!.
+
 
 xmg:type_stmt(control:X,void):--
 	xmg:send(info,'\n\nDid not type control statement:\n'),

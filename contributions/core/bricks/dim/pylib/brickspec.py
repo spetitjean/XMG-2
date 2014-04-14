@@ -16,6 +16,7 @@ class DimBrickSpec(BrickSpec):
 
     def __init__(self, name, brick_name, plugs, control_name):
         self.tag = plugs["tag"]
+        self.solver = plugs["solver"]
         del plugs["tag"]
         del plugs["Stmt"]
         del plugs["Expr"]

@@ -35,10 +35,12 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 
 	%%xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
 
-	xmg:send(info,' posting plugins '),
+	xmg:get_plugins(TreePlugins,_),
+	xmg:send(info,TreePlugins),
 	
 	%%post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
-	post_plugins([colors,rank,unicity],Space,NodeList,IntVars,Plugins),
+	xmg:send(info,TreePlugins),
+	post_plugins(TreePlugins,Space,NodeList,IntVars,Plugins),
 
 	xmg_brick_mg_compiler:send(info,' doing nposts '),
 

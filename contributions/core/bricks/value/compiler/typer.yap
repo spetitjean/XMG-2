@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2013  Simon Petitjean
+%% Copyright (C) 2012  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,19 +17,13 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_avm_typer).
+:-module(xmg_brick_value_typer).
 
-:-edcg:using([xmg_brick_mg_typer:types]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context]).
 
-xmg:stmt_type(iface,avm).
 
-xmg:type_expr(avm:avm(Coord,Feats),Type):--
+xmg:type_expr(value:var(token(_,id(ID))),Type):--
+	types::tget(ID,Type),
 	!.
-	
-xmg:type_stmt(avm:avm(Coord,Feats),Type):--
-	xmg:type_expr(avm:avm(Coord,Feats),Type),!.
 
-xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
-	types::tget(AVM,CAVM),
-	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
-	!.
+
