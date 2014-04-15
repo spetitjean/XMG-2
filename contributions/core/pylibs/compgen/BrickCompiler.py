@@ -66,8 +66,8 @@ class BrickCompiler(object):
         self.add_compiler(brick.compiler_brick)
         self.add_link(brick.language_brick,brick.compiler_brick)
         if brick._solver is not None:
-            self._solvers[brick._name]=brick._solver
-
+            self._solvers[brick._prefix]=brick._solver
+            
     def init_dims(self):
         if self._dimensions == [] :
             raise Exception("No dimensions")
@@ -280,6 +280,8 @@ class BrickCompiler(object):
         #     compfile.write('module_def(\''+comp._prefix+'\',\''+self._links[comp]+'\').\n')
         for (comp,brick) in self._links:
             compfile.write('module_def(\''+comp._prefix+'\',\''+brick+'/loader\').\n')
+        for solver in self._solvers:
+            compfile.write('module_def(\''+self._solvers[solver]+'\',\'xmg/brick/'+self._solvers[solver]+'/compiler/loader\').\n')  
         compfile.close()
         print("Part of modules generated in "+self._folder)
 
