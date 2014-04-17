@@ -39,7 +39,7 @@ class Brick(object):
             if self._text:
                 import io
                 pathname = io.StringIO(self._text)
-            self._lang = BrickGrammar(self._name, pathname, dim=self.is_dimension, prefix=self._prefix, solver=self._solver)
+            self._lang = BrickGrammar(self._name, pathname, dim=self.is_dimension, prefix=self._prefix)
         return self._lang
         
     @property

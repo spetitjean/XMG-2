@@ -7,7 +7,7 @@ import xmg.compgen.Grammar
 
 class BrickGrammar(object):
 
-    def __init__(self, name, file, dim=False, prefix=None, solver=None):
+    def __init__(self, name, file, dim=False, prefix=None):
         self._name = name
         self._file = file
         self._prefix=prefix
@@ -20,7 +20,6 @@ class BrickGrammar(object):
         self._keywords=self._grammar.keywords
         self._unfolded=False
         self._unfold=xmg.compgen.Unfold.Unfold(self)
-        self._solver=solver
 
     def connect(self, ext, brick, sym):
         if not ext in self._connections:
