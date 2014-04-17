@@ -109,7 +109,6 @@ class BrickCompiler(object):
         dimfile=open(self._folder+"/solvers.yap","w")
         dimfile.write('%% -*- prolog -*-\n\n')
         dimfile.write(':-module(xmg_solvers).\n\n')
-        self.init_dims()
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         dimfile.write('%% Solvers bindings to dimensions\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')

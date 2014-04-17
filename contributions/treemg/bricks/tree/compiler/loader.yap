@@ -18,21 +18,24 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_syn).
+:-module(xmg_loader_tree).
 
-:-	use_module('xmg/brick/syn/compiler/edcg').
+	%% this should be done optionally
+:-	use_module('xmg/brick/tree/compiler/preparer').
+:-	use_module('xmg/brick/tree/compiler/solver').
+:-	use_module('xmg/brick/tree/compiler/extractor').
 
-:-	use_module('xmg/brick/syn/compiler/compiler').
-:-	use_module('xmg/brick/syn/compiler/typer').
-:-	use_module('xmg/brick/syn/compiler/unfolder').
-:-	use_module('xmg/brick/syn/compiler/generator').
+:-	use_module('xmg/brick/unicity/compiler/preparer').
+:-	use_module('xmg/brick/unicity/compiler/solver').
 
-:-	use_module('xmg/brick/syn/engine').
-:-	use_module('xmg/brick/syn/most').
-:-	use_module('xmg/brick/syn/nodename').
-:-	use_module('xmg/brick/syn/polarity').
+:-	use_module('xmg/brick/colors/compiler/preparer').
+:-	use_module('xmg/brick/colors/compiler/solver').
 
-:-	use_module('xmg/brick/syn/compiler/convert').
+:-	use_module('xmg/brick/rank/compiler/preparer').
+:-	use_module('xmg/brick/rank/compiler/solver').
 
+:-	use_module('xmg/brick/tag/compiler/preparer').
+:-	use_module('xmg/brick/tag/compiler/solver').
 
+:-	use_module('xmg/brick/tree/compiler/convert').
 
