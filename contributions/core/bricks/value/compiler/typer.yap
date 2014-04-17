@@ -25,5 +25,37 @@
 xmg:type_expr(value:var(token(_,id(ID))),Type):--
 	types::tget(ID,Type),
 	!.
+xmg:type_expr(token(_,id(ID)),Type):--
+	types::tget(ID,Type),
+	!.
+
+xmg:type_expr(token(_,bool(_)),bool):--
+	!.
+xmg:type_expr(token(_,int(_)),int):--
+	!.
+xmg:type_expr(token(_,string(_)),string):--
+	!.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% typing a constant
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+xmg:type_expr(token(_,id(ID)),Type):--
+	xmg:type(Type,GType),
+	type_const(ID,GType),
+	!.
+
+%% not only for constants
+type_const(_,A):- 
+	var(A),!.
+type_const(Const,enum(Enum)):- 
+	!,
+	type_enum_const(Const,Enum),!.
+
+%% not for constants at all
+type_const(Const,struct(Obl,Opt,More)):- 
+	type_stuct_const(Const,Obl,Opt,More),!.
 
 
+
+type_enum_const(Const,List):-
+	lists:member(Const,List),!.

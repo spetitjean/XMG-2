@@ -8,6 +8,17 @@ type CAT = {v,n,s,cl}
 type AGR = {m,f}
 type NUM = {s,p}
 
+type LABEL !
+
+feature cat : CAT
+feature agr : AGR
+feature num : NUM
+feature gen : AGR
+
+feature extracted : bool
+feature color : COLOR
+feature arg1 : LABEL
+feature arg2 : LABEL
 
 %%feature cat : CAT
 

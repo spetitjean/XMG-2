@@ -19,6 +19,7 @@
 
 
 :-module(xmg_loader_adisj).
+:- use_module('../../../brick/adisj/compiler/typer').
 :- use_module('../../../brick/adisj/compiler/unfolder').
 :- use_module('../../../brick/adisj/compiler/generator').
 :- use_module('../../../brick/adisj/compiler/convert').

@@ -19,11 +19,34 @@
 
 :-module(xmg_brick_avm_typer).
 
-:-edcg:using([xmg_brick_mg_typer:types]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context]).
+
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context],[value_type/2]).
 
 xmg:stmt_type(iface,avm).
 
 xmg:type_expr(avm:avm(Coord,Feats),Type):--
+	xmg:type_expr(Feats,Type),
+	!.
+
+xmg:type_expr([],_):--!.
+xmg:type_expr([H|T],Type):--
+	xmg:type_expr(H,Type),
+	xmg:type_expr(T,Type),!.
+
+xmg:type_expr(avm:feat(Attr,Value),Type):--
+	xmg:send(info,'\n\nTyping feat: '),
+	xmg:send(info,Attr),
+	xmg:send(info,'\n'),
+	xmg:send(info,Value),
+	feat_type(Attr,TypeAttr),
+	type_def(TypeAttr,TypeDef),
+	(
+	    var(TypeDef)->
+	    true
+	;
+	    value_type(Value,TypeAttr)
+	),
 	!.
 	
 xmg:type_stmt(avm:avm(Coord,Feats),Type):--
@@ -32,4 +55,27 @@ xmg:type_stmt(avm:avm(Coord,Feats),Type):--
 xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 	types::tget(AVM,CAVM),
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
+	!.
+
+feat_type(token(_,id(Feat)),Type):-
+	xmg:feat(Feat,Type),
+	!.
+feat_type(Feat,Type):-
+	xmg:send(info,'\n\nError! This feat has no type: '),
+	xmg:send(info,Feat),
+	fail,
+	!.
+
+type_def(TypeAttr,TypeDef):-
+	xmg:type(TypeAttr,TypeDef),
+	!.
+type_def(TypeAttr,_):-
+	xmg:send(info,'\n\nError! Type '),
+	xmg:send(info,TypeAttr),
+	xmg:send(info,' is undefined.'),
+	fail,
+	!.
+
+value_type(Value,Type):--
+	xmg:type_expr(Value,Type),
 	!.

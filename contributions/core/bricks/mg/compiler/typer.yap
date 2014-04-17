@@ -18,11 +18,11 @@
 %% ========================================================================
 
 :-module(xmg_brick_mg_typer).
-:-dynamic(type/2).
-:-dynamic(property/2).
+:-dynamic(xmg:type/2).
+:-dynamic(xmg:property/2).
 :-dynamic(field/2).
 :-dynamic(fieldprec/2).
-:-dynamic(feat/2).
+:-dynamic(xmg:feat/2).
 
 :-multifile(xmg:type_stmt/6).
 :-multifile(xmg:stmt_type/2).
@@ -147,19 +147,14 @@ import_export(id(A,_)-_,CAVM):--
 	xmg_brick_avm_avm:dot(CAVM,A,Type),
 	types::tget(A,Type),!.
 
-%% type_metagrammar('MetaGrammar'(decls(Principles,Types,Properties,Feats,Fields,FieldPrecs),_,_)):-
-	
-%% 	%%xmg_brick_mg_compiler:send(info,'types : '),
-%% 	%%xmg_brick_mg_compiler:send(info,Types),
-%% 	get_types(Types),!,
-%% 	type_properties(Properties),!,
-%% 	type_feats(Feats),!,
-%% 	assert_field_precs(FieldPrecs),
-%% 	prepare_fields(Fields,PFields),
-%% 	order_fields(PFields,OFields),
-%% 	retractall(fieldprec(_,_)),
-%% 	type_fields(OFields,1),
-%% 	xmg_brick_mg_compiler:send(info,' typed').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Type Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+xmg:type(bool,bool).
+xmg:type(int,int).
+xmg:type(string,string).
 
 type_mg_decls(Decls):-
 	xmg:send(info,Decls),
@@ -229,12 +224,12 @@ get_types([H|T]):-
 	get_types(T).
 
 get_type(type(Type,enum(List))):-
-	assert_type(type(Type,List)).
+	assert_type(type(Type,enum(List))).
 get_type(type(Type,range(Inf,Sup))):-
 	get_range(Inf,Sup,Range),
-	assert_type(type(Type,Range)).
+	assert_type(type(Type,enum(Range))).
 get_type(type(Type,label)):-
-	assert_type(type(Type,label)),!.
+	assert_type(type(Type,_)),!.
 get_type(type(Type,struct(Obl,Opt,More))):-
 	get_feat_types(Obl),
 	get_feat_types(Opt),
@@ -251,30 +246,133 @@ get_feat_type(F-T):-
 	assert_feat(feat(F,T)),!.
 
 assert_type(type(Id,Type)):-
-	type(Id,Type),!.
+	xmg:type(Id,Type),!.
 assert_type(type(Id,Type)):-
-	type(Id,T),not(T=Type),!,
+	xmg:type(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of type '),
 	xmg:send(info,Id),
 	false,!.
 assert_type(type(Id,Type)):-
-	not(type(Id,_)),
+	not(xmg:type(Id,_)),
 	%%xmg:send(info,'\n\nassert type\n '),
 	%%xmg:send(info,Id),
 	asserta(xmg:type(Id,Type)),!.
 
+get_range(Sup,Sup,[]):-!.
+get_range(Inf,Sup,[int(Inf)|T]):-
+	Inf1 is Inf + 1,
+	get_range(Inf1,Sup,T),!.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Feats Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 assert_feat(feat(Id,Type)):-
-	type(Id,Type),!.
+	xmg:type(Id,Type),!.
 assert_feat(feat(Id,Type)):-
-	feat(Id,T),not(T=Type),!,
+	xmg:feat(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of feature '),
 	xmg:send(info,Id),
 	false,!.
 assert_feat(feat(Id,Type)):-
-	not(feat(Id,_)),
+	not(xmg:feat(Id,_)),
 	%%xmg:send(info,'\n\nassert feat \n '),
 	%%xmg:send(info,Id),
 	asserta(xmg:feat(Id,Type)),!.
+
+type_feats([]).
+type_feats([H|T]):-
+	type_feat(H),
+	type_feats(T).
+
+type_feat(feat(G,T)):-
+	assert_feat(feat(G,T)).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Properties Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+type_properties([]).
+type_properties([H|T]):-
+	type_property(H),
+	type_properties(T).
+
+type_property(property(G,T,_)):-
+	asserta(property(G,T)).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Principles Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+type_principles([]).
+type_principles([H|T]):-
+	type_principle(H),
+	type_principles(T).
+
+type_principle(principle(Principle,Args,Dims)):-	
+	asserta(xmg:principle(Principle,Args,Dims)).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Fields Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+assert_field_precs([]):- !.
+assert_field_precs([fieldprec(id(F1,_),id(F2,_))|T]):- 
+	asserta(fieldprec(F1,F2)),
+	assert_field_precs(T),!.
+
+prepare_fields([],[]):- !.
+prepare_fields([field(id(ID,_))|T],[ID|PT]):-
+	prepare_fields(T,PT),!.
+prepare_fields([U|T],[ID|PT]):-
+	xmg_brick_mg_compiler:send(info,'UNEXPECTED '),
+	xmg_brick_mg_compiler:send(info,U),false,!.
+
+order_fields([],[]):-!.
+order_fields(Fields,OFields):-
+	find_first(Fields,First),
+	order_fields(Fields,First,OFields),!.
+
+order_fields([Field],_,[Field]):- !.
+order_fields(Fields,First,[First|OFields]):-
+	lists:delete(Fields,First,NFields),
+	fieldprec(First,Next),!,
+	order_fields(NFields,Next,OFields),!.
+order_fields(Fields,First,[First|OFields]):- !,
+	xmg_brick_mg_compiler:send(info,' Could not order fields, nothing seems to follow '),
+	xmg_brick_mg_compiler:send(info,First),
+	false,!.
+
+
+
+find_first([],_):- !,
+	xmg_brick_mg_compiler:send(info,' Could not find a first field, there might be a cycle'),false,!.
+find_first([F1|T],F2):-
+	fieldprec(_,F1),!,
+	find_first(T,F2),!.
+find_first([F1|T],F1):- !.
+
+
+type_fields([],_).
+type_fields([H|T],N):-
+	type_field(H,N),
+	M is N+1,
+	type_fields(T,M).
+
+	
+type_field(F,N):-
+	asserta(field(F,N)).
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hierarchies Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 get_hierarchies([]):-!.
 get_hierarchies([H|T]):-
@@ -338,79 +436,9 @@ get_fconstraint(fconstraint(CT,Left,Right)):-
 	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
 
 
-type_feats([]).
-type_feats([H|T]):-
-	type_feat(H),
-	type_feats(T).
-
-type_feat(feat(G,T)):-
-	assert_feat(feat(G,T)).
-
-type_properties([]).
-type_properties([H|T]):-
-	type_property(H),
-	type_properties(T).
-
-type_property(property(G,T,_)):-
-	asserta(property(G,T)).
-
-type_principles([]).
-type_principles([H|T]):-
-	type_principle(H),
-	type_principles(T).
-
-type_principle(principle(Principle,Args,Dims)):-	
-	asserta(xmg:principle(Principle,Args,Dims)).
-
-assert_field_precs([]):- !.
-assert_field_precs([fieldprec(id(F1,_),id(F2,_))|T]):- 
-	asserta(fieldprec(F1,F2)),
-	assert_field_precs(T),!.
-
-prepare_fields([],[]):- !.
-prepare_fields([field(id(ID,_))|T],[ID|PT]):-
-	prepare_fields(T,PT),!.
-prepare_fields([U|T],[ID|PT]):-
-	xmg_brick_mg_compiler:send(info,'UNEXPECTED '),
-	xmg_brick_mg_compiler:send(info,U),false,!.
-
-order_fields([],[]):-!.
-order_fields(Fields,OFields):-
-	find_first(Fields,First),
-	order_fields(Fields,First,OFields),!.
-
-order_fields([Field],_,[Field]):- !.
-order_fields(Fields,First,[First|OFields]):-
-	lists:delete(Fields,First,NFields),
-	fieldprec(First,Next),!,
-	order_fields(NFields,Next,OFields),!.
-order_fields(Fields,First,[First|OFields]):- !,
-	xmg_brick_mg_compiler:send(info,' Could not order fields, nothing seems to follow '),
-	xmg_brick_mg_compiler:send(info,First),
-	false,!.
 
 
 
-find_first([],_):- !,
-	xmg_brick_mg_compiler:send(info,' Could not find a first field, there might be a cycle'),false,!.
-find_first([F1|T],F2):-
-	fieldprec(_,F1),!,
-	find_first(T,F2),!.
-find_first([F1|T],F1):- !.
 
 
-type_fields([],_).
-type_fields([H|T],N):-
-	type_field(H,N),
-	M is N+1,
-	type_fields(T,M).
-
-	
-type_field(F,N):-
-	asserta(field(F,N)).
-
-get_range(Sup,Sup,[]):-!.
-get_range(Inf,Sup,[int(Inf)|T]):-
-	Inf1 is Inf + 1,
-	get_range(Inf1,Sup,T),!.
 
