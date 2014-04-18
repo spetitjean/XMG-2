@@ -23,11 +23,12 @@ Type : 'type' id '=' TypeDef {$$=decls:type($2,$4)}
 
 TypeDef : '{' (Val // ',')+ '}' {$$=decls:enum($2)} 
 	| '[' int '.' '.' int ']' {$$=decls:range($2,$5)} 
-	| '[' (Struct // ',')* (FacStruct)? ('...')? ']' {$$=decls:struct($2,$3,$4)};
+	| TypeStruct {$$=$1};
 
-FacStruct : '|' (Struct // ',')+ {$$=$2};
+TypeStruct : '[' (Struct // ',')* ']' {$$=decls:struct($2)};
 
-Struct : id ':' id {$$=decls:structpair($1,$3)};
+Struct : id ':' id {$$=decls:structpair($1,$3)}
+       | id ':' TypeStruct {$$=decls:structpair($1,$3)} ;
 
 
 Property : 'property' id ':' id MaybeAbbrev {$$=decls:property($2,$4,$5)};

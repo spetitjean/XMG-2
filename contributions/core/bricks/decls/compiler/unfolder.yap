@@ -51,10 +51,8 @@ xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 
 unfold_typedef(decls:enum(Enum),enum(UEnum)):-
 	unfold_enum(Enum,UEnum),!.
-unfold_typedef(decls:struct(Obl,Opt,More),struct(UObl,UOpt,UMore)):-
-	unfold_pairs(Obl,UObl),
-	unfold_maybe_pairs(Opt,UOpt),
-	unfold_more(More,UMore),
+unfold_typedef(decls:struct(Feats),struct(UFeats)):-
+	unfold_pairs(Feats,UFeats),
 	!.
 unfold_typedef(decls:range(token(_,int(I1)),token(_,int(I2))),range(I1,I2)):-
 	!.
@@ -94,6 +92,8 @@ unfold_pairs([Pair|T],[UPair|T1]):-
 	unfold_pair(Pair,UPair),
 	unfold_pairs(T,T1),!.
 unfold_pair(decls:structpair(token(_,id(P1)),token(_,id(P2))),P1-P2):- !.
+unfold_pair(decls:structpair(token(_,id(P1)),decls:struct(Pairs)),P1-P2):-
+	unfold_pairs(Pairs,P2),!.
 
 unfold_maybe_pairs(none,[]):- !.
 unfold_maybe_pairs(some(List),UList):-

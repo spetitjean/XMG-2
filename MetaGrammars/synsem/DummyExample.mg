@@ -8,6 +8,8 @@ type CAT = {v,n,s,cl}
 type AGR = {m,f}
 type NUM = {s,p}
 
+type FS = [this : CAT, that : [these: AGR, those : NUM]]
+
 type LABEL !
 
 feature cat : CAT

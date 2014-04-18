@@ -29,6 +29,7 @@
 :-multifile(xmg:type_expr/6).
 
 :-edcg:thread(types,edcg:table).
+:-edcg:thread(type_decls,edcg:table).
 :-edcg:thread(global_context,edcg:table).
 :-edcg:thread(exports,edcg:table).
 
@@ -36,7 +37,7 @@
 :-edcg:weave([types,global_context],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
 :-edcg:weave([global_context],[type_classes/1]).
 :-edcg:weave([types,exports],[make_exports_global/1]).
-
+:-edcg:weave([type_decls],[type_decls/1, type_decl/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1]).
 
 xmg:check_types(T1,T1,Coord):- !.
 xmg:check_types(T1,T2,Coord):- 
@@ -156,12 +157,16 @@ xmg:type(bool,bool).
 xmg:type(int,int).
 xmg:type(string,string).
 
-type_mg_decls(Decls):-
+type_mg_decls(Decls):--
 	xmg:send(info,Decls),
 	G=[gather(field,fieldprec,fields)],
 	gather_decls(Decls,G,GDecls),!,
 	xmg:send(info,' decls gathered '),
-	type_decls(GDecls),!.
+	xmg_table:table_new(TableNew),
+	type_decls(GDecls) with type_decls(TableNew,Type_Decls),
+	xmg:send(info,'\n\nType Decls:\n'),
+	xmg:send(info,Type_Decls),
+	!.
 
 gather_decls(Decls,[],Decls):- !.
 gather_decls(Decls,[HG|TG],GDecls):-
@@ -180,30 +185,30 @@ gather_one(Decls,gather(One,Two,New),[New-NDecl|Decls2]):-
 gather_one(Decls,_,Decls):-!.
 
 
-type_decls([]):- !.
-type_decls([H|T]):-
+type_decls([]):-- !.
+type_decls([H|T]):--
 	%%xmg:send(info,H),
 	type_decl(H),!,
 	type_decls(T),!.
 
 %% Warning: types have to be done before properties and feats
 %% Warning: fieldprecs must be processed before fields
-type_decl(type-Decls):-
+type_decl(type-Decls):--
 	get_types(Decls),!.
-type_decl(hierarchy-Decls):-
+type_decl(hierarchy-Decls):--
 	get_hierarchies(Decls),!.
-type_decl(ftype-Decls):-
+type_decl(ftype-Decls):--
 	get_ftypes(Decls),!.
-type_decl(fconstraint-Decls):-
+type_decl(fconstraint-Decls):--
 	get_fconstraints(Decls),!.
-type_decl(property-Decls):-
+type_decl(property-Decls):--
 	type_properties(Decls),!.
-type_decl(feat-Decls):-
+type_decl(feat-Decls):--
 	type_feats(Decls),!.
-type_decl(principle-Principle):-
+type_decl(principle-Principle):--
 	type_principles(Principle),
 	!.
-type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):-
+type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):--
 	assert_field_precs(FieldPrecs),
 	xmg_brick_mg_compiler:send(info,' fields orders asserted\n '),
 	prepare_fields(Fields,PFields),
@@ -213,50 +218,54 @@ type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):-
 	xmg_brick_mg_compiler:send(info,OFields),
 	type_fields(OFields,1),
 	!.
-type_decl(Type-Decls):-
+type_decl(Type-Decls):--
 	xmg_brick_mg_compiler:send(info,'  unknown decl type: '),
 	xmg_brick_mg_compiler:send(info,Type),
 	false,!.
 
-get_types([]).
-get_types([H|T]):-
+get_types([]):-- !.
+get_types([H|T]):--
 	get_type(H),
 	get_types(T).
 
-get_type(type(Type,enum(List))):-
+get_type(type(Type,enum(List))):--
 	assert_type(type(Type,enum(List))).
-get_type(type(Type,range(Inf,Sup))):-
+get_type(type(Type,range(Inf,Sup))):--
 	get_range(Inf,Sup,Range),
 	assert_type(type(Type,enum(Range))).
-get_type(type(Type,label)):-
+get_type(type(Type,label)):--
 	assert_type(type(Type,_)),!.
-get_type(type(Type,struct(Obl,Opt,More))):-
-	get_feat_types(Obl),
-	get_feat_types(Opt),
+%% get_type(type(Type,struct(Obl,Opt,More))):--
+%% 	get_feat_types(Obl),
+%% 	get_feat_types(Opt),
+%% 	assert_type(type(Type,struct(Obl,Opt,More))),!.
+get_type(type(Type,struct(Feats))):--
+	get_feats_types(Feats,FeatsTypes),
+	xmg_brick_avm_avm:avm(AVM,FeatsTypes),
 	assert_type(type(Type,struct(Obl,Opt,More))),!.
-%% get_type(A):-
-%% 	xmg_brick_mg_compiler:send(info,A),xmg_brick_mg_compiler:send_nl(info).
 
-get_feat_types([]):- !.
-get_feat_types([H|T]):-
-	get_feat_type(H),
-	get_feat_types(T),!.
 
-get_feat_type(F-T):-
+get_feats_types([],[]):-- !.
+get_feats_types([H|T],[H1|T1]):--
+	get_feat_type(H,H1),
+	get_feats_types(T,T1),!.
+
+get_feat_type(F-T,F-T):--
 	assert_feat(feat(F,T)),!.
 
-assert_type(type(Id,Type)):-
+assert_type(type(Id,Type)):--
 	xmg:type(Id,Type),!.
-assert_type(type(Id,Type)):-
+assert_type(type(Id,Type)):--
 	xmg:type(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of type '),
 	xmg:send(info,Id),
 	false,!.
-assert_type(type(Id,Type)):-
+assert_type(type(Id,Type)):--
 	not(xmg:type(Id,_)),
 	%%xmg:send(info,'\n\nassert type\n '),
 	%%xmg:send(info,Id),
-	asserta(xmg:type(Id,Type)),!.
+	asserta(xmg:type(Id,Type)),
+	type_decls::tput(Id,Type),!.
 
 get_range(Sup,Sup,[]):-!.
 get_range(Inf,Sup,[int(Inf)|T]):-
@@ -267,25 +276,25 @@ get_range(Inf,Sup,[int(Inf)|T]):-
 %% Feats Declarations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-assert_feat(feat(Id,Type)):-
-	xmg:type(Id,Type),!.
-assert_feat(feat(Id,Type)):-
+assert_feat(feat(Id,Type)):--
+	xmg:feat(Id,Type),!.
+assert_feat(feat(Id,Type)):--
 	xmg:feat(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of feature '),
 	xmg:send(info,Id),
 	false,!.
-assert_feat(feat(Id,Type)):-
+assert_feat(feat(Id,Type)):--
 	not(xmg:feat(Id,_)),
 	%%xmg:send(info,'\n\nassert feat \n '),
 	%%xmg:send(info,Id),
 	asserta(xmg:feat(Id,Type)),!.
 
-type_feats([]).
-type_feats([H|T]):-
+type_feats([]):--!.
+type_feats([H|T]):--
 	type_feat(H),
 	type_feats(T).
 
-type_feat(feat(G,T)):-
+type_feat(feat(G,T)):--
 	assert_feat(feat(G,T)).
 
 
