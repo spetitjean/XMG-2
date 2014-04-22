@@ -13,7 +13,7 @@ type FS = [this : CAT, that : [these: AGR, those : NUM]]
 type LABEL !
 
 feature cat : CAT
-feature agr : AGR
+feature agr : LABEL
 feature num : NUM
 feature gen : AGR
 

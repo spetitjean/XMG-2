@@ -234,7 +234,7 @@ get_type(type(Type,range(Inf,Sup))):--
 	get_range(Inf,Sup,Range),
 	assert_type(type(Type,enum(Range))).
 get_type(type(Type,label)):--
-	assert_type(type(Type,_)),!.
+	assert_type(type(Type,label)),!.
 %% get_type(type(Type,struct(Obl,Opt,More))):--
 %% 	get_feat_types(Obl),
 %% 	get_feat_types(Opt),

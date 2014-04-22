@@ -23,9 +23,16 @@
 
 :-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context],[value_type/2]).
 
-xmg:stmt_type(iface,avm).
+xmg:stmt_type(iface,AVM):-
+	xmg_brick_avm_avm:avm(AVM,[]).
 
 xmg:type_expr(avm:avm(Coord,Feats),Type):--
+	(
+	    var(Type)->
+	      xmg_brick_avm_avm:avm(Type,[])
+	      ;
+ 	      true
+	),
 	xmg:type_expr(Feats,Type),
 	!.
 
@@ -39,15 +46,40 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	xmg:send(info,Attr),
 	xmg:send(info,'\n'),
 	xmg:send(info,Value),
-	feat_type(Attr,TypeAttr),
+	xmg:send(info,'\nwith type '),
+	xmg:send(info,Type),
+	feat_type(Attr,UAttr,TypeAttr),
 	type_def(TypeAttr,TypeDef),
 	(
-	    var(TypeDef)->
-	    true
+	    TypeDef=label ->
+	    (
+		value_type(Value,NewType),
+	        ITypeAttr=NewType
+	    )
 	;
-	    value_type(Value,TypeAttr)
+	    (
+		value_type(Value,TypeAttr),
+	        ITypeAttr=TypeAttr
+	    )
 	),
+	extend_type(Type,UAttr,ITypeAttr),
 	!.
+xmg:type_expr(avm:feat(Attr,Value),Type):--
+	throw(xmg(type_error(incompatible_types(Attr,Value,C)))).
+
+
+extend_type(Type,UAttr,TypeAttr):-
+	xmg_brick_avm_avm:dot(Type,UAttr,TypeAttr),!.
+extend_type(Type,UAttr,TypeAttr):-
+	xmg:send(info,'\n\nAVM Type Error! Could not extend type:\n'),
+	xmg_brick_avm_avm:avm(Type,LType),
+	xmg:send(info,LType),
+	xmg:send(info,'\n'),
+	xmg:send(info,UAttr),
+	xmg:send(info,'\n'),	
+	xmg:send(info,TypeAttr),
+	fail.
+
 	
 xmg:type_stmt(avm:avm(Coord,Feats),Type):--
 	xmg:type_expr(avm:avm(Coord,Feats),Type),!.
@@ -57,14 +89,11 @@ xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
 	!.
 
-feat_type(token(_,id(Feat)),Type):-
+feat_type(token(_,id(Feat)),Feat,Type):-
 	xmg:feat(Feat,Type),
 	!.
-feat_type(Feat,Type):-
-	xmg:send(info,'\n\nError! This feat has no type: '),
-	xmg:send(info,Feat),
-	fail,
-	!.
+feat_type(token(C,ID),Feat,Type):-
+	throw(xmg(type_error(feature_not_declared(ID,C)))).
 
 type_def(TypeAttr,TypeDef):-
 	xmg:type(TypeAttr,TypeDef),

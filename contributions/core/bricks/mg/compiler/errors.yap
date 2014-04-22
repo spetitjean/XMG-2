@@ -111,13 +111,15 @@ xmg_message(unfolder_error(no_class_value),Msg):- !,
 	Msg=error(unfolder,[hint('no class set to be valued',''),coord('',0,0)]).
 %% errors in type checking
 xmg_message(type_error(property_not_declared(X,C)),Msg):- !,
-	Msg=error(unfolder,[hint('property not declared',X),C]).
+	Msg=error(types,[hint('property not declared',X),C]).
 xmg_message(type_error(feature_not_declared(X,C)),Msg):- !,
-	Msg=error(unfolder,[hint('feature not declared',X),C]).
+	Msg=error(types,[hint('feature not declared',X),C]).
 xmg_message(type_error(value_not_in_range(X,C)),Msg):- !,
-	Msg=error(unfolder,[hint('value not in range',X),C]).
+	Msg=error(types,[hint('value not in range',X),C]).
 xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,
-	Msg=error(unfolder,[hint('variable not declared',X),C]).
+	Msg=error(types,[hint('variable not declared',X),C]).
+xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
+	Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
 
 %% Modules errors
 xmg_message(compiler_error(unknown_module(Module)), Msg):- !,

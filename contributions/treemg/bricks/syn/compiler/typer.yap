@@ -25,10 +25,16 @@
 %% dans l'environnement, on a toutes les variables de type contraintes
 
 %% ici, quelque part, il faut dire que le type des expressions de cette brique est syn:tree(FType,PType)
-xmg:stmt_type(syn,syn:tree(FType,PType)).
+xmg:stmt_type(syn,syn:tree(FType,PType)):-
+	xmg_brick_avm_avm:avm(FType,[]),
+	xmg_brick_avm_avm:avm(PType,[]).
 
 xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
 	xmg:type_expr(Feats,FType),
+
+	xmg:send(info,'\nFeats type is now '),
+	xmg_brick_avm_avm:avm(FType,LFType),
+	xmg:send(info,LFType),
 
 	xmg:type_expr(Props,PType),
 
