@@ -24,9 +24,9 @@
 :-dynamic(fieldprec/2).
 :-dynamic(xmg:feat/2).
 
-:-multifile(xmg:type_stmt/8).
+:-multifile(xmg:type_stmt/10).
 :-multifile(xmg:stmt_type/2).
-:-multifile(xmg:type_expr/8).
+:-multifile(xmg:type_expr/10).
 
 :-edcg:thread(types,edcg:table).
 :-edcg:thread(type_decls,edcg:table).
@@ -35,10 +35,10 @@
 :-edcg:thread(dim_types,edcg:table).
 
 
-:-edcg:weave([types,global_context,dim_types],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
-:-edcg:weave([global_context,dim_types],[type_classes/1]).
+:-edcg:weave([types,global_context,dim_types,type_decls],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
+:-edcg:weave([global_context,dim_types,type_decls],[type_classes/1]).
 :-edcg:weave([types,exports],[make_exports_global/1]).
-:-edcg:weave([type_decls],[type_decls/1, type_decl/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1]).
+:-edcg:weave([type_decls],[type_decls/1, type_decl/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1,add_base_types/1]).
 
 xmg:check_types(T1,T1,Coord):- !.
 xmg:check_types(T1,T2,Coord):- 
@@ -69,10 +69,10 @@ type_metagrammar(MG):-
 	xmg:send(info,MG).
 	
 
-do_type_classes(Classes):--
+do_type_classes(Classes,Type_Decls):--
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableDimIn),
-	type_classes(Classes) with (global_context(TableIn,TableOut),dim_types(TableDimIn,TableDimOut)).
+	type_classes(Classes) with (global_context(TableIn,TableOut),dim_types(TableDimIn,TableDimOut),type_decls(Type_Decls,_)).
 
 
 type_classes([]):--
@@ -159,15 +159,16 @@ xmg:type(bool,bool).
 xmg:type(int,int).
 xmg:type(string,string).
 
-type_mg_decls(Decls):--
+type_mg_decls(Decls,Type_BDecls):--
 	xmg:send(info,Decls),
 	G=[gather(field,fieldprec,fields)],
 	gather_decls(Decls,G,GDecls),!,
 	xmg:send(info,' decls gathered '),
 	xmg_table:table_new(TableNew),
 	type_decls(GDecls) with type_decls(TableNew,Type_Decls),
+	add_base_types([int,string,bool]) with type_decls(Type_Decls,Type_BDecls),
 	xmg:send(info,'\n\nType Decls:\n'),
-	xmg:send(info,Type_Decls),
+	xmg:send(info,Type_BDecls),
 	!.
 
 gather_decls(Decls,[],Decls):- !.
@@ -256,9 +257,9 @@ get_feat_type(F-T,F-T):--
 	assert_feat(feat(F,T)),!.
 
 assert_type(type(Id,Type)):--
-	xmg:type(Id,Type),!.
+	type_decls::tget(Id,Type),!.
 assert_type(type(Id,Type)):--
-	xmg:type(Id,T),not(T=Type),!,
+	type_decls::tget(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of type '),
 	xmg:send(info,Id),
 	false,!.
@@ -266,13 +267,18 @@ assert_type(type(Id,Type)):--
 	not(xmg:type(Id,_)),
 	%%xmg:send(info,'\n\nassert type\n '),
 	%%xmg:send(info,Id),
-	asserta(xmg:type(Id,Type)),
+	%%asserta(xmg:type(Id,Type)),
 	type_decls::tput(Id,Type),!.
 
 get_range(Sup,Sup,[]):-!.
 get_range(Inf,Sup,[int(Inf)|T]):-
 	Inf1 is Inf + 1,
 	get_range(Inf1,Sup,T),!.
+
+add_base_types([]):-- !.
+add_base_types([H|T]):--
+	type_decls::tput(H,_),
+	add_base_types(T),!.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Feats Declarations

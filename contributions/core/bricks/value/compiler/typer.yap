@@ -19,7 +19,7 @@
 
 :-module(xmg_brick_value_typer).
 
-:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:type_decls]).
 
 
 xmg:type_expr(value:var(token(_,id(ID))),Type):--
@@ -40,7 +40,7 @@ xmg:type_expr(token(_,string(_)),string):--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 xmg:type_expr(token(_,id(ID)),Type):--
-	xmg:type(Type,GType),
+	type_decls::tget(Type,GType),
 	type_const(ID,GType),
 	!.
 

@@ -19,9 +19,9 @@
 
 :-module(xmg_brick_avm_typer).
 
-:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
 
-:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types],[value_type/2]).
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls],[value_type/2,type_def/2]).
 
 xmg:stmt_type(iface,AVM):-
 	xmg_brick_avm_avm:avm(AVM,[]).
@@ -95,10 +95,10 @@ feat_type(token(_,id(Feat)),Feat,Type):-
 feat_type(token(C,ID),Feat,Type):-
 	throw(xmg(type_error(feature_not_declared(ID,C)))).
 
-type_def(TypeAttr,TypeDef):-
-	xmg:type(TypeAttr,TypeDef),
+type_def(TypeAttr,TypeDef):--
+	type_decls::tget(TypeAttr,TypeDef),
 	!.
-type_def(TypeAttr,_):-
+type_def(TypeAttr,_):--
 	xmg:send(info,'\n\nError! Type '),
 	xmg:send(info,TypeAttr),
 	xmg:send(info,' is undefined.'),
