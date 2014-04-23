@@ -19,9 +19,9 @@
 
 :-module(xmg_brick_avm_typer).
 
-:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types]).
 
-:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context],[value_type/2]).
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types],[value_type/2]).
 
 xmg:stmt_type(iface,AVM):-
 	xmg_brick_avm_avm:avm(AVM,[]).

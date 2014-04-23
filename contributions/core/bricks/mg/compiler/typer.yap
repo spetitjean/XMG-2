@@ -24,18 +24,19 @@
 :-dynamic(fieldprec/2).
 :-dynamic(xmg:feat/2).
 
-:-multifile(xmg:type_stmt/6).
+:-multifile(xmg:type_stmt/8).
 :-multifile(xmg:stmt_type/2).
-:-multifile(xmg:type_expr/6).
+:-multifile(xmg:type_expr/8).
 
 :-edcg:thread(types,edcg:table).
 :-edcg:thread(type_decls,edcg:table).
 :-edcg:thread(global_context,edcg:table).
 :-edcg:thread(exports,edcg:table).
+:-edcg:thread(dim_types,edcg:table).
 
 
-:-edcg:weave([types,global_context],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
-:-edcg:weave([global_context],[type_classes/1]).
+:-edcg:weave([types,global_context,dim_types],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
+:-edcg:weave([global_context,dim_types],[type_classes/1]).
 :-edcg:weave([types,exports],[make_exports_global/1]).
 :-edcg:weave([type_decls],[type_decls/1, type_decl/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1]).
 
@@ -70,7 +71,8 @@ type_metagrammar(MG):-
 
 do_type_classes(Classes):--
 	xmg_table:table_new(TableIn),
-	type_classes(Classes) with global_context(TableIn,TableOut).
+	xmg_table:table_new(TableDimIn),
+	type_classes(Classes) with (global_context(TableIn,TableOut),dim_types(TableDimIn,TableDimOut)).
 
 
 type_classes([]):--
