@@ -40,22 +40,15 @@ xmg:type_expr(token(_,string(_)),string):--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 xmg:type_expr(token(_,id(ID)),Type):--
-	type_decls::tget(Type,GType),
-	type_const(ID,GType),
+	type_decls::tget(const(ID),Type),
 	!.
 
-%% not only for constants
-type_const(_,A):- 
-	var(A),!.
-type_const(Const,enum(Enum)):- 
-	!,
-	type_enum_const(Const,Enum),!.
+xmg:type_expr(token(C,id(ID)),Type):--
+	type_decls::tget(const(ID),T),!,
+	throw(xmg(type_error(incompatible_types(ID,Type,C)))),
+	!.
 
-%% not for constants at all
-type_const(Const,struct(Obl,Opt,More)):- 
-	type_stuct_const(Const,Obl,Opt,More),!.
+xmg:type_expr(token(C,id(ID)),Type):--
+	throw(xmg(type_error(unknown_constant(ID,C)))),
+	!.
 
-
-
-type_enum_const(Const,List):-
-	lists:member(Const,List),!.

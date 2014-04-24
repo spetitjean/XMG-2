@@ -6,7 +6,7 @@ type CAT = {v,n,s,cl}
 %%type CAT = {t}
 
 type AGR = {m,f}
-type NUM = {s,p}
+type NUM = {sg,pl}
 
 type FS = [this : CAT, that : [these: AGR, those : NUM]]
 
@@ -60,7 +60,7 @@ declare ?X ?Y ?Z ?T ?L ?C
 	node ?X (color=black) [cat=s, extracted= +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
-	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=s]]{
+	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=pl]]{
 	     	  node ?T (color=black) [cat=?L]
 		  }
 	     
