@@ -18,6 +18,7 @@ class BrickCompiler(object):
         self._punctuation= []
         self._keywords   = []
         self._solvers    = dict()
+        self._tags       = dict()
 
     def set_folder(self,folder):
         self._folder=folder
@@ -67,6 +68,8 @@ class BrickCompiler(object):
         self.add_link(brick.language_brick,brick.compiler_brick)
         if brick._solver is not None:
             self._solvers[brick._prefix]=brick._solver
+        if brick._tag is not None:
+            self._tags[brick._prefix]=brick._tag
             
     def init_dims(self):
         if self._dimensions == [] :
@@ -113,9 +116,11 @@ class BrickCompiler(object):
         dimfile.write('%% Solvers bindings to dimensions\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
 
+        if not self._solvers:
+            tokenizefile.write('xmg:solver(_,_):- false.\n')
         for solver in self._solvers:
             dimfile.write('xmg:solver(')
-            dimfile.write(solver)
+            dimfile.write(self._tags[solver])
             dimfile.write(',')
             dimfile.write(self._solvers[solver])
             dimfile.write(').\n')
@@ -316,7 +321,8 @@ class BrickCompiler(object):
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/dimensions\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_punct\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_keywords\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\').\n\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/solvers\').\n\n')
         conffile.write('init_threads:-\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/edcg\').')
         conffile.close()

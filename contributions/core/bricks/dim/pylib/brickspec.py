@@ -38,4 +38,4 @@ Dim : '<%s>' '{' _Extern '}' {$$=dim:dim(%s,$3)};
 """ % (self.tag, self.tag)
         
         brick._solver=self.solver
-        
+        brick._tag=self.tag

@@ -5,17 +5,19 @@ property color : COLOR
 type CAT = {v,n,s,cl}
 %%type CAT = {t}
 
-type AGR = {m,f}
+type GEN = {m,f}
 type NUM = {sg,pl}
+
+type AGR = [gen:GEN, num:NUM]
 
 type FS = [this : CAT, that : [these: AGR, those : NUM]]
 
 type LABEL !
 
 feature cat : CAT
-feature agr : LABEL
+feature agr : AGR
 feature num : NUM
-feature gen : AGR
+feature gen : GEN
 
 feature extracted : bool
 feature color : COLOR
@@ -60,7 +62,7 @@ declare ?X ?Y ?Z ?T ?L ?C
 	node ?X (color=black) [cat=s, extracted= +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
-	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=pl]]{
+	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=sg,cat=s]]{
 	     	  node ?T (color=black) [cat=?L]
 		  }
 	     

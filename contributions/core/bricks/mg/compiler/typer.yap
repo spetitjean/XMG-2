@@ -237,21 +237,17 @@ get_types([H|T]):--
 	get_types(T).
 
 get_type(type(Type,enum(List))):--
-	assert_type(type(Type,enum(List))),
+	assert_type(type(Type,Type)),
 	assert_consts(List,Type).
 get_type(type(Type,range(Inf,Sup))):--
 	get_range(Inf,Sup,Range),
-	assert_type(type(Type,enum(Range))).
+	assert_type(type(Type,int)).
 get_type(type(Type,label)):--
-	assert_type(type(Type,label)),!.
-%% get_type(type(Type,struct(Obl,Opt,More))):--
-%% 	get_feat_types(Obl),
-%% 	get_feat_types(Opt),
-%% 	assert_type(type(Type,struct(Obl,Opt,More))),!.
+	assert_type(type(Type,_)),!.
 get_type(type(Type,struct(Feats))):--
 	get_feats_types(Feats,FeatsTypes),
 	xmg_brick_avm_avm:avm(AVM,FeatsTypes),
-	assert_type(type(Type,struct(Obl,Opt,More))),!.
+	assert_type(type(Type,AVM)),!.
 
 
 get_feats_types([],[]):-- !.
@@ -260,7 +256,8 @@ get_feats_types([H|T],[H1|T1]):--
 	get_feats_types(T,T1),!.
 
 get_feat_type(F-T,F-T):--
-	assert_feat(feat(F,T)),!.
+	%%assert_feat(feat(F,T)),
+	!.
 
 assert_type(type(Id,Type)):--
 	type_decls::tget(Id,Type),!.

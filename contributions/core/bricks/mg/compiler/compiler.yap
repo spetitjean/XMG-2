@@ -164,11 +164,12 @@ eval_dims([skolem-Acc|T],T1,Class):-
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	send(info,Dim),
 	xmg:dimbrick(Dim,DimBrick),
-	eval(DimBrick,Acc,XML,Class),
+	findall(Solver,xmg:solver(Dim,Solver),Solvers),
+	eval(DimBrick,Solvers,Acc,XML,Class),
 	send(info,' done\n'),
 	eval_dims(T,T1,Class).
 
-eval(morph,Morph,XML,_):-
+eval(morph,_,Morph,XML,_):-
 	%%send(info,Morph),
 	xmg_brick_morph_solver:eval_morph(Morph,Value),
 	%%send_nl(info,2),
@@ -177,24 +178,20 @@ eval(morph,Morph,XML,_):-
 	xmg_convert_morph:toXML(Value,XML,0).
 
 
-eval(syn,Syn,XML,Class):-
+eval(syn,Solvers,Syn,XML,Class):-
 	%%send(info,Syn),
-	xmg_brick_syn_compiler:eval(Syn,XML,Class).
-eval(syn1,Syn,XML,Class):-
-	xmg_compiler_syn:eval(Syn,XML,Class).
-eval(syn2,Syn,XML,Class):-
-	xmg_compiler_syn:eval(Syn,XML,Class).
+	xmg_brick_syn_compiler:eval(Syn,Solvers,XML,Class).
 
 
-eval(pg,PG,elem(pg, features([id-none])),_):-
+eval(pg,_,PG,elem(pg, features([id-none])),_):-
 	xmg_output_pg:output(PG).
 
-eval(sem,Sem,XML,_):-
+eval(sem,_,Sem,XML,_):-
 	%%send(info,Sem),
 	xmg_brick_sem_convert:toXML(Sem,XML),
 	send_nl(info).
 
-eval(frame,Frame,XML,_):-
+eval(frame,_,Frame,XML,_):-
 	Class=class_test,
 	xmg_brick_frame_preparer:prepare(Frame,PFrame),
 	send(debug,PFrame),
@@ -202,10 +199,10 @@ eval(frame,Frame,XML,_):-
 	%%xmg_convert_frame:toXML(tree(Tree,Class),XML,0).
 	xmg_brick_frame_convert:toXML(PFrame,XML,0).
 	%%send(debug,Tree).
-eval(frame,[], elem(tree, features([id-none])),_).
+eval(frame,_,[], elem(tree, features([id-none])),_).
 
 
-eval(iface,I, elem(interface, children([elem(fs, children(XML))])),_):-
+eval(iface,_,I, elem(interface, children([elem(fs, children(XML))])),_):-
 	%%send(info,'\n Here comes the interface'),
 	xmg_brick_avm_avm:avm(I,IAVM),
 	%%send(info,IAVM),
@@ -214,7 +211,7 @@ eval(iface,I, elem(interface, children([elem(fs, children(XML))])),_):-
 	%%send(info,'\nDone')
 	.
 	%%send(info,'\nDone').
-eval(iface,[], elem(interface, children([])),_).
+eval(iface,_,[], elem(interface, children([])),_).
 		
 get_dim(Dim,[Dim-CDim|_],CDim):-!.
 get_dim(Dim,[_|T],CDim):-

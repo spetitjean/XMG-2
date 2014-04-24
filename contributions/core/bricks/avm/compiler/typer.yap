@@ -50,22 +50,11 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	xmg:send(info,Type),
 	feat_type(Attr,UAttr,TypeAttr),
 	type_def(TypeAttr,TypeDef),
-	(
-	    TypeDef=label ->
-	    (
-		value_type(Value,NewType),
-	        ITypeAttr=NewType
-	    )
-	;
-	    (
-		value_type(Value,TypeAttr),
-	        ITypeAttr=TypeAttr
-	    )
-	),
-	extend_type(Type,UAttr,ITypeAttr),
+	value_type(Value,TypeDef),
+	extend_type(Type,UAttr,TypeDef),
 	!.
 xmg:type_expr(avm:feat(Attr,Value),Type):--
-	throw(xmg(type_error(incompatible_types(Attr,Value,C)))).
+	throw(xmg(type_error(incompatible_types(Attr,Value)))).
 
 
 extend_type(Type,UAttr,TypeAttr):-
@@ -74,6 +63,14 @@ extend_type(Type,UAttr,TypeAttr):-
 	xmg:send(info,'\n\nAVM Type Error! Could not extend type:\n'),
 	xmg_brick_avm_avm:avm(Type,LType),
 	xmg:send(info,LType),
+	xmg:send(info,'\n'),
+	xmg:send(info,UAttr),
+	xmg:send(info,'\n'),	
+	xmg:send(info,TypeAttr),
+	fail.
+extend_type(Type,UAttr,TypeAttr):-
+	xmg:send(info,'\n\nAVM Type Error! Could not extend type:\n'),
+	xmg:send(info,Type),
 	xmg:send(info,'\n'),
 	xmg:send(info,UAttr),
 	xmg:send(info,'\n'),	

@@ -19,7 +19,8 @@
 
 :-module(xmg_brick_syn_compiler).
 
-eval(Syn,XML,Class):-
+%% TAG compiler
+eval(Syn,[tree],XML,Class):-
 	%%xmg_brick_mg_compiler:send(info,Syn),
 	xmg_brick_mg_compiler:send(info,' preparing '),
 
@@ -34,5 +35,10 @@ eval(Syn,XML,Class):-
 	%% retract(current(Previous)),
 	%% asserta(current(Current)),
 	xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML).
+
+%% IG compiler
+eval(Syn,[],XML,Class):-
+	xmg_brick_mg_compiler:current(Previous),
+	xmg:do_xml_convert(ig:ig(Syn,Class,Previous),XML).
 eval([], elem(tree, features([id-none])),_).
 

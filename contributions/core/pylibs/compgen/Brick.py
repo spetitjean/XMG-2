@@ -17,6 +17,7 @@ class Brick(object):
         self._is_dimension = None
         self._config = None
         self._solver = None
+        self._tag = None
 
     @property
     def lang_def_pathname(self):
