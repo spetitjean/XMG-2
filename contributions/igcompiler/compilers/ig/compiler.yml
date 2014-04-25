@@ -1,0 +1,28 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+decls:
+  _ODecl: feats
+control:
+  _Stmt: dim_syn dim_iface stardim
+  _Expr: value
+stardim:
+  _Stmt: control
+  proxy: dim_iface
+avm: 
+  _Value: value
+  _Expr: value
+value: 
+  _Else: avm adisj avm.Dot control.Call
+syn:
+  _AVM: avm
+iface:
+  _AVM: avm
+dim_syn:
+  tag: "syn"
+  Stmt: syn
+  Expr: value
+dim_iface:
+  tag: "iface"
+  Stmt: iface
+  Expr: value

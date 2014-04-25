@@ -1,0 +1,15 @@
+
+%%
+
+AVM : '[' (Feat // ',')* ']' {get_coord($1,Coord), $$=avm:avm(Coord,$2)};
+
+Feat : id Pol _Value {$$=pol_avm:feat($1,$3,$2)}; 
+
+Pol : '=' {$$=$1} 
+    | '=+' {$$=$1}
+    | '=-' {$$=$1}
+    | '=~' {$$=$1};
+  
+Dot : _Expr '.' id {$$=avm:dot($1,$3)}; 
+
+%%

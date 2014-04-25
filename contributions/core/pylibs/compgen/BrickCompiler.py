@@ -117,7 +117,7 @@ class BrickCompiler(object):
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
 
         if not self._solvers:
-            tokenizefile.write('xmg:solver(_,_):- false.\n')
+            dimfile.write('xmg:solver(_,_):- false.\n')
         for solver in self._solvers:
             dimfile.write('xmg:solver(')
             dimfile.write(self._tags[solver])

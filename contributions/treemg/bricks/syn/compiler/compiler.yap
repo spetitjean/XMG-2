@@ -39,6 +39,6 @@ eval(Syn,[tree],XML,Class):-
 %% IG compiler
 eval(Syn,[],XML,Class):-
 	xmg_brick_mg_compiler:current(Previous),
-	xmg:do_xml_convert(ig:ig(Syn,Class,Previous),XML).
+	xmg:do_xml_convert(syn:desc(Syn,Class,Previous),XML).
 eval([], elem(tree, features([id-none])),_).
 
