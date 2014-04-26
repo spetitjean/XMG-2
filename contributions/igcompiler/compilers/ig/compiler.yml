@@ -9,15 +9,15 @@ control:
 stardim:
   _Stmt: control
   proxy: dim_iface
-avm: 
+polAvm:
   _Value: value
-  _Expr: value
+  _Expr: value  
 value: 
-  _Else: avm adisj avm.Dot control.Call
+  _Else: polAvm adisj polAvm.Dot control.Call
 syn:
-  _AVM: avm
+  _AVM: polAvm
 iface:
-  _AVM: avm
+  _AVM: polAvm
 dim_syn:
   tag: "syn"
   Stmt: syn
