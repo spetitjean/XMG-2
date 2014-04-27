@@ -19,32 +19,30 @@
 
 :- module(xmg_brick_avm_convert).
 
-%%:- edcg:thread(name,edcg:counter).
-
 :- edcg:using(xmg_brick_mg_convert:name).
 
-:- edcg:weave([name],[xmlFeats/2]).
+:- multifile(xmlFeat/4).
 
-%% new_name(Prefixe, Name) :--
-%% 	name::incr,
-%% 	name::get(N),
-%% 	atomic_concat([Prefixe,N],Name).
+:- edcg:weave([name],[xmlFeats/2,xmlFeat/2]).
 
 xmg:xml_convert_term(avm:avm(Feats),Convert):--
 	xmlFeats(Feats,Convert),!.
 
 xmlFeats([],[]):-- !.
+xmlFeats([H|T],[H1|T1]):--
+	xmlFeat(H,H1),
+	xmlFeats(T,T1),!.
 
 
-xmlFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))|T1]):--
+xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
 	(atom(V)
         ;
 	integer(V)
 	),
-	xmlFeats(T,T1),!.
+	!.
 
 
-xmlFeats([A-AVM|T],[H1|T1]):--
+xmlFeat(A-AVM,H1):--
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	xmg_brick_avm_avm:const_avm(AVM,CAVM),
 	((
@@ -57,15 +55,15 @@ xmlFeats([A-AVM|T],[H1|T1]):--
 	(
 	    !,H1=elem(f, features([name-A]),children([elem(fs,features([value-CAVM]))]))
 	)),
-	xmlFeats(T,T1),!.
+	!.
 
-xmlFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))|T1]):--
+xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
 	var(V),
 	xmg:convert_new_name('@V',V),
-	xmlFeats(T,T1),!.
+	!.
 
 
-xmlFeats([A-AD|T],[H1|T1]):--
+xmlFeat(A-AD,H1):--
 	xmg_brick_adisj_adisj:adisj(AD,LAD),
 	xmg_brick_adisj_adisj:const_adisj(AD,CLAD),!,
 	((
@@ -78,12 +76,10 @@ xmlFeats([A-AD|T],[H1|T1]):--
 	(
 	    !,H1=elem(f, features([name-A]),children([elem(vAlt, features([value-CLAD]))]))
 	)),
-	    xmlFeats(T,T1),!.
+	!.
 
 
-xmlFeats(Feats,_):--
-	xmg:send(info,'\nUnexpected feature:\n'),
-	xmg:send(info,Feats),false.
+
 
 
 
