@@ -9,7 +9,6 @@ type GEN = {m,f}
 type NUM = {sg,pl}
 
 type AGR = [gen:GEN, num:NUM]
-%%type AGR = [num:NUM]
 
 type FS = [this : CAT, that : [these: AGR, those : NUM]]
 
@@ -40,11 +39,10 @@ declare ?T ?C ?A
 {
 	?C=dummy[];
 	<syn>{
-		node ?T (color=black) %[cat=whatever]
+		node ?T (color=black) [cat =~ s]
 		}*=[arg2=?A]
 		;
-	%%?T=?C.X
-	?C.X=?A
+	?T=?C.X
 }
 
 class dummy
@@ -61,10 +59,10 @@ declare ?X ?Y ?Z ?T ?L ?C
   % }
   % |
   {<syn>{
-	node ?X (color=black) [cat=s, extracted= +]{ ...+
+	node ?X (color=black) [cat =+ s, extracted=- +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
-	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=sg,cat=s]]{
+	     node ?Z (color=black) [cat=~ ?C, agr=[gen=m,num=sg,cat=s]]{
 	     	  node ?T (color=black) [cat=?L]
 		  }
 	     
