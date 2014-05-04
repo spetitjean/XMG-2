@@ -31,5 +31,9 @@
 :-	use_module('xmg/brick/frame/compiler/preparer').
 :-	use_module('xmg/brick/frame/compiler/solver').
 
+%% dependencies
+:-	use_module('xmg/brick/havm/compiler/loader').
+
+
 
 

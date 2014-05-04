@@ -447,7 +447,7 @@ get_fconstraints([]):-
 
 	findall(pathconstraint(TACP,TAsP,TATP1,TATP2),xmg:fPathConstraint(TACP,TAsP,TATP1,TATP2),PathConstraints),
 
-	xmg:send(info,'\n\Path constraints:'),
+	xmg:send(info,'\n\nPath constraints:'),
 	xmg:send(info,PathConstraints),
 
 	lists:append(AttConstraints,PathConstraints,AttPathConstraints),

@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_avm).
+:-module(xmg_loader_havm).
 
 load_module:-
 	use_module('xmg/brick/avm/compiler/unfolder'),
