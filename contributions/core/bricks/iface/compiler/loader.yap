@@ -21,7 +21,7 @@
 :-module(xmg_loader_iface).
 
 :-	use_module('xmg/brick/iface/compiler/edcg').
-:-	use_module('xmg/brick/iface/compiler/compiler').
+%%:-	use_module('xmg/brick/iface/compiler/compiler').
 :-	use_module('xmg/brick/iface/compiler/typer').
 :-	use_module('xmg/brick/iface/compiler/unfolder').
 :-	use_module('xmg/brick/iface/compiler/generator').
