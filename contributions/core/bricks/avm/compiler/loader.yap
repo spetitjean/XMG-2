@@ -24,6 +24,6 @@
 :-use_module('xmg/brick/avm/compiler/unfolder').
 :-use_module('xmg/brick/avm/compiler/generator').
 :-use_module('xmg/brick/avm/compiler/convert').
-:-use_module('xmg/brick/havm/compiler/convert').
+%%:-use_module('xmg/brick/havm/compiler/convert').
 :-use_module('xmg/brick/avm/avm').
-:-use_module('xmg/brick/havm/havm').
+%%:-use_module('xmg/brick/havm/havm').
