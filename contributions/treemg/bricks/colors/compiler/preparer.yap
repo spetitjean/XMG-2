@@ -49,7 +49,7 @@ search_color(Name,[],none):-
 	%%throw(xmg(principle_error(undefined_color(Name)))),	
 	xmg:send(info,'\nNo color for node '),
 	xmg:send(info,Name),
-	xmg:send(info,'\n. This should not happen.\n\n'),
+	xmg:send(info,'. This should not happen.\n\n'),
 	!.
 
 %%search_color(_,[color-const(C,_)|_],C):-!.
