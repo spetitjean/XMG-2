@@ -57,8 +57,13 @@ get_dim_type(Dim,Type):--
 xmg:type_stmt(control:eq(S1,S2),void):--
 	xmg:type_expr(S1,Type),
 	xmg:type_expr(S2,Type2),
-	Type=Type2,
+	check_types(S1,S2,Type,Type2),
 	!.
+
+check_types(_,_,Type,Type2):-
+	Type=Type2,!.
+check_types(S1,S2,Type,Type2):-
+	throw(xmg(type_error(incompatible_exprs(expr(S1,Type),expr(S2,Type2))))).
 
 xmg:type_stmt(control:call(S1,S2),void):--
 	xmg:type_expr(control:call(S1,S2),_),
@@ -68,8 +73,7 @@ xmg:type_expr(control:call(token(_,id(S1)),S2),Type):--
 	types::tget(S1,Type),!.
 
 
-xmg:type_stmt(control:X,void):--
-	xmg:send(info,'\n\nDid not type control statement:\n'),
-	xmg:send(info,X),
-	fail.
+xmg:type_stmt(control:X,Type):--
+	throw(xmg(type_error(incompatible_types(control:X,Type)))).
+
 

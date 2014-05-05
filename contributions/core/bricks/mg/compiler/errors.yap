@@ -22,10 +22,10 @@
 
 user:generate_message_hook(error(unhandled_exception,xmg(Exc)), In, Out) :--
 	xmg_message(Exc,Msg),
-	format_msg(Msg) with queue(Out, Int).
+	format_msg(Msg) with queue([]-Out, []-In).
 user:generate_message_hook(xmg(Exc), In, Out) :--
 	xmg_message(Exc,Msg),
-	format_msg(Msg) with queue(Out, In).
+	format_msg(Msg) with queue([]-Out, []-In).
 
 format_msg(Msg) -->>
 	nonvar(Msg),
@@ -35,8 +35,8 @@ format_msg(Msg) -->>
 	format_footer,!.
 
 format_title(Title, Label) -->>
-	vs_to_string(Title) with queue(STitle,[]),
-	vs_to_string(Label) with queue(SLabel,[]),
+	vs_to_string(Title) with queue([]-STitle,[]-[]),
+	vs_to_string(Label) with queue([]-SLabel,[]-[]),
 	queue::enq("-- ~s: ~s ~`-t~80+"-[STitle,SLabel]),
 	queue::enq(nl).
 
@@ -53,8 +53,8 @@ format_specs([H|T]) -->>
 %% <line> ::= hint(L,M) | coord(F,L,C) | line(VS) | unit
 
 format_spec(hint(L,M)) -->> !,
-	vs_to_string(L) with queue(LL,[]),
-	vs_to_string(M) with queue(MM,[]),
+	vs_to_string(L) with queue([]-LL,[]-[]),
+	vs_to_string(M) with queue([]-MM,[]-[]),
 	queue::enq("~t~s~12+: ~s"-[LL,MM]),
 	queue::enq(nl).
 format_spec(coord(F,L,C)) -->> !,
@@ -62,7 +62,7 @@ format_spec(coord(F,L,C)) -->> !,
 	format_spec(hint(line,L)),
 	format_spec(hint(column,C)).
 format_spec(line(VS)) -->> !,
-	vs_to_string(VS) with queue(S,[]),
+	vs_to_string(VS) with queue([]-S,[]-[]),
 	queue::enq("~s"-[S]),
 	queue::enq(nl).
 format_spec(unit) -->> !,
@@ -89,11 +89,45 @@ vs_to_string(coord(F,L,C)) -->> !,
 	(name(C,CC),
 	 queue::enq_list(", column "),
 	 queue::enq_list(CC)).
+vs_to_string(exprs_types(E1,T1,E2,T2))-->> 
+	queue::enq_list("Incompatible types: "),
+	get_first_coord(E1,C),
+	vs_to_string(C),
+	rec_name(T1,NT1),
+	queue::enq_list("\n           Types are "),
+
+	queue::enq_list(NT1),
+	queue::enq_list(" and "),
+	rec_name(T2,NT2),
+	queue::enq_list(NT2),
+	!.
 vs_to_string(write(T)) -->> !,
 	write_to_chars(T,S),
 	queue::enq_list(S).
 vs_to_string(L) -->>
 	queue::enq_list(L).
+
+rec_name(N,N1):-
+	atom(N),
+	name(N,N1),!.
+rec_name(N,N1):-
+	N=..[':',_,H|_],!,
+	rec_name(H,N1),!.
+rec_name(N,N1):-
+	N=..[H|_],
+	rec_name(H,N1),!.
+
+get_first_coord(token(C,_),C):-!.
+get_first_coord(N,C):-
+	N=..[':',_,H|_],!,
+	xmg:send(info,H),
+	get_first_coord(H,C),!.
+get_first_coord(N,C):-
+	N=..[_,H|_],!,
+	xmg:send(info,H),
+	get_first_coord(H,C),!.
+
+
 
 %% map exception term to message record
 
@@ -120,6 +154,8 @@ xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,
 	Msg=error(types,[hint('variable not declared',X),C]).
 xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
 	Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
+xmg_message(type_error(incompatible_exprs(expr(E1,T1),expr(E2,T2))),Msg):- !,
+	Msg=error(types,[hint('incompatible expressions',exprs_types(E1,T1,E2,T2))]).
 
 %% Modules errors
 xmg_message(compiler_error(unknown_module(Module)), Msg):- !,
