@@ -1,4 +1,5 @@
 :- module(xmg_brick_mg_spprint, []).
+:- xmg:edcg.
 
 indente(0) :-- !.
 

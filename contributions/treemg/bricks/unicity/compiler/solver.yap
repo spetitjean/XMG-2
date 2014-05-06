@@ -19,7 +19,7 @@
 
 :- module(xmg_brick_unicity_solver, []).
 
-%:- use_module(library(gecode)).
+:- xmg:gecode.
 :- use_module('xmg/brick/tree/compiler/dominance').
 
 :- op(500, xfx, ':=:').

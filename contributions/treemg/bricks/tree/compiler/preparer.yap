@@ -19,6 +19,7 @@
 
 :- module(xmg_brick_tree_preparer, []).
 
+:- xmg:edcg.
 :-edcg:thread(name,edcg:counter).
 :-edcg:weave([name],[count/7,new_name/1]).
 

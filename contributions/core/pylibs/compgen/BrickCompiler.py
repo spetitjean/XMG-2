@@ -131,6 +131,7 @@ class BrickCompiler(object):
         dimfile=open(self._folder+"/edcg.yap","w")
         dimfile.write('%% -*- prolog -*-\n\n')
         dimfile.write(':-module(xmg_edcg).\n\n')
+        dimfile.write(':-xmg:edcg.\n\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         dimfile.write('%% Threads initialization\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')

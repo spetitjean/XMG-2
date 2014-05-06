@@ -81,3 +81,6 @@ user:term_expansion(X,Y) :- xmg_brick_mg_accs:term_expansion(X,Y).
 
 term_expansion((:- xmg:edcg), R) :-
     !, R=(:- use_module(edcg, 'xmg/brick/mg/edcg.yap', all)).
+
+term_expansion((:- xmg:gecode), R) :-
+    !, R=(:- use_module(gecode, library(gecode), all)).
