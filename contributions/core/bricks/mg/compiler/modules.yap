@@ -55,7 +55,7 @@ load_modules([Module|Modules]):-
 
 load_module(Module):-
 	xmg_brick_mg_compiler:send(info,Module),
-	use_module(M,Module,_),!.
+	use_module(Module),!.
 
 load_module(Module):-
 	throw(xmg(compiler_error(unknown_module(Module)))),!.

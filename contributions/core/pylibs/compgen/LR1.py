@@ -155,7 +155,6 @@ class LR1(object):
         lines=[]
         i=0
         lines.append(":-module(generated_parser).\n \n")
-        lines.append(":-module(generated_parser).\n \n")
         lines.append("get_coord(token(Coord,_),Coord). \n \n")
 
         # information about rules : rule(Number,Left,Rightsize)
