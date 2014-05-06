@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_decls_principles).
 
+:- xmg:edcg.
+
+
 principles(mg(Decls,_,_)):- 
 	get_principles(Decls,Principles),!,
 	list_principles(Principles,[],ListPrinciples),

@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_sem_generator).
 
+:- xmg:edcg.
+
+
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).
 :-edcg:using(xmg_brick_mg_generator:code).

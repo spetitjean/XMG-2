@@ -19,6 +19,9 @@
 
 :-module(xmg_brick_syn_typer).
 
+:- xmg:edcg.
+
+
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 %% le type associé à la dimension est a priori inconnu, ce sont des variables contraintes (au départ pas contraintes)

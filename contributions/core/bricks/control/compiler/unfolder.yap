@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_control_unfolder).
 
+:- xmg:edcg.
+
+
 :- edcg:using([xmg_brick_mg_accs:constraints, xmg_brick_mg_accs:name, xmg_brick_mg_accs:vars, xmg_brick_mg_accs:consts]).
 %%:- edcg:weave([constraints,name,vars,consts], []).
 

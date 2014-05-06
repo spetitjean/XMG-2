@@ -19,6 +19,8 @@
 
 
 :-module(xmg_brick_adisj_generator).
+:- xmg:edcg.
+
 
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).

@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_feats_unfolder).
 
+:- xmg:edcg.
+
+
 %% SPECIFIC RULES
 
 xmg:unfold(feats:feat(token(_,id(Id)),token(_,id(Type))),feat(Id,Type)).

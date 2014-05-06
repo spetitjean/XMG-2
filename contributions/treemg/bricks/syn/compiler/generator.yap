@@ -19,6 +19,9 @@
 
 
 :-module(xmg_brick_syn_generator).
+
+:- xmg:edcg.
+
 :-use_module('xmg/brick/syn/engine').
 
 :-edcg:using(xmg_brick_mg_generator:decls).

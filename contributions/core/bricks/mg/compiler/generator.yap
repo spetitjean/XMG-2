@@ -19,6 +19,7 @@
 
 :-module(xmg_brick_mg_generator).
 
+:- xmg:edcg.
 :-edcg:thread(decls,edcg:table).
 :-edcg:thread(name,edcg:counter).
 :-edcg:thread(code,edcg:queue).

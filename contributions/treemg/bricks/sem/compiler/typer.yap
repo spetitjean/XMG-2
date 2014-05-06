@@ -19,6 +19,9 @@
 
 :-module(xmg_brick_sem_typer).
 
+:- xmg:edcg.
+
+
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 

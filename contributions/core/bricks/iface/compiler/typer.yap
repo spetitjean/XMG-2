@@ -19,5 +19,8 @@
 
 :-module(xmg_brick_iface_typer).
 
+:- xmg:edcg.
+
+
 :-edcg:using([xmg_brick_mg_typer:types]).
 

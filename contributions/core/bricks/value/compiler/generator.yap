@@ -13,6 +13,10 @@
 %% ========================================================================
 
 :-module(xmg_brick_value_generator).
+
+:- xmg:edcg.
+
+
 :-edcg:using([xmg_brick_mg_generator:decls, xmg_brick_mg_generator:code]).
 
 xmg:generate_instr(eq(v(Var),v(ID))):--

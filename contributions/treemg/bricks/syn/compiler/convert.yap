@@ -20,6 +20,9 @@
 
 :- module(xmg_brick_syn_convert, []).
 
+:- xmg:edcg.
+
+
 %%:- use_module('xmg/brick/syn/most').
 :-edcg:thread(nodes,edcg:queue).
 :-edcg:thread(dominances,edcg:queue).

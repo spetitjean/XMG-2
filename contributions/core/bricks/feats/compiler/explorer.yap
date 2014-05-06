@@ -19,3 +19,5 @@
 
 :-module(xmg_brick_feats_explorer).
 
+:- xmg:edcg.
+

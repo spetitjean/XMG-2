@@ -20,6 +20,8 @@
 
 :-module(xmg_brick_syn_unfolder).
 
+:- xmg:edcg.
+
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
 :- edcg:weave([constraints,name,vars,consts],[unfold_tree/4, unfold_children/4, unfold_child/4, unfold_node/3, unfold_brothers/4, unfold_node_or_tree/3]).

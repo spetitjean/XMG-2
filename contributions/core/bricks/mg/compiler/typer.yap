@@ -28,6 +28,7 @@
 :-multifile(xmg:stmt_type/2).
 :-multifile(xmg:type_expr/10).
 
+:- xmg:edcg.
 %% types: local table for variable types
 :-edcg:thread(types,edcg:table).
 %% type_decls: global table for type definitions and constant types

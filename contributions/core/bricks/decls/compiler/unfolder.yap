@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_decls_unfolder).
 
+:- xmg:edcg.
+
+
 sort_decls([],[]):- !.
 sort_decls([H|T],[Head-Found|Sorted]):-
 	H=..[Head|_],

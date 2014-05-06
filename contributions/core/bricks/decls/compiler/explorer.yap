@@ -19,3 +19,6 @@
 
 :-module(xmg_brick_decls_explorer).
 
+:- xmg:edcg.
+
+

@@ -19,6 +19,9 @@
 
 
 :- module(xmg_brick_sem_convert, []).
+
+:- xmg:edcg.
+
 :- edcg:thread(name,edcg:counter).
 
 :- edcg:weave([name],[new_name/2, xmlSem/2, xmlPred/2, xmlArgs/2, xmlArg/2, xmlID/2]).

@@ -19,6 +19,8 @@
 
 :-module(xmg_brick_polAvm_typer).
 
+:- xmg:edcg.
+
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
 
 

@@ -19,6 +19,9 @@
 
 :-module(xmg_brick_caller_typer).
 
+:- xmg:edcg.
+
+
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 xmg:type_stmt(control:and(S1,S2)):--

@@ -19,6 +19,8 @@
 
 :- module(xmg_brick_adisj_convert).
 
+:- xmg:edcg.
+
 %%:- edcg:thread(name,edcg:counter).
 
 :- edcg:using(xmg_brick_mg_convert:name).

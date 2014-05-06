@@ -19,6 +19,9 @@
 
 :- module(xmg_brick_polAvm_convert).
 
+:- xmg:edcg.
+
+
 
 xmg_brick_avm_convert:xmlFeat(A-value(V,P),elem(f,features(Features1),children(Children))):--
 	xmg_brick_avm_convert:xmlFeat(A-V,elem(f,features(Features),children(Children))),

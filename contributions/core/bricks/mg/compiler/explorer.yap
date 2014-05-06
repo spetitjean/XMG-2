@@ -19,6 +19,7 @@
 
 :-module(xmg_brick_mg_explorer).
 
+:- xmg:edcg.
 :-edcg:thread(calls,edcg:queue).
 :-edcg:thread(classes,edcg:queue).
 

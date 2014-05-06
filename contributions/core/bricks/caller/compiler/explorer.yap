@@ -19,6 +19,9 @@
 
 :-module(xmg_brick_caller_explorer).
 
+:- xmg:edcg.
+
+
 :-edcg:using(xmg_brick_mg_explorer:calls).
 
 xmg:find_calls(control:and(S1,S2)):--

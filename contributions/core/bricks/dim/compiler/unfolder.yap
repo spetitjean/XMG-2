@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_dim_unfolder).
 
+:- xmg:edcg.
+
+
 
 xmg:unfold_stmt(dim:dim(Dim,Stmt)):--
 	xmg:unfold_dimstmt(Dim,Stmt) ,

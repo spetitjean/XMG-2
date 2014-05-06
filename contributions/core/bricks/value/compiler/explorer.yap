@@ -19,3 +19,5 @@
 
 :-module(xmg_brick_value_explorer).
 
+:- xmg:edcg.
+

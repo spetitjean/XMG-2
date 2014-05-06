@@ -21,6 +21,9 @@
 :- module(xmg_brick_iface_convert, []).
 :- use_module('xmg/brick/syn/most').
 
+:- xmg:edcg.
+
+
 %%:- edcg:using(xmg_convert_avm:name).
 :- edcg:using(xmg_brick_mg_convert:name).
 

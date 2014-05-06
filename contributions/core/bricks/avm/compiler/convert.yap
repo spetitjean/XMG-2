@@ -19,6 +19,8 @@
 
 :- module(xmg_brick_avm_convert).
 
+:- xmg:edcg.
+
 :- edcg:using(xmg_brick_mg_convert:name).
 
 :- multifile(xmlFeat/4).

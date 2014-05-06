@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_iface_edcg).
 
+:- xmg:edcg.
+
+
 %% À générer dans un fichier du compiler
 %% :-edcg:thread(xmg_acc:nom_dim, xmg_brick_syn_edcg:accu_type).
 

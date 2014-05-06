@@ -20,6 +20,9 @@
 
 :- module(xmg_brick_tree_convert, []).
 
+:- xmg:edcg.
+
+
 %% deal with the constructor 'tree'
 
 xmg:xml_convert_term(tree:tree(Tree,Family,Number), elem(tree, features([id-Name]),children([Syn1]))):--
