@@ -39,7 +39,7 @@ if len(sys.argv) >= 2 and sys.argv[1]=="bootstrap":
     CONFIG['COMMANDS']['commands'] = ""
     CONFIG.save()
     # current bootstrapping. need to do better later
-    sys.path.insert(0, os.path.join(appdir, "core/python"))
+    sys.path.insert(0, os.path.join(appdir, "bootstrap"))
 else:
     sys.path.insert(0, CONFIG['DEFAULT']['XMG_PYTHON_ROOTDIR'])
 

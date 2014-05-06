@@ -39,7 +39,7 @@ class YAP(subprocess.Popen):
             xmgLatin=", iso_latin_1"
         else:
             xmgLatin=", utf8"
-        xmgCompiler="use_module(\'%s/xmg/compiler/%s/generated/conf\')," % (xmg.command.YAPDIR, compiler)
+        xmgCompiler="use_module('%s/xmg/compiler/%s/generated/conf')," % (xmg.command.YAPDIR, compiler)
         return cls(
                    goal=xmgDebug+xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A),halt" % filename,
                    **kargs)

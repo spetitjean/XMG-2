@@ -20,10 +20,10 @@ def handler_xmg_bootstrap(args):
             os.unlink(dst)
         os.symlink(src, dst)
     # link in the bootstrap files
-    link_file("core/python/xmg/__init__.py", "__init__.py")
-    link_file("core/python/xmg/command/__init__.py", "command/__init__.py")
-    link_file("core/python/xmg/command/bootstrap.py", "command/bootstrap.py")
-    link_file("core/python/xmg/command/install.py", "command/install.py")
+    link_file("bootstrap/xmg/__init__.py", "__init__.py")
+    link_file("bootstrap/xmg/command/__init__.py", "command/__init__.py")
+    link_file("bootstrap/xmg/command/bootstrap.py", "command/bootstrap.py")
+    link_file("bootstrap/xmg/command/install.py", "command/install.py")
     # record initial set of commands
     command_list = xmg.config['COMMANDS']['commands'].strip().split()
     if "bootstrap" not in command_list:
