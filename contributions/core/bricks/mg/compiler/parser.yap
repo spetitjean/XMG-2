@@ -22,7 +22,7 @@
 :-module(xmg_brick_mg_parser).
 
 :- dynamic(lastError/2).
-
+:- xmg:edcg.
 :- edcg:thread(stack,edcg:stack).
 :- edcg:thread(stack2,edcg:stack).
 :- edcg:thread(steps,edcg:counter).

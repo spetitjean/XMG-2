@@ -19,6 +19,7 @@
 
 
 :-module(xmg_brick_mg_accs).
+:- use_module(edcg, 'xmg/brick/mg/edcg.yap', all).
 :-edcg:thread(constraints,edcg:queue).
 :-edcg:thread(vars,edcg:table).
 :-edcg:thread(consts,edcg:table).
@@ -34,7 +35,7 @@
 
 
 
-xmg:new_target_var(v(Name),Prefix):--
+xmg:new_target_var(v(Name),Prefix) :--
 	name::incr,
 	name::get(Get),
 	atomic_concat([Prefix,Get],Name),
@@ -77,3 +78,6 @@ term_expansion((:- xmg:unfolder_accs), R) :-
     !, unfolder_accs(L), edcg:term_expansion((:- edcg:using(L)), R).
 
 user:term_expansion(X,Y) :- xmg_brick_mg_accs:term_expansion(X,Y).
+
+term_expansion((:- xmg:edcg), R) :-
+    !, R=(:- use_module(edcg, 'xmg/brick/mg/edcg.yap', all)).
