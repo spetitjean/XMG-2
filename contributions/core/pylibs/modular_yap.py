@@ -13,7 +13,7 @@ class YAP(subprocess.Popen):
         print(xmg.command.YAPDIR)
         if xmg.command.YAPDIR is not None:
             pregoals.append("add_to_path('%s')" % xmg.command.YAPDIR)
-        pregoals.append("use_module(\'xmg/brick/mg/compiler/compiler.yap\')")
+        pregoals.append("use_module(\'%s/xmg/brick/mg/compiler/compiler.yap\')" % xmg.command.YAPDIR)
         if pregoals:
             call.extend(['-g',",".join(pregoals)])
         if goal is not None:
@@ -39,9 +39,9 @@ class YAP(subprocess.Popen):
             xmgLatin=", iso_latin_1"
         else:
             xmgLatin=", utf8"
-        xmgCompiler="use_module(\'"+xmg.command.YAPDIR+"/xmg/compiler/"+compiler+"/generated/conf\'),"
+        xmgCompiler="use_module(\'%s/xmg/compiler/%s/generated/conf\')," % (xmg.command.YAPDIR, compiler)
         return cls(
-                   goal=xmgDebug+xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A"  % filename +"),halt",
+                   goal=xmgDebug+xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A),halt" % filename,
                    **kargs)
 
   
