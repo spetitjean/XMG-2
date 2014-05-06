@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_feats).
+:-module(xmg_brick_feats_loader).
 
 
 :-use_module('xmg/brick/feats/compiler/unfolder').

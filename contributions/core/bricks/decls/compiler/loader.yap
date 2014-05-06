@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_decls).
+:-module(xmg_brick_decls_loader).
 
 :-use_module('xmg/brick/decls/compiler/unfolder').
 :-use_module('xmg/brick/decls/compiler/principles').

@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(xmg_brick_syn_convert, []).
+:- module(xmg_brick_iface_convert, []).
 :- use_module('xmg/brick/syn/most').
 
 %%:- edcg:using(xmg_convert_avm:name).

@@ -18,6 +18,6 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_dim).
+:-module(xmg_brick_dim_loader).
 
 :-use_module('xmg/brick/dim/compiler/unfolder').

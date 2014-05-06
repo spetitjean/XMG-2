@@ -12,7 +12,8 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_mg_generator).
+:-module(xmg_brick_value_generator).
+:-edcg:using([xmg_brick_mg_generator:decls, xmg_brick_mg_generator:code]).
 
 xmg:generate_instr(eq(v(Var),v(ID))):--
 	decls::tget(Var,GV),

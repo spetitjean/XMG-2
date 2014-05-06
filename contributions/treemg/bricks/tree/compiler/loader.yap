@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_tree).
+:-module(xmg_brick_tree_loader).
 
 	%% this should be done optionally
 :-	use_module('xmg/brick/tree/compiler/preparer').

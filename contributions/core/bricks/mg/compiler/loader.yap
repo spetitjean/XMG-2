@@ -1,4 +1,4 @@
-:-module(xmg_loader_mg).
+:-module(xmg_brick_mg_loader).
 
 
 :- use_module('xmg/brick/mg/compiler/accs.yap').

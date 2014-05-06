@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_polAvm).
+:-module(xmg_brick_polAvm_loader).
 
 :-use_module('xmg/brick/avm/compiler/loader').
 :-use_module('xmg/brick/polAvm/compiler/typer').

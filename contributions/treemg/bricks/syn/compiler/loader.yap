@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_syn).
+:-module(xmg_brick_syn_loader).
 
 :-	use_module('xmg/brick/syn/compiler/edcg').
 

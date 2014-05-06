@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_control).
+:-module(xmg_brick_control_loader).
 
 :-use_module('xmg/brick/control/compiler/unfolder').
 :-use_module('xmg/brick/control/compiler/typer').

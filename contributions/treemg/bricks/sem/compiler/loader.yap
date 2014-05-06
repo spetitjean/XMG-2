@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_sem).
+:-module(xmg_brick_sem_loader).
 
 :-	use_module('xmg/brick/sem/compiler/unfolder').
 :-	use_module('xmg/brick/sem/compiler/typer').

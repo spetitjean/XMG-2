@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:-module(xmg_loader_iface).
+:-module(xmg_brick_iface_loader).
 
 :-	use_module('xmg/brick/iface/compiler/edcg').
 %%:-	use_module('xmg/brick/iface/compiler/compiler').
