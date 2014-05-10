@@ -32,16 +32,16 @@ class YAP(subprocess.Popen):
         #import xmg.modular_program
         import xmg.command
         if debug:
-            xmgDebug="xmg_bricks_mg_compiler:debug_mode_on,"
+            xmgDebug="on"
         else:
-            xmgDebug=""
+            xmgDebug="off"
         if latin:
-            xmgLatin=", iso_latin_1"
+            xmgLatin="iso_latin_1"
         else:
-            xmgLatin=", utf8"
+            xmgLatin="utf8"
         xmgCompiler="use_module(\'%s/xmg/compiler/%s/generated/conf\')," % (xmg.command.YAPDIR, compiler)
         return cls(
-                   goal=xmgDebug+xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A),halt" % filename,
+                   goal=xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A,%s,%s)" % (filename,xmgLatin,xmgDebug),
                    **kargs)
 
   
