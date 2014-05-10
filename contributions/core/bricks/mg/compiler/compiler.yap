@@ -62,9 +62,9 @@ xmg:send(T,Send):-
 
 compile_file(File,Eval):-
 	xmg_compiler_conf:init,
-	findall(Module,xmg_modules_def:module_def(_,Module),Modules),
-	xmg:send(info,Modules),
-	xmg_brick_mg_modules:load_modules(Modules),
+	%%findall(Module,xmg_modules_def:module_def(_,Module),Modules),
+	%%xmg:send(info,Modules),
+	%%xmg_brick_mg_modules:load_modules(Modules),
 	xmg_compiler_conf:init_threads,
 
 	send(info,' loaded '),

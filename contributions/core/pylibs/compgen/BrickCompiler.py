@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, glob, xmg.command
 
 class BrickCompiler(object):
 
@@ -272,6 +272,7 @@ class BrickCompiler(object):
         genfile.close()
         print("Part of generator generated in "+self._folder)
 
+    # this should move to generate_loader (which does not use loader.yap files)
     def generate_modules(self):
         compfile=open(self._folder+"/modules_def.yap","w")
         compfile.write('%% -*- prolog -*-\n\n')
@@ -287,6 +288,33 @@ class BrickCompiler(object):
         for solver in self._solvers:
             compfile.write('module_def(\''+self._solvers[solver]+'\',\'xmg/brick/'+self._solvers[solver]+'/compiler/loader\').\n')  
         compfile.close()
+
+        print("Part of modules generated in "+self._folder)
+
+    def generate_loader(self):
+        compfile=open(self._folder+"/loader.yap","w")
+        compfile.write('%% -*- prolog -*-\n\n')
+        compfile.write(':-module(xmg_loader).\n\n')
+        compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+        compfile.write('%% Loader\n')
+        compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
+        ## MG must be the first module, and Control the last one !
+        # for comp in self._links:
+        #     compfile.write('module_def(\''+comp._prefix+'\',\''+self._links[comp]+'\').\n')
+        import glob
+        yapdir= xmg.command.YAPDIR 
+        for (comp,brick) in self._links:
+            for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,comp._prefix)):
+                compfile.write(':-use_module(\'%s\').\n' % yapfile)
+            for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,comp._prefix)):
+                # if a loader is there, do not load it, to avoid double imports
+                if not os.path.basename(yapfile)=="loader.yap": 
+                    compfile.write(':-use_module(\'%s\').\n' % yapfile)
+        for solver in self._solvers:
+            for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,self._solvers[solver])):
+                compfile.write(':-use_module(\'%s\').\n' % yapfile)
+            for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,self._solvers[solver])):
+                compfile.write(':-use_module(\'%s\').\n' % yapfile)
         print("Part of modules generated in "+self._folder)
 
     # def generate_conf(self,path):
@@ -321,7 +349,8 @@ class BrickCompiler(object):
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/dimensions\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_punct\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_keywords\'),\n')
-        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\'),\n')
+        #conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\'),\n')
+        conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/loader\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/solvers\').\n\n')
         conffile.write('init_threads:-\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/edcg\').')
@@ -346,7 +375,8 @@ class BrickCompiler(object):
             self.generate_tokenize_punctuation()
             self.generate_tokenize_keywords()
             #self.generate_tokenize_dims()
-            self.generate_modules()
+            #self.generate_modules()
+            self.generate_loader()
             self.generate_edcg()
             self.generate_conf()
         else:
