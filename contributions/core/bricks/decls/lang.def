@@ -10,7 +10,12 @@ Decl : Principle {$$=$1}
 
 Principle : 'use' Id_or_constr 'with' '(' (PrincipleParam // ',')* ')' 'dims' '(' (id)+ ')' {$$=decls:principle($2,$5,$9)}; 
 
-PrincipleParam : PrincipleFeat {$$=$1} |  id {$$=decls:principle_type($1)};
+PrincipleParam : PrincipleFeat {$$=$1} |  id {$$=decls:principle_type($1)} | ModType {$$=$1};
+
+/* ModType is a type constructor from a module (<module:type>) */
+ModType : '<' id ':' id '>' (Params)? {$$=decls:modtype($2,$4,$6)};
+
+Params :  '[' (id // ',')* ']' {$$=$2};
 
 PrincipleFeat : id '=' id {$$=decls:eq($1,$3)}
 	      /*| id {$$=eq($1,none)} */

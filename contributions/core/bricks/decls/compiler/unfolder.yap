@@ -83,6 +83,9 @@ unfold_args([decls:eq(token(C,id(Prop)),token(C1,int(Int)))|T],[eq(Prop,Int)|T1]
 unfold_args([decls:eq(token(C,id(Prop)),token(C1,id(Prop2)))|T],[eq(Prop,Prop2)|T1]):-
 	unfold_args(T,T1),!.
 
+unfold_args([decls:modtype(token(_,id(Brick)),token(_,id(Type)),Params)|T],[modtype(Brick,Type,Params)|T1]):-
+	unfold_args(T,T1),!.
+
 unfold_args([H|T],_):-
 	xmg:send(info,'\nUnknown principle arg: '),
 	xmg:send(info,H),
