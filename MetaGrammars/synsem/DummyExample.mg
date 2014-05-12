@@ -43,8 +43,8 @@ declare ?T ?C ?A
 		node ?T (color=black) %[cat=whatever]
 		}*=[arg2=?A]
 		;
-	%%?T=?C.X
-	?C.X=?A
+	?T=?C.X
+	%%?C.X=?A
 }
 
 class dummy

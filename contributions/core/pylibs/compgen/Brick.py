@@ -30,7 +30,7 @@ class Brick(object):
         import xmg, os.path
         xmg_yap_rootdir = xmg.config['DEFAULT']['xmg_yap_rootdir']
         #return os.path.join(xmg_yap_rootdir, "xmg/brick/%s/compiler" % self._name)
-        return "xmg/brick/%s/compiler" % self._name
+        return "xmg/brick/%s" % self._name
 
     @property
     def language_brick(self):

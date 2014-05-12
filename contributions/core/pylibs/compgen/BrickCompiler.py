@@ -37,7 +37,10 @@ class BrickCompiler(object):
         
 
     def add_compiler(self,comp):
-        self._compilers.append(comp)
+        if os.path.basename(comp)== "mg":
+            self._compilers=[comp]+self._compilers
+        else:
+            self._compilers.append(comp)
 
     def add_compilers(self,comps):
         for comp in comps:
@@ -298,15 +301,16 @@ class BrickCompiler(object):
         compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         compfile.write('%% Loader\n')
         compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
-        ## MG must be the first module, and Control the last one !
-        # for comp in self._links:
-        #     compfile.write('module_def(\''+comp._prefix+'\',\''+self._links[comp]+'\').\n')
         import glob
         yapdir= xmg.command.YAPDIR 
-        for (comp,brick) in self._links:
-            for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,comp._prefix)):
+        #for (comp,brick) in self._links:
+        for comp in self._compilers:  
+            print(comp)
+            for yapfile in glob.glob("%s/%s/*.yap" % (yapdir,comp)):
                 compfile.write(':-use_module(\'%s\').\n' % yapfile)
-            for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,comp._prefix)):
+            yapfiles=glob.glob("%s/%s/compiler/*.yap" % (yapdir,comp))
+            yapfiles.sort()
+            for yapfile in yapfiles:
                 # if a loader is there, do not load it, to avoid double imports
                 if not os.path.basename(yapfile)=="loader.yap": 
                     compfile.write(':-use_module(\'%s\').\n' % yapfile)
@@ -314,23 +318,11 @@ class BrickCompiler(object):
             for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,self._solvers[solver])):
                 compfile.write(':-use_module(\'%s\').\n' % yapfile)
             for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,self._solvers[solver])):
-                compfile.write(':-use_module(\'%s\').\n' % yapfile)
+                 # if a loader is there, do not load it, to avoid double imports
+                if not os.path.basename(yapfile)=="loader.yap": 
+                    compfile.write(':-use_module(\'%s\').\n' % yapfile)
         print("Part of modules generated in "+self._folder)
 
-    # def generate_conf(self,path):
-    #     conffile=open(path,"w")
-    #     conffile.write('%% -*- prolog -*-\n\n')
-    #     conffile.write(':-module(xmg_compiler_conf).\n\n')
-    #     conffile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
-    #     conffile.write('%% Compiler Configuration\n')
-    #     conffile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
-    #     conffile.write('init:-\n')
-    #     conffile.write('\tuse_module(\'' + self._parser_file + '\'),\n')
-    #     conffile.write('\tadd_to_path(\'' + self._folder + '\'),\n')
-    #     conffile.write('\tuse_module(\'xmg_dimensions\'),\n')
-    #     conffile.write('\tuse_module(\'xmg_modules_def\').')
-    #     conffile.close()
-    #     print("Configuration file generated in "+path)
 
     def generate_conf(self):
         compPath=os.getcwd()
