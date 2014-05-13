@@ -23,9 +23,9 @@ def handler_xmg_startbrick(args):
     os.makedirs(path, exist_ok=True)
     os.makedirs(os.path.join(path, "compiler"))
     os.makedirs(os.path.join(path, "yaplib"))
-    with open(os.path.join(path, "lang.def")) as f:
+    with open(os.path.join(path, "lang.def"),'w') as f:
         f.write(LANGDEF % {"name": name})
-    with open(os.path.join(path, "config.ini")) as f:
+    with open(os.path.join(path, "config.ini"),'w') as f:
         f.write(CONFDEF % {"name": name})
 
 # create the xmg subcommand

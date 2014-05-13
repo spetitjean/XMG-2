@@ -8,7 +8,6 @@ class BrickCompiler(object):
         self._languages  = []
         self._compilers  = []
         self._dimensions = []
-        #self._links      = dict()
         self._links      = []
         self._dims       = []
         self._dimsp      = ['trace-TRACE']
@@ -48,18 +47,12 @@ class BrickCompiler(object):
         
 
     def add_link(self,language,compiler):
-        # print(language)
         if not language in self._languages:
             raise Exception("Brick "+language._prefix+" is not part of the compiler, try one of "+self._languages)
         if not compiler in self._compilers:
             raise Exception("Brick "+compiler+" is not part of the compiler")
-        #self._links[language]=compiler
-        if language._prefix == 'control':
-            self._links.append((language,compiler))
-        elif language._prefix == 'mg':
-            self._links.insert(0,(language,compiler))
-        else:
-            self._links.insert(1,(language,compiler))
+        self._links.append((language,compiler))
+    
 
     def add_links(self,links):
         for (language,compiler) in links:
@@ -104,12 +97,8 @@ class BrickCompiler(object):
             dimfile.write(self._dimbricks[dim])
             dimfile.write(').\n')
             
-
-        # dimfile.write('dims([')
-        # dimfile.write(", ".join(self._dimsp))
-        # dimfile.write(']).\n\n')
         dimfile.close()
-        print("Dimensions generated in "+self._folder)
+        print("Dimensions generated in %s/dimensions.yap"%self._folder)
 
     def generate_solvers(self):
         dimfile=open(self._folder+"/solvers.yap","w")
@@ -128,7 +117,7 @@ class BrickCompiler(object):
             dimfile.write(self._solvers[solver])
             dimfile.write(').\n')
         dimfile.close()
-        print("Solvers bindings generated in "+self._folder)
+        print("Solvers bindings generated in %s/solvers.yap"%self._folder)
 
     def generate_edcg(self):
         dimfile=open(self._folder+"/edcg.yap","w")
@@ -142,18 +131,13 @@ class BrickCompiler(object):
             dimbrick=self._dimbricks[dim]
             import xmg
             yapdir=xmg.config['DEFAULT']['xmg_yap_rootdir']
-            print(yapdir)
             if os.path.exists(yapdir+'/xmg/brick/'+dimbrick+'/compiler/edcg.yap'):
                 dimfile.write(':-edcg:thread(xmg_acc:'+dim+', xmg_brick_'+dimbrick+'_edcg:accu_type).\n\n')
             else:
                 dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:stack).\n\n')
 
         dimfile.write(':-edcg:thread(xmg_acc:trace, edcg:stack).\n\n')
-
-
-
         dimfile.write(':-edcg:weave(['+", ".join(self._accs)+'],[xmg:value_class/3]).\n\n')
-
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         dimfile.write('%% Starting valuation\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
@@ -164,27 +148,9 @@ class BrickCompiler(object):
         dimfile.write('  xmg:value_class(Class,_,_) with ('+", ".join(self._accs_init))
         dimfile.write(').')
 
-        print("Threads generated in "+self._folder)
+        print("Threads generated in %s/edcg.yap"%self._folder)
         dimfile.close()
 
-        
-    def generate_tokenize_dims(self):
-        tokenizefile=open(self._folder+"/tokenizer_dims.yap","w")
-        tokenizefile.write('%% -*- prolog -*-\n\n')
-        tokenizefile.write(':-module(xmg_tokenizer).\n\n')
-        tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
-        tokenizefile.write('%% Part of tokenizer\n')
-        tokenizefile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
-
-        # To be replaced by 
-        # dim('dim').
-        # and (but maybe already generated with punctuation)
-        # punctuation('<dim>') -->> input_gets("<dim>"),!.
-        for dim in self._dims:
-            tokenizefile.write('dim(\'<'+dim+'>\') -->> input_gets("'+dim+'"),!. \n')
-            tokenizefile.write('dim(dim(\''+dim+'\')) -->> input_gets("<'+dim+'>"),!.\n')   
-
-        print("Part of tokenizer generated in "+self._folder)
 
     def collect_punctuation(self):
         for lang in self._languages:
@@ -195,14 +161,10 @@ class BrickCompiler(object):
 
     def collect_keywords(self):
         for lang in self._languages:
-            #print(lang._punctuation)
             for nkey in lang._keywords:
                 if nkey not in self._keywords and nkey > '':
-                    #print(npunct)
                     self._keywords.append(nkey)
-        #print(self._punctuation)
         self._keywords.sort(reverse=True)
-        #print(self._punctuation)
 
 
     def generate_tokenize_punctuation(self):
@@ -222,7 +184,7 @@ class BrickCompiler(object):
             tokenizefile.write('xmg:punctuation(\''+punct+'\').\n')
 
         tokenizefile.close()
-        print("Part of tokenizer generated in "+self._folder)
+        print("Part of tokenizer generated in %s/tokenizer_punct.yap"%self._folder)
 
     def generate_tokenize_keywords(self):
         self.collect_keywords()
@@ -241,58 +203,7 @@ class BrickCompiler(object):
             tokenizefile.write('xmg:keyword(\''+key+'\').\n')
 
         tokenizefile.close()
-        print("Part of tokenizer generated in "+self._folder)
-
-    def generate_unfold_rules(self):
-        unfoldfile=open(self._folder+"/unfolder.yap","w")
-        unfoldfile.write('%% -*- prolog -*-\n\n')
-        unfoldfile.write(':-module(xmg_unfolder_control).\n\n')
-        unfoldfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
-        unfoldfile.write('%% Part of unfolding\n')
-        unfoldfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
-
-        for dim in self._dims:
-            unfoldfile.write('unfold_stmt([\''+dim+'-DimStmt\'(Stmt)],\''+dim+'Stmt\'(UStmt)):-\n')
-            unfoldfile.write('    Stmt=..[\''+dim+'-DimStmt\',token(_,\'<\'),token(_,\''+dim+'\'),token(_,\'>\'),token(_,\'{\'),DimStmt,token(_,\'}\')],!,\n')
-            #unfoldfile.write('    add_to_path(\''+dim+'\'),\n')
-            unfoldfile.write('    use_module(\'xmg_unfolder_'+dim+'\'),\n')
-            unfoldfile.write('    xmg_unfolder_'+dim+':unfold(DimStmt,UStmt).\n\n')      
-        unfoldfile.close()
-        print("Part of unfolder generated in "+self._folder)
-
-
-    def generate_gen_rules(self):
-        genfile=open(self._folder+"/generator.yap","w")
-        genfile.write('%% -*- prolog -*-\n\n')
-        genfile.write(':-module(xmg_generator_control).\n\n')
-        genfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
-        genfile.write('%% Part of generation\n')
-        genfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')  
-        for dim in self._dims:
-            genfile.write('generate_dimStmt(\''+dim+'Stmt\'(Stmt),List,Class,Generated):-\n')
-            genfile.write('    use_module(\'xmg_generator_'+dim+'\'),\n')
-            genfile.write('    xmg_generator_'+dim+':generate_Stmt(Stmt,List,Class,Generated).\n\n')   
-        genfile.close()
-        print("Part of generator generated in "+self._folder)
-
-    # this should move to generate_loader (which does not use loader.yap files)
-    def generate_modules(self):
-        compfile=open(self._folder+"/modules_def.yap","w")
-        compfile.write('%% -*- prolog -*-\n\n')
-        compfile.write(':-module(xmg_modules_def).\n\n')
-        compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
-        compfile.write('%% Part of modules\n')
-        compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
-        ## MG must be the first module, and Control the last one !
-        # for comp in self._links:
-        #     compfile.write('module_def(\''+comp._prefix+'\',\''+self._links[comp]+'\').\n')
-        for (comp,brick) in self._links:
-            compfile.write('module_def(\''+comp._prefix+'\',\''+brick+'/loader\').\n')
-        for solver in self._solvers:
-            compfile.write('module_def(\''+self._solvers[solver]+'\',\'xmg/brick/'+self._solvers[solver]+'/compiler/loader\').\n')  
-        compfile.close()
-
-        print("Part of modules generated in "+self._folder)
+        print("Part of tokenizer generated in %s/tokenizer_keywords.yap"%self._folder)
 
     def generate_loader(self):
         compfile=open(self._folder+"/loader.yap","w")
@@ -303,9 +214,7 @@ class BrickCompiler(object):
         compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
         import glob
         yapdir= xmg.command.YAPDIR 
-        #for (comp,brick) in self._links:
         for comp in self._compilers:  
-            print(comp)
             for yapfile in glob.glob("%s/%s/*.yap" % (yapdir,comp)):
                 compfile.write(':-use_module(\'%s\').\n' % yapfile)
             yapfiles=glob.glob("%s/%s/compiler/*.yap" % (yapdir,comp))
@@ -321,7 +230,7 @@ class BrickCompiler(object):
                  # if a loader is there, do not load it, to avoid double imports
                 if not os.path.basename(yapfile)=="loader.yap": 
                     compfile.write(':-use_module(\'%s\').\n' % yapfile)
-        print("Part of modules generated in "+self._folder)
+        print("Modules loader generated in %s/loader.yap"%self._folder)
 
 
     def generate_conf(self):
@@ -335,19 +244,16 @@ class BrickCompiler(object):
         conffile.write('%% Compiler Configuration\n')
         conffile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
         conffile.write('init:-\n')
-        #conffile.write('\tadd_to_path(\'' + os.path.abspath(os.path.dirname(sys.argv[0])) + '\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/' + self._parser_file + '\'),\n')
-        #conffile.write('\tadd_to_path(\'' + os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), self._folder) + '\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/dimensions\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_punct\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/tokenizer_keywords\'),\n')
-        #conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/modules_def\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/loader\'),\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/solvers\').\n\n')
         conffile.write('init_threads:-\n')
         conffile.write('\tuse_module(\'xmg/compiler/'+compName+'/generated/edcg\').')
         conffile.close()
-        print("Configuration file generated in "+self._folder)
+        print("Configuration file generated in %s/conf.yap"%self._folder)
 
     def generate_parser(self,Brick):
         if self._parser_file is not None:
@@ -366,8 +272,6 @@ class BrickCompiler(object):
             self.generate_solvers()
             self.generate_tokenize_punctuation()
             self.generate_tokenize_keywords()
-            #self.generate_tokenize_dims()
-            #self.generate_modules()
             self.generate_loader()
             self.generate_edcg()
             self.generate_conf()
