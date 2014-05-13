@@ -1,4 +1,5 @@
 from xmg.command import subparsers
+import shutil
 
 #==============================================================================
 # xmg startbrick NAME
@@ -27,6 +28,15 @@ def handler_xmg_startbrick(args):
         f.write(LANGDEF % {"name": name})
     with open(os.path.join(path, "config.ini"),'w') as f:
         f.write(CONFDEF % {"name": name})
+    patterndir=os.path.dirname(os.path.realpath(__file__))+"/patterns/compiler"
+    yap_files = os.listdir(patterndir) 
+    for yap_file in yap_files:
+        print(yap_file)
+        full_yap_file = os.path.join(patterndir, yap_file)
+        print(full_yap_file)     
+        if (os.path.isfile(full_yap_file)):
+            print(" is file ")
+            shutil.copy(full_yap_file, path+"/compiler")
 
 # create the xmg subcommand
 cmd = subparsers.add_parser(
