@@ -1,4 +1,6 @@
 from xmg.command import subparsers
+import fileinput
+import re
 import shutil
 
 #==============================================================================
@@ -28,6 +30,7 @@ def handler_xmg_startbrick(args):
         f.write(LANGDEF % {"name": name})
     with open(os.path.join(path, "config.ini"),'w') as f:
         f.write(CONFDEF % {"name": name})
+    # create the yap files from patterns
     patterndir=os.path.dirname(os.path.realpath(__file__))+"/patterns/compiler"
     yap_files = os.listdir(patterndir) 
     for yap_file in yap_files:
@@ -37,6 +40,11 @@ def handler_xmg_startbrick(args):
         if (os.path.isfile(full_yap_file)):
             print(" is file ")
             shutil.copy(full_yap_file, path+"/compiler")
+            newfile=path+"/compiler/"+yap_file
+            # make changes in patterns
+            for line in fileinput.input(newfile,inplace=1):
+                line = re.sub('#BRICK#',name, line.rstrip())
+                print(line)
 
 # create the xmg subcommand
 cmd = subparsers.add_parser(
