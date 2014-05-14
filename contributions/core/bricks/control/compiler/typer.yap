@@ -21,8 +21,8 @@
 
 :- xmg:edcg.
 
-:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types]).
-:-edcg:weave([xmg_brick_mg_typer:dim_types],[get_dim_type/2]).
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types]).
+:-edcg:weave([xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[get_dim_type/2]).
 
 
 xmg:type_stmt(control:and(S1,S2),Type):--
@@ -45,12 +45,20 @@ xmg:type_stmt(dim:dim(Dim,S),void):--
 	%% xmg:send(info,Type),
 
 	xmg:type_stmt(S,Type),
-	%% xmg:send(info,'\ndim typed\n'),
+	xmg:send(info,'\ndim typed\n'),
 
 	!.
 
 get_dim_type(Dim,Type):--
 	dim_types::tget(dim:Dim,Type),!.
+get_dim_type(Dim,Type):--
+	xmg:principle(dimtype,DimType,Dims),
+	lists:member(Dim,Dims),!,
+	xmg:send(info,DimType),
+	xmg:stmt_type(Dim,DimType,Type),
+	xmg:send(info,'\n\nDim type: '),
+	xmg:send(info,Type),
+	dim_types::tput(dim:Dim,Type),!.
 get_dim_type(Dim,Type):--
 	xmg:stmt_type(Dim,Type),
 	dim_types::tput(dim:Dim,Type),!.

@@ -41,9 +41,20 @@ xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
 
 	xmg:type_expr(Props,PType),
 
+	xmg:send(info,'\nProps type is now '),
+	xmg_brick_avm_avm:avm(PType,LPType),
+	xmg:send(info,LPType),
+
 	xmg:get_var_type(ID,Type),
+
+	xmg:send(info,'\nNode type is '),
+	xmg:send(info,Type),
+
+
 	Type=syn:node(syn:tree(FType,PType)),
 
+	xmg:send(info,'\nNode type is '),
+	xmg:send(info,Type),
 
 	!.
 

@@ -7,7 +7,7 @@ type SynFeats = [synNode: <syn:synnode>]
 %%type SynFeats = []
 
 
-use dimtype with (<syn:tree>[SynProps,SynFeats]) dims (syn)
+use dimtype with (<syn:tree>[SynFeats,SynProps]) dims (syn)
 
 type CAT = {v,n,s,cl}
 %%type CAT = {t}
