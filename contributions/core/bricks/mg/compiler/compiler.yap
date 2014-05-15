@@ -33,7 +33,7 @@
 :-dynamic(debug_mode/0).
 
 %encoding(iso_latin_1).
-encoding(utf8).
+%encoding(utf8).
 %debug_mode(false).
 
 debug_mode_on:-
@@ -60,11 +60,23 @@ send_nl(info,N):-
 xmg:send(T,Send):-
 	send(T,Send),!.
 
+compile_file(File,Eval,Encoding,Debug):-
+	asserta(encoding(Encoding)),
+	(
+	    Debug="on"
+	    ->
+	     debug_mode_on
+             ;
+	     true
+	 ),
+	 compile_file(File,Eval),
+	 halt.
+
 compile_file(File,Eval):-
 	xmg_compiler_conf:init,
-	findall(Module,xmg_modules_def:module_def(_,Module),Modules),
-	xmg:send(info,Modules),
-	xmg_brick_mg_modules:load_modules(Modules),
+	%%findall(Module,xmg_modules_def:module_def(_,Module),Modules),
+	%%xmg:send(info,Modules),
+	%%xmg_brick_mg_modules:load_modules(Modules),
 	xmg_compiler_conf:init_threads,
 
 	send(info,' loaded '),

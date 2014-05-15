@@ -57,6 +57,12 @@ format_spec(hint(L,M)) -->> !,
 	vs_to_string(M) with queue([]-MM,[]-[]),
 	queue::enq("~t~s~12+: ~s"-[LL,MM]),
 	queue::enq(nl).
+format_spec(hint(L,M,N)) -->> !,
+	vs_to_string(L) with queue([]-LL,[]-[]),
+	vs_to_string(M) with queue([]-MM,[]-[]),
+	vs_to_string(N) with queue([]-NN,[]-[]),
+	queue::enq("~t~s~12+: ~s, got ~s"-[LL,MM,NN]),
+	queue::enq(nl).
 format_spec(coord(F,L,C)) -->> !,
 	format_spec(hint(filename,F)),
 	format_spec(hint(line,L)),
@@ -104,6 +110,16 @@ vs_to_string(exprs_types(E1,T1,E2,T2))-->>
 vs_to_string(write(T)) -->> !,
 	write_to_chars(T,S),
 	queue::enq_list(S).
+vs_to_string([H]) -->>
+	atom_codes(H,C),
+	queue::enq_list(C),
+	!.
+vs_to_string([H|T]) -->>
+	atom_codes(H,C),
+	queue::enq_list(C),
+	queue::enq_list(" or "),
+	vs_to_string(T),
+	!.
 vs_to_string(L) -->>
 	queue::enq_list(L).
 

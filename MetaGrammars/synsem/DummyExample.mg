@@ -2,6 +2,13 @@ type COLOR = {red,black,white}
 property color : COLOR
 %% use color with () dims (syn) %args (COLOR)
 
+type SynProps = []
+type SynFeats = [synNode: <syn:synnode>[<syn:tree>]]
+%%type SynFeats = []
+
+
+use dimtype with (<syn:tree>[SynFeats,SynProps]) dims (syn)
+
 type CAT = {v,n,s,cl}
 %%type CAT = {t}
 
@@ -19,6 +26,7 @@ feature cat : CAT
 feature agr : AGR
 feature num : NUM
 feature gen : GEN
+feature fs  : FS
 
 feature extracted : bool
 feature color : COLOR
@@ -43,8 +51,8 @@ declare ?T ?C ?A
 		node ?T (color=black) %[cat=whatever]
 		}*=[arg2=?A]
 		;
-	%%?T=?C.X
-	?C.X=?A
+	?T=?C.X
+	%%?C.X=?A
 }
 
 class dummy
@@ -65,7 +73,7 @@ declare ?X ?Y ?Z ?T ?L ?C
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
 	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=sg,cat=s]]{
-	     	  node ?T (color=black) [cat=?L]
+	     	  node ?T (color=black) [cat=?L, fs=[that=[these=[gen=m]]]]
 		  }
 	     
 	     	} 

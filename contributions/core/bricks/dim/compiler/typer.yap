@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2013  Simon Petitjean
+%% Copyright (C) 2014  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,11 +17,25 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_dim_typer).
 
-:-module(xmg_loader_#BRICK#).
+:- xmg:edcg.
 
-:-use_module('xmg/brick/#BRICK#/compiler/typer').
-:-use_module('xmg/brick/#BRICK#/compiler/unfolder').
-:-use_module('xmg/brick/#BRICK#/compiler/explorer').
-:-use_module('xmg/brick/#BRICK#/compiler/generator').
-:-use_module('xmg/brick/#BRICK#/compiler/convert').
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[xmg:stmt_type/3,get_types/2,get_type/2]).
+
+xmg:stmt_type(Dim,[modtype(Brick,Constr,Params)],Type):--
+	get_types(Params,Types),
+	DimType=..[Constr|Types],
+	Type=..[':',Brick,DimType],!.
+
+get_types(none,[]):-- !.
+get_types(some(Types),GTypes):--
+	get_types(Types,GTypes),!.
+get_types([],[]):-- !.
+get_types([H|T],[H1|T1]):--
+	get_type(H,H1),
+	get_types(T,T1),!.
+
+get_type(token(_,id(Type)),GType):--
+	type_decls::tget(Type,GType),!.

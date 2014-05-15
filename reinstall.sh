@@ -1,5 +1,6 @@
 #! /bin/bash
 
+rm -rf .install
 xmg bootstrap                || exit 1
 cd contributions             || exit 1
 xmg install core             || exit 1

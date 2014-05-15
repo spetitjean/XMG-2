@@ -24,7 +24,7 @@
 
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
 
-:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls],[value_type/2,type_def/2]).
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls],[value_type/2,type_def/2,extend_type/3]).
 
 xmg:stmt_type(iface,AVM):-
 	xmg_brick_avm_avm:avm(AVM,[]).
@@ -51,7 +51,7 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	xmg:send(info,Value),
 	xmg:send(info,'\nwith type '),
 	xmg:send(info,Type),
-	feat_type(Attr,UAttr,TypeAttr),
+	feat_type(Attr,UAttr,Type,TypeAttr),
 	type_def(TypeAttr,TypeDef),
 	value_type(Value,TypeDef),
 	extend_type(Type,UAttr,TypeDef),
@@ -59,10 +59,17 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 xmg:type_expr(avm:feat(Attr,Value),Type):--
 	throw(xmg(type_error(incompatible_types(Attr,Value)))).
 
-
-extend_type(Type,UAttr,TypeAttr):-
+%% when typing a structured type
+extend_type(Type,UAttr,TypeAttr):--
+	xmg_brick_avm_avm:dot(Type,UAttr,AVM),
+	type_decls::tget(AVM,AVMType),
+	xmg:send(info,' got avm type '),
+	TypeAttr=AVMType,
+	!.
+%% when typing a single feat
+extend_type(Type,UAttr,TypeAttr):--
 	xmg_brick_avm_avm:dot(Type,UAttr,TypeAttr),!.
-extend_type(Type,UAttr,TypeAttr):-
+extend_type(Type,UAttr,TypeAttr):--
 	xmg:send(info,'\n\nAVM Type Error! Could not extend type:\n'),
 	xmg_brick_avm_avm:avm(Type,LType),
 	xmg:send(info,LType),
@@ -71,7 +78,7 @@ extend_type(Type,UAttr,TypeAttr):-
 	xmg:send(info,'\n'),	
 	xmg:send(info,TypeAttr),
 	fail.
-extend_type(Type,UAttr,TypeAttr):-
+extend_type(Type,UAttr,TypeAttr):--
 	xmg:send(info,'\n\nAVM Type Error! Could not extend type:\n'),
 	xmg:send(info,Type),
 	xmg:send(info,'\n'),
@@ -89,14 +96,26 @@ xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
 	!.
 
-feat_type(token(_,id(Feat)),Feat,Type):-
+%% when typing a structured avm
+feat_type(token(_,id(Feat)),Feat,AVM,Type):-
+	xmg_brick_avm_avm:avm(AVM,AVMFeats),
+	xmg:send(info,AVMFeats),
+	lists:member(Feat-_,AVMFeats),
+	xmg_brick_avm_avm:dot(AVM,Feat,Type),
+
+	!.
+%% when typing a single feat
+feat_type(token(_,id(Feat)),Feat,_,Type):-
 	xmg:feat(Feat,Type),
 	!.
-feat_type(token(C,ID),Feat,Type):-
+feat_type(token(C,ID),Feat,_,Type):-
 	throw(xmg(type_error(feature_not_declared(ID,C)))).
 
 type_def(TypeAttr,TypeDef):--
 	type_decls::tget(TypeAttr,TypeDef),
+	!.
+type_def(TypeAttr,TypeAttr):--
+	var(TypeAttr),
 	!.
 type_def(TypeAttr,_):--
 	xmg:send(info,'\n\nError! Type '),

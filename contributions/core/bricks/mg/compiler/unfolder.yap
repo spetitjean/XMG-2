@@ -54,10 +54,8 @@ xmg:unfold([H|T],[H1|T1]):-
 	xmg:unfold(H,H1),
 	xmg:unfold(T,T1),!.
 xmg:unfold([H|T],[H1|T1]):-
-	xmg:send(info,'\n\ncould not unfold '),
-	xmg:send(info,H),
-	false,
-	!.
+	throw(xmg(unfolder_error(no_unfolding(H)))).
+
 
 
 xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Constraints,TableVF),Coord)):--
