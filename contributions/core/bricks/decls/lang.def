@@ -15,7 +15,10 @@ PrincipleParam : PrincipleFeat {$$=$1} |  id {$$=decls:principle_type($1)} | Mod
 /* ModType is a type constructor from a module (<module:type>) */
 ModType : '<' id ':' id '>' (Params)? {$$=decls:modtype($2,$4,$6)};
 
-Params :  '[' (id // ',')* ']' {$$=$2};
+Params :  '[' (ID_or_ModType // ',')* ']' {$$=$2};
+
+ID_or_ModType : id {$$=$1}
+	      | ModType {$$=$1};
 
 PrincipleFeat : id '=' id {$$=decls:eq($1,$3)}
 	      /*| id {$$=eq($1,none)} */

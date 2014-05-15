@@ -3,7 +3,7 @@ property color : COLOR
 %% use color with () dims (syn) %args (COLOR)
 
 type SynProps = []
-type SynFeats = [synNode: <syn:synnode>]
+type SynFeats = [synNode: <syn:synnode>[<syn:tree>]]
 %%type SynFeats = []
 
 
@@ -26,6 +26,7 @@ feature cat : CAT
 feature agr : AGR
 feature num : NUM
 feature gen : GEN
+feature fs  : FS
 
 feature extracted : bool
 feature color : COLOR
@@ -72,7 +73,7 @@ declare ?X ?Y ?Z ?T ?L ?C
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
 	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=sg,cat=s]]{
-	     	  node ?T (color=black) [cat=?L]
+	     	  node ?T (color=black) [cat=?L, fs=[that=[these=[gen=m]]]]
 		  }
 	     
 	     	} 

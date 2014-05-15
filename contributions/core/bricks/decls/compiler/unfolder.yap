@@ -93,7 +93,7 @@ unfold_pair(decls:structpair(token(_,id(P1)),token(_,id(P2))),P1-P2):- !.
 unfold_pair(decls:structpair(token(_,id(P1)),ModType),P1-P2):- 
 	unfold_arg(ModType,P2),
 	!.
-unfold_pair(decls:structpair(token(_,id(P1)),decls:struct(Pairs)),P1-P2):-
+unfold_pair(decls:structpair(token(_,id(P1)),decls:struct(Pairs)),P1-struct(P2)):-
 	unfold_pairs(Pairs,P2),!.
 
 unfold_maybe_pairs(none,[]):- !.

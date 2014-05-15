@@ -256,6 +256,10 @@ get_feats_types([H|T],[H1|T1]):--
 	get_feat_type(H,H1),
 	get_feats_types(T,T1),!.
 
+get_feat_type(F-struct(Feats),F-AVM):--
+	get_feats_types(Feats,FeatsTypes),
+	xmg_brick_avm_avm:avm(AVM,FeatsTypes),	
+	!.
 get_feat_type(F-T,F-T):--
 	%%assert_feat(feat(F,T)),
 	!.
