@@ -24,18 +24,17 @@
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
 :-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[xmg:stmt_type/3,get_types/2,get_type/2]).
 
-xmg:stmt_type(Dim,[modtype(Brick,Constr,Params)],Type):--
+xmg:stmt_type(Dim,Params,Type):--
+	xmg:send(info,Params),
 	get_types(Params,Types),
+	Constr=tree,
 	DimType=..[Constr|Types],
 	Type=..[':',Brick,DimType],!.
 
-get_types(none,[]):-- !.
-get_types(some(Types),GTypes):--
-	get_types(Types,GTypes),!.
 get_types([],[]):-- !.
 get_types([H|T],[H1|T1]):--
 	get_type(H,H1),
 	get_types(T,T1),!.
 
-get_type(token(_,id(Type)),GType):--
+get_type(type(Type),GType):--
 	type_decls::tget(Type,GType),!.

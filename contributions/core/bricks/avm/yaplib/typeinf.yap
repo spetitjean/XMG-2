@@ -66,7 +66,7 @@ typeinf(call(F,E), T, L) :-
 
 typeinf((C#E), T, L) :-
     !, nonvar(C),
-    global_cons_decl(C, TArg T),
+    global_cons_decl(C, TArg, T),
     typeinf(E, TArg, L).
 
 %% ==================================================================

@@ -77,7 +77,7 @@ unfold_arg(token(_,id(V)),V):-!.
 unfold_arg(decls:principle_type(token(_,id(P1))),type(P1)):-!.
 unfold_arg(decls:eq(token(C,id(Prop)),token(C1,int(Int))),eq(Prop,Int)):-!.
 unfold_arg(decls:eq(token(C,id(Prop)),token(C1,id(Prop2))),eq(Prop,Prop2)):-!.
-unfold_arg(decls:modtype(token(_,id(Brick)),token(_,id(Type)),Params),modtype(Brick,Type,Params)):-!.
+unfold_arg(decls:modtype(token(_,id(Brick)),token(_,id(Type))),modtype(Brick,Type)):-!.
 
 
 unfold_dims([],[]):- !.

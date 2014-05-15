@@ -3,11 +3,11 @@ property color : COLOR
 %% use color with () dims (syn) %args (COLOR)
 
 type SynProps = []
-type SynFeats = [synNode: <syn:synnode>[<syn:tree>]]
+type SynFeats = [synNode: <syn:synnode>]
 %%type SynFeats = []
 
 
-use dimtype with (<syn:tree>[SynFeats,SynProps]) dims (syn)
+use dimtype with (SynFeats,SynProps) dims (syn)
 
 type CAT = {v,n,s,cl}
 %%type CAT = {t}
