@@ -17,5 +17,16 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_mg_prelude).
+
 :-use_module('xmg/brick/mg/edcg.yap').
 
+:-multifile(user:term_expansion/2).
+
+term_expansion((:- xmg:edcg), R) :-
+    !, R=(:- use_module(edcg, 'xmg/brick/mg/edcg.yap', all)).
+
+term_expansion((:- xmg:gecode), R) :-
+    !, R=(:- use_module(gecode, library(gecode), all)).
+
+user:term_expansion(X,Y) :- xmg_brick_mg_prelude:term_expansion(X,Y).
