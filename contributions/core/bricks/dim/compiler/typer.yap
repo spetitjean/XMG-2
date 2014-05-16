@@ -27,7 +27,7 @@
 xmg:stmt_type(Dim,Params,Type):--
 	xmg:send(info,Params),
 	get_types(Params,Types),
-	Constr=tree,
+	xmg:stmt_type_constr(Dim,Brick:Constr),
 	DimType=..[Constr|Types],
 	Type=..[':',Brick,DimType],!.
 

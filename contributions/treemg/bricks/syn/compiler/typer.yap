@@ -24,13 +24,13 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
-%% le type associé à la dimension est a priori inconnu, ce sont des variables contraintes (au départ pas contraintes)
-%% dans l'environnement, on a toutes les variables de type contraintes
-
-%% ici, quelque part, il faut dire que le type des expressions de cette brique est syn:tree(FType,PType)
+%% statement type with default parameters
 xmg:stmt_type(syn,syn:tree(FType,PType)):-
 	xmg_brick_avm_avm:avm(FType,[]),
 	xmg_brick_avm_avm:avm(PType,[]).
+%% statement type with given parameters
+xmg:stmt_type_constr(syn,syn:tree).
+
 
 xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
 	xmg:type_expr(Feats,FType),
