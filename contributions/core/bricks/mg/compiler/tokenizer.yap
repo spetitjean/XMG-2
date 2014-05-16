@@ -354,13 +354,17 @@ dimtype(R,C) -->>
 more_dimtype1 -->> input_getc(0':), %' 
 	!.
 more_dimtype1 -->>
-    input_getc(C), buf::put(C),
+    input_getc(C), 
+    is_word_mid(C),	
+    buf::put(C),
     more_dimtype1.
 
 more_dimtype2 -->> input_getc(0'>), %'
 	!.
 more_dimtype2 -->>
-    input_getc(C), buf::put(C),
+    input_getc(C), 
+    is_word_mid(C),	
+    buf::put(C),
     more_dimtype2.
 
 %%=============================================================================
