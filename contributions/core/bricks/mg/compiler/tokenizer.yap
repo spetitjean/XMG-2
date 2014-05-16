@@ -43,7 +43,7 @@
 
 :- edcg:weave([chars, line, col, file],
 	      [spaces/0, space/0, resume_previous_file/0,
-	       number/2, string/2]).
+	       number/2, string/2, dimtype/2]).
 
 :- edcg:weave([line, col],
 	      [update_line_col_string/1, update_line_col_code/1]).
@@ -52,7 +52,7 @@
 	      [word/0, more_word/0,
 	       float/0, digit/0, digits/0, more_digits/0,
 	       uint/0, sint/0, dot/0, optepn/0,
-	       more_string/1]).
+	       more_string/1,more_dimtype1/0,more_dimtype2/0]).
 
 :- edcg:weave([tokbuf],[inserted/2]).
 
@@ -215,6 +215,7 @@ macro_more_tokens -->> [].
 %% read and return the next token.
 %%=============================================================================
 
+token(T,C) -->>     dimtype(T,C), !.
 token(T,C) -->>    inserted(T,C), !.
 token(T,C) -->> punctuation(T,C), !.
 token(T,C) -->>  identifier(T,C), !.
@@ -336,6 +337,31 @@ more_string(D) -->>
 bslash_code(0'n,0'\n) :- !.
 bslash_code(0't,0'\t) :- !.
 bslash_code(C,C).
+
+%%=============================================================================
+%% read a dimension type
+%%=============================================================================
+
+dimtype(R,C) -->>
+    coord(C),
+    input_getc(0'<),%'
+    more_dimtype1 with buf([]-S1, []-[]),
+    atom_codes(L1,S1),
+    more_dimtype2 with buf([]-S2, []-[]),
+    atom_codes(L2,S2),
+    R =dimtype(L1,L2).
+
+more_dimtype1 -->> input_getc(0':), %' 
+	!.
+more_dimtype1 -->>
+    input_getc(C), buf::put(C),
+    more_dimtype1.
+
+more_dimtype2 -->> input_getc(0'>), %'
+	!.
+more_dimtype2 -->>
+    input_getc(C), buf::put(C),
+    more_dimtype2.
 
 %%=============================================================================
 %% all punctuation should be externalized!

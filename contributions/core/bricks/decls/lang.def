@@ -12,9 +12,6 @@ Principle : 'use' Id_or_constr 'with' '(' (PrincipleParam // ',')* ')' 'dims' '(
 
 PrincipleParam : PrincipleFeat {$$=$1} |  id {$$=decls:principle_type($1)};
 
-/* ModType is a type constructor from a module (<module:type>) */
-ModType : '<' id ':' id '>' {$$=decls:modtype($2,$4)};
-
 PrincipleFeat : id '=' id {$$=decls:eq($1,$3)}
 	      /*| id {$$=eq($1,none)} */
 	      | id '=' int {$$=decls:eq($1,$3)}
@@ -31,7 +28,7 @@ TypeDef : '{' (Val // ',')+ '}' {$$=decls:enum($2)}
 TypeStruct : '[' (Struct // ',')* ']' {$$=decls:struct($2)};
 
 Struct : id ':' id {$$=decls:structpair($1,$3)}
-       | id ':' ModType {$$=decls:structpair($1,$3)}
+       | id ':' dimtype {$$=decls:structpair($1,$3)}
        | id ':' TypeStruct {$$=decls:structpair($1,$3)} ;
 
 

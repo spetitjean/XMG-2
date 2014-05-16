@@ -77,7 +77,7 @@ unfold_arg(token(_,id(V)),V):-!.
 unfold_arg(decls:principle_type(token(_,id(P1))),type(P1)):-!.
 unfold_arg(decls:eq(token(C,id(Prop)),token(C1,int(Int))),eq(Prop,Int)):-!.
 unfold_arg(decls:eq(token(C,id(Prop)),token(C1,id(Prop2))),eq(Prop,Prop2)):-!.
-unfold_arg(decls:modtype(token(_,id(Brick)),token(_,id(Type))),modtype(Brick,Type)):-!.
+unfold_arg(token(_,dimtype(Brick,Type)),modtype(Brick,Type)):-!.
 
 
 unfold_dims([],[]):- !.
@@ -90,8 +90,8 @@ unfold_pairs([Pair|T],[UPair|T1]):-
 	unfold_pairs(T,T1),!.
 
 unfold_pair(decls:structpair(token(_,id(P1)),token(_,id(P2))),P1-P2):- !.
-unfold_pair(decls:structpair(token(_,id(P1)),ModType),P1-P2):- 
-	unfold_arg(ModType,P2),
+unfold_pair(decls:structpair(token(_,id(P1)),DimType),P1-P2):- 
+	unfold_arg(DimType,P2),
 	!.
 unfold_pair(decls:structpair(token(_,id(P1)),decls:struct(Pairs)),P1-struct(P2)):-
 	unfold_pairs(Pairs,P2),!.
