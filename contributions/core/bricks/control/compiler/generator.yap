@@ -26,6 +26,8 @@
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:code).
 
+:-edcg:weave([name,decls,code],[get_params/2]).
+
 
 xmg:generate_instr(control:or([I1,I2])):--
 	xmg:generate_instr(I1) with code([]-C1,[]-[]),
@@ -41,9 +43,11 @@ xmg:generate_instr(indim(Dim,Acc)):--
 
 xmg:generate_instr((v(Var),control:call(Class,Params))):--
 	decls::tget(Var,GV),
-	
-	Call=..[value_class,Class,params(Params),exports(GV)],
-	code::enq(xmg:Call),!.
+	get_params(Params,GParams),
+	Call=..[value_class,Class,params(GParams),exports(GV)],
+	code::enq(xmg:Call),
+	xmg:send(info,Call),
+	!.
 
 xmg:generate_instr((v(Var),control:dot(Class,id(CVar,_)))):--
 	xmg:send(info,' generating dot '),
@@ -62,6 +66,11 @@ xmg:generate_instr((v(Var),control:dot(Class,CVar))):--
 	Member=..[member,CVar-GV,GC],
 	code::enq(lists:Member),
 	code::enq(xmg:send(info,'member found')),!.
+
+get_params([],[]):-- !.
+get_params([v(Var)|T],[GVar|T1]):--
+	decls::tget(Var,GVar),
+	get_params(T,T1),!.
 
 
 

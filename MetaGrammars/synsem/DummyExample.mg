@@ -46,7 +46,7 @@ class dummier
 %%import dummy[]
 declare ?T ?C ?A
 {
-	?C=dummy[];
+	?C=dummy[?A];
 	<syn>{
 		node ?T (color=black) %[cat=whatever]
 		}*=[arg2=?A]
@@ -55,7 +55,7 @@ declare ?T ?C ?A
 	%%?C.X=?A
 }
 
-class dummy
+class dummy[P]
 export X Y Z 
 declare ?X ?Y ?Z ?T ?L ?C
 {
@@ -72,7 +72,7 @@ declare ?X ?Y ?Z ?T ?L ?C
 	node ?X (color=black) [cat=s, extracted= +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
-	     node ?Z (color=black) [cat=?C, agr=[gen=m,num=sg,cat=s]]{
+	     node ?Z (color=black) [cat=?P, agr=[gen=m,num=sg,cat=s]]{
 	     	  node ?T (color=black) [cat=?L, fs=[that=[these=[gen=m]]]]
 		  }
 	     

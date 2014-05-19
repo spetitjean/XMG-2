@@ -1,6 +1,3 @@
-%type Stmts Stmts
-
-%ext _Stmt _Stmt
 
 %%
 
@@ -16,6 +13,9 @@ AStmt : _Expr '=' _Expr {$$=control:eq($1,$3)}
       | Call {$$=$1};
 
 
-Call : id '[' (id // ',')* ']' {$$=control:call($1,$3)} ;
+Call : id '[' (Var // ',')* ']' {$$=control:call($1,$3)} ;
+
+Var : '?' id{$$=$2}
+    |  id   {$$=$1};
 
 %%
