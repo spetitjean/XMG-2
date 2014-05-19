@@ -22,7 +22,7 @@
 :- xmg:edcg.
 
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types]).
-:-edcg:weave([xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[get_dim_type/2]).
+:-edcg:weave([dim_types,types,type_decls,global_context],[get_dim_type/2,type_params/2]).
 
 
 xmg:type_stmt(control:and(S1,S2),Type):--
@@ -79,11 +79,21 @@ xmg:type_stmt(control:call(S1,S2),void):--
 	xmg:type_expr(control:call(S1,S2),_),
 	!.	
 
-xmg:type_expr(control:call(token(_,id(S1)),S2),Type):--
-	types::tget(S1,Type),!.
+xmg:type_expr(control:call(token(_,id(S1)),Params),Type):--
+	%% params should be checked here
+	xmg:send(info,Params),
+	types::tget(S1,(ParamsTypes,Type)),
+	type_params(Params,ParamsTypes),
+	!.
 
 
 xmg:type_stmt(control:X,Type):--
 	throw(xmg(type_error(incompatible_types(control:X,Type)))).
 
 
+type_params([],_):-- !.
+type_params([Expr|T],[Param-Type|T1]):--
+	xmg:send(info,Expr),
+	xmg:send(info,Type),
+	xmg:type_expr(Expr,Type),
+	type_params(T,T1),!.
