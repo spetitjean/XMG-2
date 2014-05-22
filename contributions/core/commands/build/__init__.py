@@ -17,7 +17,7 @@ def handler_xmg_build(args):
     compiler = BrickCompiler("generated", "generated/parser.yap")
     for b in specs.values():
         compiler.add_brick(b.brick, dim=b.brick.is_dimension)
-        print("\nAdding "+b.brick._prefix+", dimension: "+str(b.brick.is_dimension))
+        print("\nAdding "+b.brick._prefix+", dimension: "+str(b.dim))
     axiom_id = list(axioms)[0]
     compiler.generate_parser(specs[axiom_id].brick)
     compiler.generate_all()

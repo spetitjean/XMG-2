@@ -9,12 +9,12 @@ class Brick(object):
     def connect(self, ext, brick, sym=None):
         self.language_brick.connect(ext,brick.language_brick, sym)
 
-    def __init__(self, name, prefix=None, text=None):
+    def __init__(self, name, prefix=None, text=None, dim=False):
         self._name = name
         self._lang = None
         self._text = text
         self._prefix = name if prefix is None else prefix
-        self._is_dimension = None
+        self._is_dimension = dim
         self._config = None
         self._solver = None
         self._tag = None
@@ -40,7 +40,7 @@ class Brick(object):
             if self._text:
                 import io
                 pathname = io.StringIO(self._text)
-            self._lang = BrickGrammar(self._name, pathname, dim=self.is_dimension, prefix=self._prefix)
+            self._lang = BrickGrammar(self._name, pathname, prefix=self._prefix)
         return self._lang
         
     @property
@@ -61,4 +61,5 @@ class Brick(object):
 
     @property
     def is_dimension(self):
-        return self.config.getboolean('DEFAULT', 'dimension', fallback=False)
+        #return self.config.getboolean('DEFAULT', 'dimension', fallback=False)
+        return self._is_dimension

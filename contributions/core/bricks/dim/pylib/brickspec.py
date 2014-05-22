@@ -21,12 +21,13 @@ class DimBrickSpec(BrickSpec):
             del plugs["solver"]
         else:
             self.solver = None
+        self.dimbrick = plugs["Stmt"]
         del plugs["tag"]
         del plugs["Stmt"]
         del plugs["Expr"]
         plugs["_Extern"] = control_name
         self.control_name = control_name
-        super().__init__(name, brick_name, plugs)
+        super().__init__(name, brick_name, plugs, dim=True)
 
     def init_brick(self, brick):
         brick._text = """
@@ -39,3 +40,4 @@ Dim : '<%s>' '{' _Extern '}' {$$=dim:dim(%s,$3)};
         
         brick._solver=self.solver
         brick._tag=self.tag
+        brick._dimbrick=self.dimbrick

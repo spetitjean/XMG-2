@@ -26,9 +26,10 @@ class BrickSpec:
     def create(cls, *args):
         yield cls(*args)
 
-    def __init__(self, name, brick_name, plugs):
+    def __init__(self, name, brick_name, plugs, dim=False):
         self.name = name
         self.brick_name = brick_name
+        self.dim = dim
         self.plugs = {k:[Plug(s) for s in v.split()] for k,v in plugs.items()}
 
     def deref_plugs(self, table):
@@ -45,7 +46,7 @@ class BrickSpec:
     def create_brick(self):
         from xmg.compgen.Brick import Brick
         # prefix voir si self.name != self.brick_name
-        self.brick = Brick(self.brick_name, prefix=self.name)
+        self.brick = Brick(self.brick_name, prefix=self.name, dim=self.dim)
         self.init_brick(self.brick)
 
     def init_brick(self, brick):

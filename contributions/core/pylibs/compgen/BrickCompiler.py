@@ -7,13 +7,8 @@ class BrickCompiler(object):
         self._parser_file= parser_file
         self._languages  = []
         self._compilers  = []
-        self._dimensions = []
+        self._dimensions = [('trace','trace')]
         self._links      = []
-        self._dims       = []
-        self._dimsp      = ['trace-TRACE']
-        self._accs       = ['xmg_acc:trace']
-        self._accs_init  = ['xmg_acc:trace(TRACE)']
-        self._dimbricks  = dict()
         self._punctuation= []
         self._keywords   = []
         self._solvers    = dict()
@@ -25,14 +20,13 @@ class BrickCompiler(object):
     def set_parser_file(self,path):
         self._parser_file=path
 
-    def add_language(self,lang,dim=False):
+    def add_language(self,lang):
         self._languages.append(lang)
-        if dim :
-            self._dimensions.append(lang)
+  
 
-    def add_languages(self,langs,dim=False):
+    def add_languages(self,langs):
         for lang in langs:
-            self.add_language(lang,dim)
+            self.add_language(lang)
         
 
     def add_compiler(self,comp):
@@ -59,42 +53,30 @@ class BrickCompiler(object):
             self.add_link(language,compiler)
 
     def add_brick(self,brick,dim=False):
-        self.add_language(brick.language_brick,dim)
+        self.add_language(brick.language_brick)
         self.add_compiler(brick.compiler_brick)
         self.add_link(brick.language_brick,brick.compiler_brick)
         if brick._solver is not None:
             self._solvers[brick._prefix]=brick._solver
         if brick._tag is not None:
             self._tags[brick._prefix]=brick._tag
-            
-    def init_dims(self):
-        if self._dimensions == [] :
-            raise Exception("No dimensions")
-        for brick in self._dimensions:
-            # Create accumulator in yap, and do the add_path and use_module
-            dim=brick._prefix.lower()
-            DIM=dim.capitalize()
-            self._dimsp.append(dim+'-'+dim.capitalize())
-            self._dims.append(dim)
-            self._accs.append('xmg_acc:'+dim)
-            self._accs_init.append('xmg_acc:'+dim+'('+DIM+')')
-            self._dimbricks[dim]=brick._name
+        if dim:
+            self._dimensions.append((brick._tag,brick._dimbrick))
  
 
     def generate_dimensions(self):
         dimfile=open(self._folder+"/dimensions.yap","w")
         dimfile.write('%% -*- prolog -*-\n\n')
         dimfile.write(':-module(xmg_dimensions).\n\n')
-        self.init_dims()
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         dimfile.write('%% Dimensions initialization\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
 
-        for dim in self._dims:
+        for (dim,dimbrick) in self._dimensions:
             dimfile.write('xmg:dimbrick(')
             dimfile.write(dim)
             dimfile.write(',')
-            dimfile.write(self._dimbricks[dim])
+            dimfile.write(dimbrick)
             dimfile.write(').\n')
             
         dimfile.close()
@@ -128,8 +110,17 @@ class BrickCompiler(object):
         dimfile.write('%% Threads initialization\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
         
-        for dim in self._dims:
-            dimbrick=self._dimbricks[dim]
+        dimsp=[]
+        accs=[]
+        accs_init=[]
+        for (dim,dimbrick) in self._dimensions:
+            dimsp.append(str.capitalize(dim))
+            accs.append('xmg_acc:%s' % dim)
+            accs_init.append('xmg_acc:%s(%s)' % (dim,str.capitalize(dim)))
+
+
+
+        for (dim,dimbrick) in self._dimensions:
             import xmg
             yapdir=xmg.config['DEFAULT']['xmg_yap_rootdir']
             if os.path.exists(yapdir+'/xmg/brick/'+dimbrick+'/compiler/edcg.yap'):
@@ -138,15 +129,15 @@ class BrickCompiler(object):
                 dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:stack).\n\n')
 
         dimfile.write(':-edcg:thread(xmg_acc:trace, edcg:stack).\n\n')
-        dimfile.write(':-edcg:weave(['+", ".join(self._accs)+'],[xmg:value_class/3]).\n\n')
+        dimfile.write(':-edcg:weave(['+", ".join(accs)+'],[xmg:value_class/3]).\n\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         dimfile.write('%% Starting valuation\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
 
-        accs=", ".join(self._dimsp)
+        accs=", ".join(dimsp)
 
         dimfile.write('xmg:start_value_class(Class,['+accs+']):--\n')
-        dimfile.write('  xmg:value_class(Class,_,_) with ('+", ".join(self._accs_init))
+        dimfile.write('  xmg:value_class(Class,_,_) with ('+", ".join(accs_init))
         dimfile.write(').')
 
         print("Threads generated in %s/edcg.yap"%self._folder)
