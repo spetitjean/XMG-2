@@ -117,7 +117,7 @@ eval:-
 	xmg:value_all(Computed,Class),
 	
 	send(info,'\nClass executed:'),
-	%%send(info,Computed),
+	send(info,Computed),
 	send(info,Class),
 
 	%% xmg_dimensions:dims(Dims),

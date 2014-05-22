@@ -112,10 +112,12 @@ class BrickCompiler(object):
         
         dimsp=[]
         accs=[]
+        accspairs=[]
         accs_init=[]
         for (dim,dimbrick) in self._dimensions:
-            dimsp.append(str.capitalize(dim))
+            dimsp.append(dim+"-"+str.capitalize(dim))
             accs.append('xmg_acc:%s' % dim)
+            accspairs.append('')
             accs_init.append('xmg_acc:%s(%s)' % (dim,str.capitalize(dim)))
 
 
@@ -128,7 +130,7 @@ class BrickCompiler(object):
             else:
                 dimfile.write(':-edcg:thread(xmg_acc:'+dim+', edcg:stack).\n\n')
 
-        dimfile.write(':-edcg:thread(xmg_acc:trace, edcg:stack).\n\n')
+        #dimfile.write(':-edcg:thread(xmg_acc:trace, edcg:stack).\n\n')
         dimfile.write(':-edcg:weave(['+", ".join(accs)+'],[xmg:value_class/3]).\n\n')
         dimfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         dimfile.write('%% Starting valuation\n')
