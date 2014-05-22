@@ -1,0 +1,16 @@
+
+%%
+
+MorphStmt : InField {$$=$1}
+	  | Eq {$$=$1};
+
+InField : id '<-' Expr {$$=morphtf:infield($1,$3)};
+
+Eq : Expr '=' Expr {$$=morphtf:eq($1,$3)};
+
+Expr : id {$$=$1}
+     | string {$$=$1}
+     | int {$$=$1}
+     | bool {$$=$1};
+
+%%

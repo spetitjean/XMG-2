@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2013  Simon Petitjean
+%% Copyright (C) 2014  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,8 +17,30 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-xmg:edcg.
-:-module(xmg_brick_fields_unfolder).
+:-module(xmg_brick_tfmorph_typer).
 
-xmg:unfold(fields:field(token(C,id(Field))),field(id(Field,C))):-- !.
-xmg:unfold(fields:fieldprec(token(C1,id(F1)),token(C2,id(F2))),fieldprec(id(F1,C1),id(F2,C2))):-- !.
+:- xmg:edcg.
+
+
+:-edcg:using([xmg_brick_mg_typer:types]).
+
+%% statement type with default parameters
+xmg:stmt_type(morph,tfmorph:morph(FieldsType,FeatsType)):-!.
+%% statement type with given parameters
+xmg:stmt_type_constr(morph,tfmorph:morph).
+
+
+xmg:type_stmt(tfmorph:infield(Field,Contrib),_):--
+	!.
+
+xmg:type_stmt(tfmorph:eq(F1,F2),_):--
+	!.
+
+
+
+
+xmg:type_stmt(tfmorph:X,_):--
+	xmg:send(info,'\n\nDid not type tfmorph statement:\n'),
+	xmg:send(info,X),!,
+	fail.
+

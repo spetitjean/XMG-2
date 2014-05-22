@@ -1,0 +1,26 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+decls:
+  _ODecl: feats fields
+control:
+  _Stmt: dim_tf dim_iface stardim
+  _Expr: value
+stardim:
+  _Stmt: control
+  proxy: dim_iface
+avm: 
+  _Value: value
+  _Expr: value
+value: 
+  _Else: avm adisj avm.Dot control.Call
+iface:
+  _AVM: avm
+dim_tf:
+  tag: "morph"
+  Stmt: morphtf
+  Expr: value
+dim_iface:
+  tag: "iface"
+  Stmt: iface
+  Expr: value

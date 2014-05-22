@@ -1,18 +1,13 @@
-%token field
-%token id
-
-%type FieldDecl FieldDecl
-%type Field Field
-%type FieldPrec FieldPrec
 
 %%
 
-FieldDecl : Field | FieldPrec;
+FieldDecl : Field {$$=$1} 
+	  | FieldPrec {$$=$1};
 
 
-Field : field id;
+Field : 'field' id {$$=fields:field($2)};
 
-FieldPrec : id '>>' id;
+FieldPrec : id '>>' id {$$=fields:fieldprec($1,$3)};
 
 
 %%

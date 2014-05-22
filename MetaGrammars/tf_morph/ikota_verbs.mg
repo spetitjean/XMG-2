@@ -21,26 +21,36 @@ feature neg : bool
 feature prog : bool
 feature active : bool
 
-field VR
-field fsubject
-field ftense
-field faspect
-field fproxi
-field factive
+field f_sujet
+field f_temps
+field f_racine
+field f_voix
+field f_aspect
+field f_theme
+field f_eloignement
 
-fsubject >> ftense
-ftense >> VR
-VR >> faspect
-faspect >> factive
-factive >> fproxi
+f_sujet >> f_temps
+f_temps >> f_racine
+f_racine >> f_voix
+f_voix >> f_aspect
+f_aspect >> f_theme
+f_theme >> f_eloignement
 
 
 class Subject_Clitic
 {
 <morph>{
-  { p=1; n=sg ; fsubject <- "m"}
+  { p=1; n=sg ; f_sujet <- "m"}
   | 
-  { p=2; n=sg ; fsubject <- "ò" }
+  { p=2; n=sg ; f_sujet <- "ò" }
+  | 
+  { p=3; n=sg ; f_sujet <- "à" }
+  |
+  { p=1; n=pl ; f_sujet <- "mín"}
+  | 
+  { p=2; n=pl ; f_sujet <- "bíh" }
+  | 
+  { p=3; n=pl ; f_sujet <- "b" }
 }
 }
 
@@ -50,21 +60,23 @@ class Subject_Noun
 
   p=3;
   { 
-   { n=sg; nc=@{C1,C1A,C9}}
+   { n=sg; {nc=C1|nc=C9}}
    |
-   { n=pl; nc=C2; fsubject <- "b"}
+   { n=pl; nc=C2; f_sujet <- "b"}
    | 
-   { n=sg; nc=@{C3,C3A}; fsubject <- "mw"}
+   { n=sg; nc=C3; f_sujet <- "mw"}
    | 
-   { n=pl; nc=@{C4,C6}; fsubject <- "my"}
+   { n=pl; nc=C4; f_sujet <- "mj"}
+   |
+   { n=pl; nc=C6; f_sujet <-"m"}
    | 
-   { n=sg; nc=@{C5,C5A}; fsubject <- "dʒ"}
+   { n=sg; nc=C5; f_sujet <- "dʒ"}
    | 
-   { n=sg; nc=C7; fsubject <- "y"}
+   { n=sg; nc=C7; f_sujet <- "j"}
    | 
-   { n=pl; nc=C8; fsubject <- "by"}
+   { n=pl; nc=C8; f_sujet <- "bj"}
    | 
-   { n=sg; nc=C14; fsubject <- "bw"}
+   { n=sg; nc=C14; f_sujet <- "bw"}
   }
 }
 }
@@ -82,13 +94,20 @@ class TensePos
 
   neg = - ;
   { 
-    {ftense <- "é"  ; {{ tense=past; proxi=near }
+    {f_temps <- "é"  ; {{ tense=past; proxi=near }
                      | { tense=future }}}
   | 
-    {ftense <- "à"  ; {{ tense=present }
-                     | { tense=past; proxi=@{none,imminent,day,far} } } }
+    {f_temps <- "à"  ; {{ tense=present; n=sg; proxi=none }
+                     | { tense=past; n=sg; {proxi=imminent|proxi=day|proxi=far} } } }
+  |
+    {f_temps <- "á"  ; {{ tense=present; n=pl; proxi=none }
+                     | { tense=past; n=pl; {proxi=imminent|proxi=day|proxi=far} } } }
+  |
+    {f_temps <- "àmò"  ; {{ tense=past; n=sg; proxi=none }}}
+  |
+    {f_temps <- "ámò"  ; {{ tense=past; n=pl; proxi=none }}}
   | 
-    {ftense <- "ábí"; { tense=future; proxi=imminent } } }
+    {f_temps <- "ábí"; { tense=future; proxi=imminent } } }
   }
 }
 
@@ -99,13 +118,13 @@ class TenseNeg
   neg = + ;
   {
     { tense=present ;
-      ftense <- "à"  }
+      f_temps <- "à"  }
   | 
     { tense=past ;
-      ftense <- "átʃà" }
+      f_temps <- "átʃà" }
   |
    { tense=future ;
-      ftense <- "ádʒí" } 
+      f_temps <- "ádʒí" } 
       
 	}
       }
@@ -114,11 +133,11 @@ class TenseNeg
 class Tense
 { 
   TensePos[] 
-  | 
-  TenseNeg[] 
+  %%| 
+  %%TenseNeg[] 
   }
 
-class Active
+class Theme
 {
 <morph>{
 
@@ -126,7 +145,7 @@ class Active
       active = +;
       neg = +; 
       tense = present;
-      factive <- "é" }
+      f_theme <- "é" }
 |     
     { 
       active = +; 
@@ -134,73 +153,110 @@ class Active
       	{	
 		vclass=g1; 
 		prog= + ; 
-		factive <- "á"
+		{proxi=none|proxi=imminent|proxi=far|proxi=day};
+		f_theme <- "á"
 		}
       | 
       	{
 		vclass=g1; 
-		prog= - ; 
-		factive <- "à"
+		{prog= - | {prog= + ; proxi = near}};
+		f_theme <- "à"
 		}
       | 
       	{
 		vclass=g2; 
 		prog= + ; 
-		factive <- "ɛ́"
+		{proxi=none|proxi=imminent|proxi=far|proxi=day};
+		f_theme <- "ɛ́"
 		}
       | 
       	{
 		vclass=g2; 
-		prog= - ; 
-		factive <- "ɛ̀"
+		{prog= - | {prog= + ; proxi = near}};
+		f_theme <- "ɛ̀"
 		}
       | 
       	{
 		vclass=g3; 
 		prog= + ; 
-		factive <- "ɔ́"
+		{proxi=none|proxi=imminent|proxi=far|proxi=day};
+		f_theme <- "ɔ́"
 		}
       | 
       	{
 		vclass=g3; 
-		prog= - ; 
-		factive <- "ɔ̀" 
+		{prog= - | {prog= + ; proxi = near}};
+		f_theme <- "ɔ̀" 
 		}
-    | {
-	active = - ; 
-	faspect <- "ubwɛ̀" 
-	} 
+    }
+  }
+  | {	
+    	active= -;
+	f_theme <- "ɛ"
 	}
+   }
+}
 
-}
-}
-}
+class Voix
+{
+   % <morph>{
+   % 	active = - ; 
+   % 	f_voix <- "ébw" 
+   % 	} 
+   % 	|
+  <morph>{
+  	active= +
+  	}
+
+		
+}		
 
 
 class Aspect
 {
 <morph>{
-
   { 
 	{	
-	tense=future; 
-    	prog = - 
-	}
+   		tense=future; 
+   		prog = - 
+  	}
 		;
     	{ 
-	{faspect <- "ák" ; vclass=g1}
-    	| 
-	{faspect <- "ɛ́tʃ"; vclass=g2}
-    	| 
-	{faspect <- "ɔ́k" ; vclass=g3}
+	  {
+		active= +;	
+	  	{
+			{f_aspect <- "ák" ; vclass=g1}
+    	  		| 
+	  		{f_aspect <- "ɛ́tʃ"; vclass=g2}
+    	  		| 
+	  		{f_aspect <- "ɔ́k" ; vclass=g3}
+		}
+	  }
+	  |
+	  {
+		active= -;
+		f_aspect <- "ɛ́tʃ"
+	  }
 	}
+	
+  }
+  
   | 
   
   {
-	tense=@{past,present} ;
+	tense=past ;
 	prog = + 
 	}
-}
+
+  | 
+  
+  {
+	tense=present ;
+	prog = + 
+	}
+
+
+
 }
 }
 
@@ -211,34 +267,34 @@ class Proximal
     {
   active= +;
   { 
-    {fproxi <- "ná"; proxi=day; vclass=g1}
+    {f_eloignement <- "ná"; proxi=day; vclass=g1}
   | 
-    {fproxi <- "sá"; proxi=far; vclass=g1}
+    {f_eloignement <- "sá"; proxi=far; vclass=g1}
   | 
-    {fproxi <- "nɛ́"; proxi=day; vclass=g2}
+    {f_eloignement <- "nɛ́"; proxi=day; vclass=g2}
   | 
-    {fproxi <- "sɛ́"; proxi=far; vclass=g2}
+    {f_eloignement <- "sɛ́"; proxi=far; vclass=g2}
   | 
-    {fproxi <- "nɔ́"; proxi=day; vclass=g3}
+    {f_eloignement <- "nɔ́"; proxi=day; vclass=g3}
   | 
-    {fproxi <- "sɔ́"; proxi=far; vclass=g3}
+    {f_eloignement <- "sɔ́"; proxi=far; vclass=g3}
   |  
      { 
-		proxi=@{none,near} 
+		{proxi=none|proxi=near} 
                | 
 	       { proxi=imminent; tense=future }
    }
  }
  }
- |
+ | 
  {
 	  active= - ;
  	   {
-  {fproxi <- "nɛ́"; proxi=day}
+  {f_eloignement <- "nɛ́"; proxi=day}
 | 
-  {fproxi <- "sɛ́"; proxi=far}
+  {f_eloignement <- "sɛ́"; proxi=far}
 | { 	   
-	   proxi=@{none,near} 
+	   {proxi=none|proxi=near} 
            | 
 	   { proxi=imminent; tense=future} 
     }
@@ -254,25 +310,32 @@ class Manger
 {
 <morph>{
 
-  vclass=g1; VR <- "dʒ"
+  vclass=g1; f_racine <- "dʒ"
 }
 }
 
 class Donner
 {
 <morph>{
-  vclass=g2; VR <- "w"
+  vclass=g2; f_racine <- "w"
+}
+}
+
+class Choisir 
+{
+<morph>{
+ vclass=g3; f_racine <- "bɔ́n"
 }
 }
 
 class VR
 {
-  Manger[] | Donner[]
+  Manger[] | Donner[] | Choisir[]
 }
 
 class Verb
 {
-  Subject[]; Tense[]; VR[]; Aspect[]; Active[]; Proximal[]
+  Subject[]; Tense[]; VR[]; Aspect[]; Theme[]; Voix[]; Proximal[]
 }
 
 %% AXIOMS
