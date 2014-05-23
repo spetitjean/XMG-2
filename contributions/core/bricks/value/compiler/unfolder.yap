@@ -31,6 +31,8 @@ xmg:unfold_expr(token(C,int(Int)),c(Int)):--
 	!.
 xmg:unfold_expr(token(C,bool(Bool)),c(Bool)):--
 	!.
+xmg:unfold_expr(token(C,string(String)),c(string(String))):--
+	!.
 xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
 	vars::tget(ID,G),!.
 xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--

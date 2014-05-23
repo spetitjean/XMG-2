@@ -177,13 +177,13 @@ eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	send(info,' done\n'),
 	eval_dims(T,T1,Class).
 
-eval(morph,_,Morph,XML,_):-
+eval(morphtf,_,Morph,XML,_):-
 	%%send(info,Morph),
-	xmg_brick_morph_solver:eval_morph(Morph,Value),
+	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
 	%%send_nl(info,2),
-	%%send(info,' Value : '),
-	%%send(info,Value),
-	xmg_convert_morph:toXML(Value,XML,0).
+	send(info,' Value : '),
+	send(info,Value),
+	xmg:do_xml_convert(Value,XML).
 
 
 eval(syn,Solvers,Syn,XML,Class):-

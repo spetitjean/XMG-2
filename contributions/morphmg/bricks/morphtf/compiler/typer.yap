@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_tfmorph_typer).
+:-module(xmg_brick_morphtf_typer).
 
 :- xmg:edcg.
 
@@ -25,22 +25,22 @@
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 %% statement type with default parameters
-xmg:stmt_type(morph,tfmorph:morph(FieldsType,FeatsType)):-!.
+xmg:stmt_type(morphtf,morphtf:morph(FieldsType,FeatsType)):-!.
 %% statement type with given parameters
-xmg:stmt_type_constr(morph,tfmorph:morph).
+xmg:stmt_type_constr(morphtf,morphtf:morph).
 
 
-xmg:type_stmt(tfmorph:infield(Field,Contrib),_):--
+xmg:type_stmt(morphtf:infield(Field,Contrib),_):--
 	!.
 
-xmg:type_stmt(tfmorph:eq(F1,F2),_):--
+xmg:type_stmt(morphtf:eq(F1,F2),_):--
 	!.
 
 
 
 
-xmg:type_stmt(tfmorph:X,_):--
-	xmg:send(info,'\n\nDid not type tfmorph statement:\n'),
+xmg:type_stmt(morphtf:X,_):--
+	xmg:send(info,'\n\nDid not type morphtf statement:\n'),
 	xmg:send(info,X),!,
 	fail.
 

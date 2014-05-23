@@ -32,8 +32,12 @@ class BrickCompiler(object):
     def add_compiler(self,comp):
         if os.path.basename(comp)== "mg":
             self._compilers=[comp]+self._compilers
+        if os.path.basename(comp)== "dim":
+            if not comp in self._compilers:
+                self._compilers[1]=comp
         else:
-            self._compilers.append(comp)
+            if not comp in self._compilers:
+                self._compilers.append(comp)
 
     def add_compilers(self,comps):
         for comp in comps:

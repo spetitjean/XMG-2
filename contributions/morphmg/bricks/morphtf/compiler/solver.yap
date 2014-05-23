@@ -17,15 +17,9 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_solver_morph).
+:- module(xmg_brick_morphtf_solver).
 
-eval_morph([],[]).
-eval_morph([MAcc],Value):-!,
-	xmg_xsat:eval(MAcc,Value).
-eval_morph([H|T],Value):-
-	eval_conj([H|T],Conj),
-	eval_morph([Conj],Value).
-
-eval_conj([H],H):-!.
-eval_conj([H|T],and(H,T1)):-
-	eval_conj(T,T1),!.
+eval_morph(AVM,morphtf(Feats)):-
+	%%xmg_brick_avm_avm:avm(AVM,Feats),
+	Feats=AVM,
+	!.

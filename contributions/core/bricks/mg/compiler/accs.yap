@@ -34,7 +34,6 @@
 :-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_dimstmt/2,xmg:unfold_expr/2, xmg:unfold_exprs/2,xmg:new_target_var/2,xmg:new_target_var/1]).
 
 
-
 xmg:new_target_var(v(Name),Prefix) :--
 	name::incr,
 	name::get(Get),
@@ -72,10 +71,16 @@ unfolder_accs([xmg_brick_mg_accs:constraints,
 	       xmg_brick_mg_accs:vars,
 	       xmg_brick_mg_accs:consts]).
 
+generator_accs([
+                xmg_brick_mg_generator:code]).
+
 :- multifile user:term_expansion/2.
 
 term_expansion((:- xmg:unfolder_accs), R) :-
     !, unfolder_accs(L), edcg:term_expansion((:- edcg:using(L)), R).
+
+term_expansion((:- xmg:generator_accs), R) :-
+    !, generator_accs(L), edcg:term_expansion((:- edcg:using(L)), R).
 
 user:term_expansion(X,Y) :- xmg_brick_mg_accs:term_expansion(X,Y).
 

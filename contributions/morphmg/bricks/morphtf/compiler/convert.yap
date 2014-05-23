@@ -17,18 +17,23 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_convert_morph).
+:- module(xmg_brick_morphtf_convert).
 
+:- xmg:edcg.
 
-:- edcg:using(xmg_convert:name).
+:- edcg:using(xmg_brick_mg_convert:name).
 
-:- edcg:weave([name],[new_name/2, xmlFeats/2]).
+xmg:xml_convert_term(morphtf(AVM),elem(morphtf,children([elem(feats,children(Feats)),elem(fields,children(Fields))]))):--
+	xmg_brick_avm_avm:avm(AVM,LAVM),
+	%%xmg:send(info,LAVM),
+	order_list(LAVM,L1,L2),
+	xmg:send(info,L2),
 
-new_name(Prefixe, Name) :--
-	name::incr,
-	name::get(N),
-	atomic_concat([Prefixe,N],Name).
-
+	order_fields(L2,L3),
+	xmg:send(info,L3),
+	xmg_brick_avm_convert:xmlFeats(L1,Feats),
+	xmg_brick_avm_convert:xmlFeats(L3,Fields),
+	!.
 
 toXML(List, elem(morph, children([elem(feats, children(Feats)),elem(fields,children(Fields))])),Number) :--
 	order_list(List,L1,L2),
@@ -45,28 +50,16 @@ xmlFeats(List,Feats):--
 
 order_list([],[],[]):-
 	!.
-order_list([H|T],[A-const(B,Type)|T1],T2):-
-	H=..['=',var(A),var(B)],
-	xmg_typer:feat(A,Type),!,
-	order_list(T,T1,T2).
-order_list([H|T],[A-const(B,Type)|T1],T2):-
-	H=..['=',var(A),B],
-	not(var(A)),
-	xmg_typer:feat(A,Type),
-	order_list(T,T1,T2).
 
-order_list([H|T],T1,[N-field(A-const(B,none))|T2]):-
-	H=..['=',var(A),B],
-	not(var(A)),
-	xmg_typer:field(A,N),
+order_list([A-B|T],T1,[N-field(A,B)|T2]):-
+	xmg:field(A,N),!,
 	order_list(T,T1,T2).
-order_list([H|T],T1,T2):-
-	H=..['=',var(A),B],
-	var(A),
+order_list([A-B|T],[A-B|T1],T2):-
+	xmg:feat(A,Type),!,
 	order_list(T,T1,T2).
 order_list([H|T],_,_):-
-	xmg_compiler:send(info,'UNEXPECTED IN MORPH'),
-	xmg_compiler:send(info,H),
+	xmg:send(info,'UNEXPECTED IN MORPH: '),
+	xmg:send(info,H),
 	false,!.
 
 
@@ -75,7 +68,7 @@ order_fields(F,COF):-
 	clean_fields(OF,COF).
 
 clean_fields([],[]):- !.
-clean_fields([_-field(F)|T],[F|T1]):-
+clean_fields([_-field(F,V)|T],[F-V|T1]):-
 	clean_fields(T,T1),!.
 
 

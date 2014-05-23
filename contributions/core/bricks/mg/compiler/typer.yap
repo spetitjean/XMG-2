@@ -20,7 +20,7 @@
 :-module(xmg_brick_mg_typer).
 :-dynamic(xmg:type/2).
 :-dynamic(xmg:property/2).
-:-dynamic(field/2).
+:-dynamic(xmg:field/2).
 :-dynamic(fieldprec/2).
 :-dynamic(xmg:feat/2).
 
@@ -95,6 +95,7 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with types(TableIn,TableOut),
 	rbtrees:rb_visit(GContext,GContextList),
+
 	put_global_in_table(GContextList) with types(TableOut,TableGOut),
 	unify_imports(I) with types(TableGOut,UTableOut),
 	xmg:send(info,'\nTypes table:'),
@@ -134,8 +135,8 @@ put_in_table([const(A,_)-const(N,_)|T]):--
 
 put_global_in_table([]):-- !.
 put_global_in_table([A-B|T]):--
-	types::tput(A,B),
-	put_in_table(T),!.
+	types::tput(A,B),!,
+	put_global_in_table(T),!.
 
 make_exports_global([]):-- !.
 make_exports_global([id(A,_)-_|T]):--
@@ -426,7 +427,10 @@ type_fields([H|T],N):-
 
 	
 type_field(F,N):-
-	asserta(field(F,N)).
+	xmg:send(info,'\nassert field '),
+	xmg:send(info,F),
+	
+	asserta(xmg:field(F,N)).
 
 
 

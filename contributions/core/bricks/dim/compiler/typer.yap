@@ -26,10 +26,12 @@
 
 xmg:stmt_type(Dim,Params,Type):--
 	xmg:send(info,Params),
-	get_types(Params,Types),
-	xmg:stmt_type_constr(Dim,Brick:Constr),
+	get_types(Params,Types),	
+	xmg:dimbrick(Dim,Brick),
+	%% Brick and Bricks should be the same
+	xmg:stmt_type_constr(Brick,BrickC:Constr),
 	DimType=..[Constr|Types],
-	Type=..[':',Brick,DimType],!.
+	Type=..[':',BrickC,DimType],!.
 
 get_types([],[]):-- !.
 get_types([H|T],[H1|T1]):--

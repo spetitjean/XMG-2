@@ -38,9 +38,9 @@ xmg:type_stmt(dim:dim(Dim,S),void):--
 	%% xmg:send(info,'\n\ndim statement:\n'),
 	%% xmg:send(info,S),
 	%% xmg:send(info,Dim),
-
-	get_dim_type(Dim,Type),
-
+	xmg:dimbrick(Dim,Brick),
+	get_dim_type(Brick,Type),
+	xmg:send(info,Type),
 	%% xmg:send(info,'\nexpected type:\n'),
 	%% xmg:send(info,Type),
 

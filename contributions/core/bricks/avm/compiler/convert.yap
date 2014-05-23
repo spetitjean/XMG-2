@@ -32,15 +32,17 @@ xmg:xml_convert_term(avm:avm(Feats),Convert):--
 
 xmlFeats([],[]):-- !.
 xmlFeats([H|T],[H1|T1]):--
+	xmg:send(info,H),
 	xmlFeat(H,H1),
 	xmlFeats(T,T1),!.
 
-
+xmlFeat(A-string(V),elem(f,features([name-A]),children([elem(sym,features([varname-V1]))]))):--
+	atom_codes(V1,V),!.
 xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
 	(atom(V)
         ;
 	integer(V)
-	),
+        ),
 	!.
 
 
