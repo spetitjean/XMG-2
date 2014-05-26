@@ -63,9 +63,7 @@ xmg:generate_instrs([H|T]):--
 	xmg:generate_instr(H),
 	xmg:generate_instrs(T),!.
 xmg:generate_instrs([H|T]):--
-	xmg:send(info,'unknown instruction: '),
-	xmg:send(info,H),false,!.
-
+	throw(xmg(generator_error(unknown_instruction(H)))).
 
 generate(mg(_,Classes,Values)):-
 	%% xmg_dimensions:dims(Dims),

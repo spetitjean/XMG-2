@@ -134,6 +134,11 @@ vs_to_string(A) -->>
 	xmg:send(info,Lines),
 	queue::enq_list(Lines),
 	!.
+vs_to_string(Term) -->>
+	term_to_atom(Term,Atom),
+	atom_codes(Atom,String),
+	queue::enq_list(String),
+	!.
 
 rec_name(N,N1):-
 	atom(N),
@@ -168,6 +173,10 @@ xmg_message(syntax_error(unexpected_definition(D)), Msg) :- !,
 xmg_message(syntax_error(intervalle(I,J,C)), Msg) :- !,
 	Msg=error(syntax,[hint('illegal interval',"["#I#".."#J#"]"),C]).
 
+%% errors in exporter
+xmg_message(exporter_error(variable_not_declared(A,C)),Msg):- !,
+	Msg=error(export,[hint('variable not declared',A),C]).
+
 %% errors in unfolder
 xmg_message(unfolder_error(cycle_detected_with_class(A,C)),Msg):- !,
 	Msg=error(unfolder,[hint('cycle detected with class',A),C]).
@@ -189,6 +198,11 @@ xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
 	Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
 xmg_message(type_error(incompatible_exprs(expr(E1,T1),expr(E2,T2))),Msg):- !,
 	Msg=error(types,[hint('incompatible expressions',exprs_types(E1,T1,E2,T2))]).
+
+%% generator errors
+xmg_message(generator_error(unknown_instruction(I)),Msg):- !,
+	Msg=error(generator,[hint('unknown instruction',I)]).
+
 
 %% Modules errors
 xmg_message(compiler_error(unknown_module(Module)), Msg):- !,

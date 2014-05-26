@@ -48,8 +48,8 @@ xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 	unfold_dims(Dims,UDims),!,
 	!.
 
-%%unfold_typedef(decls:enum(Enum),enum(UEnum)):-
-%%	unfold_enum(Enum,UEnum),!.
+unfold_typedef(decls:enum(Enum),enum(UEnum)):-
+	unfold_enum(Enum,UEnum),!.
 unfold_typedef(decls:struct(Feats),struct(UFeats)):-
 	unfold_pairs(Feats,UFeats),!.
 unfold_typedef(decls:range(token(_,int(I1)),token(_,int(I2))),range(I1,I2)):-!.

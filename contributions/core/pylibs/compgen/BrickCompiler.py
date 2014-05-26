@@ -30,13 +30,24 @@ class BrickCompiler(object):
         
 
     def add_compiler(self,comp):
-        if os.path.basename(comp)== "mg":
-            self._compilers=[comp]+self._compilers
-        if os.path.basename(comp)== "dim":
-            if not comp in self._compilers:
-                self._compilers[1]=comp
+        if comp in self._compilers:
+            pass
         else:
-            if not comp in self._compilers:
+            # add dependencies
+            yapdir=xmg.config['DEFAULT']['xmg_yap_rootdir']
+            deppath=yapdir+"/"+comp+"/compiler/deps"
+            if(os.path.exists(deppath)):
+                depfile=open(deppath,"r")
+                for line in depfile:
+                    print("\nAdding dependency:")
+                    print(line)
+                    self.add_compiler(line)
+            basename = os.path.basename(comp)
+            if basename== "mg":
+                self._compilers=[comp]+self._compilers
+            elif basename== "dim":
+                self._compilers[1]=comp
+            else:
                 self._compilers.append(comp)
 
     def add_compilers(self,comps):
