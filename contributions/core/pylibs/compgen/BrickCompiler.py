@@ -30,6 +30,7 @@ class BrickCompiler(object):
         
 
     def add_compiler(self,comp):
+        print(self._compilers)
         if comp in self._compilers:
             pass
         else:
@@ -41,13 +42,16 @@ class BrickCompiler(object):
                 for line in depfile:
                     print("\nAdding dependency:")
                     print(line)
-                    self.add_compiler(line)
+                    self.add_compiler("xmg/brick/"+line)
             basename = os.path.basename(comp)
             if basename== "mg":
-                self._compilers=[comp]+self._compilers
+                self._compilers.insert(0,comp)
             elif basename== "dim":
-                if len(self._compilers) > 1:
-                    self._compilers.insert(1,comp)
+                position=0
+                if len(self._compilers) > 0:
+                    if(os.path.basename(self._compilers[0]))=="mg":
+                        position=1
+                self._compilers.insert(position,comp)
             else:
                 self._compilers.append(comp)
 
