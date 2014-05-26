@@ -46,7 +46,8 @@ class BrickCompiler(object):
             if basename== "mg":
                 self._compilers=[comp]+self._compilers
             elif basename== "dim":
-                self._compilers[1]=comp
+                if len(self._compilers) > 1:
+                    self._compilers.insert(1,comp)
             else:
                 self._compilers.append(comp)
 
