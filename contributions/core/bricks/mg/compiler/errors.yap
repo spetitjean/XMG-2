@@ -5,6 +5,8 @@
 :- use_module(library(charsio)).
 :- use_module('xmg/brick/mg/edcg.yap').
 
+:-use_module(library(readutil)).
+
 :- multifile user:generate_message_hook/3.
 % :- source.
 
@@ -122,6 +124,16 @@ vs_to_string([H|T]) -->>
 	!.
 vs_to_string(L) -->>
 	queue::enq_list(L).
+vs_to_string(A) -->>
+	get_first_coord(A,C),
+	queue::enq_list("\n        "),
+	vs_to_string(C),
+	C=coord(File,Line,_),
+	get_lines(File,Line,Lines),
+	queue::enq_list("\n        "),
+	xmg:send(info,Lines),
+	queue::enq_list(Lines),
+	!.
 
 rec_name(N,N1):-
 	atom(N),
@@ -155,10 +167,15 @@ xmg_message(syntax_error(unexpected_definition(D)), Msg) :- !,
 	Msg=error(syntax,[hint('unexpected definition',write(D))]).
 xmg_message(syntax_error(intervalle(I,J,C)), Msg) :- !,
 	Msg=error(syntax,[hint('illegal interval',"["#I#".."#J#"]"),C]).
+
+%% errors in unfolder
 xmg_message(unfolder_error(cycle_detected_with_class(A,C)),Msg):- !,
 	Msg=error(unfolder,[hint('cycle detected with class',A),C]).
 xmg_message(unfolder_error(no_class_value),Msg):- !,
 	Msg=error(unfolder,[hint('no class set to be valued',''),coord('',0,0)]).
+xmg_message(unfolder_error(no_unfolding(A)),Msg):- !,
+	Msg=error(unfolder,[hint('Rule can not be unfolded',A)]).
+
 %% errors in type checking
 xmg_message(type_error(property_not_declared(X,C)),Msg):- !,
 	Msg=error(types,[hint('property not declared',X),C]).
@@ -182,3 +199,14 @@ xmg_message(compiler_error(unknown_module(Module)), Msg):- !,
 xmg_message(Exc,_) :-
 	writeln(xmg_message(Exc)),
 	throw(xmg_message(Exc)).
+
+%% Get some lines in the mg file to show the context of the error
+
+get_lines(File,Line,Codes):-
+	open(File,read,OFile),
+	get_lines1(OFile,Line,Codes),!.
+get_lines1(File,0,Codes):-
+	read_line_to_codes(File,Codes),!.
+get_lines1(File,N,Codes):-
+	M is N - 1,
+	get_lines1(File,M,Codes),!.

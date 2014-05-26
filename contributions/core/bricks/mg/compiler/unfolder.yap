@@ -27,6 +27,8 @@
 
 :-multifile(xmg:unfold/2).
 
+
+
 %% SPECIFIC RULES
 
 unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
@@ -145,5 +147,4 @@ put_in_table([const(A,_)-const(N,_)|T]):--
 	%% skolemize ?
 	vars::tput(A,sconst(N,_)),
 	put_in_table(T),!.
-
 
