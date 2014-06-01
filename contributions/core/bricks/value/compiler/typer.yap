@@ -36,6 +36,9 @@ xmg:type_expr(token(_,bool(_)),bool):--
 	!.
 xmg:type_expr(token(_,int(_)),int):--
 	!.
+xmg:type_expr(token(_,int(_)),IntType):--
+	type_decls::tget(IntType,int),
+	!.
 xmg:type_expr(token(_,string(_)),string):--
 	!.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
