@@ -46,6 +46,8 @@ xmg:type_expr(token(_,id(ID)),Type):--
 	type_decls::tget(const(ID),Type),
 	!.
 
+
+
 xmg:type_expr(token(C,id(ID)),Type):--
 	type_decls::tget(const(ID),T),!,
 	throw(xmg(type_error(incompatible_types(ID,Type,C)))),

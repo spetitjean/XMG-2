@@ -52,6 +52,8 @@ unfold_typedef(decls:enum(Enum),enum(UEnum)):-
 	unfold_enum(Enum,UEnum),!.
 unfold_typedef(decls:struct(Feats),struct(UFeats)):-
 	unfold_pairs(Feats,UFeats),!.
+unfold_typedef(decls:const_struct(Feats),const_struct(UFeats)):-
+	unfold_pairs(Feats,UFeats),!.
 unfold_typedef(decls:range(token(_,int(I1)),token(_,int(I2))),range(I1,I2)):-!.
 unfold_typedef(Def,_):-
 	xmg:send(info,'\n\nUnknown type def: '),

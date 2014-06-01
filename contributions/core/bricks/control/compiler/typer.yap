@@ -35,14 +35,14 @@ xmg:type_stmt(control:or(S1,S2),Type):--
 
 %% this should be in dim brick:
 xmg:type_stmt(dim:dim(Dim,S),void):--
-	%% xmg:send(info,'\n\ndim statement:\n'),
-	%% xmg:send(info,S),
-	%% xmg:send(info,Dim),
-	xmg:dimbrick(Dim,Brick),
-	get_dim_type(Brick,Type),
+	%%xmg:send(info,'\n\ndim statement:\n'),
+	%%xmg:send(info,S),
+	%%xmg:send(info,Dim),
+	%%xmg:dimbrick(Dim,Brick),
+	get_dim_type(Dim,Type),
 	xmg:send(info,Type),
-	%% xmg:send(info,'\nexpected type:\n'),
-	%% xmg:send(info,Type),
+	xmg:send(info,'\nexpected type:\n'),
+	xmg:send(info,Type),
 
 	xmg:type_stmt(S,Type),
 	xmg:send(info,'\ndim typed\n'),
@@ -50,21 +50,32 @@ xmg:type_stmt(dim:dim(Dim,S),void):--
 	!.
 
 get_dim_type(Dim,Type):--
-	dim_types::tget(dim:Dim,Type),!.
+	dim_types::tget(dim:Dim,Type),
+	!.
 get_dim_type(Dim,Type):--
 	xmg:principle(dimtype,DimType,Dims),
+	xmg:send(info,'\ngot dimtype declaration\n'),
+	xmg:send(info,Dim),
+	xmg:send(info,Dims),
 	lists:member(Dim,Dims),!,
 	xmg:send(info,DimType),
 	xmg:stmt_type(Dim,DimType,Type),
-	xmg:send(info,'\n\nDim type: '),
-	xmg:send(info,Type),
+	%%xmg:send(info,'\n\nDim type: '),
+	%%xmg:send(info,Type),
 	dim_types::tput(dim:Dim,Type),!.
 get_dim_type(Dim,Type):--
-	xmg:stmt_type(Dim,Type),
+	xmg:dimbrick(Dim,Brick),
+	xmg:send(info,'\ndefault typing'),
+	xmg:stmt_type(Brick,Type),
 	dim_types::tput(dim:Dim,Type),!.
 
 
 xmg:type_stmt(control:eq(S1,S2),void):--
+	xmg:type_expr(S1,Type),
+	xmg:type_expr(S2,Type2),
+	check_types(S1,S2,Type,Type2),
+	!.
+xmg:type_stmt(control:eq(S1,S2),_):--
 	xmg:type_expr(S1,Type),
 	xmg:type_expr(S2,Type2),
 	check_types(S1,S2,Type,Type2),

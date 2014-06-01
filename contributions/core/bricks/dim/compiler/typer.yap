@@ -28,7 +28,7 @@ xmg:stmt_type(Dim,Params,Type):--
 	xmg:send(info,Params),
 	get_types(Params,Types),	
 	xmg:dimbrick(Dim,Brick),
-	%% Brick and Bricks should be the same
+	%% Brick and BrickC should be the same
 	xmg:stmt_type_constr(Brick,BrickC:Constr),
 	DimType=..[Constr|Types],
 	Type=..[':',BrickC,DimType],!.

@@ -223,4 +223,5 @@ get_lines1(File,0,Codes):-
 	read_line_to_codes(File,Codes),!.
 get_lines1(File,N,Codes):-
 	M is N - 1,
+	read_line_to_codes(File,_),
 	get_lines1(File,M,Codes),!.

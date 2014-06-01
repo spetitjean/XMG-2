@@ -275,6 +275,16 @@ get_type(type(Type,struct(Feats))):--
 	get_feats_types(Feats,FeatsTypes),
 	xmg_brick_avm_avm:avm(AVM,FeatsTypes),
 	assert_type(type(Type,AVM)),!.
+get_type(type(Type,const_struct(Feats))):--
+	get_feats_types(Feats,FeatsTypes),
+	xmg_brick_avm_avm:cavm(AVM,FeatsTypes),
+	assert_type(type(Type,AVM)),!.
+get_type(type(Type,TypeDef)):--
+	xmg:send(info,'\nunknown type def: '),
+	xmg:send(info,Type),
+	xmg:send(info,', '),
+	xmg:send(info,TypeDef),
+	false,!.
 
 
 get_feats_types([],[]):-- !.
@@ -285,6 +295,10 @@ get_feats_types([H|T],[H1|T1]):--
 get_feat_type(F-struct(Feats),F-AVM):--
 	get_feats_types(Feats,FeatsTypes),
 	xmg_brick_avm_avm:avm(AVM,FeatsTypes),	
+	!.
+get_feat_type(F-const_struct(Feats),F-AVM):--
+	get_feats_types(Feats,FeatsTypes),
+	xmg_brick_avm_avm:cavm(AVM,FeatsTypes),	
 	!.
 get_feat_type(F-T,F-T):--
 	%%assert_feat(feat(F,T)),

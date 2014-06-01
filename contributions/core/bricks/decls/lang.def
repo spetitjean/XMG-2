@@ -25,7 +25,8 @@ TypeDef : '{' (Val // ',')+ '}' {$$=decls:enum($2)}
 	| '[' int '.' '.' int ']' {$$=decls:range($2,$5)} 
 	| TypeStruct {$$=$1};
 
-TypeStruct : '[' (Struct // ',')* ']' {$$=decls:struct($2)};
+TypeStruct : '[' (Struct // ',')* ']' {$$=decls:struct($2)}
+	   | '[[' (Struct // ',')* ']]' {$$=decls:const_struct($2)};
 
 Struct : id ':' id {$$=decls:structpair($1,$3)}
        | id ':' dimtype {$$=decls:structpair($1,$3)}
