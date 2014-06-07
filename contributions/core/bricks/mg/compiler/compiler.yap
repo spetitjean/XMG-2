@@ -64,8 +64,15 @@ compile_file(File,Eval,Encoding,Debug):-
              ;
 	     true
 	 ),
-	 compile_file(File,Eval),
+	 catch(compile_file(File,Eval),Exception,true),
+	 (
+	     not(var(Exception))->
+	       print_message(error, Exception)
+	       ;
+	       true
+	   ),
 	 halt.
+
 
 compile_file(File,Eval):-
 	xmg_compiler_conf:init,
@@ -111,6 +118,7 @@ compile_file(File,Eval):-
 
 	send(out,'<grammar>\n'),
 	eval.	
+
 
 eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),

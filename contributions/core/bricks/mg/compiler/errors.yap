@@ -11,6 +11,7 @@
 % :- source.
 
 
+
 :- edcg:thread(queue,edcg:queue).
 :- edcg:weave([queue],
 	       [format_msg/1,
@@ -34,7 +35,8 @@ format_msg(Msg) -->>
 	Msg =.. [Label,Title,Specs],
 	format_title(Title,Label),
 	format_specs(Specs),
-	format_footer,!.
+	format_footer,
+	!.
 
 format_title(Title, Label) -->>
 	vs_to_string(Title) with queue([]-STitle,[]-[]),
