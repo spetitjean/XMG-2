@@ -172,22 +172,24 @@ unify_imports([I|T]):--
 
 unify_import(mg:iclass(token(_,id(A)),[],none)):--
 	%%global_context::tget(A,Exports),
-	types::tget(A,(_,CAVM)),
-	do_forall(CAVM,FACAVM),
+	types::tget(A,(Params,CAVM)),
+	xmg:do_forall((Params,CAVM),(NParams,cavm(FACAVM))),
 	xmg_brick_mg_exporter:exports(N,List),
 	import_exports(List,FACAVM).
 
-do_forall(cavm(Vars),NVars):--
+xmg:do_forall((Params,cavm(Vars)),(NParams,cavm(NVars))):--
 	xmg:send(info,'\n forall on '),
-	xmg:send(info,Vars),
+	xmg:send(info,(Params,cavm(Vars))),
 	rbtrees:rb_visit(Vars,VarsList),
 	xmg_table:table_new(Free),
-	new_free(VarsList,NVarsList) with free(Free,_),
+	new_free(VarsList,NVarsList) with free(Free,Free1),
+	new_free(Params,NParams) with free(Free1,_),
 	xmg_brick_avm_avm:cavm(NVars,NVarsList),
 	xmg:send(info,'\n forall done : '),
-	xmg:send(info,NVars).
+	xmg:send(info,(NParams,cavm(NVars))).
 
 new_free([],[]):-- !.
+%% with vectors
 new_free([V-H|T],[V-F|T1]):--
 	free::tget(H,F),!,
 	xmg:send(info,'\nBINDING NEW VAR'),
@@ -201,7 +203,20 @@ new_free([V-H|T],[V-F|T1]):--
 new_free([V-H|T],[V-H|T1]):--
 	new_free(T,T1),
 	!.
-	
+%% with lists
+new_free([H|T],[V-F|T1]):--
+	free::tget(H,F),!,
+	xmg:send(info,'\nBINDING NEW VAR'),
+	new_free(T,T1),!.
+new_free([H|T],[V-F|T1]):--
+	var(H),
+	not(attvar(H)),
+	xmg:send(info,'\nCREATING NEW VAR'),
+	free::tput(H,F),
+	new_free(T,T1),!.
+new_free([H|T],[V-H|T1]):--
+	new_free(T,T1),
+	!.	
 
 
 import_exports([],CAVM):-- !.

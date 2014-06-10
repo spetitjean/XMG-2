@@ -93,7 +93,8 @@ xmg:type_stmt(control:call(S1,S2),void):--
 xmg:type_expr(control:call(token(_,id(S1)),Params),Type):--
 	%% params should be checked here
 	xmg:send(info,Params),
-	types::tget(S1,(ParamsTypes,Type)),
+	types::tget(S1,ClassType),
+	xmg:do_forall(ClassType,(ParamsTypes,Type)),
 	type_params(Params,ParamsTypes),
 	!.
 

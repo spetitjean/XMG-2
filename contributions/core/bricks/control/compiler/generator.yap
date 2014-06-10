@@ -71,6 +71,8 @@ get_params([],[]):-- !.
 get_params([v(Var)|T],[GVar|T1]):--
 	decls::tget(Var,GVar),
 	get_params(T,T1),!.
+get_params([c(Const)|T],[Const|T1]):--
+	get_params(T,T1),!.
 
 
 
