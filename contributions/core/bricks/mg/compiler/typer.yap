@@ -44,11 +44,16 @@
 %% global table of dimension types
 :-edcg:thread(dim_types,edcg:table).
 
+%% table of free variables in classes
+:-edcg:thread(free,edcg:table).
+
 
 :-edcg:weave([types,global_context,dim_types,type_decls],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
 :-edcg:weave([global_context,dim_types,type_decls],[type_classes/1]).
 :-edcg:weave([types,exports],[make_exports_global/1,make_params_global/1]).
 :-edcg:weave([type_decls],[type_decls/1, type_decl/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1,add_base_types/1, assert_consts/2, assert_const/2]).
+
+:-edcg:weave([free],[new_free/2]).
 
 xmg:check_types(T1,T1,Coord):- !.
 xmg:check_types(T1,T2,Coord):- 
@@ -167,9 +172,37 @@ unify_imports([I|T]):--
 
 unify_import(mg:iclass(token(_,id(A)),[],none)):--
 	%%global_context::tget(A,Exports),
-	types::tget(A,CAVM),
+	types::tget(A,(_,CAVM)),
+	do_forall(CAVM,FACAVM),
 	xmg_brick_mg_exporter:exports(N,List),
-	import_exports(List,CAVM).
+	import_exports(List,FACAVM).
+
+do_forall(cavm(Vars),NVars):--
+	xmg:send(info,'\n forall on '),
+	xmg:send(info,Vars),
+	rbtrees:rb_visit(Vars,VarsList),
+	xmg_table:table_new(Free),
+	new_free(VarsList,NVarsList) with free(Free,_),
+	xmg_brick_avm_avm:cavm(NVars,NVarsList),
+	xmg:send(info,'\n forall done : '),
+	xmg:send(info,NVars).
+
+new_free([],[]):-- !.
+new_free([V-H|T],[V-F|T1]):--
+	free::tget(H,F),!,
+	xmg:send(info,'\nBINDING NEW VAR'),
+	new_free(T,T1),!.
+new_free([V-H|T],[V-F|T1]):--
+	var(H),
+	not(attvar(H)),
+	xmg:send(info,'\nCREATING NEW VAR'),
+	free::tput(H,F),
+	new_free(T,T1),!.
+new_free([V-H|T],[V-H|T1]):--
+	new_free(T,T1),
+	!.
+	
+
 
 import_exports([],CAVM):-- !.
 import_exports([H|T],CAVM):--

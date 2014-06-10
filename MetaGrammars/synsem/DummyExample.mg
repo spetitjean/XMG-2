@@ -43,21 +43,21 @@ feature arg2 : LABEL
 
 
 class dummier
-%%import dummy[]
+import dummy[]
 declare ?T ?C ?A
 {
-	?C=dummy[?A];
+	%%?C=dummy[?A];
 	<syn>{
 		node ?T (color=black) %[cat=whatever]
 		}*=[arg2=?A]
-		;
-	?T=?C.X
+		%;
+	%%?T=?C.X
 	%%?C.X=?A
 }
 
 class dummy[P]
-export X Y Z 
-declare ?X ?Y ?Z ?T ?L ?C
+export X Y Z Dummy Dummy2 OtherDummy
+declare ?X ?Y ?Z ?T ?L ?C ?Dummy ?Dummy2 ?OtherDummy
 {
   % <syn>{
   % 	node ?X (color=black) [cat=@{s,n}];
@@ -68,6 +68,7 @@ declare ?X ?Y ?Z ?T ?L ?C
   % 	?Y >> ?Z
   % }
   % |
+  ?Dummy=?OtherDummy;
   {<syn>{
 	node ?X (color=black) [cat=s, extracted= +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
