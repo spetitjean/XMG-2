@@ -25,19 +25,19 @@
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 %% statement type with default parameters
-xmg:stmt_type(morphtf,morphtf:morph(FieldsType,FeatsType)):-!.
+xmg:stmt_type(morphtf,Dim,Dim:morph(FieldsType,FeatsType)):-!.
 %% statement type with given parameters
-xmg:stmt_type_constr(morphtf,morphtf:morph).
+xmg:stmt_type_constr(morphtf,morph).
 
 
-xmg:type_stmt(morphtf:infield(token(_,id(Field)),Contrib),morphtf:morph(FieldsType,FeatsType)):--
+xmg:type_stmt(morphtf:infield(token(_,id(Field)),Contrib),Morphtf:morph(FieldsType,FeatsType)):--
 	xmg:send(info,'\n\ntyping infield with type '),
 	xmg:send(info,FieldsType),
 	xmg_brick_avm_avm:dot(FieldsType,Field,T1),
 	xmg:type_expr(F2,T1),	
 	!.
 
-xmg:type_stmt(morphtf:eq(token(_,id(F1)),F2),morphtf:morph(FieldsType,FeatsType)):--
+xmg:type_stmt(morphtf:eq(token(_,id(F1)),F2),Morphtf:morph(FieldsType,FeatsType)):--
 	xmg:send(info,'\n\ntyping eq with type '),
 	xmg:send(info,FeatsType),
 	xmg_brick_avm_avm:dot(FeatsType,F1,T1),

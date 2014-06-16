@@ -6,8 +6,10 @@ type SynProps = []
 type SynFeats = [synNode: <syn:synnode>]
 %%type SynFeats = []
 
+type IFace = []
 
 use dimtype with (SynFeats,SynProps) dims (syn)
+use dimtype with (IFace) dims (iface)
 
 type CAT = {v,n,s,cl}
 %%type CAT = {t}

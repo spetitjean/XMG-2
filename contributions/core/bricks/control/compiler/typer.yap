@@ -58,15 +58,16 @@ get_dim_type(Dim,Type):--
 	xmg:send(info,Dim),
 	xmg:send(info,Dims),
 	lists:member(Dim,Dims),!,
+	xmg:dimbrick(Dim,Brick),
 	xmg:send(info,DimType),
-	xmg:stmt_type(Dim,DimType,Type),
+	xmg:stmt_type(Brick,Dim,DimType,Type),
 	%%xmg:send(info,'\n\nDim type: '),
 	%%xmg:send(info,Type),
 	dim_types::tput(dim:Dim,Type),!.
 get_dim_type(Dim,Type):--
 	xmg:dimbrick(Dim,Brick),
 	xmg:send(info,'\ndefault typing'),
-	xmg:stmt_type(Brick,Type),
+	xmg:stmt_type(Brick,Dim,Type),
 	dim_types::tput(dim:Dim,Type),!.
 
 

@@ -25,14 +25,14 @@
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 %% statement type with default parameters
-xmg:stmt_type(syn,syn:tree(FType,PType)):-
+xmg:stmt_type(syn,Dim,Dim:tree(FType,PType)):-
 	xmg_brick_avm_avm:avm(FType,[]),
 	xmg_brick_avm_avm:avm(PType,[]).
 %% statement type with given parameters
-xmg:stmt_type_constr(syn,syn:tree).
+xmg:stmt_type_constr(syn,tree).
 
 
-xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
+xmg:type_stmt(syn:node(ID,Props,Feats),Syn:tree(FType,PType)):--
 	xmg:type_expr(Feats,FType),
 
 	xmg:send(info,'\nFeats type is now '),
@@ -43,22 +43,22 @@ xmg:type_stmt(syn:node(ID,Props,Feats),syn:tree(FType,PType)):--
 	xmg_brick_avm_avm:avm(PType,LPType),
 	xmg:send(info,LPType),
 	xmg:get_var_type(ID,Type),
-	Type=syn:node(syn:tree(FType,PType)),
+	Type=Syn:node(Syn:tree(FType,PType)),
 	!.
 
-xmg:type_stmt(syn:dom(Dom,N1,N2),syn:tree(FType,PType)):--
+xmg:type_stmt(syn:dom(Dom,N1,N2),Syn:tree(FType,PType)):--
 	xmg:get_var_type(N1,T1),
-	T1=syn:node(syn:tree(FType,PType)),
+	T1=Syn:node(syn:tree(FType,PType)),
 	xmg:get_var_type(N2,T2),
-	T2=syn:node(syn:tree(FType,PType)),
+	T2=Syn:node(syn:tree(FType,PType)),
 
 	!.
 
-xmg:type_stmt(syn:prec(Prec,N1,N2),syn:tree(FType,PType)):--
+xmg:type_stmt(syn:prec(Prec,N1,N2),Syn:tree(FType,PType)):--
 	xmg:get_var_type(N1,T1),
-	T1=syn:node(syn:tree(FType,PType)),
+	T1=Syn:node(syn:tree(FType,PType)),
 	xmg:get_var_type(N2,T2),
-	T2=syn:node(syn:tree(FType,PType)),
+	T2=Syn:node(syn:tree(FType,PType)),
 	!.
 
 xmg:type_stmt(syn:tree(Node,Children),Type):--

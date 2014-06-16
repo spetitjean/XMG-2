@@ -25,7 +25,7 @@
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 
-xmg:stmt_type(sem,sem).
+xmg:stmt_type(sem,Dim,Dim:sem):-!.
 
 xmg:type_stmt(sem:_,_):--
 	!.

@@ -22,16 +22,21 @@
 :- xmg:edcg.
 
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
-:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[xmg:stmt_type/3,get_types/2,get_type/2]).
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[xmg:stmt_type/4,get_types/2,get_type/2]).
 
-xmg:stmt_type(Dim,Params,Type):--
+xmg:stmt_type(Brick,Dim,Params,Type):--
 	xmg:send(info,Params),
 	get_types(Params,Types),	
-	xmg:dimbrick(Dim,Brick),
-	%% Brick and BrickC should be the same
-	xmg:stmt_type_constr(Brick,BrickC:Constr),
+	%%xmg:dimbrick(Dim,Brick),
+	%% The types for Dim are contributed by Brick
+	xmg:stmt_type_constr(Brick,Constr),!,
 	DimType=..[Constr|Types],
-	Type=..[':',BrickC,DimType],!.
+	Type=..[':',Dim,DimType],!.
+
+%% in case there is no type constructor (like in iface)
+xmg:stmt_type(Brick,Dim,Params,Type):--
+	xmg:send(info,Params),
+	get_types(Params,[Type]),!.
 
 get_types([],[]):-- !.
 get_types([H|T],[H1|T1]):--

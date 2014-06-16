@@ -26,8 +26,6 @@
 
 :-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls],[value_type/2,type_def/2,extend_type/3]).
 
-xmg:stmt_type(iface,AVM):-
-	xmg_brick_avm_avm:avm(AVM,[]).
 
 xmg:type_expr(avm:avm(Coord,Feats),Type):--
 	(

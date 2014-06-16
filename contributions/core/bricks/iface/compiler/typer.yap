@@ -24,3 +24,7 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
+xmg:stmt_type(iface,Dim,AVM):-
+	xmg_brick_avm_avm:avm(AVM,[]).
+
+

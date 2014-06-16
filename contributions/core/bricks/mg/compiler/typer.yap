@@ -28,7 +28,7 @@
 :-multifile(xmg:type_expr/10).
 
 %% the type of statements into a dimension, with parameters given by the user
-:-multifile(xmg:stmt_type/2).
+:-multifile(xmg:stmt_type/3).
 %% the type of statements into a dimension, with default parameters
 :-multifile(xmg:stmt_type_constr/2).
 
