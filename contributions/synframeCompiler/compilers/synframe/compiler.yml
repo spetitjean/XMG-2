@@ -2,18 +2,29 @@ mg:
   _Stmt: control
   _EDecls: decls
 decls:
-  ODecl: feats hierarchy
+  _ODecl: feats hierarchy
 control:
-  _Stmt: caller dim_frame dim_syn
+  _Stmt: dim_frame dim_syn dim_iface
+  _Expr: value
 avm: 
   _Value: value
+  _Expr: value
 value: 
-  Else: avm adisj
+  _Else: avm adisj avm.Dot control.Call
 syn:
-  AVM: avm
+  _AVM: avm
+iface:
+  _AVM: avm
 dim_frame:
   tag: "frame"
   Stmt: frame
+  Expr : value
 dim_syn:
   tag: "syn"
+  solver: "tree"
   Stmt: syn
+  Expr: value
+dim_iface:
+  tag: "iface"
+  Stmt: iface
+  Expr: value

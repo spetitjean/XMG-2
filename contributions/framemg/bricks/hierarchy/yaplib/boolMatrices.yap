@@ -20,7 +20,8 @@
 
 :- module(xmg_brick_hierarchy_boolMatrix,[msquare/2,fixpoint/2,get_row/3,and_rows/3,get_type/3]).
 :- use_module(library(maplist)).
-:- use_module(library(matrix)).
+%% looks like there is a conflict with atts
+%:- use_module(library(matrix)).
 :- use_module(library(lists)).
 
 or(0,0,0):-!.	

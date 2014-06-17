@@ -29,12 +29,15 @@ eval(Syn,[tree],XML,Class):-
 	xmg_brick_tree_solver:solve(Prepared,solution(IsRoot,Eq, Children, Left, NodeList1)),
 	xmg_brick_tree_extractor:extract(IsRoot,Eq, Children, Left, NodeList1,Tree),
 	%%xmg:send(info,Tree),
+	xmg:send(info,' extracted '),
 	%%flush_output,
 	xmg_brick_mg_compiler:current(Previous),
 	%% Current is Previous + 1,
 	%% retract(current(Previous)),
 	%% asserta(current(Current)),
 	xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML).
+eval([],_,elem(tree, features([id-none])),_).
+
 
 %% IG compiler
 eval(Syn,[],XML,Class):-

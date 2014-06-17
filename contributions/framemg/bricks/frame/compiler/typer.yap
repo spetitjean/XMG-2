@@ -17,23 +17,25 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-module(xmg_brick_frame_typer).
 
-:-module(xmg_loader_frame).
-
-:-	use_module('xmg/brick/frame/compiler/typer').
-:-	use_module('xmg/brick/frame/compiler/unfolder').
-:-	use_module('xmg/brick/frame/compiler/generator').
-
-:-	use_module('xmg/brick/frame/engine').
-:-	use_module('xmg/brick/frame/nodename').
-
-:-	use_module('xmg/brick/frame/compiler/convert').
-:-	use_module('xmg/brick/frame/compiler/preparer').
-:-	use_module('xmg/brick/frame/compiler/solver').
-
-%% dependencies
-:-	use_module('xmg/brick/havm/compiler/loader').
+:- xmg:edcg.
 
 
+:-edcg:using([xmg_brick_mg_typer:types]).
 
+%% statement type with default parameters
+xmg:stmt_type(frame,Dim,Dim:frame(FType)):-
+	xmg_brick_havm_havm:h_avm(FType,_,[]).
+%% statement type with given parameters
+xmg:stmt_type_constr(frame,frame).
+
+
+xmg:type_stmt(frame:F,_):-- !.
+
+
+xmg:type_stmt(syn:X,_):--
+	xmg:send(info,'\n\nDid not type frame statement:\n'),
+	xmg:send(info,X),!,
+	fail.
 
