@@ -1,0 +1,29 @@
+Getting started: 
+
+Install contributions:
+
+XMG-NG builds metagrammar compiler from compiler bricks. These bricks
+belong to contributions. To make a set of bricks available, you need
+to install a contribution. This is done with the command "xmg install
+path_to_contribution". For example, to work with the TAG compiler, you
+need to install two contribution: contributions/core and
+contributions/treemg
+
+Building a compiler:
+
+Before compiling a metagrammar, you need to build a compiler. Some of
+them are available as contributions. To do so, you should use the
+command "xmg build" inside the compiler brick. For example, to
+generate the TAG compiler:
+
+ cd contributions/synsemCompiler/compilers/synsem; xmg build
+
+To use the compiler you just built, you need to install the
+synsemCompiler contribution.
+
+Compile a metagrammar:
+
+The command "xmg compile" allows to use a compiler on a metagrammar. For example, using the TAG compiler on an example file can be done with:
+
+xmg compile synsem Metagrammars/synsem/DummyExample.mg (with the
+--force option if you already compiled the file once)
