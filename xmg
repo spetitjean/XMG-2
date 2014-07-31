@@ -4,8 +4,8 @@
 
 import sys
 
-if sys.version_info[0] < 3:
-    raise Exception("xmg requires python version 3")
+if sys.version_info < (3,3):
+    raise Exception("xmg requires python version 3.3")
 
 import os.path
 appdir = os.path.dirname(os.path.realpath(sys.argv[0]))
