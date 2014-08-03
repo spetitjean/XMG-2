@@ -74,17 +74,32 @@ get_dim_type(Dim,Type):--
 xmg:type_stmt(control:eq(S1,S2),void):--
 	xmg:type_expr(S1,Type),
 	xmg:type_expr(S2,Type2),
-	xmg:check_types(S1,S2,Type,Type2),
-	!.
+	xmg:check_types(S1,S2,Type,Type2).
 xmg:type_stmt(control:eq(S1,S2),_):--
+	xmg:send(info,'here\n\n\n'),
 	xmg:type_expr(S1,Type),
+	xmg:send(info,S2),
+
 	xmg:type_expr(S2,Type2),
+	xmg:send(info,'here\n\n\n'),
+
 	xmg:check_types(S1,S2,Type,Type2),
 	!.
 
 xmg:check_types(_,_,Type,Type2):-
 	Type=Type2,!.
 xmg:check_types(S1,S2,Type,Type2):-
+	xmg:send(info,'\n\n\nType Checker error: '),
+
+	xmg:send(info,S1),
+	xmg:send(info,Type),
+	xmg:send(info,'\nand\n'),
+
+	xmg:send(info,S2),
+	xmg:send(info,Type2),
+	xmg:send(info,'\n\n\n'),
+
+
 	throw(xmg(type_error(incompatible_exprs(expr(S1,Type),expr(S2,Type2))))).
 
 xmg:type_stmt(control:call(S1,S2),void):--

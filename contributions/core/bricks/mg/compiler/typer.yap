@@ -73,6 +73,8 @@ xmg:type_expr(some(E),T):--
 xmg:get_var_type(none,_):-- !.
 xmg:get_var_type(some(token(_,id(ID))),Var):-- 
 	types::tget(ID,Var),!.
+xmg:get_var_type(token(_,id(ID)),Var):-- 
+	types::tget(ID,Var),!.
 xmg:get_var_type(Get,_):--
 	xmg:send(info,'could not get type for var '),
 	xmg:send(info,Get),
@@ -173,20 +175,22 @@ unify_imports([I|T]):--
 unify_import(mg:iclass(token(_,id(A)),[],none)):--
 	%%global_context::tget(A,Exports),
 	types::tget(A,(Params,CAVM)),
-	xmg:do_forall((Params,CAVM),(NParams,cavm(FACAVM))),
+	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
 	xmg_brick_mg_exporter:exports(N,List),
 	import_exports(List,FACAVM).
 
-xmg:do_forall((Params,cavm(Vars)),(NParams,cavm(NVars))):--
+xmg:do_forall((Params,cavm(Vars)),(NParams,NVars)):--
 	xmg:send(info,'\n forall on '),
 	xmg:send(info,(Params,cavm(Vars))),
 	rbtrees:rb_visit(Vars,VarsList),
 	xmg_table:table_new(Free),
 	new_free(VarsList,NVarsList) with free(Free,Free1),
+	xmg:send(info,NVarsList),
+
 	new_free(Params,NParams) with free(Free1,_),
 	xmg_brick_avm_avm:cavm(NVars,NVarsList),
 	xmg:send(info,'\n forall done : '),
-	xmg:send(info,(NParams,cavm(NVars))).
+	xmg:send(info,(NParams,NVars)).
 
 new_free([],[]):-- !.
 %% with vectors
@@ -225,8 +229,11 @@ import_exports([H|T],CAVM):--
 	import_exports(T,CAVM).
 
 import_export(id(A,_)-_,CAVM):--
-	xmg:send(info,'exporting '),
+	xmg:send(info,'\nexporting '),
 	xmg:send(info,A),
+	xmg:send(info,',  '),
+	xmg:send(info,CAVM),
+
 	xmg_brick_avm_avm:dot(CAVM,A,Type),
 	types::tget(A,Type),!.
 
@@ -424,7 +431,7 @@ type_properties([H|T]):-
 	type_properties(T).
 
 type_property(property(G,T,_)):-
-	asserta(property(G,T)).
+	asserta(xmg:property(G,T)).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -90,8 +90,15 @@ xmg:type_stmt(avm:avm(Coord,Feats),Type):--
 	xmg:type_expr(avm:avm(Coord,Feats),Type),!.
 
 xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
+	xmg:send(info,' here in avm '),
 	types::tget(AVM,CAVM),
+	xmg:send(info,' and '),
+	xmg:send(info,CAVM),
+	xmg:send(info,Feat),
+
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
+	xmg:send(info,' there in avm'),
+
 	!.
 
 %% when typing a structured avm
@@ -105,6 +112,9 @@ feat_type(token(_,id(Feat)),Feat,AVM,Type):-
 %% when typing a single feat
 feat_type(token(_,id(Feat)),Feat,_,Type):-
 	xmg:feat(Feat,Type),
+	!.
+feat_type(token(_,id(Feat)),Feat,_,Type):-
+	xmg:property(Feat,Type),
 	!.
 feat_type(token(C,ID),Feat,_,Type):-
 	throw(xmg(type_error(feature_not_declared(ID,C)))).
