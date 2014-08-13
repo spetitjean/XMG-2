@@ -20,7 +20,11 @@
 :-module(xmg_brick_hierarchy_typer).
 :-dynamic(hierarchy/3).
 :-dynamic(xmg:fconstraint/3).
+:-dynamic(xmg:ftypes/1).
 :-dynamic(xmg:fReachableType/2).
+:-dynamic(xmg:fAttrConstraint/2).
+:-dynamic(xmg:fAttrConstraint/4).
+:-dynamic(xmg:fPathConstraint/4).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Getting the hierarchy from the constraints
@@ -35,6 +39,10 @@ fTypeToVector(Type,SVector,FVector):-
 	xmg:send(info,Vector),
 	find_smaller_supertype(Vector,SVector,FVector),
 	!.
+fTypeToVector(Type,SVector,FVector):-
+	not(xmg:ftypes(Types)),
+	xmg:send(info,'\n\nError: no frame type was defined'),
+	false.
 
 find_smaller_supertype(Vector,FVector,SVector):-
 	find_smaller_supertype_from(Vector,SVector,0),

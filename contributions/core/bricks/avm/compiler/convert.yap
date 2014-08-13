@@ -53,6 +53,7 @@ xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]
 xmlFeat(A-AVM,H1):--
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	xmg_brick_avm_avm:const_avm(AVM,CAVM),
+
 	((
 	    var(CAVM),!,
 	    xmg:convert_new_name('@AVM',CAVM),
