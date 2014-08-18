@@ -1,6 +1,6 @@
 %%
 
-Frame :  (Var)? '(' id (',')? (Pair // ComaOrNot )* ')' {$$=frame:frame($1,$3,$5)};
+Frame :  (Var)? '[' id (',')? (Pair // ComaOrNot )* ']' {$$=frame:frame($1,$3,$5)};
 
 ComaOrNot : ( ',' )? {$$=$1};
 

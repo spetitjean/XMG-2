@@ -1,15 +1,21 @@
 
 %%
 
-Hierarchy : FType {$$=$1} | FConstraint {$$=$1}; 
+Hierarchy : FType {$$=$1} | FConstraint {$$=$1} | FTypes {$$=$1} | FConstraints {$$=$1}; 
+
+FTypes : 'frametypes' '=' '{' (id // ',')+ '}' {$$=hierarchy:ftypes($4)}; 
+
+FConstraints : 'frameconstraints' '=' '{' (FConst // ',')+ '}' {$$=hierarchy:fconstraints($4)}; 
 
 FType : 'ftype' id {$$=hierarchy:ftype($2)};
 
-FConstraint : 'fconstraint' IDsOrAttr FOp IDsOrAttr {$$=hierarchy:fconstraint($3,$2,$4)};
+FConstraint : 'fconstraint' FConst {$$=$2};
+
+FConst : IDsOrAttr FOp IDsOrAttr {$$=hierarchy:fconstraint($2,$1,$3)};
 
 FOp : '->' {$$=$1} | '<->' {$$=$1} ;
 
-IDsOrAttr : IDs {$$=ids($1)} | id '=' id {$$=pathEq($1,$3)} | id ':' id {$$=attrType($1,$3)};
+IDsOrAttr : IDs {$$=ids($1)} | id '=' id {$$=pathEq($1,$3)} | id ':' id {$$=attrType($1,$3)} | id ':' bool {$$=attrType($1,$3)};
 
 IDs :  ( id // ',')+ {$$=$1} ;
 

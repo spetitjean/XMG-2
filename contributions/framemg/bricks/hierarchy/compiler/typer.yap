@@ -176,6 +176,7 @@ is_type(false):-!.
 is_type(T):-
 	xmg:ftype(T),!.
 is_type(T):-
+	not(xmg:ftype(T)),
 	xmg:send(info,'\n\nError: '),
 	xmg:send(info,T),
 	xmg:send(info,' is not a ftype.'),
@@ -402,6 +403,8 @@ type_fconstraint(CT,C1,C2):-
 %% 	!.
 
 assert_type(Type):-
+	xmg:send(info,'\nAsserting type '),
+	xmg:send(info,Type),
 	asserta(xmg:ftype(Type)).
 
 assert_constraints(Type,TConst,[]):-!.

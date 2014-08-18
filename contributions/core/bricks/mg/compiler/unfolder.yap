@@ -32,8 +32,10 @@
 %% SPECIFIC RULES
 
 unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
-	xmg:send(info,' unfolding decls '),
+	xmg:send(info,' unfolding decls\n'),
 	xmg:unfold(Decls,UDecls),
+	xmg:send(info,UDecls),
+
 	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),!,
 	%%xmg_compiler:send(info,OUDecls),
 	

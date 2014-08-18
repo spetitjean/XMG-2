@@ -291,6 +291,10 @@ type_decl(ftype-Decls):--
 	get_ftypes(Decls),!.
 type_decl(fconstraint-Decls):--
 	get_fconstraints(Decls),!.
+type_decl(ftypes-[ftypes(Decls)]):--
+	get_ftypes(Decls),!.
+type_decl(fconstraints-[fconstraints(Decls)]):--
+	get_fconstraints(Decls),!.
 type_decl(property-Decls):--
 	type_properties(Decls),!.
 type_decl(feat-Decls):--
@@ -524,6 +528,7 @@ get_ftype(ftype(Type)):-
 	xmg_brick_hierarchy_typer:type_ftype(Type),!.
 
 
+
 get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
 
@@ -569,6 +574,10 @@ get_fconstraints([H|T]):-
 get_fconstraint(fconstraint(CT,Left,Right)):-
 	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
 
+get_fconstraint(C):-
+	xmg:send(info,'\nUnknown fconstraint:\n'),
+	xmg:send(info,C),
+	false.
 
 
 
