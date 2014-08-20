@@ -17,6 +17,6 @@ FOp : '->' {$$=$1} | '<->' {$$=$1} ;
 
 IDsOrAttr : IDs {$$=ids($1)} | id '=' id {$$=pathEq($1,$3)} | id ':' id {$$=attrType($1,$3)} | id ':' bool {$$=attrType($1,$3)};
 
-IDs :  ( id // ',')+ {$$=$1} ;
+IDs :  ( id )+ {$$=$1} ;
 
 %%
