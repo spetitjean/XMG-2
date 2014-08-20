@@ -29,11 +29,13 @@ verify_attributes(Var, Other, Goals) :-
 	get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
 	( get_atts(Other, avmfeats(Type2,T2,U)) ->	    
-	    %%unify_types(Type1,Type2,Type3),
 	    unify_types(Type1,Type2,Type3),
 	    %%check_type(Type1),
+	    get_attrconstraints(Type3,Must),
 	    rb_visit(T1,Pairs),
-	    unify_entries(T2,Pairs,T3),
+	    lists:append(Must,Pairs,PairsMust),
+
+	    unify_entries(T2,PairsMust,T3),
 	    put_atts(Other, avmfeats(Type3,T3,U)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]

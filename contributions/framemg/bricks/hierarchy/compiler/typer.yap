@@ -276,18 +276,27 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 
 generate_vector_attrs(Vector,[],[]):-!.
 %% path constraints
-generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],[A1-V,A2-V|ACT1]):-
+generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],ACT2):-
 	not(not(Vector=AVector)),
-	generate_vector_attrs(Vector,ACT,ACT1),!.
+	generate_vector_attrs(Vector,ACT,ACT1),
+	insert(A1-V,ACT1,ACTT),
+	insert(A2-V,ACTT,ACT2),!.
 generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.	
 %% attribute constraints
-generate_vector_attrs(Vector,[(AVector,Feat)|ACT],[Feat|ACT1]):-
+generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	not(not(Vector=AVector)),
-	generate_vector_attrs(Vector,ACT,ACT1),!.
+	generate_vector_attrs(Vector,ACT,ACT1),
+	insert(Feat,ACT1,ACT2),!.
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 
+insert(Feat,[],[Feat]).
+insert(A-V,[A-V1|T],[A-V1|T]):-
+	!,
+	V=V1,!.
+insert(A-V,[B|T],[B|T1]):-
+	insert(A-V,T,T1),!.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Getting the unification rules from the hierarchy
