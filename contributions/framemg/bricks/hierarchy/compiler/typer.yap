@@ -46,7 +46,7 @@ fTypeToVector(Type,SVector,FVector):-
 
 find_smaller_supertype(Vector,FVector,SVector):-
 	find_smaller_supertype_from(Vector,SVector,0),
-	xmg:send(info,SVector),
+	%%xmg:send(info,SVector),
 	replace_zeros(SVector,FVector),
 	!.
 
@@ -54,6 +54,8 @@ find_smaller_supertype_from(Vector,Vector,N):-
 	xmg:fReachableType(Vector,N),!.
 find_smaller_supertype_from(Vector,SVector,N):-
 	M is N +1,
+	length(Vector,L),
+	M =< L,
 	find_smaller_supertype_from(Vector,SVector,M),!.
 find_smaller_supertype_from(Vector,_,_):-
 	xmg:send(info,'\nDid not find supertype for vector '),
@@ -285,16 +287,21 @@ generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.	
 %% attribute constraints
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
-	not(not(Vector=AVector)),
+	not(not(Vector=AVector)),!,
 	generate_vector_attrs(Vector,ACT,ACT1),
-	insert(Feat,ACT1,ACT2),!.
+	xmg:send(info,'\n Adding '),
+	xmg:send(info,Feat),
+	insert(Feat,ACT1,ACT2),
+	xmg:send(info,ACT2),
+	!.
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 
 insert(Feat,[],[Feat]).
 insert(A-V,[A-V1|T],[A-V1|T]):-
-	!,
 	V=V1,!.
+insert(A-V,[A-V1|T],[A-V,A-V1|T]):-
+	not(V=V1),!.
 insert(A-V,[B|T],[B|T1]):-
 	insert(A-V,T,T1),!.
 

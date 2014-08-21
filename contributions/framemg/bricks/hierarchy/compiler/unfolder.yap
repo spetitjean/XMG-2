@@ -63,12 +63,18 @@ unfold_id(token(_,id(ID)),ID).
 
 unfold_idsOrAttr(ids(IDS),types(UIDS)):-
 	unfold_list(IDS,UIDS),!.
+unfold_idsOrAttr(token(_,bool(+)),types([true])):-
+	unfold_list(IDS,UIDS),!.
+unfold_idsOrAttr(token(_,bool(-)),types([false])):-
+	unfold_list(IDS,UIDS),!.
 
 unfold_idsOrAttr(attrType(ID1,ID2),attrType(UID1,UID2)):-
 	unfold_id(ID1,UID1),
 	unfold_id(ID2,UID2),!.
 
 unfold_idsOrAttr(attrType(ID1,token(_,bool(+))),attrType(UID1,true)):-
+	unfold_id(ID1,UID1),!.
+unfold_idsOrAttr(attrType(ID1,token(_,bool(-))),attrType(UID1,false)):-
 	unfold_id(ID1,UID1),!.
 
 unfold_idsOrAttr(pathEq(ID1,ID2),pathEq(UID1,UID2)):-

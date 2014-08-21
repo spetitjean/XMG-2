@@ -28,10 +28,10 @@
 verify_attributes(Var, Other, Goals) :-
 	get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
-	( get_atts(Other, avmfeats(Type2,T2,U)) ->	    
-	    unify_types(Type1,Type2,Type3),
+	( get_atts(Other, avmfeats(Type2,T2,U)) ->
+	    unify_types(Type1,Type2,Type3,CType3),
 	    %%check_type(Type1),
-	    get_attrconstraints(Type3,Must),
+	    get_attrconstraints(CType3,Must),
 	    rb_visit(T1,Pairs),
 	    lists:append(Must,Pairs,PairsMust),
 
@@ -63,7 +63,8 @@ h_avm(X, Type, L) :-
 	xmg:send(info,Vector),
 
 	get_attrconstraints(CVector,Must),
-	xmg:send(info,Must),
+
+
 	list_to_rbtree(L,T),
 	%%xmg:send(info,T),
 	
@@ -81,8 +82,32 @@ attribute_goal(Var, h_avm(Var,Type,L)) :-
 	rb_visit(T,L).
 
 
-get_attrconstraints(Type,C):-
-	xmg:fattrconstraint(Type,C),!.
+get_attrconstraints(Type,MCT):-
+	xmg:fattrconstraint(Type,C),
+	xmg:send(info,'\nGot attr contraints:'),
+	xmg:send(info,C),
+	xmg:send(info,'\n for :'),
+	xmg:send(info,Type),
+
+	create_attr_types(C,CT),
+	merge_feats(CT,CT,MCT),!.
+
+create_attr_types([],[]).
+create_attr_types([A-V|T],[A-V|T1]):-
+	var(V),!,
+	create_attr_types(T,T1),!.
+create_attr_types([A-V|T],[A-V1|T1]):-
+	not(var(V)),!,
+	h_avm(V1,V,[]),
+	create_attr_types(T,T1),!.
+
+merge_feats([],Feats,[]).
+merge_feats([A-V|T],Feats,[A-V|T1]):-
+	lists:member(A-V1,Feats),
+	V=V1,!,
+	merge_feats(T,Feats,T1),!.
+merge_feats([F|T],Feats,[F|T1]):-
+	merge_feats(T,Feats,T1),!.
 
 add_must([],L,L).
 add_must([H-V|T],L,NewL):-
@@ -95,9 +120,12 @@ check_type(Vector):-
 	xmg:send(info,'\nInvalid type vector:'),
 	xmg:send(info,Vector),false.
 
-unify_types(T1,T2,T3):-
+unify_types(T1,T2,T3,CT3):-
 	T1=T2,
-	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3,_),!.
+	xmg:send(info,'HERE '),
+	xmg:send(info,T1),
+
+	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3,CT3),!.
 unify_types(T1,T2,_):-
 	xmg:send(info,'\nCould not unify frame types '),
 	xmg:send(info, T1),
