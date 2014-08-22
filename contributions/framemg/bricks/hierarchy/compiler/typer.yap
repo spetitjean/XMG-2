@@ -20,6 +20,7 @@
 :-module(xmg_brick_hierarchy_typer).
 :-dynamic(hierarchy/3).
 :-dynamic(xmg:fconstraint/3).
+:-dynamic(xmg:fConstraint/3).
 :-dynamic(xmg:ftypes/1).
 :-dynamic(xmg:fReachableType/2).
 :-dynamic(xmg:fAttrConstraint/2).
