@@ -20,7 +20,7 @@ type NUM = {sg,pl}
 type AGR = [gen:GEN, num:NUM]
 %%type AGR = [num:NUM]
 
-type FS = [this : CAT, that : [these: AGR, those : NUM]]
+type FS = [this : CAT, that : [these: AGR, those : NUM] ]
 
 type LABEL !
 
@@ -43,6 +43,17 @@ feature arg2 : LABEL
 %%use syn:node with () dims (syn) args (node_props, node_feats)
 %% use syn:node with (node_props, node_feats) dims (syn) 
 
+class test
+declare ?X ?Y ?Z
+{
+	<syn>{
+		node ?X;
+		node ?Y;
+		node ?Z;
+		?X -> ?Y;
+		?X -> ?Z
+	}
+}
 
 class dummier
 %%import dummy[]
@@ -77,8 +88,8 @@ declare ?X ?Y ?Z ?T ?L ?C ?Dummy ?Dummy2 ?OtherDummy ?P2
 	node ?X (color=black) [cat=s, extracted= +]{ ...+
 	     node ?Y (color=black) [cat=@{n,cl}]
 	     ,,, 
-	     node ?Z (color=black) [cat=?P2, agr=[gen=m,num=sg,cat=s]]{
-	     	  node ?T (color=black) [cat=?L, fs=[that=[these=[gen=m]]]]
+	     node ?Z (color=black) [cat=?P2, agr=[gen=m,num=sg,cat=s] ]{
+	     	  node ?T (color=black) [cat=?L, fs=[that=[these=[gen=m] ] ] ]
 		  }
 	     
 	     	} 
@@ -94,5 +105,7 @@ declare ?X ?Y ?Z ?T ?L ?C ?Dummy ?Dummy2 ?OtherDummy ?P2
 
 
 
-value dummy
-value dummier
+%%value dummy
+%%value dummier
+
+value test

@@ -20,8 +20,8 @@
 
 :- module(xmg_brick_mg_tokenizer,[tokenize/2, tokenize/3]).
 
-:- use_module('xmg/brick/mg/edcg.yap').
-:- use_module(library(lists)).
+%%:- use_module('xmg/brick/mg/edcg.yap').
+%%:- use_module(library(lists)).
 
 :- multifile(xmg:punctuation/1).
 :- multifile(xmg:keyword/1).

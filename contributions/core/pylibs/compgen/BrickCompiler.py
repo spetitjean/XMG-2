@@ -246,6 +246,43 @@ class BrickCompiler(object):
                     compfile.write(':-use_module(\'%s\').\n' % yapfile)
         print("Modules loader generated in %s/loader.yap"%self._folder)
 
+    def generate_silent_loader(self):
+        compfile=open(self._folder+"/loader.yap","w")
+        compfile.write('%% -*- prolog -*-\n\n')
+        compfile.write(':-module(xmg_loader).\n\n')
+        compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+        compfile.write('%% Loader\n')
+        compfile.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n') 
+        import glob
+        yapdir= xmg.command.YAPDIR 
+        # compfile.write(':-load_files([')
+        files=[]
+        for comp in self._compilers:  
+            for yapfile in glob.glob("%s/%s/*.yap" % (yapdir,comp)):
+                files.append('\'%s\'' % yapfile)
+            yapfiles=glob.glob("%s/%s/compiler/*.yap" % (yapdir,comp))
+            yapfiles.sort()
+            for yapfile in yapfiles:
+                # if a loader is there, do not load it, to avoid double imports
+                if not os.path.basename(yapfile)=="loader.yap": 
+                    files.append('\'%s\'' % yapfile)
+        for solver in self._solvers:
+            for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,self._solvers[solver])):
+                files.append('\'%s\'' % yapfile)
+            for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,self._solvers[solver])):
+                 # if a loader is there, do not load it, to avoid double imports
+                if not os.path.basename(yapfile)=="loader.yap": 
+                    files.append('\'%s\'' % yapfile)
+        # compfile.write(", ".join(files))
+        edcg_file='\''+yapdir+'/xmg/brick/mg/edcg.yap\''
+        for a_file in files:
+            if a_file==edcg_file:
+                continue
+            compfile.write(':-load_files([')
+            compfile.write(a_file)
+            compfile.write('],[silent(true)]).\n')
+        print("Modules loader generated in %s/loader.yap"%self._folder)
+
 
     def generate_conf(self):
         compPath=os.getcwd()
@@ -286,7 +323,7 @@ class BrickCompiler(object):
             self.generate_solvers()
             self.generate_tokenize_punctuation()
             self.generate_tokenize_keywords()
-            self.generate_loader()
+            self.generate_silent_loader()
             self.generate_edcg()
             self.generate_conf()
         else:
