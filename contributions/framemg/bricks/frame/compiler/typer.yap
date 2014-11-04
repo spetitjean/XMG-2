@@ -34,8 +34,8 @@ xmg:stmt_type_constr(frame,frame).
 xmg:type_stmt(frame:F,_):-- !.
 
 
-xmg:type_stmt(syn:X,_):--
-	xmg:send(info,'\n\nDid not type frame statement:\n'),
-	xmg:send(info,X),!,
-	fail.
+%% xmg:type_stmt(syn:X,_):--
+%% 	xmg:send(info,'\n\nDid not type frame statement:\n'),
+%% 	xmg:send(info,X),!,
+%% 	fail.
 

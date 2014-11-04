@@ -55,6 +55,8 @@ property rank       : RANK {
 feature idx : LABEL
 feature top : LABEL
 
+feature cat : CAT
+
 feature phon : PHON
 feature anch : PHON
 feature suj : LABEL
@@ -64,6 +66,8 @@ feature mode : LABEL
 feature num  : NUMBER
 feature pers : PERSON
 
+feature bot : LABEL
+
 %class definitions:
 
 class subjCan 
@@ -71,8 +75,8 @@ export S
 declare ?W ?N ?M ?S ?NN ?NV
 { <syn>{
 	node S (color=white)[cat = s]{
-		node NN(color=red,mark=subst)[cat=n,top = [idx=?W,num = ?N, pers=?M]]
-		node NV(color=white)[cat = v, top=[num=?N, pers=?M]]
+		node NN(color=red,mark=subst)[cat=n,top = [idx=?W,num = ?N, pers=?M] ]
+		node NV(color=white)[cat = v, top=[num=?N, pers=?M] ]
 	}
 }*=[suj = ?W]
 }
@@ -83,7 +87,7 @@ declare ?W ?S ?S1 ?NN ?NV
 { <syn>{
 	node S{
 		node NV(color=white)[cat = v]
-	     ,,,node NN(color=red,mark=subst)[cat = n,top=[idx=?W]]
+	     ,,,node NN(color=red,mark=subst)[cat = n,top=[idx=?W] ]
 	}
 }*=[obj = ?W]
 }
@@ -92,8 +96,8 @@ class activeMorph
 declare ?M ?N ?X ?NV ?NVV ?NPh
 { <syn>{
 	node(color=black)[cat=s]{
-		node NV(color=black)[cat=v, bot=[mode=?N]]{
-			node NVV(color=black)[cat=v, top=[mode = ?N]]{
+		node NV(color=black)[cat=v, bot=[mode=?N] ]{
+			node NVV(color=black)[cat=v, top=[mode = ?N] ]{
 				node NPh(color=black)[phon=?X]
 			}
 		}
