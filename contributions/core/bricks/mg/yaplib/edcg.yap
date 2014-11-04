@@ -22,8 +22,7 @@
 		 op( 850, xfy, 'with'),
 		 op( 500, xfy, '=>'  ),
 		 op( 500, xfy, ':='  )]).
-:- use_module(library(lists)).
-:- use_module('table.yap').
+:- load_files([library(lists), 'table.yap'],[silent(true)]).
 
 :- dynamic edcg_info/2.
 

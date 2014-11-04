@@ -19,7 +19,7 @@
 
 :-module(xmg_brick_mg_compiler,[send/2]).
 
-:-use_module('xmg/brick/mg/compiler/prelude.yap').
+:-load_files(['xmg/brick/mg/compiler/prelude.yap'],[silent(true)]).
 
 :-dynamic(principle/1).
 :-dynamic(xmg:principle/3).
