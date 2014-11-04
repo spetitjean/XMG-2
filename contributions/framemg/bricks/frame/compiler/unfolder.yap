@@ -51,7 +51,7 @@ unfold_frame(frame:frame(Var,Type,Feats),TFrame):--
 unfold_pairs([],_):-- !.
 unfold_pairs([H|T],TFrame):--
 	unfold_pair(H,TFrame),
-	xmg:send(info,' Pair unfolded'),
+	xmg:send(debug,' Pair unfolded'),
 	unfold_pairs(T,TFrame),!.
 
 unfold_pair(frame:pair(Left,Right),TFrame):--

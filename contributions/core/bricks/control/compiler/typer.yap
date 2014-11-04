@@ -40,12 +40,11 @@ xmg:type_stmt(dim:dim(Dim,S),void):--
 	%%xmg:send(info,Dim),
 	%%xmg:dimbrick(Dim,Brick),
 	get_dim_type(Dim,Type),
-	xmg:send(info,Type),
-	xmg:send(info,'\nexpected type:\n'),
-	xmg:send(info,Type),
+	xmg:send(debug,'\nexpected type:\n'),
+	xmg:send(debug,Type),
 
 	xmg:type_stmt(S,Type),
-	xmg:send(info,'\ndim typed\n'),
+	xmg:send(debug,'\ndim typed\n'),
 
 	!.
 
@@ -54,19 +53,19 @@ get_dim_type(Dim,Type):--
 	!.
 get_dim_type(Dim,Type):--
 	xmg:principle(dimtype,DimType,Dims),
-	xmg:send(info,'\ngot dimtype declaration\n'),
-	xmg:send(info,Dim),
-	xmg:send(info,Dims),
+	xmg:send(debug,'\ngot dimtype declaration\n'),
+	xmg:send(debug,Dim),
+	xmg:send(debug,Dims),
 	lists:member(Dim,Dims),!,
 	xmg:dimbrick(Dim,Brick),
-	xmg:send(info,DimType),
+	xmg:send(debug,DimType),
 	xmg:stmt_type(Brick,Dim,DimType,Type),
 	%%xmg:send(info,'\n\nDim type: '),
 	%%xmg:send(info,Type),
 	dim_types::tput(dim:Dim,Type),!.
 get_dim_type(Dim,Type):--
 	xmg:dimbrick(Dim,Brick),
-	xmg:send(info,'\ndefault typing'),
+	xmg:send(debug,'\ndefault typing '),
 	xmg:stmt_type(Brick,Dim,Type),
 	dim_types::tput(dim:Dim,Type),!.
 
@@ -76,12 +75,10 @@ xmg:type_stmt(control:eq(S1,S2),void):--
 	xmg:type_expr(S2,Type2),
 	xmg:check_types(S1,S2,Type,Type2).
 xmg:type_stmt(control:eq(S1,S2),_):--
-	xmg:send(info,'here\n\n\n'),
 	xmg:type_expr(S1,Type),
 	xmg:send(info,S2),
 
 	xmg:type_expr(S2,Type2),
-	xmg:send(info,'here\n\n\n'),
 
 	xmg:check_types(S1,S2,Type,Type2),
 	!.

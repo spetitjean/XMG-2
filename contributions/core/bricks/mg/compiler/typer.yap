@@ -105,13 +105,13 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 
 	put_global_in_table(GContextList) with types(TableOut,TableGOut),
 	unify_imports(I) with types(TableGOut,UTableOut),
-	xmg:send(info,'\nTypes table:'),
-	xmg:send(info,UTableOut),
+	xmg:send(debug,'\nTypes table:'),
+	xmg:send(debug,UTableOut),
 	%%xmg:send(info,S),
 	xmg:type_stmt(S,void) with types(UTableOut,TypedTable),
-	xmg:send(info,'\nTyped table:'),
-	xmg:send(info,TypedTable),
-	xmg:send(info,'\n\n'),
+	xmg:send(debug,'\nTyped table:'),
+	xmg:send(debug,TypedTable),
+	xmg:send(debug,'\n\n'),
 
 	%% build a constant avm for export vector
 	xmg_brick_mg_exporter:exports(N,ListExports),
@@ -247,15 +247,15 @@ xmg:type(int,int).
 xmg:type(string,string).
 
 type_mg_decls(Decls,Type_BDecls):--
-	xmg:send(info,Decls),
+	xmg:send(debug,Decls),
 	G=[gather(field,fieldprec,fields)],
 	gather_decls(Decls,G,GDecls),!,
-	xmg:send(info,' decls gathered '),
+	xmg:send(debug,' decls gathered '),
 	xmg_table:table_new(TableNew),
 	type_decls(GDecls) with type_decls(TableNew,Type_Decls),
 	add_base_types([int,string,bool]) with type_decls(Type_Decls,Type_BDecls),
-	xmg:send(info,'\n\nType Decls:\n'),
-	xmg:send(info,Type_BDecls),
+	xmg:send(debug,'\n\nType Decls:\n'),
+	xmg:send(debug,Type_BDecls),
 	!.
 
 gather_decls(Decls,[],Decls):- !.
@@ -264,8 +264,8 @@ gather_decls(Decls,[HG|TG],GDecls):-
 	gather_decls(GODecls,TG,GDecls),!.
 
 gather_one(Decls,gather(One,Two,New),[New-NDecl|Decls2]):-
-	xmg_brick_mg_compiler:send(info,' gathering '),
-	xmg_brick_mg_compiler:send(info,New),
+	xmg_brick_mg_compiler:send(debug,' gathering '),
+	xmg_brick_mg_compiler:send(debug,New),
 	lists:member(One-DOne,Decls),
 	lists:delete(Decls,One-DOne,Decls1),
 	lists:member(Two-DTwo,Decls1),
@@ -537,32 +537,32 @@ get_fconstraints([]):-
 	%% Constraints=[implies([action],supercausation),implies([reaction],supercausation),implies([activity],supercausation),implies([causation],supercausation),implies([reaction,causation],false),implies([activity,reaction],false),implies([action,causation],false),implies([action,activity],false),implies([action,reaction],'action-reaction'),implies(['action-reaction'],action),implies(['action-reaction'],reaction)],
 
 	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
-	xmg:send(info,'\n\nType constraints:'),
-	xmg:send(info,Constraints),
+	xmg:send(debug,'\n\nType constraints:'),
+	xmg:send(debug,Constraints),
 	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
 	
-	xmg:send(info,'\n\nConstraint vectors:'),
-	xmg:send(info,CVectors),
+	xmg:send(debug,'\n\nConstraint vectors:'),
+	xmg:send(debug,CVectors),
 
 	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
-	xmg:send(info,'\n\nFiltered types:'),
-	xmg:send(info,FSets),
+	xmg:send(debug,'\n\nFiltered types:'),
+	xmg:send(debug,FSets),
 
 	findall(attrconstraint(TAC,TAs,TAT,TATT),xmg:fAttrConstraint(TAC,TAs,TAT,TATT),AttConstraints),
 
-	xmg:send(info,'\n\nAttr constraints:'),
-	xmg:send(info,AttConstraints),
+	xmg:send(debug,'\n\nAttr constraints:'),
+	xmg:send(debug,AttConstraints),
 
 	findall(pathconstraint(TACP,TAsP,TATP1,TATP2),xmg:fPathConstraint(TACP,TAsP,TATP1,TATP2),PathConstraints),
 
-	xmg:send(info,'\n\nPath constraints:'),
-	xmg:send(info,PathConstraints),
+	xmg:send(debug,'\n\nPath constraints:'),
+	xmg:send(debug,PathConstraints),
 
 	lists:append(AttConstraints,PathConstraints,AttPathConstraints),
 
 	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttPathConstraints,Types,VAttConstraints),
-	xmg:send(info,'\n\nAttr constraints vectors:'),
-	xmg:send(info,VAttConstraints),
+	xmg:send(debug,'\n\nAttr constraints vectors:'),
+	xmg:send(debug,VAttConstraints),
 	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
 
 	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),

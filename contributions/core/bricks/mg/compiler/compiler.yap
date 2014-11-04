@@ -38,6 +38,7 @@ send(info,Mess):-
 	print(user_error,Mess),!.
 send(debug,Mess):-
 	debug_mode,!,
+	send(info,'DEBUG:'),
 	print(user_error,Mess),!.
 send(debug,Mess):-
 	not(debug_mode),!.
@@ -57,12 +58,13 @@ xmg:send(T,Send):-
 
 compile_file(File,Eval,Encoding,Debug):-
 	asserta(encoding(Encoding)),
+	send(info,Debug),
 	(
-	    Debug="on"
+	    Debug='on'
 	    ->
-	     debug_mode_on
+	     ( debug_mode_on, send(info,'\n\nDebug Mode ON\n\n\n'))
              ;
-	     true
+	     ( true, send(info,'\n\nDebug Mode OFF. To activate, please use the option --debug\n\n\n'))
 	 ),
 	 catch(compile_file(File,Eval),Exception,true),
 	 (
@@ -125,7 +127,7 @@ eval:-
 	xmg:value_all(Computed,Class),
 	
 	send(info,'\nClass executed:'),
-	send(info,Computed),
+	send(debug,Computed),
 	send(info,Class),
 
 	%% xmg_dimensions:dims(Dims),

@@ -37,7 +37,7 @@ fTypeToVector(Type,SVector,FVector):-
 	xmg:ftypes(Types),
 	typeExists(Type,Types),
 	fTypeToSomeVector(Type,Types,Vector),
-	xmg:send(info,Vector),
+	xmg:send(debug,Vector),
 	find_smaller_supertype(Vector,SVector,FVector),
 	!.
 fTypeToVector(Type,SVector,FVector):-
@@ -87,8 +87,8 @@ fTypeToSomeVector(Type,[_|Types],[_|Vector]):-
 	fTypeToSomeVector(Type,Types,Vector),!.
 
 fVectorToType(Vector,Type):-
-	xmg:send(info,'Converting vector '),
-	xmg:send(info,Vector),
+	xmg:send(debug,'Converting vector '),
+	xmg:send(debug,Vector),
 	xmg:ftypes(Types),
 	%%xmg:send(info,Types),
 	fVectorToType(Vector,Types,Type),!.
@@ -111,8 +111,8 @@ build_types(types(OTypes,Sets)):-
 	findall(Type,xmg:ftype(Type),Types),
 	ordsets:list_to_ord_set(Types,OTypes),
 	asserta(xmg:ftypes(OTypes)),
-	xmg:send(info,'\nTypes are '),
-	xmg:send(info,OTypes),
+	xmg:send(debug,'\nTypes are '),
+	xmg:send(debug,OTypes),
 	%% build all set combination of these elementary types
 	findall(Set,build_set(OTypes,Set),Sets),!.
 
@@ -237,9 +237,9 @@ filter_set(Set,[Constraint|T]):-
 	filter_set(Set,T).
 
 assert_valid_type(Set,Len):-
-	xmg:send(info,'\nValid type: '),
-	xmg:send(info,Set),
-	xmg:send(info,Len),
+	xmg:send(debug,'\nValid type: '),
+	xmg:send(debug,Set),
+	xmg:send(debug,Len),
 	asserta(xmg:fReachableType(Set,Len)),!.
 
 
@@ -272,8 +272,8 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 	generate_vector_attrs(V1,AttConstraints,Feats),
 	asserta(xmg:fattrconstraint(V1,Feats)),
 
-	xmg:send(info,'\nAsserted '),
-	xmg:send(info,xmg:fattrconstraint(V1,Feats)),
+	xmg:send(debug,'\nAsserted '),
+	xmg:send(debug,xmg:fattrconstraint(V1,Feats)),
 
 	generate_vectors_attrs(VT,AttConstraints),!.
 
@@ -290,10 +290,10 @@ generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	not(not(Vector=AVector)),!,
 	generate_vector_attrs(Vector,ACT,ACT1),
-	xmg:send(info,'\n Adding '),
-	xmg:send(info,Feat),
+	xmg:send(debug,'\n Adding '),
+	xmg:send(debug,Feat),
 	insert(Feat,ACT1,ACT2),
-	xmg:send(info,ACT2),
+	xmg:send(debug,ACT2),
 	!.
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
@@ -358,7 +358,7 @@ vector_to_set([Type|Types],[0|Vector],Set):-
 
 build_vectors([],[],_).
 build_vectors([Type|Types],[Vector|Vectors],Ts):-
-	xmg:send(info,'\nBuilding vector for type '),
+	%%xmg:send(info,'\nBuilding vector for type '),
 	%%xmg:send(info,Type),
 	build_vector(Type,Vector,Ts),
 	%%xmg:send(info,Vector),
@@ -420,8 +420,8 @@ type_fconstraint(CT,C1,C2):-
 %% 	!.
 
 assert_type(Type):-
-	xmg:send(info,'\nAsserting type '),
-	xmg:send(info,Type),
+	xmg:send(debug,'\nAsserting type '),
+	xmg:send(debug,Type),
 	asserta(xmg:ftype(Type)).
 
 assert_constraints(Type,TConst,[]):-!.
@@ -430,10 +430,10 @@ assert_constraints(Type,TConst,[H|T]):-
 	assert_constraints(Type,TConst,T),!.
 
 assert_constraint(Type,TConst,Id):-
-	xmg:send(info,'\nAssert '),
-	xmg:send(info,Type),
-	xmg:send(info,TConst),
-	xmg:send(info,Id),
+	xmg:send(debug,'\nAssert '),
+	xmg:send(debug,Type),
+	xmg:send(debug,TConst),
+	xmg:send(debug,Id),
 	
 	asserta(xmg:fconstraint(Type,TConst,Id)),!.
 
@@ -450,7 +450,7 @@ assert_constraint(Type,TConst,Id):-
 type_hierarchy(_,[]):- !.
 type_hierarchy(Type,[ID1-ID2|T]):-
 	asserta(hierarchy(Type,ID1,ID2)),
-	xmg:send(info,hierarchy(Type,ID1,ID2)),
+	xmg:send(debug,hierarchy(Type,ID1,ID2)),
 	type_hierarchy(Type,T),!.
 
 subtype(Type,T1,T2):-

@@ -54,13 +54,13 @@ h_avm(X, Type, L) :- var(L), !,
 	rb_visit(T,L).
 
 h_avm(X, Type, L) :-
-	xmg:send(info,'\nConverting '),
-	xmg:send(info,Type),
+	xmg:send(debug,'\nConverting '),
+	xmg:send(debug,Type),
 	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector,CVector),
 
 
-	xmg:send(info,' to '),
-	xmg:send(info,Vector),
+	xmg:send(debug,' to '),
+	xmg:send(debug,Vector),
 
 	get_attrconstraints(CVector,Must),
 
@@ -84,10 +84,10 @@ attribute_goal(Var, h_avm(Var,Type,L)) :-
 
 get_attrconstraints(Type,MCT):-
 	xmg:fattrconstraint(Type,C),
-	xmg:send(info,'\nGot attr contraints:'),
-	xmg:send(info,C),
-	xmg:send(info,'\n for :'),
-	xmg:send(info,Type),
+	xmg:send(debug,'\nGot attr contraints:'),
+	xmg:send(debug,C),
+	xmg:send(debug,'\n for :'),
+	xmg:send(debug,Type),
 
 	create_attr_types(C,CT),
 	merge_feats(CT,CT,MCT),!.
@@ -122,8 +122,6 @@ check_type(Vector):-
 
 unify_types(T1,T2,T3,CT3):-
 	T1=T2,
-	xmg:send(info,'HERE '),
-	xmg:send(info,T1),
 
 	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3,CT3),!.
 unify_types(T1,T2,_):-

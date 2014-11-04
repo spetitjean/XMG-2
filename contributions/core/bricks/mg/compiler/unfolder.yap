@@ -34,7 +34,7 @@
 unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
 	xmg:send(info,' unfolding decls\n'),
 	xmg:unfold(Decls,UDecls),
-	xmg:send(info,UDecls),
+	xmg:send(debug,UDecls),
 
 	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),!,
 	%%xmg_compiler:send(info,OUDecls),

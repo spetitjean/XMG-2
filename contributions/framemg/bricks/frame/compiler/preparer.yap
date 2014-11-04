@@ -22,7 +22,7 @@
 prepare(Frames,FramesND):-  
 	lists:remove_duplicates(Frames,FramesND),
 	%%separate(FrameD,Nodes,Edges),
-	print_frames(FramesND),
+	%%print_frames(FramesND),
 	!.
 
 print_frames([]).
