@@ -157,7 +157,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	%%xmg:send(info,Clause),
 	asserta(Clause),
 	xmg_brick_mg_compiler:send(info,'generated '),
-	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(debug,Class),xmg_brick_mg_compiler:send_nl(info),
 	xmg_brick_mg_compiler:send(debug,Clause),
 	!.
 

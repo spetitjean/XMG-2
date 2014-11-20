@@ -87,6 +87,8 @@ compile_file(File,Eval):-
 
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	send(info,' parsed '),
+	send(debug,'\n'),
+	send(debug,Parse),
 	send_nl(info),
 
 	%%xmg_brick_mg_pprint:pprint(Parse),
@@ -102,7 +104,8 @@ compile_file(File,Eval):-
 
 	xmg_brick_mg_unfolder:unfold(Ordered,Unfolded),!,
 	send(info,' unfolded '),
-	%%send(info,Unfolded),
+	send(debug,'\n'),
+	send(debug,Unfolded),
 	send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
 	send(info,' principles done '),

@@ -76,7 +76,7 @@ xmg:type_stmt(control:eq(S1,S2),void):--
 	xmg:check_types(S1,S2,Type,Type2).
 xmg:type_stmt(control:eq(S1,S2),_):--
 	xmg:type_expr(S1,Type),
-	xmg:send(info,S2),
+	xmg:send(debug,S2),
 
 	xmg:type_expr(S2,Type2),
 
@@ -105,7 +105,7 @@ xmg:type_stmt(control:call(S1,S2),void):--
 
 xmg:type_expr(control:call(token(_,id(S1)),Params),Type):--
 	%% params should be checked here
-	xmg:send(info,Params),
+	xmg:send(debug,Params),
 	types::tget(S1,ClassType),
 	xmg:do_forall(ClassType,(ParamsTypes,Type)),
 	type_params(Params,ParamsTypes),
@@ -118,7 +118,7 @@ xmg:type_stmt(control:X,Type):--
 
 type_params([],_):-- !.
 type_params([Expr|T],[Param-Type|T1]):--
-	xmg:send(info,Expr),
-	xmg:send(info,Type),
+	xmg:send(debug,Expr),
+	xmg:send(debug,Type),
 	xmg:type_expr(Expr,Type),
 	type_params(T,T1),!.

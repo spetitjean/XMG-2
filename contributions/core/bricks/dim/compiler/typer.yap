@@ -25,7 +25,7 @@
 :-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:type_decls],[xmg:stmt_type/4,get_types/2,get_type/2]).
 
 xmg:stmt_type(Brick,Dim,Params,Type):--
-	xmg:send(info,Params),
+	xmg:send(debug,Params),
 	get_types(Params,Types),	
 	%%xmg:dimbrick(Dim,Brick),
 	%% The types for Dim are contributed by Brick
@@ -35,7 +35,7 @@ xmg:stmt_type(Brick,Dim,Params,Type):--
 
 %% in case there is no type constructor (like in iface)
 xmg:stmt_type(Brick,Dim,Params,Type):--
-	xmg:send(info,Params),
+	xmg:send(debug,Params),
 	get_types(Params,[Type]),!.
 
 get_types([],[]):-- !.

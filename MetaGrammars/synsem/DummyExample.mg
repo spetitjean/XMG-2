@@ -47,9 +47,9 @@ class test
 declare ?X ?Y ?Z
 {
 	<syn>{
-		node ?X;
-		node ?Y;
-		node ?Z;
+		node ?X [cat=v];
+		node ?Y [cat=n];
+		node ?Z [cat=s];
 		?X -> ?Y;
 		?X -> ?Z
 	}

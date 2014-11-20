@@ -82,8 +82,8 @@ xmg:get_var_type(Get,_):--
 	!.
 
 type_metagrammar(MG):-
-	xmg:send(info,'Typing classes'),
-	xmg:send(info,MG).
+	xmg:send(debug,'Typing classes'),
+	xmg:send(debug,MG).
 	
 
 do_type_classes(Classes,Type_Decls):--
@@ -96,7 +96,7 @@ type_classes([]):--
 	!.
 type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	!,
-	xmg:send(info,N),
+	xmg:send(debug,N),
 	global_context::get(GContext),
 	xmg_brick_mg_exporter:declared(N,List),
 	xmg_table:table_new(TableIn),
@@ -180,28 +180,28 @@ unify_import(mg:iclass(token(_,id(A)),[],none)):--
 	import_exports(List,FACAVM).
 
 xmg:do_forall((Params,cavm(Vars)),(NParams,NVars)):--
-	xmg:send(info,'\n forall on '),
-	xmg:send(info,(Params,cavm(Vars))),
+	xmg:send(debug,'\n forall on '),
+	xmg:send(debug,(Params,cavm(Vars))),
 	rbtrees:rb_visit(Vars,VarsList),
 	xmg_table:table_new(Free),
 	new_free(VarsList,NVarsList) with free(Free,Free1),
-	xmg:send(info,NVarsList),
+	xmg:send(debug,NVarsList),
 
 	new_free(Params,NParams) with free(Free1,_),
 	xmg_brick_avm_avm:cavm(NVars,NVarsList),
-	xmg:send(info,'\n forall done : '),
-	xmg:send(info,(NParams,NVars)).
+	xmg:send(debug,'\n forall done : '),
+	xmg:send(debug,(NParams,NVars)).
 
 new_free([],[]):-- !.
 %% with vectors
 new_free([V-H|T],[V-F|T1]):--
 	free::tget(H,F),!,
-	xmg:send(info,'\nBINDING NEW VAR'),
+	xmg:send(debug,'\nBINDING NEW VAR'),
 	new_free(T,T1),!.
 new_free([V-H|T],[V-F|T1]):--
 	var(H),
 	not(attvar(H)),
-	xmg:send(info,'\nCREATING NEW VAR'),
+	xmg:send(debug,'\nCREATING NEW VAR'),
 	free::tput(H,F),
 	new_free(T,T1),!.
 new_free([V-H|T],[V-H|T1]):--
@@ -210,12 +210,12 @@ new_free([V-H|T],[V-H|T1]):--
 %% with lists
 new_free([H|T],[V-F|T1]):--
 	free::tget(H,F),!,
-	xmg:send(info,'\nBINDING NEW VAR'),
+	xmg:send(debug,'\nBINDING NEW VAR'),
 	new_free(T,T1),!.
 new_free([H|T],[V-F|T1]):--
 	var(H),
 	not(attvar(H)),
-	xmg:send(info,'\nCREATING NEW VAR'),
+	xmg:send(debug,'\nCREATING NEW VAR'),
 	free::tput(H,F),
 	new_free(T,T1),!.
 new_free([H|T],[V-H|T1]):--
@@ -229,10 +229,10 @@ import_exports([H|T],CAVM):--
 	import_exports(T,CAVM).
 
 import_export(id(A,_)-_,CAVM):--
-	xmg:send(info,'\nexporting '),
-	xmg:send(info,A),
-	xmg:send(info,',  '),
-	xmg:send(info,CAVM),
+	xmg:send(debug,'\nexporting '),
+	xmg:send(debug,A),
+	xmg:send(debug,',  '),
+	xmg:send(debug,CAVM),
 
 	xmg_brick_avm_avm:dot(CAVM,A,Type),
 	types::tget(A,Type),!.
@@ -304,17 +304,17 @@ type_decl(principle-Principle):--
 	!.
 type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):--
 	assert_field_precs(FieldPrecs),
-	xmg_brick_mg_compiler:send(info,' fields orders asserted\n '),
+	xmg_brick_mg_compiler:send(debug,' fields orders asserted\n '),
 	prepare_fields(Fields,PFields),
-	xmg_brick_mg_compiler:send(info,' fields prepared\n '),
+	xmg_brick_mg_compiler:send(debug,' fields prepared\n '),
 	order_fields(PFields,OFields),
-	xmg_brick_mg_compiler:send(info,' fields ordered\n '),
-	xmg_brick_mg_compiler:send(info,OFields),
+	xmg_brick_mg_compiler:send(debug,' fields ordered\n '),
+	xmg_brick_mg_compiler:send(debug,OFields),
 	type_fields(OFields,1),
 	!.
 type_decl(Type-Decls):--
-	xmg_brick_mg_compiler:send(info,'  unknown decl type: '),
-	xmg_brick_mg_compiler:send(info,Type),
+	xmg_brick_mg_compiler:send(debug,'  unknown decl type: '),
+	xmg_brick_mg_compiler:send(debug,Type),
 	false,!.
 
 get_types([]):-- !.
@@ -500,8 +500,8 @@ type_fields([H|T],N):-
 
 	
 type_field(F,N):-
-	xmg:send(info,'\nassert field '),
-	xmg:send(info,F),
+	xmg:send(debug,'\nassert field '),
+	xmg:send(debug,F),
 	
 	asserta(xmg:field(F,N)).
 

@@ -288,17 +288,18 @@ parse_sem(States,Tokens,Sem):--
 
 parse_file(File,Sem):--
 	xmg_brick_mg_compiler:encoding(Encoding),
-	xmg_brick_mg_compiler:send(info,'\ntokenizing\n'),
+	xmg_brick_mg_compiler:send(debug,'\ntokenizing\n'),
 	xmg_brick_mg_tokenizer:tokenize_file(File,Tokens,Encoding),
-	xmg_brick_mg_compiler:send(info,tokenized),
-	%%xmg_brick_mg_compiler:send(debug,Tokens),
+	xmg_brick_mg_compiler:send(info,'tokenized\n'),
+	xmg_brick_mg_compiler:send(debug,Tokens),
+	xmg_brick_mg_compiler:send(debug,'\n'),
 	remove_coords(Tokens,Toks),
 	%%xmg_brick_mg_compiler:send(debug,Toks),
 	parse_sem([0],Toks,Sem) with errors(Errors,[error(error(none,none,none),0)]),!.
 
 remove_coords([coord(A,B,C)],[token(coord(A,B,C),'(EOF)')]):- !.
 remove_coords([Token],[token(coord(0,0,end),'(EOF)')]):-
-	xmg_brick_mg_compiler:send(info,Token),!.
+	xmg_brick_mg_compiler:send(debug,Token),!.
 remove_coords([coord(A1,B1,C1),coord(A,B,C)|T],T1):-
 	%xmg_brick_mg_compiler:send(info,H),
 	remove_coords([coord(A,B,C)|T],T1),!.

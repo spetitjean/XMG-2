@@ -43,12 +43,12 @@ xmg:type_expr([H|T],Type):--
 	xmg:type_expr(T,Type),!.
 
 xmg:type_expr(avm:feat(Attr,Value),Type):--
-	xmg:send(info,'\n\nTyping feat: '),
-	xmg:send(info,Attr),
-	xmg:send(info,'\n'),
-	xmg:send(info,Value),
-	xmg:send(info,'\nwith type '),
-	xmg:send(info,Type),
+	xmg:send(debug,'\n\nTyping feat: '),
+	xmg:send(debug,Attr),
+	xmg:send(debug,'\n'),
+	xmg:send(debug,Value),
+	xmg:send(debug,'\nwith type '),
+	xmg:send(debug,Type),
 	feat_type(Attr,UAttr,Type,TypeAttr),
 	type_def(TypeAttr,TypeDef),
 	value_type(Value,TypeDef),
@@ -61,7 +61,7 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 extend_type(Type,UAttr,TypeAttr):--
 	xmg_brick_avm_avm:dot(Type,UAttr,AVM),
 	type_decls::tget(AVM,AVMType),
-	xmg:send(info,' got avm type '),
+	xmg:send(debug,' got avm type '),
 	TypeAttr=AVMType,
 	!.
 %% when typing a single feat
@@ -90,21 +90,18 @@ xmg:type_stmt(avm:avm(Coord,Feats),Type):--
 	xmg:type_expr(avm:avm(Coord,Feats),Type),!.
 
 xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
-	xmg:send(info,' here in avm '),
 	types::tget(AVM,CAVM),
-	xmg:send(info,' and '),
-	xmg:send(info,CAVM),
-	xmg:send(info,Feat),
+	xmg:send(debug,CAVM),
+	xmg:send(debug,'DOT'),
+	xmg:send(debug,Feat),
 
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
-	xmg:send(info,' there in avm'),
-
 	!.
 
 %% when typing a structured avm
 feat_type(token(_,id(Feat)),Feat,AVM,Type):-
 	xmg_brick_avm_avm:avm(AVM,AVMFeats),
-	xmg:send(info,AVMFeats),
+	xmg:send(debug,AVMFeats),
 	lists:member(Feat-_,AVMFeats),
 	xmg_brick_avm_avm:dot(AVM,Feat,Type),
 
