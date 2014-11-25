@@ -36,32 +36,32 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 	%%xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
 
 	xmg:get_plugins(TreePlugins,_),
-	xmg:send(info,TreePlugins),
+	xmg:send(debug,TreePlugins),
 	
 	%%post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
-	xmg:send(info,TreePlugins),
+	xmg:send(debug,TreePlugins),
 	post_plugins(TreePlugins,Space,NodeList,IntVars,Plugins),
 
-	xmg_brick_mg_compiler:send(info,' doing nposts '),
+	xmg_brick_mg_compiler:send(debug,' doing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
-	xmg_brick_mg_compiler:send(info,' doing posts '),
+	xmg_brick_mg_compiler:send(debug,' doing posts '),
 
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
-	xmg_brick_mg_compiler:send(info,' branching '),
+	xmg_brick_mg_compiler:send(debug,' branching '),
 
 
 	global_branch(Space,IntVars),!,
 	global_pbranch(Space,IntPVars),!,
 	do_branch(Space,NodeList),!,	
 
-	xmg_brick_mg_compiler:send(info,' branched '),
+	xmg_brick_mg_compiler:send(debug,' branched '),
 
 	SolSpace := search(Space),
 
-	xmg_brick_mg_compiler:send(info,' searched '),
+	xmg_brick_mg_compiler:send(debug,' searched '),
 	flush_output,
 
 	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
@@ -76,17 +76,17 @@ post_plugins([Plugin|T],Space,NodeList,IntVars,plugins(Plugins)):-
 
 
 post_plugin(Plugin,Space,NodeList,IntVars,PlugList):-
-	xmg:send(info,' posting '),
-	xmg:send(info,Plugin),
-	xmg:send(info,'\n'),
-	%%xmg:send(info,PlugList),
+	xmg:send(debug,' posting '),
+	xmg:send(debug,Plugin),
+	xmg:send(debug,'\n'),
+	%%xmg:send(debug,PlugList),
 
 	atom_concat(['xmg_brick_',Plugin,'_solver'],Module),
 	Post=..[post,Space,NodeList,IntVars,PlugList],
 	Do=..[':',Module,Post],
-	%%xmg:send(info,Do),
+	%%xmg:send(debug,Do),
 	Do,
-	xmg:send(info,' posted\n'),
+	xmg:send(debug,' posted\n'),
 		
 	!.
 

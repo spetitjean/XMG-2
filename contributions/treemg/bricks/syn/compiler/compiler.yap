@@ -22,14 +22,14 @@
 %% TAG compiler
 eval(Syn,[tree],XML,Class):-
 	%%xmg_brick_mg_compiler:send(info,Syn),
-	xmg_brick_mg_compiler:send(info,' preparing '),
+	xmg_brick_mg_compiler:send(debug,' preparing '),
 
 	xmg_brick_tree_preparer:prepare(syn(Syn,[Class]),Prepared),
-	xmg_brick_mg_compiler:send(info,' prepared '),
+	xmg_brick_mg_compiler:send(debug,' prepared '),
 	xmg_brick_tree_solver:solve(Prepared,solution(IsRoot,Eq, Children, Left, NodeList1)),
 	xmg_brick_tree_extractor:extract(IsRoot,Eq, Children, Left, NodeList1,Tree),
 	%%xmg:send(info,Tree),
-	xmg:send(info,' extracted '),
+	xmg:send(debug,' extracted '),
 	%%flush_output,
 	xmg_brick_mg_compiler:current(Previous),
 	%% Current is Previous + 1,

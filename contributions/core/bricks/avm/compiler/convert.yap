@@ -32,7 +32,6 @@ xmg:xml_convert_term(avm:avm(Feats),Convert):--
 
 xmlFeats([],[]):-- !.
 xmlFeats([H|T],[H1|T1]):--
-	xmg:send(info,H),
 	xmlFeat(H,H1),
 	xmlFeats(T,T1),!.
 

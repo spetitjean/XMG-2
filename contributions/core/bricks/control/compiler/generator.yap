@@ -46,26 +46,26 @@ xmg:generate_instr((v(Var),control:call(Class,Params))):--
 	get_params(Params,GParams),
 	Call=..[value_class,Class,params(GParams),exports(GV)],
 	code::enq(xmg:Call),
-	xmg:send(info,Call),
+	%%xmg:send(debug,Call),
 	!.
 
 xmg:generate_instr((v(Var),control:dot(Class,id(CVar,_)))):--
-	xmg:send(info,' generating dot '),
+	xmg:send(debug,' generating dot '),
 	decls::tget(Var,GV),
 	decls::tget(Class,GC),
 	
 	Member=..[member,CVar-GV,GC],
 	code::enq(lists:Member),
-	code::enq(xmg:send(info,'member found')),!.
+	code::enq(xmg:send(debug,'member found')),!.
 
 xmg:generate_instr((v(Var),control:dot(Class,CVar))):--
-	xmg:send(info,' generating dot '),
+	xmg:send(debug,' generating dot '),
 	decls::tget(Var,GV),
 	decls::tget(Class,GC),
 	
 	Member=..[member,CVar-GV,GC],
 	code::enq(lists:Member),
-	code::enq(xmg:send(info,'member found')),!.
+	code::enq(xmg:send(debug,'member found')),!.
 
 get_params([],[]):-- !.
 get_params([v(Var)|T],[GVar|T1]):--

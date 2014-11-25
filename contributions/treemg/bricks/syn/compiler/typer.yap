@@ -35,13 +35,13 @@ xmg:stmt_type_constr(syn,tree).
 xmg:type_stmt(syn:node(ID,Props,Feats),Syn:tree(FType,PType)):--
 	xmg:type_expr(Feats,FType),
 
-	xmg:send(info,'\nFeats type is now '),
+	xmg:send(debug,'\nFeats type is now '),
 	xmg_brick_avm_avm:avm(FType,LFType),
-	xmg:send(info,LFType),
+	xmg:send(debug,LFType),
 	xmg:type_expr(Props,PType),
-	xmg:send(info,'\nProps type is now '),
+	xmg:send(debug,'\nProps type is now '),
 	xmg_brick_avm_avm:avm(PType,LPType),
-	xmg:send(info,LPType),
+	xmg:send(debug,LPType),
 	xmg:get_var_type(ID,Type),
 	Type=Syn:node(Syn:tree(FType,PType)),
 	!.

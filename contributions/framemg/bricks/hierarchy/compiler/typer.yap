@@ -23,9 +23,104 @@
 :-dynamic(xmg:fConstraint/3).
 :-dynamic(xmg:ftypes/1).
 :-dynamic(xmg:fReachableType/2).
+:-dynamic(xmg:fReachableTypes/1).
 :-dynamic(xmg:fAttrConstraint/2).
 :-dynamic(xmg:fAttrConstraint/4).
 :-dynamic(xmg:fPathConstraint/4).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Printing the hierarchy (in prelude)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Next: do this in the xml file
+xmg:print_prelude:-
+	xmg:freachableTypes(FVectors),
+	fVectorsToTypes(FVectors,FTypes),
+	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere is the type hierarchy:\n\n'),
+	print_hierarchy(FTypes),
+	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
+
+print_hierarchy([]).
+print_hierarchy([H|T]):-
+	xmg:send(info,H),
+	xmg:send(info,'\n'),
+	print_hierarchy(T).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hierarchies Declarations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+get_fconstraints([]):-
+	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
+
+	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+	xmg:send(debug,'\n\nType constraints:'),
+	xmg:send(debug,Constraints),
+	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
+	
+	xmg:send(debug,'\n\nConstraint vectors:'),
+	xmg:send(debug,CVectors),
+
+	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
+	xmg:send(debug,'\n\nFiltered types:'),
+	xmg:send(debug,FSets),
+	
+	asserta(xmg:freachableTypes(FSets)),
+
+	findall(attrconstraint(TAC,TAs,TAT,TATT),xmg:fAttrConstraint(TAC,TAs,TAT,TATT),AttConstraints),
+
+	xmg:send(debug,'\n\nAttr constraints:'),
+	xmg:send(debug,AttConstraints),
+
+	findall(pathconstraint(TACP,TAsP,TATP1,TATP2),xmg:fPathConstraint(TACP,TAsP,TATP1,TATP2),PathConstraints),
+
+	xmg:send(debug,'\n\nPath constraints:'),
+	xmg:send(debug,PathConstraints),
+
+	lists:append(AttConstraints,PathConstraints,AttPathConstraints),
+
+	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttPathConstraints,Types,VAttConstraints),
+	xmg:send(debug,'\n\nAttr constraints vectors:'),
+	xmg:send(debug,VAttConstraints),
+	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
+
+	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
+	!.
+get_fconstraints([H|T]):-
+	get_fconstraint(H),
+	get_fconstraints(T),!.
+
+get_fconstraint(fconstraint(CT,Left,Right)):-
+	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
+
+get_fconstraint(C):-
+	xmg:send(info,'\nUnknown fconstraint:\n'),
+	xmg:send(info,C),
+	false.
+
+
+get_hierarchies([]):-!.
+get_hierarchies([H|T]):-
+	get_hierarchy(H),
+	get_hierarchies(T),!.
+get_hierarchy(hierarchy(Type,Pairs)):-
+	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
+
+
+
+
+get_ftypes([]):-!.
+get_ftypes([H|T]):-
+	get_ftype(H),
+	get_ftypes(T),!.
+get_ftype(ftype(Type)):-
+	xmg_brick_hierarchy_typer:type_ftype(Type),!.
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Getting the hierarchy from the constraints
@@ -92,6 +187,11 @@ fVectorToType(Vector,Type):-
 	xmg:ftypes(Types),
 	%%xmg:send(info,Types),
 	fVectorToType(Vector,Types,Type),!.
+
+fVectorsToTypes([],[]).
+fVectorsToTypes([H|T],[H1|T1]):-
+	fVectorToType(H,H1),
+	fVectorsToTypes(T,T1),!.
 
 fVectorToType([],[],[]).
 fVectorToType([V|Vector],[_|Types],Types1):-
@@ -460,3 +560,4 @@ subtype(Type,T1,T2):-
 	hierarchy(Type,T3,T2),
 	subtype(Type,T1,T3),
 	!.
+

@@ -21,9 +21,9 @@
 
 extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
 	make_tree(IsRoot,Eq,Children,Left,Tree),
-	xmg_brick_mg_compiler:send(info,' tree made '),
+	xmg_brick_mg_compiler:send(debug,' tree made '),
 	unify_in_tree(Tree,UTree,NodeList1),
-	xmg_brick_mg_compiler:send(info,' tree unified ').
+	xmg_brick_mg_compiler:send(debug,' tree unified ').
 
 
 

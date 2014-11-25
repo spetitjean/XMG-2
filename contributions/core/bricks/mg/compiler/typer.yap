@@ -286,15 +286,15 @@ type_decls([H|T]):--
 type_decl(type-Decls):--
 	get_types(Decls),!.
 type_decl(hierarchy-Decls):--
-	get_hierarchies(Decls),!.
+	xmg_brick_hierarchy_typer:get_hierarchies(Decls),!.
 type_decl(ftype-Decls):--
-	get_ftypes(Decls),!.
+	xmg_brick_hierarchy_typer:get_ftypes(Decls),!.
 type_decl(fconstraint-Decls):--
-	get_fconstraints(Decls),!.
+	xmg_brick_hierarchy_typer:get_fconstraints(Decls),!.
 type_decl(ftypes-[ftypes(Decls)]):--
-	get_ftypes(Decls),!.
+	xmg_brick_hierarchy_typer:get_ftypes(Decls),!.
 type_decl(fconstraints-[fconstraints(Decls)]):--
-	get_fconstraints(Decls),!.
+	xmg_brick_hierarchy_typer:get_fconstraints(Decls),!.
 type_decl(property-Decls):--
 	type_properties(Decls),!.
 type_decl(feat-Decls):--
@@ -507,77 +507,6 @@ type_field(F,N):-
 
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Hierarchies Declarations
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-get_hierarchies([]):-!.
-get_hierarchies([H|T]):-
-	get_hierarchy(H),
-	get_hierarchies(T),!.
-get_hierarchy(hierarchy(Type,Pairs)):-
-	xmg_brick_hierarchy_typer:type_hierarchy(Type,Pairs),!.
-
-
-get_ftypes([]):-!.
-get_ftypes([H|T]):-
-	get_ftype(H),
-	get_ftypes(T),!.
-get_ftype(ftype(Type)):-
-	xmg_brick_hierarchy_typer:type_ftype(Type),!.
-
-
-
-get_fconstraints([]):-
-	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
-
-	%% Constraints will be built from the metagrammar, but until then...
-	
-	%% Constraints=[implies([action],supercausation),implies([reaction],supercausation),implies([activity],supercausation),implies([causation],supercausation),implies([reaction,causation],false),implies([activity,reaction],false),implies([action,causation],false),implies([action,activity],false),implies([action,reaction],'action-reaction'),implies(['action-reaction'],action),implies(['action-reaction'],reaction)],
-
-	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
-	xmg:send(debug,'\n\nType constraints:'),
-	xmg:send(debug,Constraints),
-	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
-	
-	xmg:send(debug,'\n\nConstraint vectors:'),
-	xmg:send(debug,CVectors),
-
-	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
-	xmg:send(debug,'\n\nFiltered types:'),
-	xmg:send(debug,FSets),
-
-	findall(attrconstraint(TAC,TAs,TAT,TATT),xmg:fAttrConstraint(TAC,TAs,TAT,TATT),AttConstraints),
-
-	xmg:send(debug,'\n\nAttr constraints:'),
-	xmg:send(debug,AttConstraints),
-
-	findall(pathconstraint(TACP,TAsP,TATP1,TATP2),xmg:fPathConstraint(TACP,TAsP,TATP1,TATP2),PathConstraints),
-
-	xmg:send(debug,'\n\nPath constraints:'),
-	xmg:send(debug,PathConstraints),
-
-	lists:append(AttConstraints,PathConstraints,AttPathConstraints),
-
-	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttPathConstraints,Types,VAttConstraints),
-	xmg:send(debug,'\n\nAttr constraints vectors:'),
-	xmg:send(debug,VAttConstraints),
-	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
-
-	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
-	!.
-get_fconstraints([H|T]):-
-	get_fconstraint(H),
-	get_fconstraints(T),!.
-
-get_fconstraint(fconstraint(CT,Left,Right)):-
-	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
-
-get_fconstraint(C):-
-	xmg:send(info,'\nUnknown fconstraint:\n'),
-	xmg:send(info,C),
-	false.
 
 
 
