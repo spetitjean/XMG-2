@@ -46,7 +46,7 @@ xmg:generate_instr((v(Target),avm:feat(c(F),c(Target2)))):--
 
 
 xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
-	xmg:send(info,' generating dot '),
+	xmg:send(debug,' generating dot '),
 	decls::tget(Var,GV),
 	decls::tget(Class,GC),
 	

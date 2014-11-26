@@ -32,25 +32,25 @@
 %% SPECIFIC RULES
 
 unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
-	xmg:send(info,' unfolding decls\n'),
+	xmg:send(info,' unfolding decls'),
 	xmg:unfold(Decls,UDecls),
 	xmg:send(debug,UDecls),
 
 	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),!,
 	%%xmg_compiler:send(info,OUDecls),
 	
-	xmg:send(info,' \n\n typing decls \n'),
+	xmg:send(debug,'\n typing decls'),
 	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
 
-	xmg:send(info,' \n\n typing classes \n'),
+	xmg:send(debug,'\n typing classes'),
 	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
-	xmg:send(info,'\n\ntyped\n\n'),
+	xmg:send(info,'\n typed\n'),
 
 	xmg:send(info,' unfolding classes '),
 	%%xmg:send(info,Classes),
 	xmg:unfold(Classes,UClasses),
 	%%xmg_brick_mg_compiler:send(info,UClasses),
-	xmg:send(info,' unfolding values '),
+	xmg:send(debug,'\n unfolding values '),
 	xmg:unfold(Values,UValues),
 	!.
 xmg:unfold([],[]):- !.
@@ -63,8 +63,8 @@ xmg:unfold([H|T],[H1|T1]):-
 
 
 xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Constraints,TableVF),Coord)):--
-	xmg:send(info,'\nUnfolding class '),
-	xmg:send(info,N),
+	xmg:send(debug,'\nUnfolding class '),
+	xmg:send(debug,N),
 
 	xmg_table:table_new(TableV),
 	xmg_table:table_new(TableC),

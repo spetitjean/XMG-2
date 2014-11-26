@@ -91,12 +91,9 @@ generate_classes([semantics|T]):--
 	generate_classes(T),!.
 generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 
-	xmg_brick_mg_compiler:send_nl(info),
-	xmg_brick_mg_compiler:send(info,'______________________________________________'),
-	xmg_brick_mg_compiler:send_nl(info),xmg_brick_mg_compiler:send_nl(info),
-	xmg_brick_mg_compiler:send(info,'generating '),
-	xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send_nl(info),
-	%xmg_brick_mg_compiler:send(info,Stmt),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(debug,'\n______________________________________________\n\n'),
+	xmg_brick_mg_compiler:send(debug,'generating '),
+	xmg_brick_mg_compiler:send(debug,Class),xmg_brick_mg_compiler:send(debug,'\n'),
 
 	xmg_brick_mg_exporter:declared(Class,List),
 
@@ -156,8 +153,9 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	edcg:edcg_clause(xmg:Head, Gen, Clause),
 	%%xmg:send(info,Clause),
 	asserta(Clause),
-	xmg_brick_mg_compiler:send(info,'generated '),
-	xmg_brick_mg_compiler:send(debug,Class),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(debug,'generated '),
+	xmg_brick_mg_compiler:send(debug,Class),
+	xmg_brick_mg_compiler:send(debug,'\n'),
 	xmg_brick_mg_compiler:send(debug,Clause),
 	!.
 

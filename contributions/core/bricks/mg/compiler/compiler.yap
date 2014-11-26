@@ -27,7 +27,7 @@
 :-dynamic(current/1).
 :-dynamic(debug_mode/0).
 
-:-dynamic(xmg:print_prelude/0).
+:-dynamic(xmg:print_appendix/0).
 
 %encoding(iso_latin_1).
 %encoding(utf8).
@@ -124,12 +124,12 @@ compile_file(File,Eval):-
 	asserta(current(0)),
 
 	send(out,'<grammar>\n'),
-	maybe_print_prelude,
-	eval.	
+	eval,
+    	maybe_print_appendices.	
 
 
-maybe_print_prelude:- xmg:print_prelude,fail.
-maybe_print_prelude.
+maybe_print_appendices:- xmg:print_appendix,fail.
+maybe_print_appendices.
 
 
 

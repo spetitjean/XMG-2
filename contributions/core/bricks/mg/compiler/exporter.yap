@@ -25,35 +25,35 @@
 :-dynamic(xmg:mutex_add/2).
 
 export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
-	xmg:send(info,' exploring classes for calls '),
+	xmg:send(debug,' exploring classes for calls '),
 	xmg_brick_mg_explorer:find_calls_in_classes(Classes,Calls),
 	xmg:send(info,' explored '),
-	%%xmg:send(info,Calls),
+	%%xmg:send(debug,Calls),
 
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
 	asserta(classNumber(L)),
-	xmg_brick_mg_compiler:send(info,' ordering classes '),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(debug,' ordering classes\n'),
 	order_classes(Classes,Calls,OClasses),!,
-	xmg_brick_mg_compiler:send(info,' classes ordered '),xmg_brick_mg_compiler:send_nl(info),
-	%%xmg_brick_mg_compiler:send(info,OClasses),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(debug,' classes ordered\n'),
+	%%xmg_brick_mg_compiler:send(debug,OClasses),xmg_brick_mg_compiler:send_nl(info),
 	retract(classNumber(L)),
-	xmg_brick_mg_compiler:send(info,' exporting classes '),xmg_brick_mg_compiler:send_nl(info),
+	xmg_brick_mg_compiler:send(debug,' exporting classes\n'),
 	export_classes(OClasses),
-	xmg_brick_mg_compiler:send(info,' exported classes '),xmg_brick_mg_compiler:send_nl(info),!.
+	xmg_brick_mg_compiler:send(debug,' exported classes\n'),!.
 
 
 %% Order classes
 
 mutex(mg:mutex(token(_,id(Mutex)))):-
-	xmg:send(info,'\nMutex: '),
-	xmg:send(info,Mutex),
+	xmg:send(debug,'\nMutex: '),
+	xmg:send(debug,Mutex),
 	asserta(xmg:mutex(Mutex)),!.
 
 mutex(mg:mutex_add(token(_,id(M)),token(_,id(V)))):-
-	xmg:send(info,'\nMutex add: '),
-	xmg:send(info,M),
-	xmg:send(info,V),
+	xmg:send(debug,'\nMutex add: '),
+	xmg:send(debug,M),
+	xmg:send(debug,V),
 	asserta(xmg:mutex_add(M,V)),!.
 
 mutex(mg:semantics).
@@ -83,9 +83,9 @@ order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps,Calls):-
 	order_classes(Classes,MClasses,Acc,OClasses,Laps,Calls).
 order_classes([Class|Classes],MClasses,Acc,[Class|OClasses],Laps,Calls):-
 	class_before(Class,Acc,Calls),!,
-	%%xmg:send(info,Class),
+	%%xmg:send(debug,Class),
 	Class=mg:class(token(_,id(ClassId)),_,_,_,_,_),
-	%%xmg:send(info,ClassId),
+	%%xmg:send(debug,ClassId),
 	order_classes(Classes,MClasses,[ClassId|Acc],OClasses,Laps,Calls).
 order_classes([Class|Classes],MClasses,Acc,OClasses,Laps,Calls):-
 	order_classes(Classes,[Class|MClasses],Acc,OClasses,Laps,Calls).
@@ -104,24 +104,24 @@ imports_before(none,_):-!.
 imports_before(some(mg:import(I)),Acc):-
 	imports_before(I,Acc),!.
 imports_before(I,Acc):-
-	%% xmg:send(info,'\n\nDo not know what to do with import: '),
-	%% xmg:send(info,I),
-	%% xmg:send(info,Acc),
-	%% xmg:send(info,'\n'),
+	%% xmg:send(debug,'\n\nDo not know what to do with import: '),
+	%% xmg:send(debug,I),
+	%% xmg:send(debug,Acc),
+	%% xmg:send(debug,'\n'),
 
 	false,!.
 
 calls_before([],_):- !.
 calls_before([Call|T],Acc):-
-	%%xmg:send(info,Call),
-	%%xmg:send(info,Acc),
+	%%xmg:send(debug,Call),
+	%%xmg:send(debug,Acc),
 	lists:member(Call,Acc),
 	calls_before(T,Acc).
 
 
 whatsWrong([],Acc):-!.
 whatsWrong([mg:class(token(_,id(Class)),_,I,_,_,_)|T],Acc):-
-	xmg_brick_mg_compiler:send(info,' in class '),xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send(info,'\n'),
+	xmg_brick_mg_compiler:send(debug,' in class '),xmg_brick_mg_compiler:send(debug,Class),xmg_brick_mg_compiler:send(debug,'\n'),
 	whichImport(I,Acc),!,
 	whatsWrong(T,Acc).
 
@@ -129,7 +129,7 @@ whichImport([id(H,C)|T],Acc):-
 	lists:member(H,Acc),!,
 	whichImport(T,Acc).
 whichImport([id(H,C)|T],Acc):-
-	xmg_brick_mg_compiler:send(info,'Error while importing class '),xmg_brick_mg_compiler:send(info,H),xmg_brick_mg_compiler:send(info,' at '),xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send(info,'\n'),!,
+	xmg_brick_mg_compiler:send(debug,'Error while importing class '),xmg_brick_mg_compiler:send(debug,H),xmg_brick_mg_compiler:send(debug,' at '),xmg_brick_mg_compiler:send(debug,C),xmg_brick_mg_compiler:send(debug,'\n'),!,
 	whichImport(T,Acc).
 
 %% Export variables
@@ -140,19 +140,19 @@ export_classes([H|T]):-
 	export_classes(T).
 
 export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
-	xmg:send(info,'exporting '),
-	xmg:send(info,Name),
-	xmg:send(info,': prepare\n'),
+	xmg:send(debug,'exporting '),
+	xmg:send(debug,Name),
+	xmg:send(debug,': prepare\n'),
 
 	untype([P,I,E,D],[UP,UI,UE,UD]),
-	xmg:send(info,'imports exports\n'),
+	xmg:send(debug,'imports exports\n'),
 	imports_exports(UI,UE,UD,Exps),
 	%% check exported variables have whether been declared or imported
-	%%xmg:send(info,[UE,UD]),
-	xmg:send(info,'exports declared\n'),
+	%%xmg:send(debug,[UE,UD]),
+	xmg:send(debug,'exports declared\n'),
 	exports_declared(UE,Exps,UD),!,
 
-	xmg:send(info,'add vars \n'),
+	xmg:send(debug,'add vars \n'),
 
 	add_vars(Exps,UE,FExps),
 	asserta(exports(Name,FExps)),
@@ -160,12 +160,12 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 	add_vars_no_duplicates(Exps,UD,Decls),
 
 	add_vars_no_duplicates(Decls,UP,AllDecls),
-	%%xmg:send(info,declared(Name,AllDecls)),
+	%%xmg:send(debug,declared(Name,AllDecls)),
 	asserta(declared(Name,AllDecls)),!.
 
 untype([],[]):-!.
 untype([H|T],[H1|T1]):-
-	%%xmg:send(info,H),
+	%%xmg:send(debug,H),
 	untype(H,H1),
 	untype(T,T1),!.
 untype(none,[]):-!.
@@ -189,8 +189,8 @@ untype_part(token(C,id(ID)),id(ID,C)):-
 untype_part(value:const(token(C,id(ID))),id(ID,C)):-
 	!.
 untype_part(Decl,_):-
-	xmg:send(info,'\n\nUnknown declaration: '),
-	xmg:send(info,Decl),
+	xmg:send(debug,'\n\nUnknown declaration: '),
+	xmg:send(debug,Decl),
 	false,
 	!.
 
@@ -205,9 +205,9 @@ add_vars(Exps,[H|T],[H-_|T1]):-
 add_vars_no_duplicates(Exps,[],Exps).
 add_vars_no_duplicates(Exps,[id(H,C)|T],T1):-
 	lists:member(id(H,_)-_,Exps),!,
-	xmg_brick_mg_compiler:send(info,' Multiple declarations of variable '),
-	xmg_brick_mg_compiler:send(info,H),
-	xmg_brick_mg_compiler:send(info,C),
+	xmg_brick_mg_compiler:send(debug,' Multiple declarations of variable '),
+	xmg_brick_mg_compiler:send(debug,H),
+	xmg_brick_mg_compiler:send(debug,C),
 	false,
 	add_vars_no_duplicates(Exps,T,T1).
 add_vars_no_duplicates(Exps,[H|T],[H-_|T1]):-

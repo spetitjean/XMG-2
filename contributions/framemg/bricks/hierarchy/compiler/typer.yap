@@ -33,7 +33,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Next: do this in the xml file
-xmg:print_prelude:-
+xmg:print_appendix:-
 	xmg:freachableTypes(FVectors),
 	fVectorsToTypes(FVectors,FTypes),
 	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere is the type hierarchy:\n\n'),
