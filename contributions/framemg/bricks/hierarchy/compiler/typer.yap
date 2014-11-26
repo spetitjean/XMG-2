@@ -29,22 +29,55 @@
 :-dynamic(xmg:fPathConstraint/4).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Printing the hierarchy (in prelude)
+%% Printing the hierarchy (as an appendix)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Next: do this in the xml file
 xmg:print_appendix:-
 	xmg:freachableTypes(FVectors),
-	fVectorsToTypes(FVectors,FTypes),
+	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
 	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere is the type hierarchy:\n\n'),
-	print_hierarchy(FTypes),
+	print_hierarchy(FTypes,FAttrs),
 	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
 
-print_hierarchy([]).
-print_hierarchy([H|T]):-
+print_hierarchy([],[]).
+print_hierarchy([H|T],[H1|T1]):-
 	xmg:send(info,H),
+	xmg:send(info,'\nConstraints: '),
+	print_constraints(H1),
 	xmg:send(info,'\n'),
-	print_hierarchy(T).
+	
+	print_hierarchy(T,T1).
+
+print_constraints(C):-
+	xmg:send(info,'['),
+	print_constraints(C,0),
+	xmg:send(info,']'),!.
+
+print_constraints([],_).
+print_constraints([A-V],N):-
+	xmg:send(info,A),
+	xmg:send(info,'-'),
+	set_constraint_value(V,N,_),
+	xmg:send(info,V),
+	!.
+print_constraints([A-V|T],N):-
+	xmg:send(info,A),
+	xmg:send(info,'-'),
+	set_constraint_value(V,N,M),
+	xmg:send(info,V),
+	xmg:send(info,', '),
+	print_constraints(T,M),
+	!.
+
+set_constraint_value(A,N,M):-
+	var(A),
+	%%A=N,
+	atomic_concat(['@',N],A),
+	M is N+1,!.
+set_constraint_value(A,N,M):-
+	not(var(A)),
+	M is N,!.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -181,17 +214,18 @@ fTypeToSomeVector(Type,[Type|Types],[1|Vector]):-
 fTypeToSomeVector(Type,[_|Types],[_|Vector]):-
 	fTypeToSomeVector(Type,Types,Vector),!.
 
+fVectorsToTypesAndAttrs([],[],[]).
+fVectorsToTypesAndAttrs([H|T],[H1|T1],[H2|T2]):-
+	fVectorToType(H,H1),
+	xmg:fattrconstraint(H,H2),
+	fVectorsToTypesAndAttrs(T,T1,T2),!.
+
 fVectorToType(Vector,Type):-
 	xmg:send(debug,'Converting vector '),
 	xmg:send(debug,Vector),
 	xmg:ftypes(Types),
 	%%xmg:send(info,Types),
 	fVectorToType(Vector,Types,Type),!.
-
-fVectorsToTypes([],[]).
-fVectorsToTypes([H|T],[H1|T1]):-
-	fVectorToType(H,H1),
-	fVectorsToTypes(T,T1),!.
 
 fVectorToType([],[],[]).
 fVectorToType([V|Vector],[_|Types],Types1):-
