@@ -34,7 +34,7 @@
 
 %% Next: do this in the xml file
 xmg:print_appendix:-
-	xmg:freachableTypes(FVectors),
+	xmg:fReachableTypes(FVectors),
 	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
 	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere is the type hierarchy:\n\n'),
 	print_hierarchy(FTypes,FAttrs),
@@ -101,7 +101,7 @@ get_fconstraints([]):-
 	xmg:send(debug,'\n\nFiltered types:'),
 	xmg:send(debug,FSets),
 	
-	asserta(xmg:freachableTypes(FSets)),
+	asserta(xmg:fReachableTypes(FSets)),
 
 	findall(attrconstraint(TAC,TAs,TAT,TATT),xmg:fAttrConstraint(TAC,TAs,TAT,TATT),AttConstraints),
 

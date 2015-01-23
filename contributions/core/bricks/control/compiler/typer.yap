@@ -113,6 +113,7 @@ xmg:type_expr(control:call(token(_,id(S1)),Params),Type):--
 
 
 xmg:type_stmt(control:X,Type):--
+	xmg:send(info,X),
 	throw(xmg(type_error(incompatible_types(control:X,Type)))).
 
 

@@ -225,7 +225,7 @@ eval(frame,_,Frame,XML,_):-
 	send(debug,PFrame),
 	xmg_brick_frame_convert:toXML(PFrame,XML,0).
 	%%send(debug,Tree).
-eval(frame,_,[], elem(tree, features([id-none])),_).
+eval(frame,_,[], elem(frame, features([id-none])),_).
 
 
 eval(iface,_,I, elem(interface, children([elem(fs, children(XML))])),_):-
