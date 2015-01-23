@@ -17,6 +17,11 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This module is not used
+%% Conversion done in frame brick
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 :- module(xmg_brick_havm_convert).
 
 %%:- edcg:thread(name,edcg:counter).

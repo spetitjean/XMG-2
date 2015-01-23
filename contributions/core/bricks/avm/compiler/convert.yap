@@ -69,7 +69,15 @@ xmlFeat(A-AVM,H1):--
 	)),
 	!.
 
+%% temporary 
 
+xmlFeat(A-AVM,H1):--
+	%% thread name does not seem to work, _ have to be replaced
+	xmg_brick_frame_convert:frameToXML(AVM,H,_,_),
+	H1=elem(f, features([name-A]),children([H])),
+	!.
+
+%%%%%%%%%%%%%%%
 
 
 xmlFeat(A-AD,H1):--
