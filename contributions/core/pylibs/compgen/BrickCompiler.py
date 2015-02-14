@@ -39,7 +39,7 @@ class BrickCompiler(object):
             deppath=yapdir+"/"+comp+"/compiler/deps"
             if(os.path.exists(deppath)):
                 depfile=open(deppath,"r")
-                for line in depfile:
+                for line in depfile.read().splitlines():
                     print("\nAdding dependency:")
                     print(line)
                     self.add_compiler("xmg/brick/"+line)
@@ -118,6 +118,17 @@ class BrickCompiler(object):
             dimfile.write(',')
             dimfile.write(self._solvers[solver])
             dimfile.write(').\n')
+            # add dependencies
+            yapdir=xmg.config['DEFAULT']['xmg_yap_rootdir']
+            deppath=yapdir+"/xmg/brick/"+self._solvers[solver]+"/compiler/deps"
+            print("Solver dep: "+deppath)
+            if(os.path.exists(deppath)):
+                print("Exists")
+                depfile=open(deppath,"r")
+                for line in depfile.read().splitlines():
+                    print("\nAdding dependency:")
+                    print(line)
+                    self.add_compiler("xmg/brick/"+line)
         dimfile.close()
         print("Solvers bindings generated in %s/solvers.yap"%self._folder)
 
