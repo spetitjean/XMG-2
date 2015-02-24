@@ -1,4 +1,4 @@
-:-module(xmg_output_morph).
+:-module(xmg_brick_morphlp_output).
 
 output(L):-
 	%%xmg_compiler:send(info,' ordering list ! '),

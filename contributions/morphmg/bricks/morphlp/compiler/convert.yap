@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_convert_morph).
+:- module(xmg_brick_morphlp_convert).
 
 
 :- edcg:using(xmg_convert:name).

@@ -9,10 +9,10 @@ InField : id '<-' Expr {$$=morphlp:infield($1,$3)};
 
 FieldRel : id '>>' id {$$=morphlp:fieldprec($1,$3)};
 
-Eq : Expr '=' Expr {$$=morphlp:eq($1,$3=)};
+Eq : Expr '=' Expr {$$=morphlp:meq($1,$3)};
 
 Expr : Var {$$=$1} | string {$$=$1} | int {$$=$1} | bool {$$=$1} | _ADisj {$$=$1};
 
-Var : id {$$=$1} | '?' id {$$=$1};
+Var : id {$$=$1} | '?' id {$$=$2};
 
 %%

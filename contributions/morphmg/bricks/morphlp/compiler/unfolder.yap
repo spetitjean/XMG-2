@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2013  Simon Petitjean
+%% Copyright (C) 2015  Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,77 +17,27 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_unfolder_morph).
+:-module(xmg_brick_morphlp_unfolder).
 
-unfold('MorphStmt',[M],UM):- 
-	unfold(M,UM),!.
-unfold('MorphStmts',[M],UM):- 
-	unfold(M,UM),!.
-unfold('MorphStmts',[token(_,'{'),M,token(_,'}')],UM):- 
-	unfold(M,UM),!.
-unfold('MorphStmts',[M1,token(_,';'),M2],and(UM1,UM2)):- 
-	unfold(M1,UM1),
-	unfold(M2,UM2),!.
-unfold('MorphStmts',[M1,token(_,'|'),M2],or(UM1,UM2)):- 
-	unfold(M1,UM1),
-	unfold(M2,UM2),!.
+:-xmg:edcg.
+:-xmg:unfolder_accs.
 
-unfold('Stem',[token(_,'morpheme'),Var],morpheme(UVar)):-
-	unfold(Var,UVar),!.
-unfold('InStem',[Stem,token(_,'<-'),E],inmorph(UStem,UE)):-
-	unfold(Stem,UStem),
-	unfold(E,UE),!.
-unfold('StemRel',[Stem1,Prec,Stem2],precmorph(UStem1,UStem2,UPrec)):-
-	unfold(Stem1,UStem1),
-	unfold(Stem2,UStem2),
-	unfold(Prec,UPrec),!.
-unfold('Eq',['Expr'(E1),token(_,'='),'Expr'(E2)],eq(UE1,UE2)):-
-	unfold(E1,UE1),
-	unfold(E2,UE2),!.
-unfold('ADisj',[ADisj],UADisj):-
-	unfold(ADisj,UADisj),!.
 
-unfold('Expr',[Expr],UExpr):-
-	unfold(Expr,UExpr),!.
+xmg:unfold_dimstmt(Dim,morphlp:field(Var)):--
+	xmg:send(debug,'here'),
+	xmg:unfold_expr(Var,UVar),
+	constraints::enq((morphlp:field(UVar),Dim)),!.
+xmg:unfold_dimstmt(Dim,morphlp:infield(Field,E)):--
+	xmg:unfold_expr(Field,UField),
+	xmg:unfold_expr(E,UE),
+	constraints::enq((morphlp:infield(UField,UE),Dim)),!.
+xmg:unfold_dimstmt(Dim,morphlp:fieldprec(Stem1,Stem2)):--
+	xmg:unfold_expr(Stem1,UStem1),
+	xmg:unfold_expr(Stem2,UStem2),
+	constraints::enq((morphlp:fieldprec(UStem1,UStem2),Dim)),!.
+xmg:unfold_dimstmt(Dim,morphlp:meq(E1,E2)):--
+	xmg:unfold_expr(E1,UE1),
+	xmg:unfold_expr(E2,UE2),
+	constraints::enq((morphlp:eq(UE1,UE2),Dim)),!.
 
-unfold('Var',[token(_,'?'),ID],UID):-
-	unfold(ID,UID),!.
- 
-unfold(token(C,string(S)),string(US,C)):- 
-	atom_codes(US,S),!.
-unfold(token(C,id(ID)),id(ID,C)):- !.
-unfold(token(C,int(Int)),int(Int,C)):- !.
-unfold(token(C,bool(Bool)),bool(Bool,C)):- !.
-unfold(token(_,'>>'),'>>'):- !.
 
-%% GENERIC RULES
-
-unfold(Term,UTerm):-
-	Term=..[Head|Params],
-	head_module(Head,Module),
-	head_name(Head,Name),
-	(
-	    (
-		Module='morph',
-		unfold(Name,Params,UTerm)
-	    )
-	;
-	(
-	    not(Module='morph'),
-	    xmg_modules:get_module(Module,unfolder,UModule),
-	    %%xmg_compiler:send(info,UModule),
-	    UModule:unfold(Term,UTerm)
-	)
-    ),!.
-
-unfold(Rule,_):- 
-	throw(xmg(unfolder_error(no_unfolding_rule(morph2,Rule)))),	
-	!.
-
-head_module(Head,Module):-
-	atomic_list_concat(A,'-',Head),
-	A=[Module|_],!.
-
-head_name(Head,Name):-
-	atomic_list_concat(A,'-',Head),
-	A=[_,Name],!.

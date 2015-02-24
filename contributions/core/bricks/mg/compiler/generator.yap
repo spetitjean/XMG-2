@@ -96,6 +96,8 @@ generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 	xmg_brick_mg_compiler:send(debug,Class),xmg_brick_mg_compiler:send(debug,'\n'),
 
 	xmg_brick_mg_exporter:declared(Class,List),
+	xmg_brick_mg_compiler:send(debug,'with vars: '),
+	xmg_brick_mg_compiler:send(debug,Vars),
 
 	%%xmg_table:table_new(TableIn),
 	%%put_in_table(List) with (decls(Vars,TableOut),name(_,_)),

@@ -65,8 +65,9 @@ get_dim_type(Dim,Type):--
 	dim_types::tput(dim:Dim,Type),!.
 get_dim_type(Dim,Type):--
 	xmg:dimbrick(Dim,Brick),
-	xmg:send(debug,'\ndefault typing '),
+	xmg:send(debug,'\ndefault typing: '),
 	xmg:stmt_type(Brick,Dim,Type),
+	xmg:send(debug,Type),
 	dim_types::tput(dim:Dim,Type),!.
 
 

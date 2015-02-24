@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_solver_morph).
+:- module(xmg_brick_morphlp_solver).
 
 eval_morph(Morph,solved(OStems,Form)):-
 	get_all(Morph,Stems,Precs),
