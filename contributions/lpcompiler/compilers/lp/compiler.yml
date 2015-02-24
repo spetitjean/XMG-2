@@ -1,0 +1,24 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+control:
+  _Stmt: dim_lp dim_iface stardim
+  _Expr: value
+stardim:
+  _Stmt: control
+  proxy: dim_iface
+avm: 
+  _Value: value
+  _Expr: value
+value: 
+  _Else: avm adisj avm.Dot control.Call
+iface:
+  _AVM: avm
+dim_lp:
+  tag: "morph"
+  Stmt: morphlp
+  Expr: value
+dim_iface:
+  tag: "iface"
+  Stmt: iface
+  Expr: value

@@ -1,39 +1,18 @@
-%token morpheme
-%token string
-%token id
-%token int
-%token bool
-
-%type DimStmt DimStmt
-%type MorphStmts MorphStmts
-%type MorphStmt MorphStmt
-%type InStem InStem
-%type Stem Stem
-%type StemRel StemRel
-%type Eq Eq
-%type Expr Expr
-%type Values Values
-%type Value Value
-%type Var Var
-
-%ext ADisj ADisj
 
 %%
 
-MorphStmts : MorphStmt | MorphStmts ';' MorphStmts | MorphStmts '|' MorphStmts | MorphStmts '->' MorphStmts | '{' MorphStmts '}';
+MorphStmt : Field {$$=$1} | InField {$$=$1} | FieldRel {$$=$1} | Eq {$$=$1};
 
-MorphStmt : Stem | InStem | StemRel | Eq;
+Field : 'field' id {$$=morphlp:field($2)};
 
-Stem : morpheme Var;
+InField : id '<-' Expr {$$=morphlp:infield($1,$3)};
 
-InStem : Var '<-' Expr;
+FieldRel : id '>>' id {$$=morphlp:fieldprec($1,$3)};
 
-StemRel : Var '>>' Var;
+Eq : Expr '=' Expr {$$=morphlp:eq($1,$3=)};
 
-Eq : Expr '=' Expr;
+Expr : Var {$$=$1} | string {$$=$1} | int {$$=$1} | bool {$$=$1} | _ADisj {$$=$1};
 
-Expr : Var | string | int | bool | ADisj;
-
-Var : id | '?' id;
+Var : id {$$=$1} | '?' id {$$=$1};
 
 %%
