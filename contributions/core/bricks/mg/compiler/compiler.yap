@@ -211,6 +211,13 @@ eval(syn,Solvers,Syn,XML,Class):-
 	%%send(info,Syn),
 	xmg_brick_syn_compiler:eval(Syn,Solvers,XML,Class).
 
+eval(morphlp,_,Morph,XML,_):-
+	%%send(info,Morph),
+	xmg_brick_morphlp_solver:eval(Morph,Value),
+	%%send_nl(info,2),
+	send(info,' Value : '),
+	send(info,Value),
+	xmg:do_xml_convert(Value,XML).
 
 eval(pg,_,PG,elem(pg, features([id-none])),_):-
 	xmg_output_pg:output(PG).

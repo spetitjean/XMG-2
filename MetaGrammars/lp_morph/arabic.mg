@@ -114,12 +114,12 @@ class ktb
 
 class verb
 {
-  ktb[]
+  ktb[] %% |
 }
 
 class main
 {
-  root[]; verb[]; pattern[]
+  root[]; verb[]; pattern[]; active[]
 }
 
 value main

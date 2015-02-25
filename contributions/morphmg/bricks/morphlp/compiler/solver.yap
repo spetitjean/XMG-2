@@ -19,20 +19,26 @@
 
 :- module(xmg_brick_morphlp_solver).
 
-eval_morph(Morph,solved(OStems,Form)):-
-	get_all(Morph,Stems,Precs),
-	%%xmg_compiler:send(info,Stems),
-	%%xmg_compiler:send(info,Precs),
+eval(Morph,solved(OStems,Form)):-
+	xmg:send(info,'\nSolving lp: '),
+	xmg:send(info,Morph),
+	get_all(Morph,Stems,Precs,InF,Eqs),
+	xmg:send(info,Stems),
+	xmg:send(info,Precs),
 	order_stems(Stems,Precs,OStems),
 	concat_stems(OStems,Form),
-	%%xmg_compiler:send(info,OStems),
+	xmg:send(info,OStems),
 	!.
 
-get_all([],[],[]):- !.
-get_all([morpheme(Stem)|T],[morpheme(Stem)|T1],T2):-
-	get_all(T,T1,T2),!.
-get_all([prec(S1,S2,P)|T],T1,[prec(S1,S2,P)|T2]):-
-	get_all(T,T1,T2),!.
+get_all([],[],[],[],[]):- !.
+get_all([field(Stem)|T],[field(Stem)|T1],T2,T3,T4):-
+	get_all(T,T1,T2,T3,T4),!.
+get_all([fieldprec(S1,S2)|T],T1,[fieldprec(S1,S2)|T2],T3,T4):-
+	get_all(T,T1,T2,T3,T4),!.
+get_all([H|T],T1,T2,[H|T3],T4):-
+	get_all(T,T1,T2,T3,T4),!.
+get_all([fieldprec(S1,S2,P)|T],T1,[fieldprec(S1,S2,P)|T2],T3,T4):-
+	get_all(T,T1,T2,T3,T4),!.
 
 
 order_stems([],_,[]):-!.
