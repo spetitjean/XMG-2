@@ -21,7 +21,7 @@
 
 :- use_module(library(assoc)).
 
-eval(Morph,solved(Atom,MEqs)):-
+eval(Morph,morphlp:solved(Atom,MEqs)):-
 	xmg:send(info,'\nSolving lp: '),
 	xmg:send(info,Morph),
 	get_all(Morph,Stems,Precs,InF,Eqs),

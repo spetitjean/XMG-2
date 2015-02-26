@@ -19,23 +19,15 @@
 
 :- module(xmg_brick_morphlp_convert).
 
-
-:- edcg:using(xmg_convert:name).
-
-:- edcg:weave([name],[new_name/2, xmlFeats/2, xmlMorph/2]).
-
-new_name(Prefixe, Name) :--
-	name::incr,
-	name::get(N),
-	atomic_concat([Prefixe,N],Name).
+:- xmg:edcg.
 
 
-toXML(solved(List,Form), elem(morph, children([elem(form,features([value-Form])),elem(morphemes,children(Stems))])),Number) :--
-	%%xmg_convert_avm:xmlFeats(L1,Feats) with name(0,N1),
-	xmlMorph(List,Stems) with name(N1,_),
+xmg:xml_convert_term(morphlp:solved(List,Form), elem(morph, children([elem(features,features([value-Form])),elem(morph,features([value-List]))]))) :--
+	%% xmg_convert_avm:xmlFeats(L1,Feats) with name(0,N1),
+	%% xmlMorph(List,Stems),
 	!.
 
-xmlMorph([],[]):--
+xmlMorph([],[]):-
 	!.
-xmlMorph([const(Value,_)|T],[elem(morpheme,features([value-Value]))|T1]):-- 
+xmlMorph([H|T],[elem(morpheme,features([value-H]))|T1]):- 
 	xmlMorph(T,T1),!.
