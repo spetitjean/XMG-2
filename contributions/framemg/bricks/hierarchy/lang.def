@@ -3,9 +3,9 @@
 
 Hierarchy : FType {$$=$1} | FConstraint {$$=$1} | FTypes {$$=$1} | FConstraints {$$=$1}; 
 
-FTypes : 'frametypes' '=' '{' (id // ',')+ '}' {$$=hierarchy:ftypes($4)}; 
+FTypes : 'frame-types' '=' '{' (id // ',')+ '}' {$$=hierarchy:ftypes($4)}; 
 
-FConstraints : 'frameconstraints' '=' '{' (FConst // ',')+ '}' {$$=hierarchy:fconstraints($4)}; 
+FConstraints : 'frame-constraints' '=' '{' (FConst // ',')+ '}' {$$=hierarchy:fconstraints($4)}; 
 
 FType : 'ftype' id {$$=hierarchy:ftype($2)};
 

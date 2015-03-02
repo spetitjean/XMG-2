@@ -61,14 +61,14 @@ order_stems(Stems,Precs,First,[field(First)|OStems]):-
 	lists:member(fieldprec(First,Next),Precs),!,
 	order_stems(NStems,Precs,Next,OStems),!.
 order_stems(Stems,Precs,First,[Stem|OStems]):- !,
-	xmg_compiler:send(info,' Could not order fields, nothing seems to follow '),
-	xmg_compiler:send(info,First),
+	xmg:send(info,' Could not order fields, nothing seems to follow '),
+	xmg:send(info,First),
 	false,!.
 
 
 
 find_first([],_,_):- !,
-	xmg_compiler:send(info,' Could not find a first field, there might be a cycle'),false,!.
+	xmg:send(info,' Could not find a first field, there might be a cycle'),false,!.
 find_first([field(F1)|T],Precs,F2):-
 	lists:member(fieldprec(_,F1),Precs),!,
 	find_first(T,Precs,F2),!.

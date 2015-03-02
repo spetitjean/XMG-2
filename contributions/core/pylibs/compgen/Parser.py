@@ -27,7 +27,7 @@ class Parser(object):
         for token in tokenizer:
             token,sem,coord=convert(token)
             if token == sqstring:
-                id_regex = re.compile(r"^([A-Za-z][A-Za-z0-9]*)$")
+                id_regex = re.compile(r"^([A-Za-z][A-Za-z0-9\-_]*)$")
                 m = id_regex.match(sem)
                 if m:
                     self.keywords.append(sem)

@@ -17,19 +17,15 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_frame_convert, []).
+:- module(xmg_brick_frame_convert).
+
+:- xmg:edcg.
 
 %%:- edcg:using(xmg_convert_avm:name).
 :- edcg:using(xmg_brick_mg_convert:name).
 
-:- dynamic(dejavu/1).
+:- edcg:weave([name],[framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2]).
 
-:- edcg:weave([name],[new_name/2, framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2]).
-
-new_name(Prefixe, Name) :--
-	name::incr,
-	name::get(N),
-	atomic_concat([Prefixe,N],Name).
 
 listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
@@ -53,7 +49,7 @@ frameToXML(Frame,Frame1 ):--
 	(
 	    (
 		var(Const),!,
-		new_name('@Frame',New),
+		xmg:convert_new_name('@Frame',New),
 		%%xmg:send(info,New),
 		New=Const,
 		featsToXML(Feats,XMLFeats),
@@ -81,7 +77,7 @@ valToXML(Frame,XMLFrame):--
 	frameToXML(Frame,XMLFrame),!.
 valToXML(Var,elem(sym,features([value-Var]))):--
 	var(Var),
-	new_name('@V',Var),
+	xmg:convert_new_name('@V',Var),
 	!.
 valToXML(const(Val,_),elem(sym,features([value-Val]))):-- !.
 valToXML(Val,elem(sym,features([value-Val]))):-- !.
