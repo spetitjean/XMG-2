@@ -69,8 +69,6 @@ xmlFeat(A-AVM,H1):--
 	)),
 	!.
 
-%% temporary 
-
 
 
 %%%%%%%%%%%%%%%
