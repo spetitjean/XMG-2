@@ -17,15 +17,15 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_tree_solver, []).
+:- module(xmg_brick_rrg_solver, []).
 
 :- use_module(library(gecode)).
-:- use_module('xmg/brick/tree/compiler/dominance').
+:- use_module('xmg/brick/rrg/compiler/dominance').
 
 :- op(500, xfx, ':=:').
 
 
-solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugins,Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):-
+solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NotParents, Relations,NodeNames,Plugins,Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):-
 	!,		
 	Space:=space,!,
 	
@@ -303,7 +303,7 @@ get_node(N,[M-_|T],Node):-
 get_rel(A,B,Rels,Rel):- 
 	B>A,!,
 	A1 is A - 1,
-	xmg_brick_tree_solver:nbNodes(NNodes),
+	nbNodes(NNodes),
 	I is (A1*NNodes)-(A1*A//2)+B-A,
 	lists:nth(I,Rels,Rel),
 	!.
@@ -317,7 +317,7 @@ get_rel(A,B,Rels,Rel):-
 get_prel(A,B,Rels,Rel):- 
 	B>A,!,
 	A1 is A - 1,
-	xmg_brick_tree_solver:nbNodes(NNodes),
+	nbNodes(NNodes),
 	I is 2*((A1*NNodes)-(A1*A//2)+B-A)-1,
 	lists:nth(I,Rels,Rel),
 	!.
@@ -325,7 +325,7 @@ get_prel(A,B,Rels,Rel):-
 get_prel(A,B,Rels,Rel):-
 	A>B,!,
 	B1 is B - 1,
-	xmg_brick_tree_solver:nbNodes(NNodes),
+	nbNodes(NNodes),
 	I is 2*((B1*NNodes)-(B1*B//2)+A-B),
 	lists:nth(I,Rels,Rel),
 	!.

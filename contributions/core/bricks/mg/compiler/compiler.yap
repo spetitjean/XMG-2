@@ -207,9 +207,17 @@ eval(morphtf,_,Morph,XML,_):-
 	xmg:do_xml_convert(Value,XML).
 
 
-eval(syn,Solvers,Syn,XML,Class):-
+eval(syn,[tree],Syn,XML,Class):-
 	%%send(info,Syn),
-	xmg_brick_syn_compiler:eval(Syn,Solvers,XML,Class).
+	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
+eval(syn,[rrg],Syn,XML,Class):-
+	%%send(info,Syn),
+	xmg_brick_rrg_compiler:eval(Syn,Solvers,XML,Class).
+eval(syn,[],Syn,XML,Class):-
+	%%send(info,Syn),
+	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
+
+
 
 eval(morphlp,_,Morph,XML,_):-
 	%%send(info,Morph),

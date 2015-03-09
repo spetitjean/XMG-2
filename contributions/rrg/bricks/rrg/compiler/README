@@ -1,0 +1,1 @@
+Here is an attempt for a RRG solver. The idea is to use most of the tree solver. The only change should be in the solver.yap file: no new edge should be created. 
