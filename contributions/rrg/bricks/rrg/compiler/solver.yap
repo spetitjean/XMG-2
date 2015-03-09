@@ -25,7 +25,7 @@
 :- op(500, xfx, ':=:').
 
 
-solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NotParents, Relations,NodeNames,Plugins,Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):-
+solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents, Relations,NodeNames,Plugins,Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):-
 	!,		
 	Space:=space,!,
 	
@@ -46,11 +46,17 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NotParents, Relations,Nod
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
+	xmg_brick_mg_compiler:send(info,' doing npposts '),
+	xmg_brick_mg_compiler:send(info,NodeNames),
+	xmg_brick_mg_compiler:send(info,NodeList),
+
+	do_npposts(Space,NodeNames,NodeList,NoParents),!,
+
 	xmg_brick_mg_compiler:send(debug,' doing posts '),
 
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
-	xmg_brick_mg_compiler:send(debug,' branching '),
+	xmg_brick_mg_compiler:send(info,' branching '),
 
 
 	global_branch(Space,IntVars),!,
@@ -67,6 +73,20 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NotParents, Relations,Nod
 	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
 
 
+do_npposts(_,[],[],_):- !.
+do_npposts(Space,[H|T],[H1|T1],NoParents):-
+	do_nppost(Space,H,H1,NoParents),
+	do_npposts(Space,T,T1,NoParents),!.
+
+do_nppost(Space,N,Node,NoParents):-
+	lists:member(N,NoParents),
+	xmg:send(info,'\nhere no parent: '),
+	xmg:send(info,Node),
+	IntVar:=intvar(Space,N,N),
+	RB :=: rb(Node),
+	Space += rel(RB,'SRT_DISJ', IntVar),
+	!.
+do_nppost(Space,N,Node,NoParents):- !.
 
 post_plugins([],_,_,_,_):- !.
 post_plugins([Plugin|T],Space,NodeList,IntVars,plugins(Plugins)):-	
@@ -203,8 +223,6 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(any,A,B)):-
 	IntSet:= intset([1,5]),
 	Space += dom(IntVar,IntSet),  
 	!.
-
-
 
 
 
