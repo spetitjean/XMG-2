@@ -47,8 +47,9 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents, Relations,Node
 	do_nposts(Space,IntVars,NotUnifs),!,
 
 	xmg_brick_mg_compiler:send(info,' doing npposts '),
-	xmg_brick_mg_compiler:send(info,NodeNames),
-	xmg_brick_mg_compiler:send(info,NodeList),
+	xmg_brick_mg_compiler:send(info,Table),
+
+	%%xmg_brick_mg_compiler:send(info,NodeList),
 
 	do_npposts(Space,NodeNames,NodeList,NoParents),!,
 
@@ -56,7 +57,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents, Relations,Node
 
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
-	xmg_brick_mg_compiler:send(info,' branching '),
+	xmg_brick_mg_compiler:send(debug,' branching '),
 
 
 	global_branch(Space,IntVars),!,
@@ -64,13 +65,16 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents, Relations,Node
 	do_branch(Space,NodeList),!,	
 
 	xmg_brick_mg_compiler:send(debug,' branched '),
+	%%color_branch(Space,NodeList),
 
 	SolSpace := search(Space),
 
-	xmg_brick_mg_compiler:send(debug,' searched '),
+	xmg:send(info,' searched '),
 	flush_output,
 
-	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
+	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot),
+	xmg:send(debug,' got values:'),
+	xmg:send(debug,solution(IsRoot,Eq, Children, Left, NodeList1)).
 
 
 do_npposts(_,[],[],_):- !.
@@ -80,11 +84,11 @@ do_npposts(Space,[H|T],[H1|T1],NoParents):-
 
 do_nppost(Space,N,Node,NoParents):-
 	lists:member(N,NoParents),
-	xmg:send(info,'\nhere no parent: '),
-	xmg:send(info,Node),
+	%%xmg:send(info,'\nhere no parent: '),
+	%%xmg:send(info,Node),
 	IntVar:=intvar(Space,N,N),
-	RB :=: rb(Node),
-	Space += rel(RB,'SRT_DISJ', IntVar),
+	LRoot :=: lroot(Node),
+	Space += rel(LRoot,'SRT_DISJ', IntVar),
 	!.
 do_nppost(Space,N,Node,NoParents):- !.
 

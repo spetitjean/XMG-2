@@ -34,12 +34,12 @@ init_nodes([Node|Nodes],Space,N,I) :-
 	init_nodes(Nodes,Space,N,J).
 
 init_node(Node,Space,N,I) :-
-	Node=node(Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,UpCard,IsRoot,RB),
+	Node=node(Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,UpCard,IsRoot,RB,LRoot),
 	Empty := intset([]),
 	Full := intset(1,N),
 	FullVar := setvar(Space,Full,Full),
 	EmptyVar := setvar(Space,Empty,Empty),
-	[Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,RB] := setvars(Space,11,Empty,Full),
+	[Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,RB,LRoot] := setvars(Space,12,Empty,Full),
 	M is N-1,
 	UpCard := intvar(Space,0,M),
 	IsRoot := boolvar(Space),
@@ -58,11 +58,12 @@ init_node(Node,Space,N,I) :-
 	Space += rel(Parent, 'SRT_SUB', Up),
 	Space += rel(Children, 'SRT_SUB', Down),
 	Space += rel(RB, 'SRT_SUB', Eq),
-	Space += rel(RB, 'SRT_EQ', EmptyVar, IsRoot),
-	%%Space += cardinality(RB,1,1),
+	Space += rel(LRoot, 'SRT_SUB', Eq),
+	Space += rel(LRoot, 'SRT_EQ', EmptyVar, IsRoot),
+	Space += cardinality(RB,1,1),
 	!.
 
-is_node(Node) :- functor(Node,node,13).
+is_node(Node) :- functor(Node,node,14).
 assert_node(Node) :-
 	is_node(Node) -> true ;
 	throw(expected(node,Node)).
@@ -80,6 +81,7 @@ Parent   :=: parent(Node)   :- !, assert_node(Node), arg(10,Node,Parent).
 UpCard   :=: upcard(Node)   :- !, assert_node(Node), arg(11,Node,UpCard).
 IsRoot   :=: isroot(Node)   :- !, assert_node(Node), arg(12,Node,IsRoot).
 RB       :=: rb(Node)       :- !, assert_node(Node), arg(13,Node,RB).
+LRoot    :=: lroot(Node)    :- !, assert_node(Node), arg(14,Node,LRoot).
 Values   :=: map(Fun,Nodes) :- !, map_fun(Values,Nodes,Fun).
 X        :=: Y              :- throw(unrecognized(X :=: Y)).
 

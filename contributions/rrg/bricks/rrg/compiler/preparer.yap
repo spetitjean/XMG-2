@@ -21,7 +21,7 @@
 
 :- xmg:edcg.
 :-edcg:thread(name,edcg:counter).
-:-edcg:weave([name],[count/7,new_name/1]).
+:-edcg:weave([name],[count/7,check_unique_name/3,new_name/1]).
 
 new_name(Name):--
 	name::incr,
@@ -77,7 +77,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParent
 
 	write_noparents(Nodes,Relations,NoParents) ,
 
-	xmg:send(info,prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)),
+	%%xmg:send(info,prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)),
 	%%false,
 
 	!.
@@ -85,20 +85,20 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParent
 %% this should go somewhere else
 xmg:get_plugins(TreePlugins,OutPlugins):-
 	findall(P,xmg:principle(P,Args,Dims),Plugins),
-	filter_tree_plugins(Plugins,[],TreePlugins,OutPlugins),!.
+	filter_rrg_plugins(Plugins,[],TreePlugins,OutPlugins),!.
 
-filter_tree_plugins([],_,[],[]).
-filter_tree_plugins([H|T],Mem,[NH|T1],[_|T2]):-
-	is_tree_plugin(H,NH),
+filter_rrg_plugins([],_,[],[]).
+filter_rrg_plugins([H|T],Mem,[NH|T1],[_|T2]):-
+	is_rrg_plugin(H,NH),
 	not(lists:member(NH,Mem)),!,
-	filter_tree_plugins(T,[NH|Mem],T1,T2).
-filter_tree_plugins([H|T],Mem,T1,T2):-
-	filter_tree_plugins(T,Mem,T1,T2),!.
+	filter_rrg_plugins(T,[NH|Mem],T1,T2).
+filter_rrg_plugins([H|T],Mem,T1,T2):-
+	filter_rrg_plugins(T,Mem,T1,T2),!.
 
-is_tree_plugin(tag,tag).
-is_tree_plugin(color,colors).
-is_tree_plugin(rank,rank).
-is_tree_plugin(unicity,unicity).
+%%is_rrg_plugin(tag,tag).
+is_rrg_plugin(rrgcolor,rrgcolors).
+%%is_rrg_plugin(rank,rank).
+%%is_rrg_plugin(unicity,unicity).
 
 prepare_plugins(Syn,[],prepared([],Syn)):- !.
 prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
@@ -237,33 +237,49 @@ write_node(A,'none',Table):-- !.
 
 
 
-
-
-count([],0,0,0,_,Table,Table):-- !.
-
-count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
-	J is I+1,
+check_unique_name(N,NewNodeName,TableIn):--
 	xmg_brick_syn_nodename:nodename(N,Nodename),
-	xmg_table:table_get(TableIn,Nodename,_),
+	xmg_table:table_get(TableIn,Nodename,_),!,
 	xmg:send(debug,Nodename),
 	xmg:send(debug,' CONFLICT '),!,
 
 	new_name(New),
 	xmg_brick_syn_nodename:nodename(M,New),
 	M=N,
-	xmg_brick_syn_nodename:nodename(N,NewNodename),
-	xmg:send(debug,' New ID given\n'),
+	xmg_brick_syn_nodename:nodename(N,NewNodeName),
+	xmg:send(info,'\nNew ID given\n'),
+	%%xmg:send(info,NewNodeName),
+	
+	!.
+check_unique_name(Node,NodeName,_):--
+	xmg_brick_syn_nodename:nodename(Node,NodeName),!.
+
+count([],0,0,0,_,Table,Table):-- !.
+
+count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
+	J is I+1,!,
+	%% xmg_brick_syn_nodename:nodename(N,Nodename),
+	%% xmg_table:table_get(TableIn,Nodename,_),
+	%% xmg:send(debug,Nodename),
+	%% xmg:send(debug,' CONFLICT '),!,
+
+	%% new_name(New),
+	%% xmg_brick_syn_nodename:nodename(M,New),
+	%% M=N,
+	%% xmg_brick_syn_nodename:nodename(N,NewNodename),
+	%% xmg:send(debug,' New ID given\n'),
+	check_unique_name(N,NewNodename,TableIn),
 	xmg_table:table_put(TableIn,NewNodename,J,Table),
 	%%xmg:send(info,Table),
 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
 	Nodes is NodesR +1,!.
 
-count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
-	J is I+1,!,
-	xmg_brick_syn_nodename:nodename(N,Nodename),
-	xmg_table:table_put(TableIn,Nodename,J,Table),
-	count(T,NodesR,Doms,Precs,J,Table,TableOut),
-	Nodes is NodesR +1,!.
+%% count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
+%% 	J is I+1,!,
+%% 	xmg_brick_syn_nodename:nodename(N,Nodename),
+%% 	xmg_table:table_put(TableIn,Nodename,J,Table),
+%% 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
+%% 	Nodes is NodesR +1,!.
 
 
 
