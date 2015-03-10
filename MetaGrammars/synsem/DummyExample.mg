@@ -51,7 +51,7 @@ declare ?X ?Y ?Z
 		node ?Y [cat=n];
 		node ?Z [cat=s];
 		?X -> ?Y;
-		?X -> ?Z
+		?X -L> ?Z
 	}
 }
 

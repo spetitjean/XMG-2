@@ -145,6 +145,58 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(any,A,B)):-
   
 	!.
 
+do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
+	B>A,!,
+	get_rel(A,B,IntVars,IntVar),
+	get_prel(A,B,IntPVars,IntPVar),
+	Space += dom(IntVar,3),
+	Space += dom(IntPVar,1),
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+	LeftB:=:left(NB),
+	LeftA:=:left(NA),
+	Space += rel(LeftA,'SRT_EQ',LeftB),
+	!.
+
+do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
+	A>B,!,
+	get_rel(B,A,IntVars,IntVar),
+	get_prel(A,B,IntPVars,IntPVar),
+	Space += dom(IntVar,2),
+	Space += dom(IntPVar,1),
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+	LeftB:=:left(NB),
+	LeftA:=:left(NA),
+	Space += rel(LeftA,'SRT_EQ',LeftB),
+	!.
+
+do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
+	B>A,!,
+	get_rel(A,B,IntVars,IntVar),
+	get_prel(A,B,IntPVars,IntPVar),
+	Space += dom(IntVar,3),
+	Space += dom(IntPVar,1),
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+	RightB:=:right(NB),
+	RightA:=:right(NA),
+	Space += rel(RightA,'SRT_EQ',RightB),
+	!.
+
+do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
+	A>B,!,
+	get_rel(B,A,IntVars,IntVar),
+	get_prel(A,B,IntPVars,IntPVar),
+	Space += dom(IntVar,2),
+	Space += dom(IntPVar,1),
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+	RightB:=:right(NB),
+	RightA:=:right(NA),
+	Space += rel(RightA,'SRT_EQ',RightB),
+	!.
+
 %% HSTEPS
 
 
