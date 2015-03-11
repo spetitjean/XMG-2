@@ -43,7 +43,6 @@ init_node(Node,Space,N,I) :-
 	M is N-1,
 	UpCard := intvar(Space,0,M),
 	IsRoot := boolvar(Space),
-	RbRoot := intvar(Space,0,2),
 	Space += cardinality(Parent,0,M), 
 	Space += cardinality(Up,UpCard),
 	Space += rel(UpCard,'IRT_EQ',0,IsRoot),
@@ -120,6 +119,7 @@ node_rel(Space,X,Y,Rel):-
 	UpCardX   :=: upcard(X),   
 	IsRootX   :=: isroot(X),
 	RbX       :=: rb(X),
+	LRootX    :=: lroot(X),
 
 	EqY       :=: eq(Y),      
 	UpY       :=: up(Y) ,     
@@ -134,6 +134,7 @@ node_rel(Space,X,Y,Rel):-
 	UpCardY   :=: upcard(Y),   
 	IsRootY   :=: isroot(Y),
 	RbY       :=: rb(Y),
+	LRootY    :=: lroot(Y),
 
 	nbNodes(NBNodes),
 	Card1:= intvar(Space,1,NBNodes),
@@ -151,8 +152,8 @@ node_rel(Space,X,Y,Rel):-
 	%% 1 : =
 	Space += rel(Rel,'IRT_EQ',1,Rel1),
 
-	Rel1P := boolvars(Space,13),
-	Rel1P=[R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,R13],
+	Rel1P := boolvars(Space,14),
+	Rel1P=[R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,R13,R14],
 
 	Space += rel(Rel1P, 'IRT_GQ', Rel1),
 
@@ -169,19 +170,21 @@ node_rel(Space,X,Y,Rel):-
 	Space += rel(UpCardX,'IRT_EQ',UpCardY,R11),
 	Space += rel(IsRootX,'IRT_EQ',IsRootY,R12),
 	Space += rel(RbX,'SRT_EQ',RbY,R13),
+	Space += rel(LRootX,'SRT_EQ',LRootY,R14),
 
 	%% N1 : !=
 	Rel1N := boolvar(Space),
 	Space += rel(Rel,'IRT_NQ',1,Rel1N),
 
-	Rel1NP := boolvars(Space,4),
-	Rel1NP=[RN1,RN2,RN3,RN4],
+	Rel1NP := boolvars(Space,5),
+	Rel1NP=[RN1,RN2,RN3,RN4,RN5],
 	Space += rel(Rel1NP, 'IRT_GQ', Rel1N),
 
 	Space +=rel(EqX,'SRT_DISJ',EqY,RN1),
 	Space +=rel(ChildrenX,'SRT_DISJ',ChildrenY,RN2),
 	Space +=linear([IsRootX,IsRootY],'IRT_LQ',1,RN3),
 	Space += rel(RbX,'SRT_DISJ',RbY,RN4),
+	Space += rel(LRootX,'SRT_DISJ',LRootY,RN5),
 
 	%% 2 : <-+
 	Space += rel(Rel,'IRT_EQ',2,Rel2),

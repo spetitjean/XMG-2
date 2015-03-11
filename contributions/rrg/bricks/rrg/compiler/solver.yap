@@ -90,7 +90,11 @@ do_nppost(Space,N,Node,NoParents):-
 	LRoot :=: lroot(Node),
 	Space += rel(LRoot,'SRT_DISJ', IntVar),
 	!.
-do_nppost(Space,N,Node,NoParents):- !.
+do_nppost(Space,N,Node,NoParents):- 
+	IntVar:=intvar(Space,N,N),
+	LRoot :=: lroot(Node),
+	Space += rel(LRoot,'SRT_SUP', IntVar),
+	!.
 
 post_plugins([],_,_,_,_):- !.
 post_plugins([Plugin|T],Space,NodeList,IntVars,plugins(Plugins)):-	
@@ -322,8 +326,9 @@ do_branch(Space,[Node|T]):-
 	Parent   :=: parent(Node),   
 	UpCard   :=: upcard(Node),   
 	IsRoot   :=: isroot(Node),
+	LRoot    :=: lroot(Node),
 	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
-	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
+	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent,LRoot],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 
 	Space += branch(IsRoot,'INT_VALUES_MIN'),
 	Space += branch(UpCard,'INT_VALUES_MIN'),
