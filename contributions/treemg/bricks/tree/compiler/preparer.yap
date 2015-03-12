@@ -33,11 +33,12 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
+	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
+
 	add_constraints(SynD,SynD,[],SynDC),
 
 	%% écrire l'id de la classe courante
 	Trace=[Family|_],
-	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
 
 	%%xmg:send(info,TableOut),
 

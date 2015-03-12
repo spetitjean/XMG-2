@@ -138,6 +138,8 @@ unify_in_trees([H|T],[H1|T1], NodeList):-
 
 unify_in_tree(tree:tree(T,Trees), tree:tree(T1,Trees1), NodeList):-
 	!,
+	xmg:send(debug,'\nUnifying nodes: '),
+	xmg:send(debug,T),
 
 	T1=node(P,F,N),
 	xmg_brick_avm_avm:avm(P,[]),
@@ -146,19 +148,26 @@ unify_in_tree(tree:tree(T,Trees), tree:tree(T1,Trees1), NodeList):-
 	unify_node(T,T1,NodeList),!,
 	unify_in_trees(Trees,Trees1,NodeList),!.
 unify_in_tree(A,A1,NodeList):-
+	!,
+	xmg:send(debug,'\nUnifying nodes: '),
 
 	unify_node(A,A1,NodeList),!.
 
-unify_node([NNode],node(P,F,N),NodeList):-
-	xmg_brick_rrg_solver:get_node(NNode,NodeList,node(P1,F1,N1)),
 
-	%% xmg_brick_avm_avm:avm(P1,Props1),
-	%% xmg_brick_avm_avm:avm(F1,Feats1),
-	%% xmg_brick_syn_nodename:nodename(N1,Name1),
+unify_node([NNode],node(P,F,N),NodeList):-
+	xmg:send(debug,' | '),
+
+	xmg:send(debug,NNode),
+	xmg:send(debug,', '),
+	xmg_brick_rrg_solver:get_node(NNode,NodeList,node(P1,F1,N1)),!,
+
+	xmg_brick_avm_avm:avm(P1,Props1),
+	xmg_brick_avm_avm:avm(F1,Feats1),
+	xmg_brick_syn_nodename:nodename(N1,Name1),
 	
-	%% xmg:send(debug,Props1),
-	%% xmg:send(debug,Feats1),
-	%% xmg:send(debug,Name1),
+	xmg:send(debug,Props1),
+	xmg:send(debug,Feats1),
+	xmg:send(debug,Name1),
 
 	%% xmg_brick_avm_avm:avm(P,Props),
 	%% xmg_brick_avm_avm:avm(F,Feats),
@@ -176,7 +185,19 @@ unify_node([N1],node(P2,F2,NN2),NodeList):-
 	!,
 	false.
 unify_node([NNode|T],node(P,F,N),NodeList):-
+	xmg:send(debug,' | '),
+	xmg:send(debug,NNode),
+	xmg:send(debug,', '),
 	xmg_brick_rrg_solver:get_node(NNode,NodeList,node(P,F,N)),!,
+
+	xmg_brick_avm_avm:avm(P,Props),
+	xmg_brick_avm_avm:avm(F,Feats),
+	xmg_brick_syn_nodename:nodename(N,Name),
+	
+	xmg:send(debug,Props),
+	xmg:send(debug,Feats),
+	xmg:send(debug,Name),
+
 	unify_node(T,node(P,F,N),NodeList),
 	!.
 unify_node([N1|T],node(P2,F2,NN2),NodeList):-

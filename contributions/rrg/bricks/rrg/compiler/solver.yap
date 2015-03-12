@@ -43,13 +43,13 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents, Relations,Node
 	post_plugins(TreePlugins,Space,NodeList,IntVars,Plugins),
 
 	xmg_brick_mg_compiler:send(debug,' doing nposts '),
-
+	xmg:send(debug,NotUnifs),
 	do_nposts(Space,IntVars,NotUnifs),!,
 
-	xmg_brick_mg_compiler:send(info,' doing npposts '),
-	xmg_brick_mg_compiler:send(info,Table),
+	xmg_brick_mg_compiler:send(debug,' doing npposts '),
+	xmg_brick_mg_compiler:send(debug,Table),
 
-	%%xmg_brick_mg_compiler:send(info,NodeList),
+	%%xmg_brick_mg_compiler:send(debug,NodeList),
 
 	do_npposts(Space,NodeNames,NodeList,NoParents),!,
 
@@ -69,11 +69,11 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents, Relations,Node
 
 	SolSpace := search(Space),
 
-	xmg:send(info,' searched '),
+	%%xmg:send(debug,' searched '),
 	flush_output,
 
 	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot),
-	xmg:send(debug,' got values:'),
+	xmg:send(debug,'\ngot values:'),
 	xmg:send(debug,solution(IsRoot,Eq, Children, Left, NodeList1)).
 
 

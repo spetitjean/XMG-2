@@ -33,14 +33,18 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParent
 	%%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
+	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
+
+	xmg:send(debug,'\nName mapping:\n'),
+	xmg:send(debug,TableOut),
+
 	add_constraints(SynD,SynD,[],SynDC),
 	%%add_parent_constraints(SynD,SynD,[],SynPC),
 
 	%% écrire l'id de la classe courante
 	Trace=[Family|_],
-	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
 
-	%%xmg:send(info,TableOut),
+	%%xmg:send(debug,TableOut),
 
 	count_noteqs(SynDC,Noteqs),
 
@@ -53,8 +57,8 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParent
 
 	xmg:get_plugins(Plugins,OutPlugins),
 	
-	%%xmg:send(info,'\nPlugins: '),
-	%%xmg:send(info,Plugins),
+	%%xmg:send(debug,'\nPlugins: '),
+	%%xmg:send(debug,Plugins),
 
 	prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)),
 
@@ -77,7 +81,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParent
 
 	write_noparents(Nodes,Relations,NoParents) ,
 
-	%%xmg:send(info,prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)),
+	%%xmg:send(debug,prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,NoParents,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)),
 	%%false,
 
 	!.
@@ -108,7 +112,7 @@ prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
 %% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
 prepare_plugin(Syn,Plugin,Out):-
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
-	xmg:send(info,Module),
+	xmg:send(debug,Module),
 	Prepare=..[prepare,Syn,Out],
 	Do=..[':',Module,Prepare],
 	Do,
@@ -247,8 +251,8 @@ check_unique_name(N,NewNodeName,TableIn):--
 	xmg_brick_syn_nodename:nodename(M,New),
 	M=N,
 	xmg_brick_syn_nodename:nodename(N,NewNodeName),
-	xmg:send(info,'\nNew ID given\n'),
-	%%xmg:send(info,NewNodeName),
+	xmg:send(debug,'\nNew ID given\n'),
+	%%xmg:send(debug,NewNodeName),
 	
 	!.
 check_unique_name(Node,NodeName,_):--
@@ -270,7 +274,7 @@ count([node(_,_,N)|T],Nodes,Doms,Precs,I,TableIn,TableOut):--
 	%% xmg:send(debug,' New ID given\n'),
 	check_unique_name(N,NewNodename,TableIn),
 	xmg_table:table_put(TableIn,NewNodename,J,Table),
-	%%xmg:send(info,Table),
+	%%xmg:send(debug,Table),
 	count(T,NodesR,Doms,Precs,J,Table,TableOut),
 	Nodes is NodesR +1,!.
 
@@ -308,15 +312,17 @@ add_constraints([_|T],[],L,L1):-
 
 add_constraints([node(A,B,C)|H],[node(A1,B1,C1)|H1],L,L1):-
 	!,
-	add_constraint(node(A,B,C),node(A1,B1,C1),L,L2),
-	add_constraints([node(A,B,C)|H],H1,L,L3),
+	add_constraint(node(A,B,C),node(A1,B1,C1),L,L2),!,
+	add_constraints([node(A,B,C)|H],H1,L,L3),!,
 	lists:append(L2,L3,L1),
 	!.
 
 add_constraints([_|H],[node(A1,B1,C1)|H1],L,L1):-
+	!,
 	add_constraints(H,[node(A1,B1,C1)|H1],L,L1),!.
 
 add_constraints([node(A,B,C)|H],[_|H1],L,L1):-
+	!,
 	add_constraints([node(A,B,C)|H],H1,L,L1),!.
 
 add_constraints([_|H],[_|H1],L,L1):-
@@ -324,22 +330,37 @@ add_constraints([_|H],[_|H1],L,L1):-
 
 
 
-add_constraint(node(Props1,Feats1,_),node(Props2,Feats2,_),L,L):-
+add_constraint(node(Props1,Feats1,Node1),node(Props2,Feats2,Node2),L,L):-
+	xmg:send(debug,'\n\nChecking noteq: '),
+	xmg_brick_avm_avm:avm(Feats1,F1),
+	xmg:send(debug,F1),
+	xmg_brick_avm_avm:avm(Feats2,F2),
+	xmg:send(debug,F2),
+	
 	no_color(Props1,PropsNC1),
 	no_color(Props2,PropsNC2),
 	not(not(PropsNC1=PropsNC2)),
-	not(not(Feats1=Feats2)),!.
+	not(not(Feats1=Feats2)),
+	xmg:send(debug,'\nUnif okay: '),
+	xmg_brick_syn_nodename:nodename(Node1,Nodename1),
+	xmg_brick_syn_nodename:nodename(Node2,Nodename2),
+
+	xmg:send(debug,Nodename1),
+	xmg:send(debug,', '),
+	xmg:send(debug,Nodename2),
+	!.
 add_constraint(node(_,Feats1,Node1),node(_,Feats2,Node2),L,[noteq(Nodename1,Nodename2)|L]):-
 
 	xmg_brick_syn_nodename:nodename(Node1,Nodename1),
 	xmg_brick_syn_nodename:nodename(Node2,Nodename2),
 
-	%% xmg:send(info,Nodename1),
-	%% xmg:send(info,'\n'),
-	%% xmg:send(info,Nodename2),
+	xmg:send(debug,'\nnoteq: '),
+	xmg:send(debug,Nodename1),
+	xmg:send(debug,', '),
+	xmg:send(debug,Nodename2),
 	%% xmg_brick_avm_avm:print_avm(Feats1),
 	%% xmg_brick_avm_avm:print_avm(Feats2),
-	%% xmg:send(info,'\n\n'),
+	%% xmg:send(debug,'\n\n'),
 	!.
 
 inverse_table([],T,T):-!.
