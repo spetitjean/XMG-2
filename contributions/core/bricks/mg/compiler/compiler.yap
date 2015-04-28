@@ -123,6 +123,7 @@ compile_file(File,Eval):-
 	
 	asserta(current(0)),
 
+	send(out,'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'),
 	send(out,'<grammar>\n'),
 	eval,
     	maybe_print_appendices.	
@@ -167,7 +168,7 @@ eval:-
 	retract(current(Previous)),
 	asserta(current(Current)),
 	xmg:do_xml_convert(mg:entry(Class,Trace,EDims,Previous),XML),
-	xmg_brick_mg_printer:printXML([XML],1),
+	xmg:printXML(XML,1),
 	send(info,Previous),send_nl(info),send_nl(info),
 
 

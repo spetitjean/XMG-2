@@ -293,16 +293,23 @@ declare ?VV1 ?VV2
   }
 }
 
-class ktb
+class ktb %% write
 {
   <iface>{
 	[r1="k", r2="t", r3="b"]
   }
 }
 
+class drs %% study
+{
+  <iface>{
+	[r1="d", r2="r", r3="s"]
+  }
+}
+
 class verb
 {
-  ktb[] %% |
+  ktb[] | drs[]
   
 }
 

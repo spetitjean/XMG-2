@@ -2,8 +2,8 @@
 
 :- module(xmg_brick_mg_printer).
 
-printXML([], I):-!.
-printXML([H|T], I) :- printElem(H, I), printXML(T, I),!.
+xmg:printXML(H, I) :-
+    printElem(H, I),!.
 
 printIndent(0):-!.
 printIndent(I) :-
