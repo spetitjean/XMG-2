@@ -89,9 +89,7 @@ xmg:unfold_dimstmt(Syn,syn:prec(token(_,Op),N1,N2)):--
 	constraints::enq((syn:prec(T1,Op,T2,C),Syn)),
 	!.
 
-xmg:unfold_expr(none,_):-- !.
-xmg:unfold_expr(some(E),Target):--
-	xmg:unfold_expr(E,Target),!.
+
 
 
 

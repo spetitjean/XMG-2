@@ -27,21 +27,21 @@ fconstraint motion -> event
 fconstraint causation -> event
 
 %% causation is incompatible with motion and activity
-fconstraint motion, causation -> false
+fconstraint motion causation -> false
 %% ?
 %% fconstraint causation, activity -> false
 
 %% left part of the hierarchy
 fconstraint translocation -> motion
-fconstraint locomotion <-> activity, translocation
+fconstraint locomotion <-> activity translocation
 fconstraint bounded-translocation -> translocation
-fconstraint bounded-locomotion <-> locomotion, bounded-translocation
+fconstraint bounded-locomotion <-> locomotion bounded-translocation
 fconstraint walking -> bounded-locomotion
 
 %% right part of the hierarchy
 fconstraint onset-causation -> causation
 fconstraint extended-causation -> causation
-fconstraint onset-causation, extended-causation -> false
+fconstraint onset-causation extended-causation -> false
 
 %% attribute and path constraints
 
@@ -49,7 +49,7 @@ fconstraint onset-causation, extended-causation -> false
 fconstraint activity -> actor : true
 fconstraint motion -> mover : true
 fconstraint translocation -> path : true
-fconstraint activity, motion -> actor = mover
+fconstraint activity motion -> actor = mover
 fconstraint bounded-translocation -> goal = true
 
 %% right side
@@ -57,9 +57,9 @@ fconstraint causation -> cause : true
 fconstraint causation -> effect : true
 fconstraint onset-causation -> cause : true %% cause should be of type punctual-event
 
-fconstraint path, event -> false
-fconstraint person, path -> false
-fconstraint person, event -> false
+fconstraint path event -> false
+fconstraint person path -> false
+fconstraint person event -> false
 
 fconstraint john -> person
 
@@ -84,26 +84,26 @@ declare
 
 	% };
 	<frame>{
-		?F1 (locomotion 
+		?F1[locomotion 
 		    	   actor:?X1 
 		    	   mover:?X1 
-			   path: ( path )
+			   path: [ path ]
 				
-			   manner: ( walking )
+			   manner:[walking ]
 				%% walking should be a subtype of manner, incompatible with event	
 				 
-			);
-		?F2 (translocation
-			   path:(
+			];
+		?F2 [translocation
+			   path:[
 				path
 					region: ?V
-				)
-			);
-		?F3 (person
-			name:(
+				]
+			];
+		?F3 [person
+			name:[
 				john
-				)
-			)
+				]
+			]
 		
 	}
 	;

@@ -158,7 +158,7 @@ resolve_file(AFile, File, Path) -->>
     exists(AFile) -> Path=AFile ;
     ( file::top(CFile),
       get_path(CFile, CPath),
-      append(CPath, File, MFile),
+      lists:append(CPath, File, MFile),
       atom_codes(Path, MFile) ).
 
 divert_to_file(AFile) -->>
@@ -172,11 +172,11 @@ divert_to_file(AFile) -->>
 fileName(N) -->>
     word with buf([]-F,[]-[]),
     maybeDotExt(E),
-    {append(F,E,N)}.
+    {lists:append(F,E,N)}.
 
 maybeDotExt(E) -->>
     input_gets(".")
-    -> (word with buf(_-Ext,[]-[]), {append(".",Ext,E)})
+    -> (word with buf(_-Ext,[]-[]), {lists:append(".",Ext,E)})
     ; E=[].
 
 get_path(File, Path) :-
@@ -187,7 +187,7 @@ get_path(File, Path) :-
     get_path(Absolute_codes, Base_codes, Path),
     !.
 get_path(Absolute, Base, Path) :-
-    append(Path, Base, Absolute),!.
+    lists:append(Path, Base, Absolute),!.
 
 %%=============================================================================
 %% proceed to read and record a macro

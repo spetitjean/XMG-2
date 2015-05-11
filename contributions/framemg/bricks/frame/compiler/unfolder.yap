@@ -33,14 +33,17 @@ xmg:unfold_dimstmt(Frame,Stmt):--
 
 unfold_frame(frame:frame(Var,Type,Feats),TFrame):--
 	xmg:unfold_expr(Type,UType),
-	
 	(
 	    Var=none 
 	->
-	xmg:new_target_var(TFrame)
-    ;
-	xmg:unfold_expr(Var,TFrame)
-    ),
+	    xmg:new_target_var(TFrame)
+	 ;
+	 (
+	     xmg:send(info,'THERE'),
+	     xmg:send(info,Var),
+	     xmg:unfold_expr(Var,TFrame)
+	)),
+	xmg:send(info,'\n\nhere!'),
 
 	constraints::enq((TFrame,frame:frame,UType)),
 
@@ -68,41 +71,6 @@ unfold_pair(frame:pair(Left,Right),TFrame):--
 	!.
 
 
-
-%% an older try, 
-
-xmg:unfold_dimstmt(Frame,frame:tree(Root,Children)):--
-	%%xmg_brick_mg_compiler:send(info,Root),
-	!.
-
-
-xmg:unfold_dimstmt(Frame,frame:node(N,P,F)):-- 
-	xmg:unfold_expr(N,TN),
-	
-	constraints::enq((TN,frame:node,Frame)),
-	%%constraints::enq(indim(Syn,TN)),
-	xmg:new_target_var(T1),
-	xmg:new_target_var(T2),
-	%%xmg_brick_mg_compiler:send(info,P),
-	%%xmg_brick_mg_compiler:send(info,F),
-	xmg:unfold_expr(P,T1),
-	constraints::enq((TN,frame:props(T1))),	
-	xmg:unfold_expr(F,T2),
-	constraints::enq((TN,frame:feats(T2))),
-	!.
-xmg:unfold_dimstmt(Frame,frame:edge(Props,N1,N2)):-- 
-	xmg:new_target_var(V1),
-	xmg:unfold_expr(Props,V1),
-	xmg:unfold_expr(N1,T1),
-	xmg:unfold_expr(N2,T2),
-	constraints::enq((frame:edge(V1,T1,T2),Frame)),
-	!.
-
-%% xmg:unfold_dimstmt(Frame,Stmt):--
-%% 	xmg:send(info,'\nunable to unfold\n'),
-%% 	xmg:send(info,Stmt),
-%% 	false,!.
-	
 
 
 
