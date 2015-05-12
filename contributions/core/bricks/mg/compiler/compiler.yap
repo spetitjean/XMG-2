@@ -40,7 +40,7 @@ send(info,Mess):-
 	print(user_error,Mess),!.
 send(debug,Mess):-
 	debug_mode,!,
-	send(info,'DEBUG:'),
+	send(info,'\nDEBUG:'),
 	print(user_error,Mess),!.
 send(debug,Mess):-
 	not(debug_mode),!.

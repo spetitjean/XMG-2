@@ -31,8 +31,8 @@ xmg:stmt_type_constr(morphlp,morph).
 
 
 xmg:type_stmt(morphlp:infield(token(_,id(Field)),Contrib),Morphlp:morph(FieldsType,FeatsType)):--
-	xmg:send(info,'\n\ntyping infield with type '),
-	xmg:send(info,FieldsType),
+	xmg:send(debug,'\n\ntyping infield with type '),
+	xmg:send(debug,FieldsType),
 	%% xmg_brick_avm_avm:dot(FieldsType,Field,T1),
 	xmg:type_expr(F2,T1),	
 	!.
@@ -44,10 +44,9 @@ xmg:type_stmt(morphlp:fieldprec(token(_,id(Field1)),token(_,id(Field2))),_):--
 	!.
 
 xmg:type_stmt(morphlp:meq(token(_,id(F1)),F2),Morphlp:morph(FieldsType,FeatsType)):--
-	xmg:send(info,'\n\ntyping eq with type '),
-	xmg:send(info,FeatsType),
+	xmg:send(debug,'\n\ntyping eq with type '),
+	xmg:send(debug,FeatsType),
 	%% xmg_brick_avm_avm:dot(FeatsType,F1,T1),
-	xmg:send(debug,'\nhere '),
 	xmg:type_expr(F2,T1),
 	!.
 
