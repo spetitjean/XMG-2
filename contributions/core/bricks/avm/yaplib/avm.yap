@@ -74,10 +74,10 @@ avm_dot(X,F,V) :-
     (rb_lookup(F,VV,T)
      -> V=VV
      ;  rb_insert(T,F,V,TT),
-	put_atts(X, avmfeats(TT,C))).
+	put_atts(X, avmfeats(TT,C))),!.
 avm_dot(X,F,V):-
-    xmg:send(info,'\nDot error: no value for attribute '),
-    xmg:send(info,F),
+    xmg:send(debug,'\nDot error: no value for attribute '),
+    xmg:send(debug,F),
     false.
 
 

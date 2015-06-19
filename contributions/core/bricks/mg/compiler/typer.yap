@@ -319,7 +319,7 @@ type_decl(Type-Decls):--
 
 get_types([]):-- !.
 get_types([H|T]):--
-	get_type(H),
+	get_type(H),!,
 	get_types(T).
 
 get_type(type(Type,enum(List))):--

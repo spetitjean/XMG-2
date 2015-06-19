@@ -72,14 +72,9 @@ get_dim_type(Dim,Type):--
 
 
 xmg:type_stmt(control:eq(S1,S2),void):--
-	xmg:send(info,'HERE\n'),
-        xmg:send(info,S1),
-        xmg:send(info,S2),
 	xmg:type_expr(S1,Type),
-	xmg:send(info,'HERE 1\n'),
 
 	xmg:type_expr(S2,Type2),
-	xmg:send(info,'HERE 2\n'),
 
 	xmg:check_types(S1,S2,Type,Type2).
 xmg:type_stmt(control:eq(S1,S2),_):--
