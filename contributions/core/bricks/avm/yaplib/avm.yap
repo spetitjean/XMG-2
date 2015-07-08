@@ -84,8 +84,8 @@ avm_dot(X,F,V):-
 cavm_dot(cavm(T),F,V) :-        %% should signal an error if not applicable
     rb_lookup(F,V,T).
 cavm_dot(cavm(X),F,V):-
-    xmg:send(info,'\nDot error: no value for attribute '),
-    xmg:send(info,F),
+    xmg:send(debug,'\nDot error: no value for attribute '),
+    xmg:send(debug,F),
     false.
 
 %% ============================================================================
