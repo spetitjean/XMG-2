@@ -25,6 +25,7 @@
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
 
 :- edcg:weave([constraints,name,vars,consts],[unfold_tree/4, unfold_children/4, unfold_child/4, unfold_node/3, unfold_brothers/4, unfold_node_or_tree/3]).
+:- multifile(unfold_children/12).
 
 
 %%:-add_to_path('../AVM').
@@ -36,6 +37,7 @@
 
 
 xmg:unfold_dimstmt(Syn,syn:tree(Root,Children)):--
+	%%xmg:send(info,'\n\nTREE: '),
 	%%xmg_brick_mg_compiler:send(info,Root),
 	unfold_tree(Syn,Root,Children,_),
 	!.
@@ -95,19 +97,20 @@ xmg:unfold_dimstmt(Syn,syn:prec(token(_,Op),N1,N2)):--
 
 unfold_tree(Syn,Root,Children,URoot):--
 	unfold_node(Syn,Root,URoot),
-	%%xmg:send(info,Children),
+        %%xmg:send(info,Children),
+	%%xmg:send(info,'\n\n'),
 	unfold_children(Syn,URoot,Children,_),!.
 
 unfold_children(Syn,URoot,syn:children(Child,Brothers),UChild):--
 	unfold_child(Syn,URoot,Child,UChild),
 	%%xmg:send(info,'\n\nHERE\n\n'),
 	unfold_brothers(Syn,URoot,UChild,Brothers),!.
-unfold_children(Syn,URoot,Children):--
-	xmg:send(info,'\n\nCould not unfold Children:\n'),
-	xmg:send(info,Children),
-	xmg:send(info,'\n\n'),
-	false,
-	!.
+%% unfold_children(Syn,URoot,Children,UChild):--
+%% 	xmg:send(info,'\n\nCould not unfold Children:\n'),
+%% 	xmg:send(info,Children),
+%% 	xmg:send(info,'\n\n'),
+%% 	false,
+%% 	!.
 
 unfold_child(Syn,URoot,syn:child(Op,Child),UChild):--
 	unfold_treeDomOp(Op,UOp),

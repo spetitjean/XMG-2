@@ -68,7 +68,11 @@ xmg:check_types(T1,T2,Coord):-
 
 xmg:type_expr(none,_):-- !.
 xmg:type_expr(some(E),T):-- 
-	xmg:type_expr(E,T),!.
+	     xmg:type_expr(E,T),!.
+
+xmg:type_stmt(none,_):-- !.
+xmg:type_stmt(some(E),T):-- 
+	xmg:type_stmt(E,T),!.
 
 xmg:get_var_type(none,_):-- !.
 xmg:get_var_type(some(token(_,id(ID))),Var):-- 

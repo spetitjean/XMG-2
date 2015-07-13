@@ -52,8 +52,8 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 
 	xmg:get_plugins(Plugins,OutPlugins),
 	
-	%%xmg:send(info,'\nPlugins: '),
-	%%xmg:send(info,Plugins),
+	xmg:send(debug,'\nPlugins: '),
+	xmg:send(debug,Plugins),
 
 	prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)),
 

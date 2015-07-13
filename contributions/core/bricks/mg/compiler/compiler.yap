@@ -210,6 +210,9 @@ eval(morphtf,_,Morph,XML,_):-
 
 eval(syn,[tree],Syn,XML,Class):-
 	%%send(info,Syn),
+    xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
+eval(syn2,[tree],Syn,XML,Class):-
+	%%send(info,Syn),
 	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
 eval(syn,[rrg],Syn,XML,Class):-
 	%%send(info,Syn),
