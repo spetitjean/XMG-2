@@ -100,7 +100,7 @@ prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
 %% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
 prepare_plugin(Syn,Plugin,Out):-
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
-	xmg:send(info,Module),
+	xmg:send(debug,Module),
 	Prepare=..[prepare,Syn,Out],
 	Do=..[':',Module,Prepare],
 	Do,

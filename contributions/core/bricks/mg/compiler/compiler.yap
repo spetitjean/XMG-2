@@ -40,7 +40,7 @@ send(info,Mess):-
 	print(user_error,Mess),!.
 send(debug,Mess):-
 	debug_mode,!,
-	send(info,'\nDEBUG:'),
+	send(info,'\nDEBUG: '),
 	print(user_error,Mess),!.
 send(debug,Mess):-
 	not(debug_mode),!.
@@ -110,7 +110,7 @@ compile_file(File,Eval):-
 	send(debug,Unfolded),
 	send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
-	send(info,' principles done '),
+	send(debug,' principles done '),
 
 
 	xmg_brick_mg_generator:generate(Unfolded),!,
@@ -138,7 +138,7 @@ eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),
 	xmg:value_all(Computed,Class),
 	
-	send(info,'\nClass executed:'),
+	send(info,'\nClass executed: '),
 	send(debug,Computed),
 	send(info,Class),
 
@@ -169,6 +169,7 @@ eval:-
 	asserta(current(Current)),
 	xmg:do_xml_convert(mg:entry(Class,Trace,EDims,Previous),XML),
 	xmg:printXML(XML,1),
+	send(info,'Printed model '),
 	send(info,Previous),send_nl(info),send_nl(info),
 
 
@@ -184,7 +185,13 @@ iface_last([iface-I|T],T1):-
 iface_last([H|T],[H|T1]):-
 	iface_last(T,T1),!.
 
-eval:- send(out,'</grammar>\n'),!.
+eval:- send(out,'</grammar>\n'),
+       send(info,'\n\n________________________________________________\n________________________________________________'),
+       send(info,'\n\n      Process ended: '),
+       current(Number),
+       send(info,Number),
+       send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
+       !.
 
 eval_dims([],[],_).
 eval_dims([trace-Acc|T],T1,Class):-!,
@@ -192,19 +199,19 @@ eval_dims([trace-Acc|T],T1,Class):-!,
 eval_dims([skolem-Acc|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
-	send(info,Dim),
+	send(debug,Dim),
 	xmg:dimbrick(Dim,DimBrick),
 	findall(Solver,xmg:solver(Dim,Solver),Solvers),
 	eval(DimBrick,Solvers,Acc,XML,Class),
-	send(info,' done\n'),
+	send(debug,' done\n'),
 	eval_dims(T,T1,Class).
 
 eval(morphtf,_,Morph,XML,_):-
 	%%send(info,Morph),
 	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
 	%%send_nl(info,2),
-	send(info,' Value : '),
-	send(info,Value),
+	send(debug,' Value : '),
+	send(debug,Value),
 	xmg:do_xml_convert(Value,XML).
 
 
@@ -227,8 +234,8 @@ eval(morphlp,_,Morph,XML,_):-
 	%%send(info,Morph),
 	xmg_brick_morphlp_solver:eval(Morph,Value),
 	%%send_nl(info,2),
-	send(info,' Value : '),
-	send(info,Value),
+	send(debug,' Value : '),
+	send(debug,Value),
 	xmg:do_xml_convert(Value,XML).
 
 eval(pg,_,PG,elem(pg, features([id-none])),_):-

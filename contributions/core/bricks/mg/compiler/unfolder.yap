@@ -85,7 +85,7 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 	unfold_vars(E,UE),
 	unfold_vars(D,UD),
 	
-	xmg:send(info,'\nUnfolded vars\n\n'),
+	xmg:send(debug,'\nUnfolded vars\n\n'),
 
 	unfold_class(S) with (constraints([]-Constraints,[]-[]), name(0,_), vars(TableVO,TableVF), consts(TableC,_)),
 	%%xmg_brick_mg_compiler:send(info,Constraints),

@@ -36,9 +36,9 @@
 xmg:print_appendix:-
 	xmg:fReachableTypes(FVectors),
 	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere is the type hierarchy:\n\n'),
+	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere are the valid types according to the hierarchy:\n\n'),
 	print_hierarchy(FTypes,FAttrs),
-	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
+	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
 
 print_hierarchy([],[]).
 print_hierarchy([H|T],[H1|T1]):-
