@@ -26,6 +26,7 @@
 :-dynamic(unicity/1).
 :-dynamic(current/1).
 :-dynamic(debug_mode/0).
+:-dynamic(xmg:notype_mode/0).
 
 :-dynamic(xmg:print_appendix/0).
 
@@ -34,7 +35,10 @@
 %debug_mode(false).
 
 debug_mode_on:-
-	asserta(debug_mode).
+    asserta(debug_mode).
+
+notype_mode_on:-
+	asserta(xmg:notype_mode).
 
 send(info,Mess):-
 	print(user_error,Mess),!.
@@ -58,15 +62,21 @@ send_nl(info,N):-
 xmg:send(T,Send):-
 	send(T,Send),!.
 
-compile_file(File,Eval,Encoding,Debug):-
+compile_file(File,Eval,Encoding,Debug,NoTypes):-
 	asserta(encoding(Encoding)),
-	send(info,Debug),
 	(
 	    Debug='on'
 	    ->
 	     ( debug_mode_on, send(info,'\n\nDebug Mode ON\n\n\n'))
              ;
 	     ( true, send(info,'\n\nDebug Mode OFF. To activate, please use the option --debug\n\n\n'))
+	),
+	(
+	    NoTypes='on'
+	    ->
+	     ( notype_mode_on, send(info,'\n\nType checking OFF.\n\n\n'))
+             ;
+	     true
 	 ),
 	 catch(compile_file(File,Eval),Exception,true),
 	 (

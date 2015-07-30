@@ -40,7 +40,7 @@ def handler_xmg_compile(args):
         file=os.open(rename,os.O_RDWR|os.O_CREAT)
         yap_out= os.fdopen(file)
     else : yap_out=1
-    YAP=xmg.modular_yap.YAP.xmg_compile(args.compiler,args.input,args.debug,args.latin,stdout=yap_out)
+    YAP=xmg.modular_yap.YAP.xmg_compile(args.compiler,args.input,args.debug,args.latin,args.notype,stdout=yap_out)
     try:
         YAP.communicate()
     finally:
@@ -61,4 +61,5 @@ cmd.add_argument("input", metavar="IFILE", help="metagrammar file")
 cmd.add_argument("output", nargs='?', default=None)
 cmd.add_argument("--debug", action='store_true', help="Prints some useful information")
 cmd.add_argument("--latin", action='store_true', help="iso_latin_1 mode")
+cmd.add_argument("--notype", action='store_true', help="Cancels type checking (not recommanded)")
 cmd.set_defaults(handler=handler_xmg_compile)

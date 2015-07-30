@@ -1,0 +1,18 @@
+1- Contributions and Bricks:
+  XMG-NG is a compiler builder. It assembles compilers for Metagrammars, just as XMG-1 is. These compilers are assembled using elementary parts of compilers called bricks. A contribution is a set of bricks serving a purpose: for example, the contribution treemg gathers all the bricks needed to describe tree based grammars.
+
+2- Commands:
+  The commands of XMG-NG are provided by bricks. The first command to be used is "xmg bootstrap", which installs the basic command of the compiler generator.
+
+  The command "xmg install" makes the brick of a given contribution available.
+
+  "xmg build" can be used inside a compiler brick: it will assemble the compiler specified by the compiler.yaml file.
+
+  "xmg compile" takes as arguments a compiler and a metagrammar. The option "--force" allows to overwrite the output file is it already exists. The option "--debug" print some more information about the compilation steps.
+
+3- Assembling a compiler:
+
+4- Creating a contribution:
+
+5- Creating a brick:
+  

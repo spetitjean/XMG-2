@@ -38,13 +38,16 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
 
 	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),!,
 	%%xmg_compiler:send(info,OUDecls),
-	
-	xmg:send(debug,'\n typing decls'),
-	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
 
-	xmg:send(debug,'\n typing classes'),
-	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
-	xmg:send(info,'\n typed\n'),
+	(
+	    xmg:notype_mode
+	    ->
+	     ( true)
+             ;
+	     ( check_types(OUDecls,Classes,Type_Decls) )
+	),
+	
+
 
 	xmg:send(info,' unfolding classes '),
 	%%xmg:send(info,Classes),
@@ -58,7 +61,16 @@ xmg:unfold([H|T],[H1|T1]):-
 	xmg:unfold(H,H1),
 	xmg:unfold(T,T1),!.
 xmg:unfold([H|T],[H1|T1]):-
-	throw(xmg(unfolder_error(no_unfolding(H)))).
+    throw(xmg(unfolder_error(no_unfolding(H)))).
+
+check_types(OUDecls,Classes,Type_Decls):-
+	xmg:send(debug,'\n typing decls'),
+	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
+
+	xmg:send(debug,'\n typing classes'),
+	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
+	xmg:send(info,'\n typed\n'),
+	!.
 
 xmg:unfold_expr(none,_):-- !.
 xmg:unfold_expr(some(E),Target):--
