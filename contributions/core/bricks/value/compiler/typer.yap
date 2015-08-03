@@ -22,8 +22,8 @@
 :- xmg:edcg.
 
 
-:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:type_decls]).
-
+:-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:type_decls,xmg_brick_mg_typer:dim_types]).
+:-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:type_decls,xmg_brick_mg_typer:dim_types],type_disj/2).
 
 xmg:type_expr(value:var(token(_,id(ID))),Type):--
 	types::tget(ID,Type),
@@ -41,6 +41,11 @@ xmg:type_expr(token(_,int(_)),IntType):--
 	!.
 xmg:type_expr(token(_,string(_)),string):--
 	!.
+
+xmg:type_expr(value:disj(Values),Type):--
+	type_disj(Values,Type),
+	!.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% typing a constant
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,3 +65,13 @@ xmg:type_expr(token(C,id(ID)),Type):--
 	throw(xmg(type_error(unknown_constant(ID,C)))),
 	!.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% typing a disjunction of values
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+type_disj([Value],Type):--
+	 xmg:type_expr(Value,Type),!.
+type_disj([Value|Values],Type):--
+	 xmg:type_expr(Values,Type),
+         type_disj(Values,Type),
+	 !.

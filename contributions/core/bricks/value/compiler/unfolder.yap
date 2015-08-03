@@ -23,6 +23,7 @@
 
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
+:- edcg:weave([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts],unfold_disj/3).
 
 	
 xmg:unfold_expr(token(C,id(ID)),v(ID)):--
@@ -56,56 +57,28 @@ xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
 xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	%%xmg:send(info,'\n\n WARNING : '),
 	%%xmg:send(info,ID),
-	!.
-	
+	       !.
 
- 
-%% unfold('Value',[Value],UValue):-
-%% 	unfold(Value,UValue).
-%% unfold('Value',[token(_,'?'),Value],UValue):-
-%% 	unfold(Value,UValue).
-%% unfold('Else',[Value],UValue):-
-%% 	unfold(Value,UValue).
-%% unfold('ADisj',[V],UV):-
-%% 	add_to_path('ADisj'),
-%% 	use_module(xmg_unfolder_adisj),
-%% 	xmg_brick_adisj_unfolder:unfold(V,UV),!.
+xmg:unfold_expr(value:disj(Values),Var):--
+	       xmg:new_target_var(Disj),
+	xmg:send(info,'HERE'),
+
+        unfold_disj(Values,UValues,Disj),
+		xmg:send(info,'HERE'),
+
+	constraints::enq(UValues),
+	constraints::enq(eq(Disj,Var)),
+        !.
 
 
-%% unfold(token(C,id(ID)),id(ID,C)).
-%% unfold(token(C,string(ID)),string(ID,C)).
-%% unfold(token(C,int(ID)),int(ID,C)).
-%% unfold(token(C,bool(ID)),bool(ID,C)).
+unfold_disj([Value],eq(Var,UValue),Var):--	   
+	   xmg:unfold_expr(Value,UValue),
+!.
 
-%% %% GENERIC RULES
+unfold_disj([Value|Values],control:or([eq(Var,UValue),UValues]),Var):--	   
+	   xmg:unfold_expr(Value,UValue),
+           unfold_disj(Values,UValues,Var),
+           !.
 
-%% unfold(Term,UTerm):-
-%% 	Term=..[Head|Params],
-%% 	head_module(Head,Module),
-%% 	head_name(Head,Name),
-%% 	(
-%% 	    (
-%% 		Module=value,
-%% 		%%xmg_modules_def:module_def(Module,'value'),
-%% 		unfold(Name,Params,UTerm)
-%% 	    )
-%% 	;
-%% 	(
-%% 	    not(Module=value),
-%% 	    %%not(xmg_modules_def:module_def(Module,'value')),
-%% 	    xmg_brick_mg_modules:get_module(Module,unfolder,UModule),
-%% 	    UModule:unfold(Term,UTerm)
-%% 	)
-%%     ),!.
 
-%% unfold(Rule,_):- 
-%% 	throw(xmg(unfolder_error(no_unfolding_rule(value,Rule)))),	
-%% 	!.
 
-%% head_module(Head,Module):-
-%% 	atomic_list_concat(A,'-',Head),
-%% 	A=[Module|_],!.
-
-%% head_name(Head,Name):-
-%% 	atomic_list_concat(A,'-',Head),
-%% 	A=[_,Name],!.

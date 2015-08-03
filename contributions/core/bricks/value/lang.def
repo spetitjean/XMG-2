@@ -7,6 +7,8 @@ Value : id {$$=$1}
       | bool {$$=$1}
       | int {$$=$1}
       | string {$$=$1}
-      | _Else {$$=$1};
+      | _Else {$$=$1}
+      /* Curly brackets are used to avoid ambiguity (mostly for class calls) */
+      | '{' ( Value // '|')+ '}' {$$=value:disj($2)};
 
 %%

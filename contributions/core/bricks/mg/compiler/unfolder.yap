@@ -63,14 +63,6 @@ xmg:unfold([H|T],[H1|T1]):-
 xmg:unfold([H|T],[H1|T1]):-
     throw(xmg(unfolder_error(no_unfolding(H)))).
 
-check_types(OUDecls,Classes,Type_Decls):-
-	xmg:send(debug,'\n typing decls'),
-	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
-
-	xmg:send(debug,'\n typing classes'),
-	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
-	xmg:send(info,'\n typed\n'),
-	!.
 
 xmg:unfold_expr(none,_):-- !.
 xmg:unfold_expr(some(E),Target):--
@@ -104,6 +96,16 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 	!.
 
 xmg:unfold(mg:value(token(_,id(ID))),value(ID)):-!.
+
+
+check_types(OUDecls,Classes,Type_Decls):-
+	xmg:send(debug,'\n typing decls'),
+	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
+
+	xmg:send(debug,'\n typing classes'),
+	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
+	xmg:send(info,'\n typed\n'),
+	!.
 
 unfold_vars(none,[]):-!.
 unfold_vars(some(Vars),UVars):-
