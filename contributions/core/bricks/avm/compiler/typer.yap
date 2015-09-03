@@ -91,6 +91,17 @@ xmg:type_stmt(avm:avm(Coord,Feats),Type):--
 
 xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 	types::tget(AVM,CAVM),
+	xmg:send(debug,'\n\nTyping dot expression:'),
+	xmg:send(debug,CAVM),
+	xmg:send(debug,'DOT'),
+	xmg:send(debug,Feat),
+
+	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
+	!.
+%% For dots in classes (should be consistent)
+xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--
+	types::tget(AVM,CAVM),
+	xmg:send(debug,'\n\nTyping dot expression:'),
 	xmg:send(debug,CAVM),
 	xmg:send(debug,'DOT'),
 	xmg:send(debug,Feat),
