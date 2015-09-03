@@ -38,6 +38,7 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
 
 	xmg_brick_decls_unfolder:sort_decls(UDecls,OUDecls),!,
 	%%xmg_compiler:send(info,OUDecls),
+	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
 
 	(
 	    xmg:notype_mode
@@ -99,8 +100,10 @@ xmg:unfold(mg:value(token(_,id(ID))),value(ID)):-!.
 
 
 check_types(OUDecls,Classes,Type_Decls):-
-	xmg:send(debug,'\n typing decls'),
-	xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
+    %% the type_mg_decls actually has to be done in any case,
+    %% it is important for the principles
+        %%xmg:send(debug,'\n typing decls'),
+	%%xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
 
 	xmg:send(debug,'\n typing classes'),
 	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,

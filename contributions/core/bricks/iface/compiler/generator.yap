@@ -33,10 +33,10 @@
 
 xmg:generate_instr(unify(IFace,v(AVM))):--
 	decls::tget(AVM,VAVM),
-	code::enq(xmg:send(info,'unifying interface')),
+	code::enq(xmg:send(debug,'unifying interface')),
 	Set=..['::',xmg_acc:IFace,get(VAVM)],
 	code::enq(Set),
-	code::enq(xmg:send(info,'unified interface')),
+	code::enq(xmg:send(debug,'unified interface')),
 
 	!.
 

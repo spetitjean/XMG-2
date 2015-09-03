@@ -68,6 +68,9 @@ feature pers : PERSON
 
 feature bot : LABEL
 
+feature arg0 : LABEL
+feature arg1 : LABEL
+
 %class definitions:
 
 class subjCan 
@@ -111,7 +114,8 @@ declare
 { 
 	X = subjCan[] ; 
 	Y = objCan[] ; 
-	activeMorph[] ;
+	activeMorph[]
+	;
 	X.S = Y.S
 }
 

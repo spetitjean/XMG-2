@@ -76,8 +76,8 @@ compile_file(File,Eval,Encoding,Debug,NoTypes):-
 	    ->
 	     ( notype_mode_on, send(info,'\n\nType checking OFF.\n\n\n'))
              ;
-	     true
-	 ),
+	     (true)
+	 ),!,
 	 catch(compile_file(File,Eval),Exception,true),
 	 (
 	     not(var(Exception))->

@@ -60,12 +60,8 @@ xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	       !.
 
 xmg:unfold_expr(value:disj(Values),Var):--
-	       xmg:new_target_var(Disj),
-	xmg:send(info,'HERE'),
-
+	xmg:new_target_var(Disj),
         unfold_disj(Values,UValues,Disj),
-		xmg:send(info,'HERE'),
-
 	constraints::enq(UValues),
 	constraints::enq(eq(Disj,Var)),
         !.
