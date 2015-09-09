@@ -26,6 +26,7 @@
 
 :- edcg:weave([constraints,name,vars,consts],[unfold_tree/4, unfold_children/4, unfold_child/4, unfold_node/3, unfold_brothers/4, unfold_node_or_tree/3]).
 :- multifile(unfold_children/12).
+:- multifile(unfold_node/11).
 
 
 %%:-add_to_path('../AVM').
@@ -56,27 +57,7 @@ xmg:unfold_dimstmt(Syn,syn:S1):--
 	xmg:unfold_dimstmt(Syn,S1),!.
 
 xmg:unfold_dimstmt(Syn,syn:node(N,P,F)):-- 
-	xmg:unfold_expr(N,TN),
-	
-	(
-	    var(TN)
-	->
-	    xmg:new_target_var(TN)
-	    ;
-	    true
-        ),
-
-
-	constraints::enq((TN,syn:node,Syn)),
-	%%constraints::enq(indim(Syn,TN)),
-	xmg:new_target_var(T1),
-	xmg:new_target_var(T2),
-	%%xmg_brick_mg_compiler:send(info,P),
-	%%xmg_brick_mg_compiler:send(info,F),
-	xmg:unfold_expr(P,T1),
-	constraints::enq((TN,syn:props(T1))),	
-	xmg:unfold_expr(F,T2),
-	constraints::enq((TN,syn:feats(T2))),
+	unfold_node(Syn,syn:node(N,P,F),_),
 	!.
 xmg:unfold_dimstmt(Syn,syn:dom(token(_,Op),N1,N2)):-- 
 	%%xmg:new_target_var(T1),

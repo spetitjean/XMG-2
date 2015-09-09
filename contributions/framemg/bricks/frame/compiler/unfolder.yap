@@ -39,12 +39,8 @@ unfold_frame(frame:frame(Var,Type,Feats),TFrame):--
 	    xmg:new_target_var(TFrame)
 	 ;
 	 (
-	     xmg:send(info,'THERE'),
-	     xmg:send(info,Var),
 	     xmg:unfold_expr(Var,TFrame)
 	)),
-	xmg:send(info,'\n\nhere!'),
-
 	constraints::enq((TFrame,frame:frame,UType)),
 
 	unfold_pairs(Feats,TFrame),

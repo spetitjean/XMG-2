@@ -80,10 +80,10 @@ xmg:type_stmt(syn:child(Op,Tree),Type):--
 	!.
 
 
-xmg:type_stmt(syn:X,Type):--
-	xmg:send(info,'\n\nDid not type syn statement:\n'),
-        xmg:send(info,X),
-        xmg:send(info,'\nwith type:\n'),
-	xmg:send(info,Type),!,
-	fail.
+%% xmg:type_stmt(syn:X,Type):--
+%% 	xmg:send(info,'\n\nDid not type syn statement:\n'),
+%%         xmg:send(info,X),
+%%         xmg:send(info,'\nwith type:\n'),
+%% 	xmg:send(info,Type),!,
+%% 	fail.
 
