@@ -52,43 +52,34 @@ xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([
 	xmlID(Pred,XPred),
 	xmlArgs(Args,Args1),!.
 
-xmlPred(P,elem(literal,features([negated-'no']),children([elem(predicate,children([elem(sym,features([varname-XPred]))]))|Args1]))):--
+%% xmlPred(P,elem(literal,features([negated-'no']),children([elem(predicate,children([elem(sym,features([varname-XPred]))]))|Args1]))):--
+%% 	P=..['@',Pred,Args],
+%% 	xmlID(Pred,XPred),
+%% 	xmlArgs(Args,Args1),!.
+
+xmlPred(P,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([varname-Label]))])),elem(predicate,children([elem(sym,features([varname-XPred]))]))|Args1]))):--
 	P=..['@',Pred,Args],
 	xmlID(Pred,XPred),
-	xmlArgs(Args,Args1),!.
+	xmlArgs(Args,Args1),
+	new_name('@V',Label),
+	!.
+
+xmlPred(P,elem(semdominance,features([op-'ge']),children([elem(sym,features([V1])),elem(sym,features([V2]))]))):--
+	P=..['<<',E1,E2],
+	xmlID(E1,V1),
+	xmlID(E2,V2),!.
 
 xmlID(ID,XID):--
 	var(ID),
 	new_name('@V',XID),!.
-xmlID(const(ID,_),ID):-- !.
-xmlID(sconst(ID,_),XID):--
+xmlID(c(ID,_),ID):-- !.
+xmlID(s(ID,_),XID):--
 	var(ID),
 	new_name('!C',XID),!.
-xmlID(sconst(ID,_),ID):-- !.
-xmlID(ID,ID):-- !.
+xmlID(s(ID,_),ID):-- !.
+xmlID(v(ID),ID):-- !.
 
 
-%% xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([value-L]))])),elem(predicate,children([elem(sym,features([varname-Pred]))]))|Args1]))):--
-%% 	LP=..[':',L,P],
-%% 	P=..['@',Pred,Args],
-%% 	var(Pred),
-%% 	new_name('@V',Pred),
-%% 	xmlArgs(Args,Args1),!.
-
-%% xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([value-L]))])),elem(predicate,children([elem(sym,features([varname-Pred]))]))|Args1]))):--
-%% 	LP=..[':',L,P],
-%% 	P=..['@',Pred,Args],
-%% 	xmlArgs(Args,Args1),!.
-
-%% xmlPred(LP,elem(literal,features([negated-'no']),children([elem(predicate,children([elem(sym,features([varname-Pred]))]))|Args1]))):--
-%% 	var(Pred),
-%% 	new_name('@V',Pred),
-%% 	P=..['@',Pred,Args],
-%% 	xmlArgs(Args,Args1),!.
-
-%% xmlPred(LP,elem(literal,features([negated-'no']),children([elem(predicate,children([elem(sym,features([varname-Pred]))]))|Args1]))):--
-%% 	P=..['@',Pred,Args],
-%% 	xmlArgs(Args,Args1),!.
 
 xmlArgs([],[]):--!.
 

@@ -35,14 +35,19 @@ xmlFeats([H|T],[H1|T1]):--
 	xmlFeat(H,H1),
 	xmlFeats(T,T1),!.
 
-xmlFeat(A-V,elem(f,features([name-A,varname-V]))):--
+xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
 	var(V),
 	xmg:convert_new_name('@V',V),
 	!.
-xmlFeat(A-V,elem(f,features([name-A,varname-V]))):--
+%% xmlFeat(A-V,elem(f,features([name-A,varname-V]))):--
+%% 	atom(V),
+%% 	atom_chars(V,['@'|_]),
+%% 	!.
+xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
 	atom(V),
 	atom_chars(V,['@'|_]),
 	!.
+
 xmlFeat(A-string(V),elem(f,features([name-A]),children([elem(sym,features([value-V1]))]))):--
 	atom_codes(V1,V),!.
 xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([value-V]))]))):--
