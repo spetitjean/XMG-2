@@ -55,16 +55,21 @@
 
 :-edcg:weave([free],[new_free/2]).
 
-xmg:check_types(T1,T1,Coord):- !.
+xmg:check_types(T1,T2,Coord):-
+    xmg:send(debug,'Checking types'),
+    T1=T2,!.
 xmg:check_types(T1,T2,Coord):- 
 	not(T1=T2),
-	xmg:send(info,' incompatible types:'),
+	xmg:send(info,'\n\nIncompatible types: '),
 	xmg:send(info,T1),
 	xmg:send(info,', '),
 	xmg:send(info,T2),
 	xmg:send(info,', '),
 	xmg:send(info,Coord),
+	halt,
 	!.
+
+
 
 xmg:type_expr(none,_):-- !.
 xmg:type_expr(some(E),T):-- 

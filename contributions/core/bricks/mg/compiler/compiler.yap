@@ -30,6 +30,8 @@
 
 :-dynamic(xmg:print_appendix/0).
 
+:-multifile(xmg:send_others/2).
+
 %encoding(iso_latin_1).
 %encoding(utf8).
 %debug_mode(false).
@@ -40,8 +42,11 @@ debug_mode_on:-
 notype_mode_on:-
 	asserta(xmg:notype_mode).
 
+
+send(I,Mess):-
+    xmg:send_others(I,Mess),!.
 send(info,Mess):-
-	print(user_error,Mess),!.
+        print(user_error,Mess),!.
 send(debug,Mess):-
 	debug_mode,!,
 	send(info,'\nDEBUG: '),

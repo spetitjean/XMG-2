@@ -38,7 +38,7 @@ xmg:generate_instr((sem:pred(none,v(P),Args),Sem)):--
 
 xmg:generate_instr((sem:pred(none,c(P),Args),Sem)):--
 	generate_params(Args,GArgs),
-	APred=..['@',P,GArgs],
+	APred=..['@',c(P),GArgs],
 	Generated=..['::',xmg_acc:Sem,put(APred)],
 	code::enq(Generated),!.
 
@@ -53,7 +53,7 @@ xmg:generate_instr((sem:pred(v(L),v(P),Args),Sem)):--
 xmg:generate_instr((sem:pred(v(L),c(P),Args),Sem)):--
 	decls::tget(L,VL),
 	generate_params(Args,GArgs),
-	APred=..['@',P,GArgs],
+	APred=..['@',c(P),GArgs],
 	Generated=..['::',xmg_acc:Sem,put(APred)],
 	code::enq(Generated),!.
 

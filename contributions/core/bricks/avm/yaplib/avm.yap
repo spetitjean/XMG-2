@@ -1,3 +1,22 @@
+%% -*- prolog -*-
+
+%% ========================================================================
+%% Copyright (C) 2011  Simon Petitjean
+
+%%  This program is free software: you can redistribute it and/or modify
+%%  it under the terms of the GNU General Public License as published by
+%%  the Free Software Foundation, either version 3 of the License, or
+%%  (at your option) any later version.
+
+%%  This program is distributed in the hope that it will be useful,
+%%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%  GNU General Public License for more details.
+
+%%  You should have received a copy of the GNU General Public License
+%%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%% ========================================================================
+
 :- module(xmg_brick_avm_avm, [avm/2, const_avm/2]).
 
 :- use_module(library(atts)).
@@ -92,22 +111,28 @@ cavm_dot(cavm(X),F,V):-
 %% DEBUGGING
 %% ============================================================================
 
-print_avm(AVM):-
-    avm(AVM,LAVM),!,
-    xmg:send(info,'\n'),
-    xmg:send(info,'['),
-    print_inside(LAVM),
-    xmg:send(info,']'),
-    xmg:send(info,'\n'),!.
-print_avm(AVM):-
-    xmg_brick_adisj_adisj:adisj(AVM,LAVM),
-    xmg:send(info,LAVM),!.
-print_avm(AVM):-
-    xmg:send(info,AVM),!.
+xmg:send_others(I,AVM):-
+    attvar(AVM),
+    print_avm(I,AVM),!.
 
-print_inside([]):- !.
-print_inside([A-V|T]):-
-    xmg:send(info,A),
-    xmg:send(info,':'),
-    print_avm(V),
-    print_inside(T),!.
+print_avm(I):-
+    print_avm(debug,I),!.
+
+print_avm(I,AVM):-
+    avm(AVM,LAVM),!,
+    xmg:send(I,'\n'),
+    xmg:send(I,'['),
+    print_inside(I,LAVM),
+    xmg:send(I,']'),!.
+print_avm(I,AVM):-
+    xmg_brick_adisj_adisj:adisj(AVM,LAVM),
+    xmg:send(I,LAVM),!.
+print_avm(I,AVM):-
+    xmg:send(I,AVM),!.
+
+print_inside(I,[]):- !.
+print_inside(I,[A-V|T]):-
+    xmg:send(I,A),
+    xmg:send(I,':'),
+    print_avm(I,V),
+    print_inside(I,T),!.

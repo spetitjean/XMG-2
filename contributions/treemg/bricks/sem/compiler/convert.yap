@@ -45,11 +45,12 @@ xmlSem([H|T],[H1|T1]):--
 	xmlPred(H,H1),
 	xmlSem(T,T1),!.
 
-xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([value-XL]))])),elem(predicate,children([elem(sym,features([varname-XPred]))]))|Args1]))):--
+xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([value-XL]))])),elem(predicate,children([elem(sym,features(FXPred))]))|Args1]))):--
 	LP=..[':',L,P],
 	P=..['@',Pred,Args],
 	xmlID(L,XL),
 	xmlID(Pred,XPred),
+	value_or_var(XPred,FXPred),
 	xmlArgs(Args,Args1),!.
 
 %% xmlPred(P,elem(literal,features([negated-'no']),children([elem(predicate,children([elem(sym,features([varname-XPred]))]))|Args1]))):--
@@ -57,9 +58,11 @@ xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([
 %% 	xmlID(Pred,XPred),
 %% 	xmlArgs(Args,Args1),!.
 
-xmlPred(P,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([varname-Label]))])),elem(predicate,children([elem(sym,features([varname-XPred]))]))|Args1]))):--
-	P=..['@',Pred,Args],
-	xmlID(Pred,XPred),
+xmlPred(P,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([varname-Label]))])),elem(predicate,children([elem(sym,features(FXPred))]))|Args1]))):--
+       P=..['@',Pred,Args],
+       xmlID(Pred,XPred),
+       value_or_var(XPred,FXPred),
+
 	xmlArgs(Args,Args1),
 	new_name('@V',Label),
 	!.
@@ -72,15 +75,20 @@ xmlPred(P,elem(semdominance,features([op-'ge']),children([elem(sym,features([V1]
 xmlID(ID,XID):--
 	var(ID),
 	new_name('@V',XID),!.
-xmlID(c(ID,_),ID):-- !.
-xmlID(s(ID,_),XID):--
+xmlID(c(ID),ID):-- !.
+xmlID(s(ID),XID):--
 	var(ID),
 	new_name('!C',XID),!.
-xmlID(s(ID,_),ID):-- !.
-xmlID(v(ID),ID):-- !.
+xmlID(s(ID),ID):-- !.
+xmlID(v(ID),VID):--
+     atomic_concat(['@V',ID],VID),!.
 
 
+value_or_var(X,[varname-X]):-
+    atom_chars(X,['@','V'|_]),!.
 
+value_or_var(X,[value-X]).
+    
 xmlArgs([],[]):--!.
 
 xmlArgs([H|T],[H1|T1]):--

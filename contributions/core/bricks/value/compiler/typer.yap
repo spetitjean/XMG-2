@@ -25,12 +25,25 @@
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:type_decls,xmg_brick_mg_typer:dim_types]).
 :-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:type_decls,xmg_brick_mg_typer:dim_types],type_disj/2).
 
-xmg:type_expr(value:var(token(_,id(ID))),Type):--
-	types::tget(ID,Type),
-	!.
-xmg:type_expr(token(_,id(ID)),Type):--
-	types::tget(ID,Type),
-	!.
+xmg:type_expr(value:var(token(C,id(ID))),Type):--
+	     types::tget(ID,Type1),
+             xmg:check_types(Type,Type1,C),
+        !.
+xmg:type_expr(value:var(token(C,id(ID))),Type):--
+             throw(xmg(generator_error(unknown_variable(ID,C)))).
+
+xmg:type_expr(value:const(token(C,id(ID))),Type):--
+	     types::tget(ID,Type1),
+             xmg:check_types(Type,Type1,C),
+        !.
+xmg:type_expr(value:const(token(C,id(ID))),Type):--
+        throw(xmg(generator_error(unknown_constant(ID,C)))).
+
+xmg:type_expr(token(C,id(ID)),Type):--
+      			  types::tget(ID,Type1),
+			  xmg:check_types(Type,Type1,C),
+        !.
+
 
 xmg:type_expr(token(_,bool(_)),bool):--
 	!.
@@ -50,9 +63,11 @@ xmg:type_expr(value:disj(Values),Type):--
 %% typing a constant
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xmg:type_expr(token(_,id(ID)),Type):--
-	type_decls::tget(const(ID),Type),
-	!.
+xmg:type_expr(token(C,id(ID)),Type):--
+	     type_decls::tget(const(ID),Type1),
+             xmg:check_types(Type,Type1,C),
+	     !.
+
 
 
 
