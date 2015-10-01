@@ -119,20 +119,28 @@ print_avm(I):-
     print_avm(debug,I),!.
 
 print_avm(I,AVM):-
+    attvar(AVM),
     avm(AVM,LAVM),!,
+        		  xmg:send(I,'HERE, AVM is'),
+    		  xmg:send(I,LAVM),
+
     xmg:send(I,'\n'),
-    xmg:send(I,'['),
+    xmg:send(I,'['),!,
     print_inside(I,LAVM),
     xmg:send(I,']'),!.
 print_avm(I,AVM):-
-    xmg_brick_adisj_adisj:adisj(AVM,LAVM),
+    xmg:send(I,'Printing ADisj '),
+    xmg_brick_adisj_adisj:adisj(AVM,LAVM),!,
     xmg:send(I,LAVM),!.
-print_avm(I,AVM):-
+print_avm(I,AVM):-!,
+    not(attvar(AVM)),!,		  
     xmg:send(I,AVM),!.
+
 
 print_inside(I,[]):- !.
 print_inside(I,[A-V|T]):-
-    xmg:send(I,A),
-    xmg:send(I,':'),
-    print_avm(I,V),
+    xmg:send(I,A),!,
+    xmg:send(I,':'),!,
+    print(user_error,V),
+    print_avm(I,V),!,
     print_inside(I,T),!.

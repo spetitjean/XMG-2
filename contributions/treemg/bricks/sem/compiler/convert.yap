@@ -46,8 +46,10 @@ xmlSem([H|T],[H1|T1]):--
 	xmlSem(T,T1),!.
 
 xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([value-XL]))])),elem(predicate,children([elem(sym,features(FXPred))]))|Args1]))):--
-	LP=..[':',L,P],
-	P=..['@',Pred,Args],
+       LP=..[':',L,P],
+
+       P=..['@',Pred,Args],
+
 	xmlID(L,XL),
 	xmlID(Pred,XPred),
 	value_or_var(XPred,FXPred),
@@ -82,6 +84,9 @@ xmlID(s(ID),XID):--
 xmlID(s(ID),ID):-- !.
 xmlID(v(ID),VID):--
      atomic_concat(['@V',ID],VID),!.
+%% Should not happen, but does when class parameters are used as predicates
+xmlID(ID,ID):--
+	not(var(ID)),!.
 
 
 value_or_var(X,[varname-X]):-

@@ -194,8 +194,9 @@ xmg_message(type_error(feature_not_declared(X,C)),Msg):- !,
 	Msg=error(types,[hint('feature not declared',X),C]).
 xmg_message(type_error(value_not_in_range(X,C)),Msg):- !,
 	Msg=error(types,[hint('value not in range',X),C]).
-xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,
-	Msg=error(types,[hint('variable not declared',X),C]).
+xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,				Msg=error(types,[hint('variable not declared',X),C]).
+xmg_message(type_error(unknown_constant(X,C)),Msg):- !,
+	Msg=error(types,[hint('unknown constant',X),C]).
 xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
 	Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
 xmg_message(type_error(incompatible_exprs(expr(E1,T1),expr(E2,T2))),Msg):- !,

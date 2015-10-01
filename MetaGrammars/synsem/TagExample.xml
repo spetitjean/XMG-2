@@ -10,22 +10,6 @@
       <class>transitifDirect</class>
       <class>lexemeManger</class>
     </trace>
-    <semantics>
-      <literal negated="no">
-        <predicate>
-          <sym varname="manger"/>
-        </predicate>
-        <arg>
-          <sym varname="@V1"/>
-        </arg>
-        <arg>
-          <sym varname="@V2"/>
-        </arg>
-        <arg>
-          <sym varname="@V3"/>
-        </arg>
-      </literal>
-    </semantics>
     <tree id="lexemeManger_0">
       <node type="std" name="XMG_VAR_1SS">
         <narg>
@@ -43,9 +27,15 @@
               </f>
               <f name="top">
                 <fs coref="@AVM3">
-                  <f name="idx" varname="@V2"/>
-                  <f name="num" varname="@V4"/>
-                  <f name="pers" varname="@V5"/>
+                  <f name="idx">
+                    <sym varname="@V4"/>
+                  </f>
+                  <f name="num">
+                    <sym varname="@V5"/>
+                  </f>
+                  <f name="pers">
+                    <sym varname="@V6"/>
+                  </f>
                 </fs>
               </f>
             </fs>
@@ -53,39 +43,47 @@
         </node>
         <node type="std" name="NVX1NVX2NV">
           <narg>
-            <fs coref="@AVM6">
+            <fs coref="@AVM7">
               <f name="bot">
-                <fs coref="@AVM7">
-                  <f name="mode" varname="@V8"/>
+                <fs coref="@AVM8">
+                  <f name="mode">
+                    <sym varname="@V9"/>
+                  </f>
                 </fs>
               </f>
               <f name="cat">
                 <sym value="v"/>
               </f>
               <f name="top">
-                <fs coref="@AVM9">
-                  <f name="num" varname="@V4"/>
-                  <f name="pers" varname="@V5"/>
+                <fs coref="@AVM10">
+                  <f name="num">
+                    <sym varname="@V5"/>
+                  </f>
+                  <f name="pers">
+                    <sym varname="@V6"/>
+                  </f>
                 </fs>
               </f>
             </fs>
           </narg>
           <node type="std" name="NVV">
             <narg>
-              <fs coref="@AVM10">
+              <fs coref="@AVM11">
                 <f name="cat">
                   <sym value="v"/>
                 </f>
                 <f name="top">
-                  <fs coref="@AVM11">
-                    <f name="mode" varname="@V8"/>
+                  <fs coref="@AVM12">
+                    <f name="mode">
+                      <sym varname="@V9"/>
+                    </f>
                   </fs>
                 </f>
               </fs>
             </narg>
             <node type="std" name="NPh">
               <narg>
-                <fs coref="@AVM12">
+                <fs coref="@AVM13">
                   <f name="phon">
                     <sym value="manger"/>
                   </f>
@@ -96,13 +94,15 @@
         </node>
         <node type="subst" name="NN">
           <narg>
-            <fs coref="@AVM13">
+            <fs coref="@AVM14">
               <f name="cat">
                 <sym value="n"/>
               </f>
               <f name="top">
-                <fs coref="@AVM14">
-                  <f name="idx" varname="@V3"/>
+                <fs coref="@AVM15">
+                  <f name="idx">
+                    <sym varname="@V16"/>
+                  </f>
                 </fs>
               </f>
             </fs>
@@ -110,15 +110,42 @@
         </node>
       </node>
     </tree>
+    <semantics>
+      <literal negated="no">
+        <label>
+          <sym value="@V1"/>
+        </label>
+        <predicate>
+          <sym value="manger"/>
+        </predicate>
+        <arg>
+          <sym varname="@V2"/>
+        </arg>
+        <arg>
+          <sym varname="@V4"/>
+        </arg>
+        <arg>
+          <sym varname="@V16"/>
+        </arg>
+      </literal>
+    </semantics>
     <interface>
       <fs>
         <f name="anch">
           <sym value="manger"/>
         </f>
-        <f name="arg0" varname="@V2"/>
-        <f name="arg1" varname="@V3"/>
-        <f name="obj" varname="@V3"/>
-        <f name="suj" varname="@V2"/>
+        <f name="arg0">
+          <sym varname="@V4"/>
+        </f>
+        <f name="arg1">
+          <sym varname="@V16"/>
+        </f>
+        <f name="obj">
+          <sym varname="@V16"/>
+        </f>
+        <f name="suj">
+          <sym varname="@V4"/>
+        </f>
       </fs>
     </interface>
   </entry>

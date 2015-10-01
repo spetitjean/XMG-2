@@ -121,7 +121,7 @@ declare
 
 class BinaryRel[Pred]
 declare 
-	!L !E ?X ?Y
+	!L !E ?X ?Y 
  { 
    <sem>{
    !L:Pred(!E,?X,?Y)
@@ -131,7 +131,9 @@ declare
 
 class lexemeManger 
 declare ?X ?Y
-{ transitifDirect[]*=[suj=?X,obj=?Y,anch=manger] ; BinaryRel[manger]*=[arg0 =?X,arg1 = ?Y] }
+{ transitifDirect[]*=[suj=?X,obj=?Y,anch=manger]
+  ; BinaryRel[manger]*=[arg0 =?X,arg1 = ?Y]
+    }
 
 %Simple transitive
 value lexemeManger

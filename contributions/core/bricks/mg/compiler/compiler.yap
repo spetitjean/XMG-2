@@ -43,43 +43,43 @@ notype_mode_on:-
 	asserta(xmg:notype_mode).
 
 
-send(I,Mess):-
-    xmg:send_others(I,Mess),!.
-send(info,Mess):-
+%% xmg:send(I,Mess):-
+%%     xmg:send_others(I,Mess),!.
+xmg:send(info,Mess):-
         print(user_error,Mess),!.
-send(debug,Mess):-
+xmg:send(debug,Mess):-
 	debug_mode,!,
-	send(info,'\nDEBUG: '),
+	xmg:send(info,'\nDEBUG: '),
 	print(user_error,Mess),!.
-send(debug,Mess):-
+xmg:send(debug,Mess):-
 	not(debug_mode),!.
-send(out,Mess):-
+xmg:send(out,Mess):-
 	print(user_output,Mess),!.
-send_nl(info):-
-	send(info,'\n'),!.
-send_nl(info,1):-
-	send(info,'\n'),!.
-send_nl(info,N):-
-	send(info,'\n'),!,
+xmg:send_nl(info):-
+	xmg:send(info,'\n'),!.
+xmg:send_nl(info,1):-
+	xmg:send(info,'\n'),!.
+xmg:send_nl(info,N):-
+	xmg:send(info,'\n'),!,
 	M is N -1,!,
-	send_nl(info,M),!.
+	xmg:send_nl(info,M),!.
 
-xmg:send(T,Send):-
-	send(T,Send),!.
+send(O,M):-!, xmg:send(O,M),!.
+
 
 compile_file(File,Eval,Encoding,Debug,NoTypes):-
 	asserta(encoding(Encoding)),
 	(
 	    Debug='on'
 	    ->
-	     ( debug_mode_on, send(info,'\n\nDebug Mode ON\n\n\n'))
+	     ( debug_mode_on, xmg:send(info,'\n\nDebug Mode ON\n\n\n'))
              ;
-	     ( true, send(info,'\n\nDebug Mode OFF. To activate, please use the option --debug\n\n\n'))
+	     ( true, xmg:send(info,'\n\nDebug Mode OFF. To activate, please use the option --debug\n\n\n'))
 	),
 	(
 	    NoTypes='on'
 	    ->
-	     ( notype_mode_on, send(info,'\n\nType checking OFF.\n\n\n'))
+	     ( notype_mode_on, xmg:send(info,'\n\nType checking OFF.\n\n\n'))
              ;
 	     (true)
 	 ),!,
@@ -96,50 +96,50 @@ compile_file(File,Eval,Encoding,Debug,NoTypes):-
 compile_file(File,Eval):-
 	xmg_compiler_conf:init,
 	%%findall(Module,xmg_modules_def:module_def(_,Module),Modules),
-	%%xmg:send(info,Modules),
+	%%xmg:xmg:send(info,Modules),
 	%%xmg_brick_mg_modules:load_modules(Modules),
 	xmg_compiler_conf:init_threads,
 
-	send(info,' loaded '),
+	xmg:send(info,' loaded '),
 
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
-	send(info,' parsed '),
-	send(debug,'\n'),
-	send(debug,Parse),
-	send_nl(info),
+	xmg:send(info,' parsed '),
+	xmg:send(debug,'\n'),
+	xmg:send(debug,Parse),
+	xmg:send_nl(info),
 
 	%%xmg_brick_mg_pprint:pprint(Parse),
-	%%send(info,Parse),
+	%%xmg:send(info,Parse),
 
 	xmg_brick_mg_exporter:export_metagrammar(Parse,Ordered),!,
-	send(info,' exported '),
-	send_nl(info),
+	xmg:send(info,' exported '),
+	xmg:send_nl(info),
 
 	%% xmg_brick_mg_typer:type_metagrammar(Ordered),!,
-	%% send(info,' typed '),
-	%% send_nl(info),
+	%% xmg:send(info,' typed '),
+	%% xmg:send_nl(info),
 
 	xmg_brick_mg_unfolder:unfold(Ordered,Unfolded),!,
-	send(info,' unfolded '),
-	send(debug,'\n'),
-	send(debug,Unfolded),
-	send_nl(info),	
+	xmg:send(info,' unfolded '),
+	xmg:send(debug,'\n'),
+	xmg:send(debug,Unfolded),
+	xmg:send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
-	send(debug,' principles done '),
+	xmg:send(debug,' principles done '),
 
 
 	xmg_brick_mg_generator:generate(Unfolded),!,
-	send_nl(info),	
-	send(info,' generated '),
-	send_nl(info),	
+	xmg:send_nl(info),	
+	xmg:send(info,' generated '),
+	xmg:send_nl(info),	
 
 	retractall(xmg_brick_mg_exporter:declared(_,_)),
 	retractall(xmg_brick_mg_exporter:exports(_,_)),
 	
 	asserta(current(0)),
 
-	send(out,'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'),
-	send(out,'<grammar>\n'),
+	xmg:send(out,'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'),
+	xmg:send(out,'<grammar>\n'),
 	eval,
     	maybe_print_appendices.	
 
@@ -153,9 +153,9 @@ eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),
 	xmg:value_all(Computed,Class),
 	
-	send(info,'\nClass executed: '),
-	send(debug,Computed),
-	send(info,Class),
+	xmg:send(info,'\nClass executed: '),
+	xmg:send(debug,Computed),
+	xmg:send(info,Class),
 
 	%% xmg_dimensions:dims(Dims),
 
@@ -164,16 +164,16 @@ eval:-
 
 	get_dim(trace,Computed,Trace),
 
-	%% send(info,'\ngot trace\n'),
+	%% xmg:send(info,'\ngot trace\n'),
 
 	findall(Mutex,xmg:mutex(Mutex),Mutexes),
-	%% send(info,'\nMutexes:'),
-	%% send(info,Mutexes),
+	%% xmg:send(info,'\nMutexes:'),
+	%% xmg:send(info,Mutexes),
 	check_mutexes(Trace,Mutexes),
 
-	send_nl(info),send_nl(info),send(info,'                Computed '),send(info,Class),send_nl(info),send_nl(info),
+	xmg:send_nl(info),xmg:send_nl(info),xmg:send(info,'                Computed '),xmg:send(info,Class),xmg:send_nl(info),xmg:send_nl(info),
 
-	%%send(info,Computed),
+	%%xmg:send(info,Computed),
 	
 	iface_last(Computed,OComputed),
 
@@ -184,14 +184,14 @@ eval:-
 	asserta(current(Current)),
 	xmg:do_xml_convert(mg:entry(Class,Trace,EDims,Previous),XML),
 	xmg:printXML(XML,1),
-	send(info,'Printed model '),
-	send(info,Previous),send_nl(info),send_nl(info),
+	xmg:send(info,'Printed model '),
+	xmg:send(info,Previous),xmg:send_nl(info),xmg:send_nl(info),
 
 
-	send(info,'________________________________________________\nDone class '),
-	send(info,Class),
-	send_nl(info),
-	send_nl(info),
+	xmg:send(info,'________________________________________________\nDone class '),
+	xmg:send(info,Class),
+	xmg:send_nl(info),
+	xmg:send_nl(info),
 	fail.
 
 iface_last([],[]).
@@ -200,12 +200,12 @@ iface_last([iface-I|T],T1):-
 iface_last([H|T],[H|T1]):-
 	iface_last(T,T1),!.
 
-eval:- send(out,'</grammar>\n'),
-       send(info,'\n\n________________________________________________\n________________________________________________'),
-       send(info,'\n\n      Process ended: '),
+eval:- xmg:send(out,'</grammar>\n'),
+       xmg:send(info,'\n\n________________________________________________\n________________________________________________'),
+       xmg:send(info,'\n\n      Process ended: '),
        current(Number),
-       send(info,Number),
-       send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
+       xmg:send(info,Number),
+       xmg:send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
        !.
 
 eval_dims([],[],_).
@@ -214,70 +214,69 @@ eval_dims([trace-Acc|T],T1,Class):-!,
 eval_dims([skolem-Acc|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
-	send(debug,Dim),
+	xmg:send(debug,Dim),
 	xmg:dimbrick(Dim,DimBrick),
 	findall(Solver,xmg:solver(Dim,Solver),Solvers),
 	eval(DimBrick,Solvers,Acc,XML,Class),
-	send(debug,' done\n'),
+	xmg:send(debug,' done\n'),
 	eval_dims(T,T1,Class).
 
 eval(morphtf,_,Morph,XML,_):-
-	%%send(info,Morph),
+	%%xmg:send(info,Morph),
 	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
-	%%send_nl(info,2),
-	send(debug,' Value : '),
-	send(debug,Value),
+	%%xmg:send_nl(info,2),
+	xmg:send(debug,' Value : '),
+	xmg:send(debug,Value),
 	xmg:do_xml_convert(Value,XML).
 
 
 eval(syn,[tree],Syn,XML,Class):-
-	%%send(info,Syn),
+	%%xmg:send(info,Syn),
     xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
 eval(syn2,[tree],Syn,XML,Class):-
-	%%send(info,Syn),
+	%%xmg:send(info,Syn),
 	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
 eval(syn,[rrg],Syn,XML,Class):-
-	%%send(info,Syn),
+	%%xmg:send(info,Syn),
 	xmg_brick_rrg_compiler:eval(Syn,Solvers,XML,Class).
 eval(syn,[],Syn,XML,Class):-
-	%%send(info,Syn),
+	%%xmg:send(info,Syn),
 	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
 
 
 
 eval(morphlp,_,Morph,XML,_):-
-	%%send(info,Morph),
+	%%xmg:send(info,Morph),
 	xmg_brick_morphlp_solver:eval(Morph,Value),
-	%%send_nl(info,2),
-	send(debug,' Value : '),
-	send(debug,Value),
+	%%xmg:send_nl(info,2),
+	xmg:send(debug,' Value : '),
+	xmg:send(debug,Value),
 	xmg:do_xml_convert(Value,XML).
 
 eval(pg,_,PG,elem(pg, features([id-none])),_):-
 	xmg_output_pg:output(PG).
 
 eval(sem,_,Sem,XML,_):-
-	%%send(info,Sem),
 	xmg_brick_sem_convert:toXML(Sem,XML),
-	send_nl(info).
+	xmg:send_nl(info).
 
 eval(frame,_,Frame,XML,_):-
 	xmg_brick_frame_preparer:prepare(Frame,PFrame),
-	send(debug,PFrame),
+	xmg:send(debug,PFrame),
 	xmg_brick_frame_convert:toXML(PFrame,XML,0).
-	%%send(debug,Tree).
+	%%xmg:send(debug,Tree).
 %%eval(frame,_,[], elem(frame, features([id-none])),_).
 
 
 eval(iface,_,I, elem(interface, children([elem(fs, children(XML))])),_):-
-	%%send(info,'\n Here comes the interface'),
+	%%xmg:send(info,'\n Here comes the interface'),
 	xmg_brick_avm_avm:avm(I,IAVM),
-	%%send(info,IAVM),
+	%%xmg:send(info,IAVM),
 	%%xmg_brick_avm_convert:xmlFeats(IAVM,XML,1,_).
     	xmg:do_xml_convert(avm:avm(IAVM),XML)
-	%%send(info,'\nDone')
+	%%xmg:send(info,'\nDone')
 	.
-	%%send(info,'\nDone').
+	%%xmg:send(info,'\nDone').
 eval(iface,_,[], elem(interface, children([])),_).
 		
 get_dim(Dim,[Dim-CDim|_],CDim):-!.
@@ -305,7 +304,7 @@ fail_if_mutex([Class|T],Class,Mutex):-
 	fail_if_mutex(T,Class,Mutex),!.
 fail_if_mutex([Class|T],First,Mutex):-
 	xmg:mutex_add(Mutex,Class),!,
-	send(info,' mutex fail '),
+	xmg:send(info,' mutex fail '),
 	fail.
 fail_if_mutex([Class|T],First,Mutex):-
 	%not(mutex_add(Mutex,Class)),!,
