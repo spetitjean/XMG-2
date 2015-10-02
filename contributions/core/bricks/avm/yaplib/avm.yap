@@ -113,34 +113,48 @@ cavm_dot(cavm(X),F,V):-
 
 xmg:send_others(I,AVM):-
     attvar(AVM),
-    print_avm(I,AVM),!.
+    print_avm(I,AVM,3),!.
+
+%% Print an AVM (only up to depth 3)
 
 print_avm(I):-
-    print_avm(debug,I),!.
+    print_avm(debug,I,3),!.
 
-print_avm(I,AVM):-
+print_avm(I,_,0):-
+    xmg:send(I,'...'),!.
+print_avm(I,AVM,N):-
+    M is N-1,
+ 
+    
     attvar(AVM),
     avm(AVM,LAVM),!,
-        		  xmg:send(I,'HERE, AVM is'),
-    		  xmg:send(I,LAVM),
 
+    
     xmg:send(I,'\n'),
+    indent(I,N),
     xmg:send(I,'['),!,
-    print_inside(I,LAVM),
+    print_inside(I,LAVM,M),
+    indent(I,N),
     xmg:send(I,']'),!.
-print_avm(I,AVM):-
-    xmg:send(I,'Printing ADisj '),
+print_avm(I,AVM,_):-
     xmg_brick_adisj_adisj:adisj(AVM,LAVM),!,
     xmg:send(I,LAVM),!.
-print_avm(I,AVM):-!,
+print_avm(I,AVM,_):-!,
     not(attvar(AVM)),!,		  
     xmg:send(I,AVM),!.
 
 
-print_inside(I,[]):- !.
-print_inside(I,[A-V|T]):-
+print_inside(I,[],_):- !.
+print_inside(I,[A-V|T],N):-
+    xmg:send(I,'\n'),
+    indent(I,N),
     xmg:send(I,A),!,
-    xmg:send(I,':'),!,
-    print(user_error,V),
-    print_avm(I,V),!,
-    print_inside(I,T),!.
+    xmg:send(I,': '),!,
+    print_avm(I,V,N),!,
+    print_inside(I,T,N),!.
+
+indent(_,3):-!.
+indent(I,N):-
+    xmg:send(I,'   '),
+    M is N+1,
+    indent(I,M),!.

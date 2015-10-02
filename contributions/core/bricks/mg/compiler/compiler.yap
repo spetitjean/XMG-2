@@ -43,13 +43,13 @@ notype_mode_on:-
 	asserta(xmg:notype_mode).
 
 
-%% xmg:send(I,Mess):-
-%%     xmg:send_others(I,Mess),!.
+xmg:send(I,Mess):-
+    xmg:send_others(I,Mess),!.
 xmg:send(info,Mess):-
         print(user_error,Mess),!.
 xmg:send(debug,Mess):-
 	debug_mode,!,
-	xmg:send(info,'\nDEBUG: '),
+	%%xmg:send(info,'\nDEBUG: '),
 	print(user_error,Mess),!.
 xmg:send(debug,Mess):-
 	not(debug_mode),!.
