@@ -32,6 +32,9 @@
 
 :-multifile(xmg:send_others/2).
 
+%% xmg:eval extracts the models from a description. 
+:-multifile(xmg:eval/5).
+
 %encoding(iso_latin_1).
 %encoding(utf8).
 %debug_mode(false).
@@ -158,8 +161,6 @@ eval:-
 	xmg:send(info,Class),
 
 	%% xmg_dimensions:dims(Dims),
-
-	%% Computed=dims([morph-Morph,syn-Syn,pg-PG,sem-Sem]),
 	%% Computed=dims(Dims),
 
 	get_dim(trace,Computed,Trace),
@@ -217,67 +218,10 @@ eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	xmg:send(debug,Dim),
 	xmg:dimbrick(Dim,DimBrick),
 	findall(Solver,xmg:solver(Dim,Solver),Solvers),
-	eval(DimBrick,Solvers,Acc,XML,Class),
+	xmg:eval(DimBrick,Solvers,Acc,XML,Class),
 	xmg:send(debug,' done\n'),
 	eval_dims(T,T1,Class).
 
-eval(morphtf,_,Morph,XML,_):-
-	%%xmg:send(info,Morph),
-	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
-	%%xmg:send_nl(info,2),
-	xmg:send(debug,' Value : '),
-	xmg:send(debug,Value),
-	xmg:do_xml_convert(Value,XML).
-
-
-eval(syn,[tree],Syn,XML,Class):-
-	%%xmg:send(info,Syn),
-    xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
-eval(syn2,[tree],Syn,XML,Class):-
-	%%xmg:send(info,Syn),
-	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
-eval(syn,[rrg],Syn,XML,Class):-
-	%%xmg:send(info,Syn),
-	xmg_brick_rrg_compiler:eval(Syn,Solvers,XML,Class).
-eval(syn,[],Syn,XML,Class):-
-	%%xmg:send(info,Syn),
-	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
-
-
-
-eval(morphlp,_,Morph,XML,_):-
-	%%xmg:send(info,Morph),
-	xmg_brick_morphlp_solver:eval(Morph,Value),
-	%%xmg:send_nl(info,2),
-	xmg:send(debug,' Value : '),
-	xmg:send(debug,Value),
-	xmg:do_xml_convert(Value,XML).
-
-eval(pg,_,PG,elem(pg, features([id-none])),_):-
-	xmg_output_pg:output(PG).
-
-eval(sem,_,Sem,XML,_):-
-	xmg_brick_sem_convert:toXML(Sem,XML),
-	xmg:send_nl(info).
-
-eval(frame,_,Frame,XML,_):-
-	xmg_brick_frame_preparer:prepare(Frame,PFrame),
-	xmg:send(debug,PFrame),
-	xmg_brick_frame_convert:toXML(PFrame,XML,0).
-	%%xmg:send(debug,Tree).
-%%eval(frame,_,[], elem(frame, features([id-none])),_).
-
-
-eval(iface,_,I, elem(interface, children([elem(fs, children(XML))])),_):-
-	%%xmg:send(info,'\n Here comes the interface'),
-	xmg_brick_avm_avm:avm(I,IAVM),
-	%%xmg:send(info,IAVM),
-	%%xmg_brick_avm_convert:xmlFeats(IAVM,XML,1,_).
-    	xmg:do_xml_convert(avm:avm(IAVM),XML)
-	%%xmg:send(info,'\nDone')
-	.
-	%%xmg:send(info,'\nDone').
-eval(iface,_,[], elem(interface, children([])),_).
 		
 get_dim(Dim,[Dim-CDim|_],CDim):-!.
 get_dim(Dim,[_|T],CDim):-

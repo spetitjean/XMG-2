@@ -1,11 +1,6 @@
-%token feature
-%token id
-
-%type Feat Feat
-
 
 %%
 
-Feat : feature id ':' id {$$=feats:feat($2,$4)};
+Feat : 'feature' id ':' id {$$=feats:feat($2,$4)};
 
 %%

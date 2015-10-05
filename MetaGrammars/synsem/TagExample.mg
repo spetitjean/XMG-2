@@ -1,7 +1,7 @@
 %------------------
 %  Toy MetaGrammar   
 %------------------
-
+ 
 %principle declarations:
 
 use color with () dims (syn)
@@ -24,6 +24,7 @@ type AGR=[cat    : CAT,
 	  person : PERSON,
 	  test   : bool
 ]
+
 
 type LABEL !
 type PHON !

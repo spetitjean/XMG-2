@@ -253,43 +253,6 @@ identifier_to_token(A,A) :- xmg:keyword(A),!.
 identifier_to_token(A,T) :- xmg:identifier_to_token(A,T),!.
 identifier_to_token(A,id(A)).
 
-%% DENYS!!!
-%% these should be externalized and provided as
-%% multifile(xmg:keyword/1)
-
-xmg:keyword(include).
-xmg:keyword(node).
-xmg:keyword(class).
-xmg:keyword(mutex).
-xmg:keyword(export).
-xmg:keyword(import).
-xmg:keyword(type).
-xmg:keyword(property).
-xmg:keyword(feature).
-xmg:keyword(field).
-xmg:keyword(feat).
-xmg:keyword(as).
-xmg:keyword(yielding).
-xmg:keyword(declare).
-xmg:keyword(except).
-xmg:keyword(shadow).
-xmg:keyword(value).
-xmg:keyword(use).
-xmg:keyword(with).
-xmg:keyword(dims).
-xmg:keyword(extern).
-xmg:keyword(highlight).
-xmg:keyword(semantics).
-xmg:keyword(props).
-xmg:keyword(feats).
-xmg:keyword(leftm).
-xmg:keyword(rightm).
-xmg:keyword(macro).
-
-xmg:keyword(edge).
-xmg:keyword(hierarchy).
-
-xmg:keyword(morpheme).
 
 %%=============================================================================
 %% read a float or an int
@@ -390,70 +353,6 @@ punctuation(T,C) :--
 punctuation_to_token(A,T) :-
     xmg:punctuation_to_token(A,T), !.
 punctuation_to_token(A,A).
-
-%% DENYS!!!
-%% move these out where they belong
-%% they also need to be installed in order of decreasing length.
-
-%% xmg:punctuation('<sem>').
-%% xmg:punctuation('<pg>').
-%% xmg:punctuation('<morph>').
-%% xmg:punctuation('<syn>').
-%% xmg:punctuation('<frame>').
-
-%% xmg:punctuation('<syn1>').
-%% xmg:punctuation('<syn2>').
-
-%% xmg:punctuation('=>').
-%% xmg:punctuation('<=!>').
-%% xmg:punctuation('-!-').
-
-%% xmg:punctuation('<-').
-%% xmg:punctuation('...+').
-%% xmg:punctuation(',,,+').
-%% xmg:punctuation('...').
-%% xmg:punctuation(',,,').
-%% xmg:punctuation(';;;').
-%% xmg:punctuation('->*').
-%% xmg:punctuation('->+').
-%% xmg:punctuation('->').
-%% xmg:punctuation('>>*').
-%% xmg:punctuation('>>+').
-%% xmg:punctuation('>>').
-%% xmg:punctuation('-L>').
-%% xmg:punctuation('-R>').
-%% xmg:punctuation('::').
-%% xmg:punctuation(':=').
-%% xmg:punctuation('+=').
-%% xmg:punctuation('-=').
-%% xmg:punctuation('=+').
-%% xmg:punctuation('=-').
-%% xmg:punctuation('=~').
-%% xmg:punctuation('=|').
-%% xmg:punctuation('<<').
-%% %%xmg:punctuation('..').
-%% xmg:punctuation('!=').
-%% xmg:punctuation('**').
-%% xmg:punctuation('{').
-%% xmg:punctuation('}').
-%% xmg:punctuation('&').
-%% xmg:punctuation('|').
-%% xmg:punctuation('[').
-%% xmg:punctuation(']').
-%% xmg:punctuation(',').
-%% xmg:punctuation('(').
-%% xmg:punctuation(')').
-%% xmg:punctuation('?').
-%% xmg:punctuation('~').
-%% xmg:punctuation(':').
-%% xmg:punctuation('=').
-%% xmg:punctuation('<').
-%% xmg:punctuation('>').
-%% xmg:punctuation('.').
-%% xmg:punctuation(';').
-%% xmg:punctuation('@').
-%% xmg:punctuation('!').
-%% xmg:punctuation('*=').
 
 %%=============================================================================
 %% read a + or - as a boolean
