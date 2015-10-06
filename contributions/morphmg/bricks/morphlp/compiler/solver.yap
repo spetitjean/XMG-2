@@ -22,21 +22,21 @@
 :- use_module(library(assoc)).
 
 eval(Morph,morphlp:solved(Atom,MEqs)):-
-	xmg:send(info,'\nSolving lp: '),
-	xmg:send(info,Morph),
+	xmg:send(debug,'\nSolving lp: '),
+	xmg:send(debug,Morph),
 	get_all(Morph,Stems,Precs,InF,Eqs),
-	xmg:send(info,Stems),
-	xmg:send(info,Precs),
-	xmg:send(info,InF),
-	xmg:send(info,Eqs),
+	xmg:send(debug,Stems),
+	xmg:send(debug,Precs),
+	xmg:send(debug,InF),
+	xmg:send(debug,Eqs),
 	order_stems(Stems,Precs,OStems),
-	xmg:send(info,'\nFields ordered'),
+	xmg:send(debug,'\nFields ordered'),
 	put_in_fields(InF,OStems,Strings),
 	merge_eqs(Eqs,MEqs),
-	xmg:send(info,'\nStrings in fields: '),
+	xmg:send(debug,'\nStrings in fields: '),
 	concat_stems(Strings,Form),
 	atom_codes(Atom,Form),
-	xmg:send(info,Atom),
+	xmg:send(debug,Atom),
 	!.
 
 get_all([],[],[],[],[]):- !.
@@ -109,11 +109,11 @@ merge_eqs([H|T],[H|Eqs]):-
 
 merge_eq(A-V,Eqs,MMEqs):-
 	lists:member(A-V,Eqs),
-	xmg:send(info,'\nwas in eqs'),
+	xmg:send(debug,'\nwas in eqs'),
 	lists:delete(Eqs,A-V,MEqs),
 	merge_eq(A-V,MEqs,MMEqs),!.
 merge_eq(A-V,Eqs,Eqs):-
 	not(lists:member(A-_,Eqs)),
-	xmg:send(info,'\nwas not in eqs'),!.
+	xmg:send(debug,'\nwas not in eqs'),!.
 
 	

@@ -1,6 +1,0 @@
-Jean aime Marie.
-Jean est appelé par Marie.
-Marie aime Jean.
-Marie dort.
-Jean qui dort aime Marie.
-ils dorment.
