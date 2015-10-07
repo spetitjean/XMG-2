@@ -78,9 +78,9 @@ class subjCan
 export S
 declare ?W ?N ?M ?S ?NN ?NV
 { <syn>{
-	node S (color=white)[cat = s]{
-		node NN(color=red,mark=subst)[cat=n,top = [idx=?W,num = ?N, pers=?M] ]
-		node NV(color=white)[cat = v, top=[num=?N, pers=?M] ]
+  node S (color=white)[cat = s]{
+       	node NN(color=red,mark=subst)[cat=n,top = [idx=?W,num = ?N, pers=?M] ]
+	node NV(color=white)[cat = v, top=[num=?N, pers=?M] ]
 	}
 }*=[suj = ?W]
 }
@@ -125,10 +125,10 @@ declare
 	!L !E ?X ?Y 
  { 
    <sem>{
-   !L:Pred(!E,?X,?Y)
-   }
-   *= [arg0 = ?X,arg1 = ?Y] 
-    }
+	!L:Pred(!E,?X,?Y)
+   	}
+	*= [arg0 = ?X,arg1 = ?Y] 
+  }
 
 class lexemeManger 
 declare ?X ?Y

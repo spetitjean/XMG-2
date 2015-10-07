@@ -330,7 +330,37 @@ class BrickCompiler(object):
         else:
             raise Exception("No file set to generate the parser")
 
+    def generate_emacs_mode(self):
+        compPath=os.getcwd()
+        compSplit=compPath.split('/')
+        compName=compSplit[len(compSplit)-1]
+        modefile=open(self._folder+"/.emacs","w")
+        modefile.write(';;====================================================================\n')
+        modefile.write(';; MetaGrammar mode, compiler '+compName+'\n')
+        modefile.write(';; Automatically generated, based on the mode by B. Crabbe\n')
+        modefile.write('(require \'generic-x)\n')
+        modefile.write('(define-generic-mode \'metagrammar-mode\n') 
+        modefile.write('  \'("%");;comments\n')
+        modefile.write('  \'(')
+        for key in self._keywords:
+            modefile.write('"'+key+'"')
+        modefile.write(');;keywords\n')
+        modefile.write('  \'(\n')
+        modefile.write('    ("class\\\\s (\*\*)* +\\\\(\\\\sw[a-zA-Z0-9_.-]*\\\\)" 1 \'font-lock-type-face);noms de classes\n')
+        modefile.write('    ("\?[a-zA-Z0-9]+" . font-lock-variable-name-face)\n')
+        modefile.write('    ("\![a-zA-Z0-9]+" . font-lock-constant-face)\n')
+        modefile.write('    ("\<[a-zA-Z]+>" . font-lock-constant-face)\n')
+        modefile.write('    ("\(\\\\(\\\\sw[a-zA-Z0-9_.-]*\\\\(,\\\\sw[a-zA-Z0-9_.-]*\\\\)*\\\\)\)" 1 font-lock-constant-face);;params & node props\n')
+        modefile.write('    ("$\\\\(\\\\sw*\\\\)*" . font-lock-constant-face);;params inside\n')
+        modefile.write('    )\n')
+        modefile.write('  \'(".mg\\\\\'") ;;file extension\n')
+        modefile.write('  nil\n')
+        modefile.write('  "Major mode for metagrammar editing")  ')
+        modefile.close()
+        print("Emacs mode file generated in %s/.emacs"%self._folder)
 
+
+        
     def generate_all(self):
         directory=self._folder
         if not os.path.exists(directory):
@@ -343,6 +373,7 @@ class BrickCompiler(object):
             self.generate_silent_loader()
             self.generate_edcg()
             self.generate_conf()
+            self.generate_emacs_mode()
         else:
             raise Exception("No directory set for the compiler")
 
