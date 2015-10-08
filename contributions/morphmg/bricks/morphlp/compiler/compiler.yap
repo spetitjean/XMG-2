@@ -20,10 +20,9 @@
 :-module(xmg_brick_morphlp_compiler).
 
 
-xmg:eval(morphlp,_,Morph,XML,_):-
+xmg:eval(morphlp,_,Morph,Value,_):-
 	%%xmg:send(info,Morph),
 	xmg_brick_morphlp_solver:eval(Morph,Value),
 	%%xmg:send_nl(info,2),
 	xmg:send(debug,' Value : '),
-	xmg:send(debug,Value),
-	xmg:do_xml_convert(Value,XML).
+	xmg:send(debug,Value).

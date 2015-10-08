@@ -22,7 +22,8 @@
 :- xmg:edcg.
 
 
-xmg:xml_convert_term(morphlp:solved(List,Form), elem(morph, children([elem(features,features([value-Form])),elem(morph,features([value-List]))]))) :--
+xmg:xml_convert_term(morphlp:solved(List,Form), elem(morph, children([elem(features,children(CForm)),elem(morph,features([value-List]))]))) :--
+	xmg:xml_convert_term(avm:avm(Form),CForm),
 	%% xmg_convert_avm:xmlFeats(L1,Feats) with name(0,N1),
 	%% xmlMorph(List,Stems),
 	!.
