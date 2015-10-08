@@ -1,1 +1,4 @@
-
+* YAP is broken (attributed variables cause errors after commit a34b45b), how can we simplify the installation?
+* repair brick morphtf (or the metagrammars)
+* provide minimal examples in Metagrammars for every compiler (type definitions, etc)
+* all these compiler.yap files should have better names, like executor.yap or evaluator.yap (except the one in brick mg, which is the compiler)

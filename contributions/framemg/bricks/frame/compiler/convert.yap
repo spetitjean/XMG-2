@@ -31,9 +31,7 @@ listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
 xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFeats))) :--
-	%%xmg:send(info,' here convert '),
 	framesToXML(Frames,UFeats),
-	%%xmg:send(info,UFeats),
 	!.
 
 

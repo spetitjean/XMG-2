@@ -23,7 +23,7 @@
 
 :- edcg:using(xmg_brick_mg_convert:name).
 
-xmg:xml_convert_term(morphtf(AVM),elem(morphtf,children([elem(feats,children(Feats)),elem(fields,children(Fields))]))):--
+xmg:xml_convert_term(morphtf:morphtf(AVM),elem(morphtf,children([elem(feats,children(Feats)),elem(fields,children(Fields))]))):--
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	%%xmg:send(info,LAVM),
 	order_list(LAVM,L1,L2),

@@ -22,7 +22,7 @@
 
 :- xmg:edcg.
 
-:- edcg:thread(name,edcg:counter).
+:- edcg:using(xmg_brick_mg_convert:name).
 
 :- edcg:weave([name],[new_name/2, xmlSem/2, xmlPred/2, xmlArgs/2, xmlArg/2, xmlID/2]).
 
@@ -34,7 +34,7 @@ new_name(Prefixe, Name) :--
 
 xmg:xml_convert_term(sem:sem(Sem), elem(semantics,children(Sem1))) :--
 	lists:remove_duplicates(Sem,SemD),!,
-	xmlSem(Sem,Sem1) with name(0,_),
+	xmlSem(Sem,Sem1),
 	!.
 
 xmlSem([],[]):-- !.

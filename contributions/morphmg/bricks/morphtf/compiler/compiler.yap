@@ -20,12 +20,10 @@
 :-module(xmg_brick_morphtf_compiler).
 
 
-xmg:eval(morphtf,_,Morph,XML,_):-
+xmg:eval(morphtf,_,Morph,morphtf:morphtf(Value),_):-
 	%%xmg:send(info,Morph),
 	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
 	%%xmg:send_nl(info,2),
 	xmg:send(debug,' Value : '),
-	xmg:send(debug,Value),
-	xmg:do_xml_convert(Value,XML).
-
+	xmg:send(debug,Value).
 
