@@ -334,7 +334,7 @@ class BrickCompiler(object):
         compPath=os.getcwd()
         compSplit=compPath.split('/')
         compName=compSplit[len(compSplit)-1]
-        modefile=open(self._folder+"/.emacs","w")
+        modefile=open(self._folder+"/emacs_mode","w")
         modefile.write(';;====================================================================\n')
         modefile.write(';; MetaGrammar mode, compiler '+compName+'\n')
         modefile.write(';; Automatically generated, based on the mode by B. Crabbe\n')
@@ -357,7 +357,7 @@ class BrickCompiler(object):
         modefile.write('  nil\n')
         modefile.write('  "Major mode for metagrammar editing")  ')
         modefile.close()
-        print("Emacs mode file generated in %s/.emacs"%self._folder)
+        print("Emacs mode file generated in %s/emacs_mode"%self._folder)
 
 
         

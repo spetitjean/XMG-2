@@ -33,6 +33,8 @@
 
 :-edcg:weave([constraints,vars,consts,name],[xmg:unfold_stmt/1,xmg:unfold_dimstmt/2,xmg:unfold_expr/2, xmg:unfold_exprs/2,xmg:new_target_var/2,xmg:new_target_var/1]).
 
+%%:-edcg:weave([name],[xmg_brick_mg_compiler:eval_dims/3]).
+
 
 xmg:new_target_var(v(Name),Prefix) :--
 	name::incr,

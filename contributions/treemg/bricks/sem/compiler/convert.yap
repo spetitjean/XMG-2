@@ -31,10 +31,8 @@ new_name(Prefixe, Name) :--
 	name::get(N),
 	atomic_concat([Prefixe,N],Name).
 
-listToXML([],[]).
-listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
-toXML(Sem, elem(semantics,children(Sem1))) :--
+xmg:xml_convert_term(sem:sem(Sem), elem(semantics,children(Sem1))) :--
 	lists:remove_duplicates(Sem,SemD),!,
 	xmlSem(Sem,Sem1) with name(0,_),
 	!.

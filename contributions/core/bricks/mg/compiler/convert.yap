@@ -42,7 +42,9 @@ xmg:xml_convert(Term,Convert):--
 xmg:xml_convert(Term,Convert):--
 	xmg:xml_convert_attributed(Term,Convert),!.
 xmg:xml_convert(Term,Convert):--
-	xmg:xml_convert_free(Term,Convert),!.
+	       xmg:xml_convert_free(Term,Convert),!.
+
+
 xmg:xml_convert(Term,Expected):--
 	xmg:send(info,'\n\nError: could not convert to xml \n'),
 	xmg:send(info,Term),
@@ -55,9 +57,10 @@ xmg:xml_convert_free(Free,Convert):--
 	var(Free),
 	new_name("@V",Convert).
 
-xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),elem(entry, features([name-Name]),children([elem(family, data(Class)),elem(trace, children(Trace1))|Dims]))):--
+xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),elem(entry, features([name-Name]),children([elem(family, data(Class)),elem(trace, children(Trace1))|CDims]))):--
 	xmlTrace(Trace,Trace1),!,
-	atomic_concat([Class,'_',Number],Name),
+        atomic_concat([Class,'_',Number],Name),
+	xmg:xml_convert_term(Dims,CDims),
 	!.
 
 xmg:xml_convert_term([],[]):-- !.

@@ -21,6 +21,8 @@
 
 :-load_files(['xmg/brick/mg/compiler/prelude.yap'],[silent(true)]).
 
+
+
 :-dynamic(principle/1).
 :-dynamic(xmg:principle/3).
 :-dynamic(unicity/1).
@@ -34,6 +36,8 @@
 
 %% xmg:eval extracts the models from a description. 
 :-multifile(xmg:eval/5).
+:-multifile(xmg:eval/7).
+
 
 %encoding(iso_latin_1).
 %encoding(utf8).
@@ -209,7 +213,7 @@ eval:- xmg:send(out,'</grammar>\n'),
        xmg:send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
        !.
 
-eval_dims([],[],_).
+eval_dims([],[],_):-!.
 eval_dims([trace-Acc|T],T1,Class):-!,
 	eval_dims(T,T1,Class).
 eval_dims([skolem-Acc|T],T1,Class):-

@@ -20,7 +20,7 @@
 :-module(xmg_brick_tree_compiler).
 
 %% TAG compiler
-eval(Syn,[tree],XML,Class):-
+eval(Syn,[tree],tree:tree(Tree,Class,Previous),Class):-
 	xmg:send(debug,' preparing '),
 
 	xmg_brick_tree_preparer:prepare(syn(Syn,[Class]),Prepared),
@@ -28,8 +28,9 @@ eval(Syn,[tree],XML,Class):-
 	xmg_brick_tree_solver:solve(Prepared,solution(IsRoot,Eq, Children, Left, NodeList1)),
 	xmg_brick_tree_extractor:extract(IsRoot,Eq, Children, Left, NodeList1,Tree),
 	xmg:send(debug,' extracted '),
-	xmg_brick_mg_compiler:current(Previous),
+	xmg_brick_mg_compiler:current(Previous).
+	%%xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML)
 
-	xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML).
-eval([],_,elem(tree, features([id-none])),_).
+eval([],_,none,_).
+%%eval([],_,elem(tree, features([id-none])),_).
 

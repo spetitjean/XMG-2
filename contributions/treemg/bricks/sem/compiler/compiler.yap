@@ -19,9 +19,7 @@
 
 :-module(xmg_brick_sem_compiler).
 
-xmg:eval(sem,_,Sem,XML,_):-
-	xmg_brick_sem_convert:toXML(Sem,XML),
-	xmg:send_nl(info).
+xmg:eval(sem,_,Sem,sem:sem(Sem),_).
 
 
 
