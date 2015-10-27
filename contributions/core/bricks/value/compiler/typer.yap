@@ -39,10 +39,6 @@ xmg:type_expr(value:const(token(C,id(ID))),Type):--
 xmg:type_expr(value:const(token(C,id(ID))),Type):--
         throw(xmg(generator_error(unknown_constant(ID,C)))).
 
-xmg:type_expr(token(C,id(ID)),Type):--
-      			  types::tget(ID,Type1),
-			  xmg:check_types(Type,Type1,C),
-        !.
 
 
 xmg:type_expr(token(_,bool(_)),bool):--
@@ -57,11 +53,28 @@ xmg:type_expr(token(_,string(_)),string):--
 
 xmg:type_expr(value:disj(Values),Type):--
 	type_disj(Values,Type),
-	!.
+!.
+
+
+%% Case where ID has no ? and could possibly be constant or variable
+xmg:type_expr(token(C,id(ID)),Type):--
+	     type_decls::tget(const(ID),Type1),
+             types::tget(ID,Type1),
+	     C=coord(File,Line,Col),
+	     atomic_concat(['In file ',File,', line ',Line,', column ',Col,', ',ID,' could refer to both a constant and a variable.'],Mess),
+	     print_message(warning,Mess),
+	     xmg:check_types(Type,Type1,C),
+	     !.
+
+xmg:type_expr(token(C,id(ID)),Type):--
+      			  types::tget(ID,Type1),
+			  xmg:check_types(Type,Type1,C),
+        !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% typing a constant
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 xmg:type_expr(token(C,id(ID)),Type):--
 	     type_decls::tget(const(ID),Type1),

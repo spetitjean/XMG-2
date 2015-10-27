@@ -169,7 +169,33 @@ parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
 	generated_parser:action(State,Tok,'reduce',NRule),
 	generated_parser:action(State,Tok,'shift',NState),
-	xmg_brick_mg_compiler:send(info,'reduce/shift confict'),false,!. 
+	xmg_brick_mg_compiler:send(debug,'\nreduce/shift confict on token '),
+	xmg_brick_mg_compiler:send(debug,Token),
+
+	false,!.
+
+parse_sem([State|States],[Token|Tokens]):--
+	tokArgs(Token,Tok,Args),
+	generated_parser:action(State,Tok,'reduce',NRule),
+	generated_parser:action(State,Tok,'reduce',NRule1),
+	not(NRule=NRule1),
+	xmg_brick_mg_compiler:send(debug,'\nreduce/reduce confict on token '),
+	xmg_brick_mg_compiler:send(debug,Token),
+
+	false,!.
+
+parse_sem([State|States],[Token|Tokens]):--
+	tokArgs(Token,Tok,Args),
+	generated_parser:action(State,Tok,'shift',NState),
+	generated_parser:action(State,Tok,'shift',NState1),
+	not(NState=NState1),
+	xmg_brick_mg_compiler:send(debug,'\nshift/shift confict on token '),
+	xmg_brick_mg_compiler:send(debug,Token),
+		xmg_brick_mg_compiler:send(debug,'. States are '),
+		xmg_brick_mg_compiler:send(debug,NState),
+		xmg_brick_mg_compiler:send(debug,' and '),
+		xmg_brick_mg_compiler:send(debig,NState1),
+	false,!. 
 
 	
 
@@ -178,15 +204,11 @@ parse_sem([State|States],[Token|Tokens]):--
 
 	generated_parser:action(State,Tok,'reduce',NRule),
 
-	%% xmg:send(info,'\nstate '),
-	%% xmg:send(info,State),
-	%% xmg:send(info,'\nreducing '),
-	%% xmg:send(info,Token),
-	%% xmg:send(info,NRule),
 
 	steps::incr ,
 	%% REDUCE
 	generated_parser:rule(NRule,Left,RightSize),
+
 	pop2N([State|States],RightSize,Pop,Stack),
 	Stack=[Top|_],
 	generated_parser:next(Top,Left,Next),
@@ -262,7 +284,6 @@ parse_sem([State|States],[token(Coord,Token)|Tokens]):--
 	fail.
 
 throw_errors:--
-	xmg_brick_mg_compiler:send(info,' ERROR :'),
 	lastError(Errors,_),
 	%%errors::top(Errors),
 	

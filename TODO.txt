@@ -2,3 +2,12 @@
 * repair brick morphtf (or the metagrammars)
 * provide minimal examples in Metagrammars for every compiler (type definitions, etc)
 * all these compiler.yap files should have better names, like executor.yap or evaluator.yap (except the one in brick mg, which is the compiler)
+
+* Bug in the LALR Parser generator:
+  Minimal example:
+    S: (int)? 'b' 'c'
+     | 'b';
+
+    b and 4bc can be parsed but not bc
+    bc can be parsed if the second clause is removed
+    Happens only if the optional NT is the first symbol of the RHS

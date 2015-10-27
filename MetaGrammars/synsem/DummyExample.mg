@@ -44,7 +44,7 @@ feature arg2 : LABEL
 %% use syn:node with (node_props, node_feats) dims (syn) 
 
 class test
-declare ?X ?Y ?Z
+declare ?X ?Y ?Z ?v
 {
 	<syn>{
 		node ?X [cat=v];

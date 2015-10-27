@@ -67,16 +67,20 @@ class LR1(object):
         todo = list(items)
         while todo:
             it = todo.pop()
-            #print "item",map(str,it)
+            #print("item"," ".join(map(str,it)))
             clos.add(it)
             if it.complete:
                 continue
             nxt = it.next
-            if nxt.is_T :#or (nxt,it.token) in done:
+            #print("Next is "+str(nxt))
+            if nxt.is_T :
+            #if (nxt,it.token) in done:
                 continue
             done.add((nxt,it.token))
             first= self.grammar.first(it.suffix[1:]+(it.token,))
-            #print "FIRST:",map(str,it.suffix[1:]+(it.token,)),"->",map(str,list(first))
+            # print("FIRST("," ".join(map(str,it.suffix[1:]+(it.token,))),")")
+            # for f in first:
+            #     print(f)
             for r in self.grammar.rules:
                 if r.head is nxt:
                     for b in first: 
