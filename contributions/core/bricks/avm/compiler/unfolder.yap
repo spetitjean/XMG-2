@@ -35,11 +35,11 @@ unfold_feats([Feat|Feats], Target) :--
 	unfold_feat(Feat, Target),
 	unfold_feats(Feats, Target).
 
-unfold_feat(avm:feat(token(Coord,F),V), Target) :--
+unfold_feat(avm:feat(F,V), Target) :--
 	%%xmg:new_target_var(Target1),
         %%xmg:new_target_var(Target2),
 	xmg:new_target_var(Value),
-	%%xmg:unfold_expr(F, Target1),
+	xmg:unfold_expr(F, Target1),
 	xmg:unfold_expr(V, Target2),
 	%%constraints::enq(eq(Value,Target2)),
 	(
@@ -50,7 +50,7 @@ unfold_feat(avm:feat(token(Coord,F),V), Target) :--
 	    true
 	),
     
-	constraints::enq((Target,avm:feat(F,Target2))),!.
+	constraints::enq((Target,avm:feat(Target1,Target2))),!.
 
 
 xmg:unfold_expr(avm:dot(Var1,Var2),Target):--
