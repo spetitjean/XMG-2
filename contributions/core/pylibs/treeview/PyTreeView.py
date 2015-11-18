@@ -153,7 +153,7 @@ class PyTreeView(QtGui.QMainWindow):
         mgAction.setShortcut('Ctrl+Alt+O')
         mgAction.setStatusTip(self.tr('Compiler et charger un fichier MG'))
         mgAction.triggered.connect(self.getmgname)
-        dezoomAction = QtGui.QAction(QtGui.QIcon(IMAGE.ZOOMAR),  self.tr('Dézoomer'),  self)
+        dezoomAction = QtGui.QAction(QtGui.QIcon(IMAGE.ZOOMAR),  self.tr('Dezoomer'),  self)
         dezoomAction.setShortcut('Ctrl+-')
         dezoomAction.setStatusTip(self.tr('Dézoomer'))
         dezoomAction.triggered.connect(self.widcentral.dezoom)
