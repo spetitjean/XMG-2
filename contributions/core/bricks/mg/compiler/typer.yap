@@ -85,9 +85,9 @@ xmg:get_var_type(some(token(_,id(ID))),Var):--
 xmg:get_var_type(token(_,id(ID)),Var):-- 
 	types::tget(ID,Var),!.
 xmg:get_var_type(Get,_):--
-	xmg:send(info,'could not get type for var '),
+	xmg:send(info,'\ncould not get type for var '),
 	xmg:send(info,Get),
-	false,
+	halt,
 	!.
 
 type_metagrammar(MG):-
@@ -487,14 +487,14 @@ order_fields(Fields,First,[First|OFields]):-
 	fieldprec(First,Next),!,
 	order_fields(NFields,Next,OFields),!.
 order_fields(Fields,First,[First|OFields]):- !,
-	xmg_brick_mg_compiler:send(info,' Could not order fields, nothing seems to follow '),
+	xmg_brick_mg_compiler:send(info,'\nCould not order fields, nothing seems to follow '),
 	xmg_brick_mg_compiler:send(info,First),
-	false,!.
+	halt,!.
 
 
 
 find_first([],_):- !,
-	xmg_brick_mg_compiler:send(info,' Could not find a first field, there might be a cycle'),false,!.
+	xmg_brick_mg_compiler:send(info,'\nCould not find a first field, there might be a cycle'),halt,!.
 find_first([F1|T],F2):-
 	fieldprec(_,F1),!,
 	find_first(T,F2),!.

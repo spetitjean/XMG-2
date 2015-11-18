@@ -19,7 +19,7 @@ class _ConfigParser(configparser.ConfigParser):
         filename = os.path.expanduser("~/.config/xmg/treeview/config.cfg")
         dirname = os.path.dirname(filename)
         if not os.path.exists(dirname):
-            os.mkdirs(dirname)
+            os.mkdir(dirname)
         with open(filename,"w") as f:
             self.write(f)
 
