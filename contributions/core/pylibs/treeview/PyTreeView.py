@@ -339,7 +339,7 @@ def main(args=[],formalism="tag"):
     app = QtGui.QApplication(args)
     if config['GENERAL']['lang']=='ENG':
         appTranslator = QtCore.QTranslator()
-        appTranslator.load("PyTreeView_en")
+        appTranslator.load(os.path.dirname(os.path.abspath(__file__))+"/PyTreeView_en")
         app.installTranslator(appTranslator)
     ex=PyTreeView(formalism)                
     ex.showMaximized()

@@ -16,9 +16,9 @@ def handler_xmg_gui(args):
         PyTreeView.main([args.input])
 
 cmd = subparsers.add_parser(
-    "gui", description="view a TAG metagrammar")
+    "gui", description="view a resource")
 cmd.add_argument("type", metavar="TYPE", help="TYPE (formalism)")
-cmd.add_argument("--input","-i", metavar="IFILE", help="XMG metagrammar file",
+cmd.add_argument("--input","-i", metavar="IFILE", help="XML file",
                  default=None)
-cmd.add_argument("input", nargs='?', default=None, help="metagrammar file")
+cmd.add_argument("input", nargs='?', default=None, help="Grammar file")
 cmd.set_defaults(handler=handler_xmg_gui)
