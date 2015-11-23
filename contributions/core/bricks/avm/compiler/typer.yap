@@ -98,6 +98,15 @@ xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
 	!.
+
+xmg:type_expr(avm:dot(avm:dot(AVM1,V),token(_,id(Feat))),Type):--
+	     xmg:type_expr(avm:dot(AVM1,V),T1),
+xmg:send(debug,'\n\nTyping recursive dot expression:'),
+	xmg:send(debug,'DOT'),
+	xmg:send(debug,Feat),
+	xmg_brick_avm_avm:dot(T1,Feat,Type),
+	!.
+
 %% For dots in classes (should be consistent)
 xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--
 	types::tget(AVM,CAVM),
@@ -108,6 +117,8 @@ xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--
 
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
 	!.
+
+
 
 %% when typing a structured avm
 feat_type(token(_,id(Feat)),Feat,AVM,Type):-
