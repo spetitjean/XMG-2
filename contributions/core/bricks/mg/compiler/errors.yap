@@ -115,10 +115,12 @@ vs_to_string(write(T)) -->> !,
 	write_to_chars(T,S),
 	queue::enq_list(S).
 vs_to_string([H]) -->>
+	atom(H),
 	atom_codes(H,C),
 	queue::enq_list(C),
 	!.
 vs_to_string([H|T]) -->>
+	atom(H),
 	atom_codes(H,C),
 	queue::enq_list(C),
 	queue::enq_list(" or "),
@@ -166,6 +168,11 @@ get_first_coord(N,C):-
 
 %% map exception term to message record
 
+%% errors in tokenizer
+xmg_message(tokenizer_error(unrecognized(T,C)), Msg) :- !,
+	Msg=error(tokenizer,[hint(unrecognized,T),C]).
+
+%% errors in parser
 xmg_message(parser_error(expected(E,T,C)), Msg) :- !,
 	Msg=error(parser,[hint(expected,E,T),C]).
 xmg_message(parser_error(unsupported(T,C)), Msg) :- !,

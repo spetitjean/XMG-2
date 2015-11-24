@@ -137,6 +137,9 @@ more_tokens -->>
      (toks::put(C), toks::put(T))),
     tokens.
 more_tokens -->> [].
+more_tokens -->>
+	    line::get(L), col::get(C), file::top(F), Coord=coord(F,L,C), input_getline(S),
+            throw(xmg(tokenizer_error(unrecognized(S,Coord)))).
 
 %%=============================================================================
 %% proceed to perform a "file include"
@@ -144,12 +147,8 @@ more_tokens -->> [].
 
 more_tokens_include -->>
     spaces,
-    %% token(id(File)),
     fileName(File),
     atom_codes(AFile,File),
-%    xmg_compiler:send(info,'including '),
-%    xmg_compiler:send(info,AFile),
-%    xmg_compiler:send_nl(info),
     resolve_file(AFile, File, Path),
     divert_to_file(Path),
     tokens.
