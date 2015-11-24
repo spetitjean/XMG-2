@@ -134,7 +134,7 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 	make_params_global(P) with (types(TypedTable,_), exports(IParams,Params)),
 	rbtrees:rb_visit(Params,ParamList),
 
-	global_context::tput(N,(ParamList,CAVM)),
+	global_context::tput(class(N),(ParamList,CAVM)),
 	type_classes(T),!.
 type_classes([_|T]):--
 	type_classes(T),!.
@@ -183,7 +183,7 @@ unify_imports([I|T]):--
 
 unify_import(mg:iclass(token(_,id(A)),[],none)):--
 	%%global_context::tget(A,Exports),
-	types::tget(A,(Params,CAVM)),
+	types::tget(class(A),(Params,CAVM)),
 	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
 	xmg_brick_mg_exporter:exports(N,List),
 	import_exports(List,FACAVM).
