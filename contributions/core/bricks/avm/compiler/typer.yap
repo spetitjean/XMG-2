@@ -75,7 +75,7 @@ extend_type(Type,UAttr,TypeAttr):--
 	xmg:send(info,UAttr),
 	xmg:send(info,'\n'),	
 	xmg:send(info,TypeAttr),
-	fail.
+	halt.
 extend_type(Type,UAttr,TypeAttr):--
 	xmg:send(info,'\n\nAVM Type Error! Could not extend type:\n'),
 	xmg:send(info,Type),
@@ -83,7 +83,7 @@ extend_type(Type,UAttr,TypeAttr):--
 	xmg:send(info,UAttr),
 	xmg:send(info,'\n'),	
 	xmg:send(info,TypeAttr),
-	fail.
+	halt.
 
 	
 xmg:type_stmt(avm:avm(Coord,Feats),Type):--
@@ -148,7 +148,7 @@ type_def(TypeAttr,_):--
 	xmg:send(info,'\n\nError! Type '),
 	xmg:send(info,TypeAttr),
 	xmg:send(info,' is undefined.'),
-	fail,
+	halt,
 	!.
 
 value_type(Value,Type):--

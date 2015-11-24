@@ -50,7 +50,7 @@ xmg:xml_convert(Term,Expected):--
 	xmg:send(info,Term),
 	xmg:send(info,'\nI expected: \n' ),
 	xmg:send(info,Expected),
-	false,!.
+	halt,!.
 
 
 xmg:xml_convert_free(Free,Convert):--

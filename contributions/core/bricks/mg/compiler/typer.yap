@@ -171,7 +171,7 @@ make_params_global([token(_,id(A))|T]):--
 make_params_global([A|T]):--
 	xmg:send(info,'\nNo type for:'),
 	xmg:send(info,A),
-	false,!.
+	halt,!.
 
 unify_imports(none):-- !.
 unify_imports(some(mg:import(I))):-- 
@@ -322,9 +322,9 @@ type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):--
 	type_fields(OFields,1),
 	!.
 type_decl(Type-Decls):--
-	xmg_brick_mg_compiler:send(debug,'  unknown decl type: '),
-	xmg_brick_mg_compiler:send(debug,Type),
-	false,!.
+	xmg_brick_mg_compiler:send(info,'  unknown decl type: '),
+	xmg_brick_mg_compiler:send(info,Type),
+	halt,!.
 
 get_types([]):-- !.
 get_types([H|T]):--
@@ -352,7 +352,7 @@ get_type(type(Type,TypeDef)):--
 	xmg:send(info,Type),
 	xmg:send(info,', '),
 	xmg:send(info,TypeDef),
-	false,!.
+	halt,!.
 
 
 get_feats_types([],[]):-- !.
@@ -378,7 +378,7 @@ assert_type(type(Id,Type)):--
 	type_decls::tget(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of type '),
 	xmg:send(info,Id),
-	false,!.
+	halt,!.
 assert_type(type(Id,Type)):--
 	type_decls::tput(Id,Type),!.
 
@@ -393,7 +393,7 @@ assert_const(Const,Type):--
 	type_decls::tget(const(Const),T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of const '),
 	xmg:send(info,Const),
-	false,!.
+	halt,!.
 assert_const(Const,Type):--
 	type_decls::tput(const(Const),Type).
 
@@ -417,7 +417,7 @@ assert_feat(feat(Id,Type)):--
 	xmg:feat(Id,T),not(T=Type),!,
 	xmg:send(info,'\n Multiple definition of feature '),
 	xmg:send(info,Id),
-	false,!.
+	halt,!.
 assert_feat(feat(Id,Type)):--
 	not(xmg:feat(Id,_)),
 	%%xmg:send(info,'\n\nassert feat \n '),
@@ -474,7 +474,7 @@ prepare_fields([field(id(ID,_))|T],[ID|PT]):-
 	prepare_fields(T,PT),!.
 prepare_fields([U|T],[ID|PT]):-
 	xmg_brick_mg_compiler:send(info,'UNEXPECTED '),
-	xmg_brick_mg_compiler:send(info,U),false,!.
+	xmg_brick_mg_compiler:send(info,U),halt,!.
 
 order_fields([],[]):-!.
 order_fields(Fields,OFields):-

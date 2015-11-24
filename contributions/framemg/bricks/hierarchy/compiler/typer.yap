@@ -171,7 +171,7 @@ fTypeToVector(Type,SVector,FVector):-
 fTypeToVector(Type,SVector,FVector):-
 	not(xmg:ftypes(Types)),
 	xmg:send(info,'\n\nError: no frame type was defined'),
-	false.
+	halt.
 
 find_smaller_supertype(Vector,FVector,SVector):-
 	find_smaller_supertype_from(Vector,SVector,0),
@@ -197,7 +197,7 @@ typeExists(Type,Types):-
 typeExists(Type,Types):-
 	xmg:send(info,'\n\nError: '),
 	xmg:send(info,Type),
-	xmg:send(info,' is not a type.'),false.
+	xmg:send(info,' is not a type.'),halt.
 
 replace_zeros([],[]).
 replace_zeros([0|T],[_|T1]):-
@@ -317,7 +317,7 @@ is_type(T):-
 	xmg:send(info,'\n\nError: '),
 	xmg:send(info,T),
 	xmg:send(info,' is not a ftype.'),
-	false.
+	halt.
 
 
 

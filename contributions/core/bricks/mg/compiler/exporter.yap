@@ -129,8 +129,12 @@ whichImport([id(H,C)|T],Acc):-
 	lists:member(H,Acc),!,
 	whichImport(T,Acc).
 whichImport([id(H,C)|T],Acc):-
-	xmg_brick_mg_compiler:send(debug,'Error while importing class '),xmg_brick_mg_compiler:send(debug,H),xmg_brick_mg_compiler:send(debug,' at '),xmg_brick_mg_compiler:send(debug,C),xmg_brick_mg_compiler:send(debug,'\n'),!,
-	whichImport(T,Acc).
+    xmg:send(info,'Error while importing class '),
+    xmg:send(info,H),
+    xmg:send(info,' at '),
+    xmg:send(info,C),
+    xmg:send(info,'\n'),!,
+    halt.
 
 %% Export variables
 
@@ -205,9 +209,9 @@ add_vars(Exps,[H|T],[H-_|T1]):-
 add_vars_no_duplicates(Exps,[],Exps).
 add_vars_no_duplicates(Exps,[id(H,C)|T],T1):-
 	lists:member(id(H,_)-_,Exps),!,
-	xmg_brick_mg_compiler:send(debug,' Multiple declarations of variable '),
-	xmg_brick_mg_compiler:send(debug,H),
-	xmg_brick_mg_compiler:send(debug,C),
+	xmg:send(debug,' Multiple declarations of variable '),
+	xmg:send(debug,H),
+	xmg:send(debug,C),
 	false,
 	add_vars_no_duplicates(Exps,T,T1).
 add_vars_no_duplicates(Exps,[H|T],[H-_|T1]):-
@@ -219,8 +223,8 @@ imports_exports([import(id(I,C),AS)|TI],E,D,Exps):-
 	   import_exports(I,Exps1)
 	;
 	(
-	    xmg_brick_mg_compiler:send_nl(info),xmg_brick_mg_compiler:send(info,'Did not find exports for class '),
-	    xmg_brick_mg_compiler:send(info,I),xmg_brick_mg_compiler:send(info,' at '), xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info)
+	    xmg:send_nl(info),xmg:send(info,'Did not find exports for class '),
+	    xmg:send(info,I),xmg:send(info,' at '), xmg:send(info,C),xmg:send_nl(info)
 	)
     ),
 	!,
@@ -251,11 +255,11 @@ exports_declared([id(H,C)|T],Exps,D):-
 	    ( lists:member(id(H,_)-_,Exps) ; lists:member(id(H,_),D) )
 	;
 	(
-	    %% xmg_brick_mg_compiler:send_nl(info),
-	    %% xmg_brick_mg_compiler:send(info,'variable '),
-	    %% xmg_brick_mg_compiler:send(info,H),
-	    %% xmg_brick_mg_compiler:send(info,' exported but not declared '),
-	    %% xmg_brick_mg_compiler:send(info,C),xmg_brick_mg_compiler:send_nl(info)
+	    %% xmg:send_nl(info),
+	    %% xmg:send(info,'variable '),
+	    %% xmg:send(info,H),
+	    %% xmg:send(info,' exported but not declared '),
+	    %% xmg:send(info,C),xmg:send_nl(info)
 	    throw(xmg(exporter_error(variable_not_declared(H,C))))
 	)
     )
