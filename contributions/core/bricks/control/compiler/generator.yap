@@ -36,6 +36,9 @@ xmg:generate_instr(control:or([I1,I2])):--
 	!.
 xmg:generate_instr(control:and(I)):--
 	xmg:generate_instrs(I),
+        !.
+xmg:generate_instr(control:opt_true):--
+	code::enq('true'),
 	!.
 
 xmg:generate_instr(indim(Dim,Acc)):--

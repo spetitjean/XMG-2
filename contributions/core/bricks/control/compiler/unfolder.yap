@@ -36,6 +36,10 @@ xmg:unfold_stmt(control:or(E1,E2)):--
 	xmg:unfold_stmt(E2) with (constraints([]-C2,[]-[])),
 	constraints::enq(control:or([control:and(C1),control:and(C2)])),
 	!.
+xmg:unfold_stmt(control:opt(E1)):--
+	xmg:unfold_stmt(E1) with (constraints([]-C1,[]-[])),
+	constraints::enq(control:or([control:and(C1),control:opt_true])),
+	!.
 
 xmg:unfold_dimstmt(Dim,control:and(S1,S2)):-- 
 	%% xmg_brick_mg_compiler:send(info,'\n\nunfolding:\n'),
@@ -49,7 +53,10 @@ xmg:unfold_dimstmt(Dim,control:or(S1,S2)):--
 	xmg:unfold_dimstmt(Dim,S2) with (constraints([]-C2,[]-[])),
 	constraints::enq(control:or([control:and(C1),control:and(C2)])),
 	!.
-
+xmg:unfold_dimstmt(Dim,control:opt(S1)):-- 
+	xmg:unfold_dimstmt(Dim,S1) with (constraints([]-C1,[]-[])),
+	constraints::enq(control:or([control:and(C1),control:opt_true])),
+	!.
 
 
 xmg:unfold_stmt(control:dimStmt(Dim,E2)):--

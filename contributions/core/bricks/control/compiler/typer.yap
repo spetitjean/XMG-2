@@ -33,6 +33,9 @@ xmg:type_stmt(control:or(S1,S2),Type):--
 	xmg:type_stmt(S1,Type),!,
 	xmg:type_stmt(S2,Type),!.
 
+xmg:type_stmt(control:opt(S1),Type):--
+	xmg:type_stmt(S1,Type),!.
+
 %% this should be in dim brick:
 xmg:type_stmt(dim:dim(Dim,S),void):--
 	%%xmg:send(info,'\n\ndim statement:\n'),
