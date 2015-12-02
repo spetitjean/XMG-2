@@ -250,7 +250,7 @@ parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
 	%% xmg:send(info,StepE),
 
 	(
-	    StepE - Steps > 100 ->
+	    StepE - Steps > 20 ->
 	    throw_errors;true
 	),
 	fail.
