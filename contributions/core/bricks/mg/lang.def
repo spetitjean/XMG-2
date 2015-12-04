@@ -23,7 +23,8 @@ MaybeAs	    : 'as' '[' (AsElem)+  ']' {$$=some($3)} | {$$=none};
 AsElem	    : Var '=' Var {$$=mg:ias($1,$3)} 
 	    | Var {$$=mg:ias($1,none)};
 
-Exports	    : 'export' (Var)+ {$$=mg:export($2)};
+Exports	    : 'export' (Var)+ {$$=mg:export($2)}
+	    | 'export' '*' {$$=mg:export(all)};
 
 Decls	    : 'declare' (Var)+ {$$=mg:declare($2)};
 

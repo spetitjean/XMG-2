@@ -85,6 +85,7 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 	put_in_table(List) with vars(TableV,TableVO),
 
 	%%xmg_brick_mg_compiler:send(info,Vars),
+
 	unfold_vars(P,UP),
 	unfold_vars(I,UI),
 	unfold_vars(E,UE),
@@ -116,7 +117,8 @@ unfold_vars(some(Vars),UVars):-
 unfold_vars(mg:declare(Vars),UVars):-
 	unfold_vars(Vars,UVars),!.
 unfold_vars(mg:export(Vars),UVars):-
-	unfold_vars(Vars,UVars),!.
+    unfold_vars(Vars,UVars),!.
+unfold_vars(mg:export(all),all):-!.
 unfold_vars(mg:import(Vars),UVars):-
 	unfold_vars(Vars,UVars),!.
 unfold_vars([],[]):-!.

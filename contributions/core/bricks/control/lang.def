@@ -8,7 +8,7 @@ Stmts :
       | AStmt {$$=$1}
       | '{' Stmts '}' {$$=$2}
       | '(' Stmts ')' {$$=$2}
-      | '|[' Stmts ']|' {$$=control:opt($2)}; 
+      | '{|' Stmts '|}' {$$=control:opt($2)}; 
 
 AStmt : _Expr '=' _Expr {$$=control:eq($1,$3)}
       | Call {$$=$1};

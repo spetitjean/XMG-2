@@ -147,8 +147,11 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 	xmg:send(debug,'exporting '),
 	xmg:send(debug,Name),
 	xmg:send(debug,': prepare\n'),
+	xmg:send(debug,E),
 
-	untype([P,I,E,D],[UP,UI,UE,UD]),
+	maybe_star(E,D,StarE),
+	xmg:send(debug,' star done '),
+	untype([P,I,StarE,D],[UP,UI,UE,UD]),
 	xmg:send(debug,'imports exports\n'),
 	imports_exports(UI,UE,UD,Exps),
 	%% check exported variables have whether been declared or imported
@@ -166,6 +169,9 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 	add_vars_no_duplicates(Decls,UP,AllDecls),
 	%%xmg:send(debug,declared(Name,AllDecls)),
 	asserta(declared(Name,AllDecls)),!.
+
+maybe_star(some(mg:export(all)),D,D).
+maybe_star(E,_,E).
 
 untype([],[]):-!.
 untype([H|T],[H1|T1]):-
