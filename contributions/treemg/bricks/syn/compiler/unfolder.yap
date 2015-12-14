@@ -134,14 +134,17 @@ unfold_node(Syn,syn:node(N,P,F),TN):--
 	
 	constraints::enq((TN,syn:node,Syn)),
 	%%constraints::enq(indim(Syn,TN)),
-	xmg:new_target_var(T1),
-	xmg:new_target_var(T2),
-	%%xmg_brick_mg_compiler:send(info,P),
-	%%xmg_brick_mg_compiler:send(info,F),
+
 	xmg:unfold_expr(P,T1),
-	constraints::enq((TN,syn:props(T1))),	
 	xmg:unfold_expr(F,T2),
+
+	(var(T1)->xmg:new_target_var(T1);true),
+	(var(T2)->xmg:new_target_var(T2);true),
+	
+
+	constraints::enq((TN,syn:props(T1))),	
 	constraints::enq((TN,syn:feats(T2))),
+	
 	!.
 
 unfold_treeDomOp(none,'->').
