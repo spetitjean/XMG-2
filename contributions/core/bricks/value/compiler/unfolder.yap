@@ -66,6 +66,7 @@ xmg:unfold_expr(value:disj(Values),Var):--
         !.
 
 
+
 unfold_disj([Value],eq(Var,UValue),Var):--	   
 	   xmg:unfold_expr(Value,UValue),
 !.
@@ -75,5 +76,13 @@ unfold_disj([Value|Values],control:or([eq(Var,UValue),UValues]),Var):--
            unfold_disj(Values,UValues,Var),
            !.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% unfolding an intersection of cavm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+xmg:unfold_expr(value:inter(E1,E2),Var):--
+	   xmg:unfold_expr(E1,U1),
+           xmg:unfold_expr(E2,U2),
+	   constraints::enq((Var,value:inter(U1,U2))),
+	   !.
 

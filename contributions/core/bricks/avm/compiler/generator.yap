@@ -66,4 +66,27 @@ xmg:avm_dot(Member-_,List):-
 	xmg:send(info,Member),
 	xmg:send(info,' in '),
 	xmg:send(info,List).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% generating an intersection of cavm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+xmg:generate_instr((v(Var),value:inter(v(V1),v(V2)))):--
+		  xmg:send(info,'Generating a intersection\n'),
+        xmg:send(info,(v(Var),value:inter(v(V1),v(V2)))),
+	decls::tget(V1,CAVM1),
+        decls::tget(V2,CAVM2),
+        decls::tget(Var,CAVM),
+	code::enq(xmg:send(info,'CAVM1:')),	
+	code::enq(xmg:send(info,CAVM1)),
 	
+	code::enq(xmg:send(info,'CAVM2:')),
+	code::enq(xmg:send(info,CAVM2)),!,	
+
+	code::enq(xmg:send(info,' Trying intersection ')),
+	code::enq(lists:intersection(CAVM1,CAVM2,CAVM)),
+	xmg:send(info,intersection(CAVM1,CAVM2,CAVM)),
+	code::enq(xmg:send(info,' done intersection: ')),
+	code::enq(xmg:send(info,CAVM)),	
+	!.

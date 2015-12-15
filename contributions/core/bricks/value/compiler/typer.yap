@@ -103,3 +103,16 @@ type_disj([Value|Values],Type):--
 	 xmg:type_expr(Values,Type),
          type_disj(Values,Type),
 	 !.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% typing an intersection of cavm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+xmg:type_expr(value:inter(token(C1,id(ID1)),token(C2,id(ID2))),Type):--
+	     types::tget(ID1,Type1),
+	     types::tget(ID2,Type2),
+	     xmg_brick_avm_avm:cavm(Type1,CAVM1),
+	     xmg_brick_avm_avm:cavm(Type2,CAVM2),
+	     lists:intersection(CAVM1,CAVM2,CAVM),
+	     xmg_brick_avm_avm:cavm(Type,CAVM),
+	     !.

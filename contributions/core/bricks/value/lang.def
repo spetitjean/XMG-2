@@ -9,6 +9,8 @@ Value : id {$$=$1}
       | string {$$=$1}
       | _Else {$$=$1}
       /* Curly brackets are used to avoid ambiguity (mostly for class calls) */
-      | '{' ( Value // '|')+ '}' {$$=value:disj($2)};
+      | '{' ( Value // '|')+ '}' {$$=value:disj($2)}
+      | '?' id '^^' '?' id {$$=value:inter($2,$5)}
+      ;
 
 %%
