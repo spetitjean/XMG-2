@@ -250,7 +250,7 @@ parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
 	%% xmg:send(info,StepE),
 
 	(
-	    StepE - Steps > 20 ->
+	    StepE - Steps > 30 ->
 	    throw_errors;true
 	),
 	fail.
@@ -297,6 +297,8 @@ throw_error([],Expected,Coord,Token):-
 throw_error([H|T],Expected,_,_):-
 	H=error(State,Token,Coord),
 	expected_tokens(State,tokens(State,Expected1)),
+	xmg:send(info,Expected1),
+	xmg:send(info,Expected),
 	lists:append(Expected,Expected1,Expected2),
 	throw_error(T,Expected2,Coord,Token),
 	!.
@@ -334,8 +336,9 @@ remove_coords([H,coord(A,B,C)|T],[token(coord(A,B,C),H)|T1]):-
 
 
 
-expected_tokens(State,tokens(State,Tokens)):-
-	findall(Token,generated_parser:action(State,Token,_,_),Tokens),!.
+expected_tokens(State,tokens(State,RDTokens)):-
+    findall(Token,generated_parser:action(State,Token,_,_),Tokens),
+    lists:remove_duplicates(Tokens,RDTokens),!.
 
 
 
