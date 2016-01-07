@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE mcgrammar SYSTEM "xmg-mctag.dtd,xml">
+
+<mcgrammar>
+    <morphs>
+        <morph lex="I" >
+            <lemmaref cat="n"  name="i" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="John" >
+            <lemmaref cat="n"  name="john" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Mary" >
+            <lemmaref cat="n"  name="mary" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="bucket" >
+            <lemmaref cat="n"  name="bucket" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="he" >
+            <lemmaref cat="n"  name="he" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="kick" >
+            <lemmaref cat="v"  name="kick" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="kicked" >
+            <lemmaref cat="v"  name="kick" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="kicks" >
+            <lemmaref cat="v"  name="kick" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="love" >
+            <lemmaref cat="v"  name="love" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="loved" >
+            <lemmaref cat="v"  name="love" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="loves" >
+            <lemmaref cat="v"  name="love" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="she" >
+            <lemmaref cat="n"  name="she" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="sleep" >
+            <lemmaref cat="v"  name="sleep" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="sleeps" >
+            <lemmaref cat="v"  name="sleep" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="slept" >
+            <lemmaref cat="v"  name="sleep" >
+                <fs>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="the" >
+            <lemmaref cat="det"  name="the" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="they" >
+            <lemmaref cat="n"  name="they" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="we" >
+            <lemmaref cat="n"  name="we" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="you" >
+            <lemmaref cat="n"  name="you" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="you" >
+            <lemmaref cat="n"  name="you" >
+                <fs>
+                    <f name="thirdsing" >
+                        <sym value="-" />
+                    </f>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+    </morphs>
+</mcgrammar>

@@ -297,8 +297,8 @@ throw_error([],Expected,Coord,Token):-
 throw_error([H|T],Expected,_,_):-
 	H=error(State,Token,Coord),
 	expected_tokens(State,tokens(State,Expected1)),
-	xmg:send(info,Expected1),
-	xmg:send(info,Expected),
+	%%xmg:send(info,Expected1),
+	%%xmg:send(info,Expected),
 	lists:append(Expected,Expected1,Expected2),
 	throw_error(T,Expected2,Coord,Token),
 	!.

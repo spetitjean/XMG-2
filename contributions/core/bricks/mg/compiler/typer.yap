@@ -285,6 +285,9 @@ gather_one(Decls,_,Decls):-!.
 
 
 type_decls([]):-- !.
+type_decls(_):--
+	  xmg:notype_mode,
+	  !.
 type_decls([H|T]):--
 	%%xmg:send(info,H),
 	type_decl(H),!,

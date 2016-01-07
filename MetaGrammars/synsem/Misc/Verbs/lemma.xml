@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE mcgrammar SYSTEM "xmg-mctag.dtd,xml">
+
+<mcgrammar>
+    <lemmas>
+        <lemma name="be"  cat="v" >
+            <anchor tree_id="family[@name=n0Vn1]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="by"  cat="p" >
+            <anchor tree_id="family[@name=void]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="call"  cat="v" >
+            <anchor tree_id="family[@name=n0Vn1]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="have"  cat="v" >
+            <anchor tree_id="family[@name=n0Vn1]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="he"  cat="n" >
+            <anchor tree_id="family[@name=pronoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="i"  cat="n" >
+            <anchor tree_id="family[@name=pronoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="john"  cat="n" >
+            <anchor tree_id="family[@name=propernoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="kick"  cat="v" >
+            <anchor tree_id="family[@name=n0Vn1]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="love"  cat="v" >
+            <anchor tree_id="family[@name=n0Vn1]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="mary"  cat="n" >
+            <anchor tree_id="family[@name=propernoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="she"  cat="n" >
+            <anchor tree_id="family[@name=pronoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="sleep"  cat="v" >
+            <anchor tree_id="family[@name=n0V]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="the"  cat="det" >
+            <anchor tree_id="family[@name=determiner]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="they"  cat="n" >
+            <anchor tree_id="family[@name=pronoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="we"  cat="n" >
+            <anchor tree_id="family[@name=pronoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="who"  cat="n" >
+            <anchor tree_id="family[@name=wh]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="you"  cat="n" >
+            <anchor tree_id="family[@name=pronoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+    </lemmas>
+</mcgrammar>

@@ -45,6 +45,8 @@ xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
 xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	       consts::tget(ID,G),!.
 xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
+	       vars::tget(ID,sconst(G)),!.
+xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	xmg:send(info,'\n\nVariable or constant was not declared: '),
         xmg:send(info,ID),
 	xmg:send(info,' at '),
