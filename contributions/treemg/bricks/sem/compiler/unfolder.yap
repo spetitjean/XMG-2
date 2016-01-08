@@ -38,3 +38,8 @@ xmg:unfold_dimstmt(Sem,sem:pred(Label,Pred,Params)):--
 	),
 	constraints::enq((sem:pred(ULabel,UPred,UParams),Sem)),!.
 
+xmg:unfold_dimstmt(Sem,sem:scopeOver(S1,S2)):--
+	xmg:unfold_expr(S1,U1),	    
+        xmg:unfold_expr(S2,U2),
+	constraints::enq((sem:scopeOver(U1,U2),Sem)),!.
+

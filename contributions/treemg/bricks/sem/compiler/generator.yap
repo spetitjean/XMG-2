@@ -78,6 +78,13 @@ xmg:generate_instr((sem:pred(v(L),c(P),Args),Sem)):--
 
 %% 	!.
 
+xmg:generate_instr((sem:scopeOver(v(U1),v(U2)),Sem)):--
+		  decls::tget(U1,V1),
+		  decls::tget(U2,V2),
+		  S=..['<<',V1,V2],
+		  Generated=..['::',xmg_acc:Sem,put(S)],
+		  code::enq(Generated),!.		  
+
 generate_params([],[]):-- !.
 generate_params([v(V)|T],[GV|T1]):--
 	decls::tget(V,GV),
