@@ -67,7 +67,7 @@ xmlPred(P,elem(literal,features([negated-'no']),children([elem(label,children([e
 	new_name('@V',Label),
 	!.
 
-xmlPred(P,elem(semdominance,features([op-'ge']),children([elem(sym,features([V1])),elem(sym,features([V2]))]))):--
+xmlPred(P,elem(semdominance,features([op-'ge']),children([elem(sym,features([varname-V1])),elem(sym,features([varname-V2]))]))):--
 	P=..['<<',E1,E2],
 	xmlID(E1,V1),
 	xmlID(E2,V2),!.
