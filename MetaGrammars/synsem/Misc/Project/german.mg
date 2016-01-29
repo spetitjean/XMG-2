@@ -1,11 +1,14 @@
 type MARK = {subst, nadj, foot, anchor, coanchor, flex}
 type CAT = {np,n,v,vp,s,pp,p}
 type PHON = {e}
+type LABEL!
 
 property mark : MARK
 
 feature cat : CAT
 feature phon : PHON
+feature top: LABEL
+feature bot: LABEL
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TREE FRAGMENTS:
