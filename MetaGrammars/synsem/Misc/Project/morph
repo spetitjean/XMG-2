@@ -1,0 +1,218 @@
+%
+%  File morph
+%
+%  Authors:
+%     Laura Kallmeyer <lk@sfs.uni-tuebingen.de>
+%     Timm Lichte  <timm.lichte@uni-tuebingen.de>
+%     
+%  Copyright:
+%     Laura Kallmeyer and Timm Lichte, 2008
+%
+%  Last modified:
+%     Mon May  5 10:05:42 CEST 2008
+%
+%  This file is part of the GerTT grammar
+%     http://www.sfb441.uni-tuebingen.de/emmy/res-en.html
+%
+%  GerTT is a free linguistic resource; you can redistribute it and/or modify
+%  it under the terms of the Lesser General Public License For Linguistic Resources.
+%
+%  GerTT is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+%  See the Lesser General Public License For Linguistic Resources
+%  for more details.
+%
+%  You should have received a copy of the Lesser General Public License For 
+%  Linguistic Resources  along with this program.  
+%  If not, see <http://infolingu.univ-mlv.fr/DonneesLinguistiques/Lexiques-Grammaires/lgpllr.html>.
+%
+
+%================
+% Verbs
+%================
+
+kommt	kommen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+schläft	schlafen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+schlafen	schlafen	[pos = v; num = pl; per = 3; mode = ind; fin = +;]
+schlafen	schlafen	[pos = v; stat = 1; fin = -;]
+geschlafen	schlafen	[pos = v; stat = 3; fin = -;]
+zu_schlafen	schlafen	[pos = v; stat = 2; fin = -;]
+schreibt	schreiben	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+schreiben	schreiben	[pos = v; num = pl; per = 3; mode = ind; fin = +;]
+schreiben	schreiben	[pos = v; stat = 1; fin = -;]
+geschrieben	schreiben	[pos = v; stat = 3; fin = -;]
+zu_schreiben	schreiben	[pos = v; stat = 2; fin = -;]
+
+liebt	lieben	[pos = v; sem-temp = pres; fin = +;]
+liebte	lieben	[pos = v; sem-temp = past; fin = +;]
+lieben	lieben	[pos = v; stat = 1; fin = -;]
+zu_lieben	lieben	[pos = v; stat = 2; fin = -;]
+geliebt	lieben	[pos = v; stat = 3; fin = -;]
+
+pflückt	pflücken	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+abpflückt	pflücken	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+pflückte	pflücken	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+pflücken	pflücken	[pos = v; num = pl; per = 3; mode = ind; fin = +;]
+zu_pflücken	pflücken	[pos = v; stat = 2; fin = -;]
+abzupflücken	pflücken	[pos = v; stat = 2; fin = -;]
+gepflückt	pflücken	[pos = v; stat = 3; fin = -;]
+abgepflückt	pflücken	[pos = v; stat = 3; fin = -;]
+
+sagt	sagen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+
+verspricht	versprechen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+versprochen	versprechen	[pos = v; stat = 3; fin = -;]
+zu_versprechen	versprechen	[pos = v; stat = 2; fin = -;]
+versprechen	versprechen	[pos = v; stat = 1; fin = -;]
+
+versucht	versuchen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+versucht	versuchen	[pos = v; stat = 3; fin = -;]
+zu_versuchen	versuchen	[pos = v; stat = 2; fin = -;]
+versuchen	versuchen	[pos = v; stat = 1; fin = -;]
+
+wählt	wählen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+auswählt	wählen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+
+fällt	fallen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+herabfällt	fallen	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+
+% Copula:
+ist	sein	[pos = v; num = sg; per = 3; mode = ind; fin = +;]
+
+% Auxiliaries:
+wird	werden	[pos = v; num = sg; per = 3; mode = ind; fin = +; subj = +;]
+werden	werden	[pos = v; num = pl; per = 3; mode = ind; fin = +; subj = +;]
+hat	haben	[pos = v; num = sg; per = 3; mode = ind; fin = +; subj = +;]
+haben	haben	[pos = v; num = pl; per = 3; mode = ind; fin = +; subj = +;]
+gehabt	haben	[pos = v; stat = 3; fin = -;]
+haben	haben	[pos = v; stat = 1; fin = -;]
+
+
+%================
+% Complementizer
+%================
+
+dass	dass	[pos = comp; compcont = dass;]
+
+
+%================
+% Determiner
+%================
+
+der	der	[pos = det; num = sg; gen = m; cas = nom; per = 3; detdegree = strong;]
+den	der	[pos = det; num = sg; gen = m; cas = acc; detdegree = strong;]
+dem	der	[pos = det; num = sg; gen = m; cas = dat; detdegree = strong;]
+des	der	[pos = det; num = sg; gen = m; cas = gen; detdegree = strong;]
+der	der	[pos = det; num = sg; gen = f; cas = dat|gen; detdegree = strong;]
+die	der	[pos = det; num = pl; gen = m; cas = nom|acc; detdegree = strong;]
+die	der	[pos = det; num = pl|sg; gen = f; cas = nom; detdegree = strong;]
+die	der	[pos = det; num = sg; gen = f; cas = acc; detdegree = strong;]
+ein	ein	[pos = det; num = sg; gen = m; cas = nom; detdegree = weak;]
+einen	ein	[pos = det; num = sg; gen = m; cas = acc; detdegree = weak;]
+einem	ein	[pos = det; num = sg; gen = m; cas = dat; detdegree = weak;]
+eines	ein	[pos = det; num = sg; gen = m; cas = gen; detdegree = weak;]
+eine	ein	[pos = det; num = sg; gen = f; cas = nom|acc; detdegree = weak;]
+einer	ein	[pos = det; num = sg; gen = f; cas = dat|gen; detdegree = weak;]
+jeder	jeder	[pos = det; num = sg; gen = m; cas = nom; detdegree = strong;]
+jeden	jeder	[pos = det; num = sg; gen = m; cas = acc; detdegree = strong;]
+jedem	jeder	[pos = det; num = sg; gen = m; cas = dat; detdegree = strong;]
+jedes	jeder	[pos = det; num = sg; gen = m; cas = gen; detdegree = strong;]
+jede	jeder	[pos = det; num = sg; gen = f; cas = nom|acc; detdegree = strong;]
+jeder	jeder	[pos = det; num = sg; gen = f; cas = dat|gen; detdegree = strong;]
+viele	viel	[pos = det; num = pl; gen = m|f|n; cas = nom|acc;]
+vielen	viel	[pos = det; num = pl; gen = m|f|n; cas = dat;]
+vieler	viel	[pos = det; num = pl; gen = m|f|n; cas = gen;]
+
+%================
+% Pronoun
+%================
+
+er	er	[pos = n; num = sg; per = 3; gen = m; cas = nom; rel = -; wh = -]
+ihn	er	[pos = n; num = sg; per = 3; gen = m; cas = acc; rel = -; wh = -]
+ihm	er	[pos = n; num = sg; per = 3; gen = m; cas = dat; rel = -; wh = -]
+seiner	er	[pos = n; num = sg; per = 3; gen = m|n; cas = gen; rel = -; wh = -]
+es	er	[pos = n; num = sg; per = 3; gen = n; cas = nom|acc|dat; rel = -; wh = -]
+sie	er	[pos = n; num = sg|pl; per = 3; gen = f; cas = nom|acc; rel = -; wh = -]
+ihr	er	[pos = n; num = sg; per = 3; gen = f; cas = dat; rel = -; wh = -]
+ihrer	er	[pos = n; num = sg|pl; per = 3; gen = f; cas = gen; rel = -; wh = -]
+ihnen	er	[pos = n; num = pl; per = 3; gen = f; cas = dat; rel = -; wh = -]
+
+der	der	[pos = n; num = sg; per = 3; gen = m; relnum = sg; relgen = m; cas = nom; rel = +; wh = -; vtype = v3]
+den	der	[pos = n; num = sg; per = 3; gen = m; relnum = sg; relgen = m; cas = acc; rel = +; wh = -; vtype = v3]
+dem	der	[pos = n; num = sg; per = 3; gen = m|n; relnum = sg; relgen = m|n; cas = dat; rel = +; wh = -; vtype = v3]
+dessen	der	[pos = n; num = sg; per = 3; gen = m|f|n; relnum = sg; relgen = m|f|n; cas = gen; rel = +; wh = -; vtype = v3]
+die	der	[pos = n; num = sg; per = 3; gen = f; relnum = sg; relgen = f; cas = nom|acc; rel = +; wh = -; vtype = v3]
+der	der	[pos = n; num = sg; per = 3; gen = f; relnum = sg; relgen = f; cas = dat; rel = +; wh = -; vtype = v3]
+das	der	[pos = n; num = sg; per = 3; gen = n; relnum = sg; relgen = n; cas = nom|acc; rel = +; wh = -; vtype = v3]die	der	[pos = n; num = pl; per = 3; gen = m|f|n; relnum = pl; relgen = m|f|n; cas = nom|acc; rel = +; wh = -; vtype = v3]
+den	der	[pos = n; num = pl; per = 3; gen = m|f|n; relnum = pl; relgen = m|f|n; cas = dat; rel = +; wh = -; vtype = v3]
+der	der	[pos = n; num = pl; per = 3; gen = m|f|n; relnum = pl; relgen = m|f|n; cas = gen; rel = +; wh = -; vtype = v3]
+
+
+wer	wer	[pos = n; per = 3; cas = nom; wh = +;]
+wen	wer	[pos = n; per = 3; cas = acc; wh = +;]
+wem	wer	[pos = n; per = 3; cas = dat; wh = +;]
+wessen	wer	[pos = n; per = 3; cas = gen; wh = +;]
+
+%================
+% Nouns
+%================
+
+Apfel	Apfel	[pos = n; num = sg; per = 3; gen = m; cas = nom|acc|dat; count = +;]
+Apfels	Apfel	[pos = n; num = sg; per = 3; gen = m; cas = gen; count = +;]
+Äpfel	Apfel	[pos = n; num = pl; per = 3; gen = m; cas = nom|acc|gen; count = +;]
+Äpfeln	Apfel	[pos = n; num = pl; per = 3; gen = m; cas = dat; count = +;]
+Feige	Feige	[pos = n; num = sg; per = 3; gen = f; cas = nom|acc|dat|gen; count = +;]
+Feigen	Feige	[pos = n; num = pl; per = 3; gen = f; cas = nom|acc|dat|gen; count = +;]
+Tourist	Tourist	[pos = n; num = sg; per = 3; gen = m; cas = nom; count = +;]
+Touristen	Tourist	[pos = n; per = 3; num = sg; gen = m; cas = acc|dat|gen; count = +;]
+Touristen	Tourist	[pos = n; per = 3; num = pl; gen = m; cas = nom|acc|dat|gen; count = +;]
+
+
+%================
+% Proper Names
+%================
+
+Hans	Hans	[pos = n; num = sg; per = 3; gen = m; cas = nom|acc|dat;]
+Laura	Laura	[pos = n; num = sg; per = 3; gen = f; cas = nom|acc|dat;]
+Timm	Timm	[pos = n; num = sg; per = 3; gen = m; cas = nom|acc|dat;]
+Wolfgang	Wolfgang	[pos = n; num = sg; per = 3; gen = m; cas = nom|acc|dat;]
+Yannick	Yannick	[pos = n; num = sg; per = 3; gen = m; cas = nom|acc|dat;]
+
+
+%================
+% Adjectives
+%================
+
+angeblich	angeblich	[pos = a; adv = +; amode = pos;]
+gerade	gerade	[pos = a; adv = +; amode = pos;]
+selten	selten	[pos = a; adv = +; amode = pos;]
+
+hungrige	hungrig	[pos = a; adv = -; amode = pos; num = sg; gen = m|f; cas = nom; detdegree = strong;]
+hungriger	hungrig	[pos = a; adv = -; amode = pos; num = sg; gen = m; cas = nom; detdegree = weak;]
+hungrigen	hungrig	[pos = a; adv = -; amode = pos; num = sg; gen = m; cas = acc|dat|gen; detdegree = weak;]
+müde	müde	[pos = a; adv = -; amode = pos; num = sg; gen = m|f; cas = nom; detdegree = strong;]
+müder	müde	[pos = a; adv = -; amode = comp; num = sg; gen = m; cas = nom; detdegree = weak;]
+müden	müde	[pos = a; adv = -; amode = comp; num = sg; gen = m; cas = acc|dat|gen; detdegree = weak;]
+reife	reif	[pos = a; adv = -; amode = pos; num = sg; gen = m|f; cas = nom; detdegree = strong;]
+reifen	reif	[pos = a; adv = -; amode = pos; num = sg; gen = m; cas = acc|dat|gen; detdegree = strong;]
+reife	reif	[pos = a; adv = -; amode = pos; num = sg; gen = f; cas = acc; detdegree = strong;]
+reifen	reif	[pos = a; adv = -; amode = pos; num = sg; gen = f; cas = dat|gen; detdegree = strong;]
+reifer	reif	[pos = a; adv = -; amode = pos; num = sg; gen = m; cas = nom; detdegree = weak;]
+reife	reif	[pos = a; adv = -; amode = pos; num = sg; gen = f; cas = nom|acc; detdegree = weak;]
+reifen	reif	[pos = a; adv = -; amode = pos; num = sg; gen = f; cas = dat|gen; detdegree = weak;]
+
+
+%================
+% Preposition
+%================
+
+für	für	[pos = p; cas = fuer;]
+an	an	[pos = p; cas = an;]
+
+
+%================
+% Coordination
+%================
+
+und	und	[pos = coord;]

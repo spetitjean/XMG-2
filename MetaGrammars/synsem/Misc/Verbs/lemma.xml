@@ -8,7 +8,21 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="binaryRel" >
+                        <args>
+                            <f name="theta1" >
+                                <sym value="agent" />
+                            </f>
+                            <f name="rel" >
+                                <sym value="be" />
+                            </f>
+                            <f name="theta2" >
+                                <sym value="patient" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="by"  cat="p" >
@@ -24,7 +38,21 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="binaryRel" >
+                        <args>
+                            <f name="theta1" >
+                                <sym value="agent" />
+                            </f>
+                            <f name="rel" >
+                                <sym value="call" />
+                            </f>
+                            <f name="theta2" >
+                                <sym value="patient" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="have"  cat="v" >
@@ -32,7 +60,21 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="binaryRel" >
+                        <args>
+                            <f name="theta1" >
+                                <sym value="agent" />
+                            </f>
+                            <f name="rel" >
+                                <sym value="have" />
+                            </f>
+                            <f name="theta2" >
+                                <sym value="patient" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="he"  cat="n" >
@@ -56,7 +98,11 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="John" >
+                        <args/>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="kick"  cat="v" >
@@ -64,7 +110,21 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="binaryRel" >
+                        <args>
+                            <f name="theta1" >
+                                <sym value="agent" />
+                            </f>
+                            <f name="rel" >
+                                <sym value="kick" />
+                            </f>
+                            <f name="theta2" >
+                                <sym value="patient" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="love"  cat="v" >
@@ -72,7 +132,11 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="love" >
+                        <args/>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="mary"  cat="n" >
@@ -80,7 +144,11 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="Mary" >
+                        <args/>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="she"  cat="n" >
@@ -96,7 +164,18 @@
                 <filter>
                     <fs/>
                 </filter>
-                <sem/>
+                <sem>
+                    <semclass name="unaryRel" >
+                        <args>
+                            <f name="theta1" >
+                                <sym value="agent" />
+                            </f>
+                            <f name="rel" >
+                                <sym value="sleep" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
             </anchor>
         </lemma>
         <lemma name="the"  cat="det" >

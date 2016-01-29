@@ -1,0 +1,648 @@
+%
+%  File lemma
+%
+%  Authors:
+%     Laura Kallmeyer <lk@sfs.uni-tuebingen.de>
+%     Timm Lichte  <timm.lichte@uni-tuebingen.de>
+%     
+%  Copyright:
+%     Laura Kallmeyer and Timm Lichte, 2008
+%
+%  Last modified:
+%     Mon May  5 10:05:42 CEST 2008
+%
+%  This file is part of the GerTT grammar
+%     http://www.sfb441.uni-tuebingen.de/emmy/res-en.html
+%
+%  GerTT is a free linguistic resource; you can redistribute it and/or modify
+%  it under the terms of the Lesser General Public License For Linguistic Resources.
+%
+%  GerTT is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+%  See the Lesser General Public License For Linguistic Resources
+%  for more details.
+%
+%  You should have received a copy of the Lesser General Public License For 
+%  Linguistic Resources  along with this program.  
+%  If not, see <http://infolingu.univ-mlv.fr/DonneesLinguistiques/Lexiques-Grammaires/lgpllr.html>.
+%
+
+
+%================
+% Complementizer
+%================
+
+*ENTRY: dass
+*CAT: comp
+*SEM: 
+*ACC: 1
+*FAM: Complementizer
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+
+
+%================
+% Determiner
+%================
+
+*ENTRY: der
+*CAT: det
+*SEM: SemDetDef[pred=der]
+*ACC: 1
+*FAM: DetDef
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: ein
+*CAT: det
+*SEM: SemDetQuant[pred=ein]
+*ACC: 1
+*FAM: DetQuantifier
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: jeder
+*CAT: det
+*SEM: SemDetQuant[pred=jeder]
+*ACC: 1
+*FAM: DetQuantifier
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: viel
+*CAT: det
+*SEM: SemDetQuant[pred=viele]
+*ACC: 1
+*FAM: DetQuantifier
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+
+%================
+% Pronoun
+%================
+
+*ENTRY: er
+*CAT: n
+*SEM: 
+*ACC: 1
+*FAM: Noun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+
+*ENTRY: der
+*CAT: n
+*SEM: 
+*ACC: 1
+*FAM: Noun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: wer
+*CAT: n
+*SEM: 
+*ACC: 1
+*FAM: Noun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+
+
+%================
+% Nouns
+%================
+
+*ENTRY: Apfel
+*CAT: n
+*SEM: UnaryNoun[pred=apfel]
+*ACC: 1
+*FAM: NounPred
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: Feige
+*CAT: n
+*SEM: UnaryNoun[pred=feige]
+*ACC: 1
+*FAM: NounPred
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: Tourist
+*CAT: n
+*SEM: UnaryNoun[pred=tourist]
+*ACC: 1
+*FAM: NounPred
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: Hans
+*CAT: n
+*SEM: SemProperName[name=Hans]
+*ACC: 1
+*FAM: ProperNoun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
+*ENTRY: Laura
+*CAT: n
+*SEM: SemProperName[name=Laura]
+*ACC: 1
+*FAM: ProperNoun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
+*ENTRY: Timm
+*CAT: n
+*SEM: SemProperName[name=Timm]
+*ACC: 1
+*FAM: ProperNoun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
+*ENTRY: Wolfgang
+*CAT: n
+*SEM: SemProperName[name=Wolfgang]
+*ACC: 1
+*FAM: ProperNoun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
+*ENTRY: Yannick
+*CAT: n
+*SEM: SemProperName[name=Yannick]
+*ACC: 1
+*FAM: ProperNoun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
+
+%================
+% Verbs
+%================
+
+*ENTRY: kommen
+*CAT: v
+*SEM: UnaryVerb[pred=kommen]
+*ACC: 1
+*FAM: Vnp1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+*COANCHORS: 
+
+*ENTRY: schlafen
+*CAT: v
+*SEM: UnaryVerb[pred=schlafen]
+*ACC: 1
+*FAM: Vnp1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+*COANCHORS: 
+
+*ENTRY: schlafen
+*CAT: v
+*SEM: UnaryVerb[pred=schlafen]
+*ACC: 1
+*FAM: V-inf
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+
+*ENTRY: lieben
+*CAT: v
+*SEM: BinaryVerb[pred=lieben]
+*ACC: 1
+*FAM: Vnp2
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: lieben
+*CAT: v
+*SEM: BinaryVerb[pred=lieben]
+*ACC: 1
+*FAM: Vnp1-inf
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = acc
+*COANCHORS: 
+
+
+*ENTRY: pflücken
+*CAT: v
+*SEM: BinaryVerb[pred=pfluecken]
+*ACC: 1
+*FAM: Vnp2
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: pflücken
+*CAT: v
+*SEM: TernaryVerb[pred=pfluecken]
+*ACC: 1
+*FAM: Vnp3
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = dat
+NParg3 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: pflücken
+*CAT: v
+*SEM: BinaryVerb[pred=pfluecken]
+*ACC: 1
+*FAM: Vnp1-inf
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: pflücken
+*CAT: v
+*SEM: TernaryVerb[pred=pfluecken]
+*ACC: 1
+*FAM: Vnp2-inf
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = dat
+NParg2 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: pflücken
+*CAT: v
+*SEM: BinaryVerb[pred=abpfluecken]
+*ACC: 1
+*FAM: Vnp2
+*FILTERS: [rk-coanchor = +]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = acc
+*COANCHORS: 
+rk -> ab/v
+
+*ENTRY: pflücken
+*CAT: v
+*SEM: TernaryVerb[pred=abpfluecken]
+*ACC: 1
+*FAM: Vnp3
+*FILTERS: [rk-coanchor = +]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = dat
+NParg3 -> cas = acc
+*COANCHORS: 
+rk -> ab/v
+
+*ENTRY: wählen
+*CAT: v
+*SEM: BinaryVerb[pred=auswaehlen]
+*ACC: 1
+*FAM: Vnp2
+*FILTERS: [rk-coanchor = +]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = acc
+*COANCHORS: 
+rk -> aus/v
+
+*ENTRY: fallen
+*CAT: v
+*SEM: UnaryVerb[pred=herabfallen]
+*ACC: 1
+*FAM: Vnp1
+*FILTERS: [rk-coanchor = +]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+*COANCHORS: 
+rk -> herab/v
+
+*ENTRY: sagen
+*CAT: v
+*SEM: SemPi1p1[pred=sagen]
+*ACC: 1
+*FAM: Vnp1s1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+*COANCHORS: 
+
+*ENTRY: sagen
+*CAT: v
+*SEM: SemPi2p1[pred=sagen]
+*ACC: 1
+*FAM: Vnp2s1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = dat
+*COANCHORS: 
+
+*ENTRY: schreiben
+*CAT: v
+*SEM: BinaryVerb[pred=schreiben]
+*ACC: 1
+*FAM: Vnp2
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = acc|dat|an
+*COANCHORS: 
+
+*ENTRY: schreiben
+*CAT: v
+*SEM: TernaryVerb[pred=schreiben]
+*ACC: 1
+*FAM: Vnp3
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = dat|an
+NParg3 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: versuchen
+*CAT: v
+*SEM: SemPi1p1[pred=versuchen]
+*ACC: 1
+*FAM: Vv1np1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+Varg -> stat = 2
+Varg -> subj = -
+*COANCHORS: 
+
+*ENTRY: versuchen
+*CAT: v
+*SEM: SemPi1p1[pred=versuchen]
+*ACC: 1
+*FAM: Vv1-inf
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+Varg -> stat = 2
+Varg -> subj = -
+*COANCHORS: 
+
+*ENTRY: versprechen
+*CAT: v
+*SEM: SemPi1p1[pred=versprechen]
+*ACC: 1
+*FAM: Vv1np1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+Varg -> stat = 2
+Varg -> subj = -
+*COANCHORS: 
+
+*ENTRY: versprechen
+*CAT: v
+*SEM: SemPi1p1[pred=versprechen]
+*ACC: 1
+*FAM: Vv1-inf
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+Varg -> stat = 2
+Varg -> subj = -
+*COANCHORS: 
+
+*ENTRY: versprechen
+*CAT: v
+*SEM: SemPi2p1[pred=versprechen]
+*ACC: 1
+*FAM: Vv1np2
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = dat
+Varg -> stat = 2
+Varg -> subj = -
+*COANCHORS: 
+
+*ENTRY: haben
+*CAT: v
+*SEM: 
+*ACC: 1
+*FAM: Vnp2
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = acc
+*COANCHORS: 
+
+
+*ENTRY: sein
+*CAT: v
+*SEM: 
+*ACC: 1
+*FAM: Vnp1pred1
+*FILTERS: [rk-coanchor = -]
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = nom
+NParg2 -> cas = nom
+*COANCHORS: 
+
+
+%================
+% Auxiliaries
+%================
+
+*ENTRY: werden
+*CAT: v
+*SEM: 
+*ACC: 1
+*FAM: Aux
+*FILTERS:
+*EX: {}
+*EQUATIONS:
+Varg -> stat = 1
+*COANCHORS: 
+
+*ENTRY: haben
+*CAT: v
+*SEM: 
+*ACC: 1
+*FAM: Aux
+*FILTERS:
+*EX: {}
+*EQUATIONS:
+Varg -> stat = 3
+*COANCHORS: 
+
+
+
+%================
+% Adjectives
+%================
+
+*ENTRY: angeblich
+*CAT: a
+*SEM: SemPropMod[pred=angeblich]
+*ACC: 1
+*FAM: AdjVerbAttribute
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: gerade
+*CAT: a
+*SEM: SemPropMod[pred=gerade]
+*ACC: 1
+*FAM: AdjVerbAttribute
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: hungrig
+*CAT: a
+*SEM: SemInters-Adj[pred=hungrig]
+*ACC: 1
+*FAM: AdjNounAttribute
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: müde
+*CAT: a
+*SEM: SemInters-Adj[pred=muede]
+*ACC: 1
+*FAM: AdjNounAttribute
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: reif
+*CAT: a
+*SEM: SemInters-Adj[pred=reif]
+*ACC: 1
+*FAM: AdjNounAttribute
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+*ENTRY: selten
+*CAT: a
+*SEM: SemPropMod[pred=selten]
+*ACC: 1
+*FAM: AdjVerbAttribute
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+%================
+% Prepositions
+%================
+
+*ENTRY: für
+*CAT: p
+*SEM: 
+*ACC: 1
+*FAM: PrepositionalPhrase
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = acc
+*COANCHORS: 
+
+*ENTRY: an
+*CAT: p
+*SEM: 
+*ACC: 1
+*FAM: PrepositionalPhrase
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+NParg1 -> cas = acc
+*COANCHORS: 
+
+
+
+%================
+% Coordination
+%================
+
+*ENTRY: und
+*CAT: coord
+*SEM: 
+*ACC: 1
+*FAM: CoordNP
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS: 
+
+

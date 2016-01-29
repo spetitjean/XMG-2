@@ -2,7 +2,7 @@
 
 *ENTRY: love
 *CAT: v
-*SEM: 
+*SEM: love
 *ACC: 1
 *FAM: n0Vn1
 *FILTERS: []
@@ -12,7 +12,7 @@
 
 *ENTRY: kick
 *CAT: v
-*SEM: 
+*SEM:  binaryRel[theta1=agent,rel=kick,theta2=patient]
 *ACC: 1
 *FAM: n0Vn1
 *FILTERS: []
@@ -22,7 +22,7 @@
 
 *ENTRY: call
 *CAT: v
-*SEM: 
+*SEM:  binaryRel[theta1=agent,rel=call,theta2=patient]
 *ACC: 1
 *FAM: n0Vn1
 *FILTERS: []
@@ -32,7 +32,7 @@
 
 *ENTRY: have
 *CAT: v
-*SEM:
+*SEM: binaryRel[theta1=agent,rel=have,theta2=patient]
 *ACC: 1
 *FAM: n0Vn1
 *FILTERS: []
@@ -42,7 +42,7 @@
 
 *ENTRY: sleep
 *CAT: v
-*SEM:
+*SEM: unaryRel[theta1=agent,rel=sleep]
 *ACC: 1
 *FAM: n0V
 *FILTERS: []
@@ -52,7 +52,7 @@
 
 *ENTRY: be
 *CAT: v
-*SEM:
+*SEM:  binaryRel[theta1=agent,rel=be,theta2=patient]
 *ACC: 1
 *FAM: n0Vn1
 *FILTERS: []
@@ -62,7 +62,7 @@
 
 *ENTRY: john
 *CAT: n
-*SEM:
+*SEM: John
 *ACC: 1
 *FAM: propernoun
 *FILTERS: []
@@ -83,7 +83,7 @@
 
 *ENTRY: mary
 *CAT: n
-*SEM: 
+*SEM: Mary
 *ACC: 1
 *FAM: propernoun
 *FILTERS: []

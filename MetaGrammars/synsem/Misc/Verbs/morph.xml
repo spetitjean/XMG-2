@@ -12,6 +12,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="i" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -26,6 +29,9 @@
                     </f>
                     <f name="num" >
                         <sym value="sg" />
+                    </f>
+                    <f name="i" >
+                        <sym value="john" />
                     </f>
                 </fs>
             </lemmaref>
@@ -42,6 +48,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="mary" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -54,6 +63,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="bucket" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -65,6 +77,9 @@
                     </f>
                     <f name="num" >
                         <sym value="sg" />
+                    </f>
+                    <f name="i" >
+                        <sym value="he" />
                     </f>
                 </fs>
             </lemmaref>
@@ -81,6 +96,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="kick" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -89,6 +107,9 @@
                 <fs>
                     <f name="mode" >
                         <sym value="ind" />
+                    </f>
+                    <f name="i" >
+                        <sym value="kick" />
                     </f>
                 </fs>
             </lemmaref>
@@ -105,6 +126,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="kick" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -120,6 +144,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="love" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -128,6 +155,9 @@
                 <fs>
                     <f name="mode" >
                         <sym value="ind" />
+                    </f>
+                    <f name="i" >
+                        <sym value="love" />
                     </f>
                 </fs>
             </lemmaref>
@@ -144,6 +174,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="love" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -155,6 +188,9 @@
                     </f>
                     <f name="num" >
                         <sym value="sg" />
+                    </f>
+                    <f name="i" >
+                        <sym value="she" />
                     </f>
                 </fs>
             </lemmaref>
@@ -171,6 +207,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="sleep" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -186,6 +225,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="sleep" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -194,6 +236,9 @@
                 <fs>
                     <f name="mode" >
                         <sym value="ind" />
+                    </f>
+                    <f name="i" >
+                        <sym value="sleep" />
                     </f>
                 </fs>
             </lemmaref>
@@ -216,6 +261,9 @@
                     <f name="num" >
                         <sym value="pl" />
                     </f>
+                    <f name="i" >
+                        <sym value="they" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -228,6 +276,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="we" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -240,6 +291,9 @@
                     <f name="num" >
                         <sym value="sg" />
                     </f>
+                    <f name="i" >
+                        <sym value="you" />
+                    </f>
                 </fs>
             </lemmaref>
         </morph>
@@ -251,6 +305,9 @@
                     </f>
                     <f name="num" >
                         <sym value="pl" />
+                    </f>
+                    <f name="i" >
+                        <sym value="you" />
                     </f>
                 </fs>
             </lemmaref>

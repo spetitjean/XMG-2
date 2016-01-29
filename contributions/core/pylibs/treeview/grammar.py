@@ -31,7 +31,11 @@ def gensem(sem):
                     s += "!"
                     s += gensem(i)
             elif i.tag == 'label':
-                s+= i.find('sym').get('value') + ":"
+                # s+= i.find('sym').get('value') + ":"
+                if 'value' in i.find('sym').attrib:
+                    s+= i.find('sym').get('value') + ":"
+                elif 'varname' in i.find('sym').attrib: 
+                    s+= i.find('sym').get('varname') + ":"
             elif i.tag == 'predicate':
                 if 'value' in i.find('sym').attrib:
                     s+= i.find('sym').get('value') + "("

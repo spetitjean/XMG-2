@@ -1,0 +1,2552 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE mcgrammar SYSTEM "xmg-mctag.dtd,xml">
+
+<!--  
+  File morph.xml
+
+  Authors:
+     Laura Kallmeyer <lk@sfs.uni-tuebingen.de>
+     Timm Lichte  <timm.lichte@uni-tuebingen.de>
+     
+  Copyright:
+     Mon May  5 10:05:42 CEST 2008
+
+  Last modified:
+     Thu Feb 28 15:43:52 CET 2008
+
+  This file is part of the GerTT grammar
+     http://www.sfb441.uni-tuebingen.de/emmy/res-en.html
+
+  GerTT is a free linguistic resource; you can redistribute it and/or modify
+  it under the terms of the Lesser General Public License For Linguistic Resources.
+
+  GerTT is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+  See the Lesser General Public License For Linguistic Resources
+  for more details.
+
+  You should have received a copy of the Lesser General Public License For 
+  Linguistic Resources  along with this program.  
+  If not, see <http://infolingu.univ-mlv.fr/DonneesLinguistiques/Lexiques-Grammaires/lgpllr.html>.
+-->
+
+<mcgrammar>
+    <morphs>
+        <morph lex="Apfel" >
+            <lemmaref cat="n"  name="Apfel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Apfels" >
+            <lemmaref cat="n"  name="Apfel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Feige" >
+            <lemmaref cat="n"  name="Feige" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Feigen" >
+            <lemmaref cat="n"  name="Feige" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Hans" >
+            <lemmaref cat="n"  name="Hans" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Laura" >
+            <lemmaref cat="n"  name="Laura" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Timm" >
+            <lemmaref cat="n"  name="Timm" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Tourist" >
+            <lemmaref cat="n"  name="Tourist" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Touristen" >
+            <lemmaref cat="n"  name="Tourist" >
+                <fs>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Touristen" >
+            <lemmaref cat="n"  name="Tourist" >
+                <fs>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Wolfgang" >
+            <lemmaref cat="n"  name="Wolfgang" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Yannick" >
+            <lemmaref cat="n"  name="Yannick" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="abgepflückt" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="abpflückt" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="abzupflücken" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="an" >
+            <lemmaref cat="p"  name="an" >
+                <fs>
+                    <f name="cas" >
+                        <sym value="an" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="angeblich" >
+            <lemmaref cat="a"  name="angeblich" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="+" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="auswählt" >
+            <lemmaref cat="v"  name="wählen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="das" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="n" />
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <sym value="n" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="dass" >
+            <lemmaref cat="comp"  name="dass" >
+                <fs>
+                    <f name="compcont" >
+                        <sym value="dass" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="dem" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="dem" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="den" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="den" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="den" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="relnum" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="relgen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="der" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="der" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="der" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="der" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="der" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="relnum" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="relgen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="des" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="dessen" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="die" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="die" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <vAlt>
+                            <sym value="pl" />
+                            <sym value="sg" />
+                        </vAlt>
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="die" >
+            <lemmaref cat="det"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="die" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="relnum" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="relgen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="die" >
+            <lemmaref cat="n"  name="der" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="relnum" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="relgen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="rel" >
+                        <sym value="+" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                    <f name="vtype" >
+                        <sym value="v3" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ein" >
+            <lemmaref cat="det"  name="ein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="eine" >
+            <lemmaref cat="det"  name="ein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="einem" >
+            <lemmaref cat="det"  name="ein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="einen" >
+            <lemmaref cat="det"  name="ein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="einer" >
+            <lemmaref cat="det"  name="ein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="eines" >
+            <lemmaref cat="det"  name="ein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="er" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="es" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="n" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="dat" />
+                        </vAlt>
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="fällt" >
+            <lemmaref cat="v"  name="fallen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="für" >
+            <lemmaref cat="p"  name="für" >
+                <fs>
+                    <f name="cas" >
+                        <sym value="fuer" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="gehabt" >
+            <lemmaref cat="v"  name="haben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="geliebt" >
+            <lemmaref cat="v"  name="lieben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="gepflückt" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="gerade" >
+            <lemmaref cat="a"  name="gerade" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="+" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="geschlafen" >
+            <lemmaref cat="v"  name="schlafen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="geschrieben" >
+            <lemmaref cat="v"  name="schreiben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="haben" >
+            <lemmaref cat="v"  name="haben" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                    <f name="subj" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="haben" >
+            <lemmaref cat="v"  name="haben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="1" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="hat" >
+            <lemmaref cat="v"  name="haben" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                    <f name="subj" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="herabfällt" >
+            <lemmaref cat="v"  name="fallen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="hungrige" >
+            <lemmaref cat="a"  name="hungrig" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="hungrigen" >
+            <lemmaref cat="a"  name="hungrig" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="hungriger" >
+            <lemmaref cat="a"  name="hungrig" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ihm" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ihn" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ihnen" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ihr" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ihrer" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <vAlt>
+                            <sym value="sg" />
+                            <sym value="pl" />
+                        </vAlt>
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="ist" >
+            <lemmaref cat="v"  name="sein" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="jede" >
+            <lemmaref cat="det"  name="jeder" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="jedem" >
+            <lemmaref cat="det"  name="jeder" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="jeden" >
+            <lemmaref cat="det"  name="jeder" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="jeder" >
+            <lemmaref cat="det"  name="jeder" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="jeder" >
+            <lemmaref cat="det"  name="jeder" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="jedes" >
+            <lemmaref cat="det"  name="jeder" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="kommt" >
+            <lemmaref cat="v"  name="kommen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="lieben" >
+            <lemmaref cat="v"  name="lieben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="1" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="liebt" >
+            <lemmaref cat="v"  name="lieben" >
+                <fs>
+                    <f name="sem-temp" >
+                        <sym value="pres" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="liebte" >
+            <lemmaref cat="v"  name="lieben" >
+                <fs>
+                    <f name="sem-temp" >
+                        <sym value="past" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="müde" >
+            <lemmaref cat="a"  name="müde" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="müden" >
+            <lemmaref cat="a"  name="müde" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="comp" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="müder" >
+            <lemmaref cat="a"  name="müde" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="comp" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="pflücken" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="pflückt" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="pflückte" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reife" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reife" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reife" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reifen" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="acc" />
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reifen" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="strong" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reifen" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="dat" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="reifer" >
+            <lemmaref cat="a"  name="reif" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="-" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="detdegree" >
+                        <sym value="weak" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="sagt" >
+            <lemmaref cat="v"  name="sagen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="schlafen" >
+            <lemmaref cat="v"  name="schlafen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="schlafen" >
+            <lemmaref cat="v"  name="schlafen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="1" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="schläft" >
+            <lemmaref cat="v"  name="schlafen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="schreiben" >
+            <lemmaref cat="v"  name="schreiben" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="schreiben" >
+            <lemmaref cat="v"  name="schreiben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="1" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="schreibt" >
+            <lemmaref cat="v"  name="schreiben" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="seiner" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="selten" >
+            <lemmaref cat="a"  name="selten" >
+                <fs>
+                    <f name="adv" >
+                        <sym value="+" />
+                    </f>
+                    <f name="amode" >
+                        <sym value="pos" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="sie" >
+            <lemmaref cat="n"  name="er" >
+                <fs>
+                    <f name="num" >
+                        <vAlt>
+                            <sym value="sg" />
+                            <sym value="pl" />
+                        </vAlt>
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="f" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                    <f name="rel" >
+                        <sym value="-" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="und" >
+            <lemmaref cat="coord"  name="und" >
+                <fs/>
+            </lemmaref>
+        </morph>
+        <morph lex="versprechen" >
+            <lemmaref cat="v"  name="versprechen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="1" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="verspricht" >
+            <lemmaref cat="v"  name="versprechen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="versprochen" >
+            <lemmaref cat="v"  name="versprechen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="versuchen" >
+            <lemmaref cat="v"  name="versuchen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="1" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="versucht" >
+            <lemmaref cat="v"  name="versuchen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="versucht" >
+            <lemmaref cat="v"  name="versuchen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="3" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="viele" >
+            <lemmaref cat="det"  name="viel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                        </vAlt>
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="vielen" >
+            <lemmaref cat="det"  name="viel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="vieler" >
+            <lemmaref cat="det"  name="viel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="gen" >
+                        <vAlt>
+                            <sym value="m" />
+                            <sym value="f" />
+                            <sym value="n" />
+                        </vAlt>
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="wem" >
+            <lemmaref cat="n"  name="wer" >
+                <fs>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="wen" >
+            <lemmaref cat="n"  name="wer" >
+                <fs>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="acc" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="wer" >
+            <lemmaref cat="n"  name="wer" >
+                <fs>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="nom" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="werden" >
+            <lemmaref cat="v"  name="werden" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                    <f name="subj" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="wessen" >
+            <lemmaref cat="n"  name="wer" >
+                <fs>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="gen" />
+                    </f>
+                    <f name="wh" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="wird" >
+            <lemmaref cat="v"  name="werden" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                    <f name="subj" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="wählt" >
+            <lemmaref cat="v"  name="wählen" >
+                <fs>
+                    <f name="num" >
+                        <sym value="sg" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="mode" >
+                        <sym value="ind" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="zu_lieben" >
+            <lemmaref cat="v"  name="lieben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="zu_pflücken" >
+            <lemmaref cat="v"  name="pflücken" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="zu_schlafen" >
+            <lemmaref cat="v"  name="schlafen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="zu_schreiben" >
+            <lemmaref cat="v"  name="schreiben" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="zu_versprechen" >
+            <lemmaref cat="v"  name="versprechen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="zu_versuchen" >
+            <lemmaref cat="v"  name="versuchen" >
+                <fs>
+                    <f name="stat" >
+                        <sym value="2" />
+                    </f>
+                    <f name="fin" >
+                        <sym value="-" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Äpfel" >
+            <lemmaref cat="n"  name="Apfel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <vAlt>
+                            <sym value="nom" />
+                            <sym value="acc" />
+                            <sym value="gen" />
+                        </vAlt>
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+        <morph lex="Äpfeln" >
+            <lemmaref cat="n"  name="Apfel" >
+                <fs>
+                    <f name="num" >
+                        <sym value="pl" />
+                    </f>
+                    <f name="per" >
+                        <sym value="3" />
+                    </f>
+                    <f name="gen" >
+                        <sym value="m" />
+                    </f>
+                    <f name="cas" >
+                        <sym value="dat" />
+                    </f>
+                    <f name="count" >
+                        <sym value="+" />
+                    </f>
+                </fs>
+            </lemmaref>
+        </morph>
+    </morphs>
+</mcgrammar>

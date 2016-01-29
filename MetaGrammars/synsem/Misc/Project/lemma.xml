@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE mcgrammar SYSTEM "xmg-mctag.dtd,xml">
+
+<!--  
+  File lemma.xml
+
+  Authors:
+     Laura Kallmeyer <lk@sfs.uni-tuebingen.de>
+     Timm Lichte  <timm.lichte@uni-tuebingen.de>
+     
+  Copyright:
+     Laura Kallmeyer and Timm Lichte, 2008
+
+  Last modified:
+     Mon May  5 10:05:42 CEST 2008
+
+  This file is part of the GerTT grammar
+     http://www.sfb441.uni-tuebingen.de/emmy/res-en.html
+
+  GerTT is a free linguistic resource; you can redistribute it and/or modify
+  it under the terms of the Lesser General Public License For Linguistic Resources.
+
+  GerTT is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+  See the Lesser General Public License For Linguistic Resources
+  for more details.
+
+  You should have received a copy of the Lesser General Public License For 
+  Linguistic Resources  along with this program.  
+  If not, see <http://infolingu.univ-mlv.fr/DonneesLinguistiques/Lexiques-Grammaires/lgpllr.html>.
+-->
+
+<mcgrammar>
+    <lemmas>
+        <lemma name="Apfel"  cat="n" >
+            <anchor tree_id="family[@name=NounPred]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="UnaryNoun" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="apfel" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Feige"  cat="n" >
+            <anchor tree_id="family[@name=NounPred]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="UnaryNoun" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="feige" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Hans"  cat="n" >
+            <anchor tree_id="family[@name=ProperNoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemProperName" >
+                        <args>
+                            <f name="name" >
+                                <sym value="hans" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Laura"  cat="n" >
+            <anchor tree_id="family[@name=ProperNoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemProperName" >
+                        <args>
+                            <f name="name" >
+                                <sym value="laura" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Timm"  cat="n" >
+            <anchor tree_id="family[@name=ProperNoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemProperName" >
+                        <args>
+                            <f name="name" >
+                                <sym value="timm" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Tourist"  cat="n" >
+            <anchor tree_id="family[@name=NounPred]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="UnaryNoun" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="tourist" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Wolfgang"  cat="n" >
+            <anchor tree_id="family[@name=ProperNoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemProperName" >
+                        <args>
+                            <f name="name" >
+                                <sym value="wolfgang" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="Yannick"  cat="n" >
+            <anchor tree_id="family[@name=ProperNoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemProperName" >
+                        <args>
+                            <f name="name" >
+                                <sym value="yannick" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="an"  cat="p" >
+            <anchor tree_id="family[@name=PrepositionalPhrase]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="angeblich"  cat="a" >
+            <anchor tree_id="family[@name=AdjVerbAttribute]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemPropMod" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="angeblich" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="dass"  cat="comp" >
+            <anchor tree_id="family[@name=Complementizer]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="der"  cat="det" >
+            <anchor tree_id="family[@name=DetDef]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemDetDef" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="der" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="der"  cat="n" >
+            <anchor tree_id="family[@name=Noun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="ein"  cat="det" >
+            <anchor tree_id="family[@name=DetQuantifier]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemDetQuant" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="ein" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="er"  cat="n" >
+            <anchor tree_id="family[@name=Noun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="fallen"  cat="v" >
+            <anchor tree_id="family[@name=Vnp1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="+" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <coanchor node_id="rk" >
+                    <lex>herab</lex>
+                </coanchor>
+                <sem>
+                    <semclass name="UnaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="herabfallen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="für"  cat="p" >
+            <anchor tree_id="family[@name=PrepositionalPhrase]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="gerade"  cat="a" >
+            <anchor tree_id="family[@name=AdjVerbAttribute]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemPropMod" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="gerade" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="haben"  cat="v" >
+            <anchor tree_id="family[@name=Vnp2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem/>
+            </anchor>
+            <anchor tree_id="family[@name=Aux]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="3" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="hungrig"  cat="a" >
+            <anchor tree_id="family[@name=AdjNounAttribute]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemInters-Adj" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="hungrig" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="jeder"  cat="det" >
+            <anchor tree_id="family[@name=DetQuantifier]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemDetQuant" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="jeder" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="kommen"  cat="v" >
+            <anchor tree_id="family[@name=Vnp1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="UnaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="kommen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="lieben"  cat="v" >
+            <anchor tree_id="family[@name=Vnp2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="lieben" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp1-inf]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="lieben" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="müde"  cat="a" >
+            <anchor tree_id="family[@name=AdjNounAttribute]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemInters-Adj" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="muede" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="pflücken"  cat="v" >
+            <anchor tree_id="family[@name=Vnp2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="pfluecken" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp3]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="dat" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg3" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="TernaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="pfluecken" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp1-inf]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="pfluecken" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp2-inf]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="dat" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="TernaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="pfluecken" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="+" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <coanchor node_id="rk" >
+                    <lex>ab</lex>
+                </coanchor>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="abpfluecken" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp3]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="+" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="dat" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg3" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <coanchor node_id="rk" >
+                    <lex>ab</lex>
+                </coanchor>
+                <sem>
+                    <semclass name="TernaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="abpfluecken" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="reif"  cat="a" >
+            <anchor tree_id="family[@name=AdjNounAttribute]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemInters-Adj" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="reif" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="sagen"  cat="v" >
+            <anchor tree_id="family[@name=Vnp1s1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi1p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="sagen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp2s1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="dat" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi2p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="sagen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="schlafen"  cat="v" >
+            <anchor tree_id="family[@name=Vnp1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="UnaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="schlafen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=V-inf]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <sem>
+                    <semclass name="UnaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="schlafen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="schreiben"  cat="v" >
+            <anchor tree_id="family[@name=Vnp2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <vAlt>
+                                <sym value="acc" />
+                                <sym value="dat" />
+                                <sym value="an" />
+                            </vAlt>
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="schreiben" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vnp3]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <vAlt>
+                                <sym value="dat" />
+                                <sym value="an" />
+                            </vAlt>
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg3" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="TernaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="schreiben" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="sein"  cat="v" >
+            <anchor tree_id="family[@name=Vnp1pred1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="selten"  cat="a" >
+            <anchor tree_id="family[@name=AdjVerbAttribute]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemPropMod" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="selten" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="und"  cat="coord" >
+            <anchor tree_id="family[@name=CoordNP]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="versprechen"  cat="v" >
+            <anchor tree_id="family[@name=Vv1np1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="2" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="subj" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi1p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="versprechen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vv1-inf]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="2" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="subj" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi1p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="versprechen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vv1np2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="dat" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="2" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="subj" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi2p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="versprechen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="versuchen"  cat="v" >
+            <anchor tree_id="family[@name=Vv1np1]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="2" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="subj" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi1p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="versuchen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+            <anchor tree_id="family[@name=Vv1-inf]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="2" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="subj" >
+                            <sym value="-" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem>
+                    <semclass name="SemPi1p1" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="versuchen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="viel"  cat="det" >
+            <anchor tree_id="family[@name=DetQuantifier]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="SemDetQuant" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="viele" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+        <lemma name="wer"  cat="n" >
+            <anchor tree_id="family[@name=Noun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="werden"  cat="v" >
+            <anchor tree_id="family[@name=Aux]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <equation type="bot"  node_id="Varg" >
+                    <fs>
+                        <f name="stat" >
+                            <sym value="1" />
+                        </f>
+                    </fs>
+                </equation>
+                <sem/>
+            </anchor>
+        </lemma>
+        <lemma name="wählen"  cat="v" >
+            <anchor tree_id="family[@name=Vnp2]" >
+                <filter>
+                    <fs>
+                        <f name="rk-coanchor" >
+                            <sym value="+" />
+                        </f>
+                    </fs>
+                </filter>
+                <equation type="bot"  node_id="NParg1" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="nom" />
+                        </f>
+                    </fs>
+                </equation>
+                <equation type="bot"  node_id="NParg2" >
+                    <fs>
+                        <f name="cas" >
+                            <sym value="acc" />
+                        </f>
+                    </fs>
+                </equation>
+                <coanchor node_id="rk" >
+                    <lex>aus</lex>
+                </coanchor>
+                <sem>
+                    <semclass name="BinaryVerb" >
+                        <args>
+                            <f name="pred" >
+                                <sym value="auswaehlen" />
+                            </f>
+                        </args>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
+    </lemmas>
+</mcgrammar>
