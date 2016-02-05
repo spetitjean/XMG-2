@@ -61,6 +61,8 @@ xmg:xml_convert_term(tree:tree(H,Trees), Root):--
 	xmg:xml_convert(Trees,Trees1),!.
 	
 
+xmg:xml_convert_term(tree:none, elem(tree, features([]))):--
+	!.
 
 %% xmlSyn(tree(H,Trees),Root):--
 %% 	H=node(PropAVM,FeatAVM,N),

@@ -224,7 +224,6 @@
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
 *COANCHORS: 
 
 *ENTRY: schlafen
@@ -235,7 +234,6 @@ NParg1 -> cas = nom
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
 *COANCHORS: 
 
 *ENTRY: schlafen
@@ -257,8 +255,6 @@ NParg1 -> cas = nom
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: lieben
@@ -269,7 +265,6 @@ NParg2 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = acc
 *COANCHORS: 
 
 
@@ -281,8 +276,6 @@ NParg1 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: pflücken
@@ -293,9 +286,6 @@ NParg2 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = dat
-NParg3 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: pflücken
@@ -306,7 +296,6 @@ NParg3 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: pflücken
@@ -317,8 +306,6 @@ NParg1 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = dat
-NParg2 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: pflücken
@@ -329,8 +316,6 @@ NParg2 -> cas = acc
 *FILTERS: [rk-coanchor = +]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = acc
 *COANCHORS: 
 rk -> ab/v
 
@@ -342,9 +327,6 @@ rk -> ab/v
 *FILTERS: [rk-coanchor = +]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = dat
-NParg3 -> cas = acc
 *COANCHORS: 
 rk -> ab/v
 
@@ -356,8 +338,6 @@ rk -> ab/v
 *FILTERS: [rk-coanchor = +]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = acc
 *COANCHORS: 
 rk -> aus/v
 
@@ -369,7 +349,6 @@ rk -> aus/v
 *FILTERS: [rk-coanchor = +]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
 *COANCHORS: 
 rk -> herab/v
 
@@ -381,7 +360,6 @@ rk -> herab/v
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
 *COANCHORS: 
 
 *ENTRY: sagen
@@ -392,8 +370,6 @@ NParg1 -> cas = nom
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = dat
 *COANCHORS: 
 
 *ENTRY: schreiben
@@ -404,8 +380,6 @@ NParg2 -> cas = dat
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = acc|dat|an
 *COANCHORS: 
 
 *ENTRY: schreiben
@@ -416,9 +390,6 @@ NParg2 -> cas = acc|dat|an
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = dat|an
-NParg3 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: versuchen
@@ -429,9 +400,6 @@ NParg3 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-Varg -> stat = 2
-Varg -> subj = -
 *COANCHORS: 
 
 *ENTRY: versuchen
@@ -442,8 +410,6 @@ Varg -> subj = -
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-Varg -> stat = 2
-Varg -> subj = -
 *COANCHORS: 
 
 *ENTRY: versprechen
@@ -454,9 +420,6 @@ Varg -> subj = -
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-Varg -> stat = 2
-Varg -> subj = -
 *COANCHORS: 
 
 *ENTRY: versprechen
@@ -467,8 +430,6 @@ Varg -> subj = -
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-Varg -> stat = 2
-Varg -> subj = -
 *COANCHORS: 
 
 *ENTRY: versprechen
@@ -479,10 +440,6 @@ Varg -> subj = -
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = dat
-Varg -> stat = 2
-Varg -> subj = -
 *COANCHORS: 
 
 *ENTRY: haben
@@ -493,8 +450,6 @@ Varg -> subj = -
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = acc
 *COANCHORS: 
 
 
@@ -506,8 +461,6 @@ NParg2 -> cas = acc
 *FILTERS: [rk-coanchor = -]
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = nom
-NParg2 -> cas = nom
 *COANCHORS: 
 
 
@@ -523,7 +476,6 @@ NParg2 -> cas = nom
 *FILTERS:
 *EX: {}
 *EQUATIONS:
-Varg -> stat = 1
 *COANCHORS: 
 
 *ENTRY: haben
@@ -534,7 +486,6 @@ Varg -> stat = 1
 *FILTERS:
 *EX: {}
 *EQUATIONS:
-Varg -> stat = 3
 *COANCHORS: 
 
 
@@ -615,7 +566,6 @@ Varg -> stat = 3
 *FILTERS: []
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = acc
 *COANCHORS: 
 
 *ENTRY: an
@@ -626,7 +576,6 @@ NParg1 -> cas = acc
 *FILTERS: []
 *EX: {}
 *EQUATIONS:
-NParg1 -> cas = acc
 *COANCHORS: 
 
 

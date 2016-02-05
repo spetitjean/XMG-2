@@ -1,11 +1,13 @@
 type MARK = {subst, nadj, foot, anchor, coanchor, flex}
 type CAT = {np,n,v,vp,s,pp,p}
+type CAS = {nom, acc, dat, gen}
 type PHON = {e}
 type LABEL!
 
 property mark : MARK
 
 feature cat : CAT
+feature cas : CAS
 feature phon : PHON
 feature top: LABEL
 feature bot: LABEL
@@ -34,7 +36,7 @@ feature bot: LABEL
 % value NounPred
 % value Noun
 % value DetQuantifier
-% value DetDef
+% val	ue DetDef
 % value Vnp1
 % value V-inf
 % value Vnp2

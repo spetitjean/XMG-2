@@ -31,6 +31,6 @@ eval(Syn,[tree],tree:tree(Tree,Class,Previous),Class):-
 	xmg_brick_mg_compiler:current(Previous).
 	%%xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML)
 
-eval([],_,none,_).
+eval([],_,tree:none,_).
 %%eval([],_,elem(tree, features([id-none])),_).
 
