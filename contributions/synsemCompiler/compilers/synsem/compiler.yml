@@ -11,7 +11,7 @@ stardim:
   proxy: dim_iface
 avm: 
   _Value: value
-  _Expr: value
+  _Expr: value_expr
 value: 
   _Else: avm adisj avm.Dot control.Call
 syn:

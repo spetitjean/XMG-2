@@ -1,7 +1,9 @@
 from xmg.compgen.BrickSpec import BrickSpec
+from collections import OrderedDict
 
 def yaml_to_specs(desc):
-    table = {}
+    # table = {}
+    table = OrderedDict()
     # print(desc.items())
     for name, plugs in desc.items():
         for bs in BrickSpec.make(name, plugs):

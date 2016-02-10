@@ -93,16 +93,16 @@ xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 	types::tget(AVM,CAVM),
 	xmg:send(debug,'\n\nTyping dot expression:'),
 	xmg:send(debug,CAVM),
-	xmg:send(debug,'DOT'),
+	xmg:send(debug,' DOT '),
 	xmg:send(debug,Feat),
 
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
 	!.
 
 xmg:type_expr(avm:dot(avm:dot(AVM1,V),token(_,id(Feat))),Type):--
-	     xmg:type_expr(avm:dot(AVM1,V),T1),
-xmg:send(debug,'\n\nTyping recursive dot expression:'),
-	xmg:send(debug,'DOT'),
+	xmg:type_expr(avm:dot(AVM1,V),T1),
+        xmg:send(debug,'\n\nTyping recursive dot expression:'),
+	xmg:send(debug,' DOT '),
 	xmg:send(debug,Feat),
 	xmg_brick_avm_avm:dot(T1,Feat,Type),
 	!.
@@ -112,7 +112,7 @@ xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--
 	types::tget(AVM,CAVM),
 	xmg:send(debug,'\n\nTyping dot expression:'),
 	xmg:send(debug,CAVM),
-	xmg:send(debug,'DOT'),
+	xmg:send(debug,' DOT '),
 	xmg:send(debug,Feat),
 
 	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
