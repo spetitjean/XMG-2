@@ -40,6 +40,17 @@ framesToXML([H|T],[H1|T1]):--
 	frameToXML(H,H1),
 	framesToXML(T,T1).
 
+frameToXML(dom(V1,Op,V2),XML ):--
+	  xmg:send(info,'Printing frame dom:\n'),
+	  xmg:send(info,dom(V1,Op,V2)),
+	  xmg_brick_havm_havm:const_h_avm(V1,C1),
+	  xmg:send(info,'got id 1\n'),
+	  xmg_brick_havm_havm:const_h_avm(V2,C2),
+	  xmg:send(info,'got ids\n'),
+
+	  XML=elem(dominance, features([type-large, from-C1, to-C2])),
+		   !.
+
 frameToXML(Frame,Frame1 ):--
 	xmg_brick_havm_havm:h_avm(Frame,VType,Feats),
 	xmg_brick_hierarchy_typer:fVectorToType(VType,Type),

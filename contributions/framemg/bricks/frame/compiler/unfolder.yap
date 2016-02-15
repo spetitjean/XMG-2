@@ -25,9 +25,15 @@
 
 :-edcg:weave([constraints,name,vars,consts],[unfold_frame/2, unfold_pairs/2, unfold_pair/2]).
 
-xmg:unfold_dimstmt(Frame,Stmt):--
+xmg:unfold_dimstmt(Frame,frame:dom(V1,V2,Op)):--
+	xmg:unfold_expr(V1,T1),
+	xmg:unfold_expr(V2,T2),
+	constraints::enq((frame:dom(T1,Op,T2),Frame)),
+	!.
+
+xmg:unfold_dimstmt(Frame,frame:frame(V,T,F)):--
 	xmg:new_target_var(TFrame),
-	unfold_frame(Stmt,UStmt),
+	unfold_frame(frame:frame(V,T,F),UStmt),
 	constraints::enq((UStmt,frame:topframe,Frame)),
 	!.
 

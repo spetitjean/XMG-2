@@ -45,6 +45,14 @@ xmg:generate_instr((v(TFrame),frame:pair,c(Left)-v(Right))):--
 	code::enq(xmg_brick_havm_havm:h_avm(VFrame,_,[Left-VRight])),
 	!.
 
+xmg:generate_instr((frame:dom(v(N1),Op,v(N2)),Frame)):--
+
+	decls::tget(N1,V1),
+	decls::tget(N2,V2),
+	AccDom=..['::',xmg_acc:Frame,put(dom(V1,Op,V2))],
+	code::enq(AccDom),	
+	!.
+
 
 %% some older try:
 
