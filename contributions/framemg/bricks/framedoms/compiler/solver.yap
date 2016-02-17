@@ -36,9 +36,9 @@ solve_dom_star(F1,F2,Frames):-
     xmg:send(debug,'found label \n'),
     xmg:send(debug,F1),
     xmg:send(debug,FL1),
-    xmg:send(info,'\nNow unifying '),
+    xmg:send(debug,'\nNow unifying '),
     xmg_brick_havm_havm:h_avm(F2,_,Feats),
-    xmg:send(info,Feats),
+    xmg:send(debug,Feats),
     unify_star(F2,FL1,F21),
     F2=F21,
     xmg:send(debug,'unified \n').
@@ -69,7 +69,7 @@ find_label_in_children(F1,[_|T],FL):-
 
 unify_star(F2,Frame,Frame):-
     not(not(F2=Frame)),
-    xmg:send(info,'Performed unification on initial node \n').
+    xmg:send(debug,'Performed unification on initial node \n').
 unify_star(F2,Frame,F21):-
     attvar(Frame),
     xmg_brick_havm_havm:h_avm(Frame,_,List),
@@ -79,8 +79,8 @@ unify_star(F2,Frame,F21):-
 
 unify_in_children(F2,[A-H|T],H):-
     not(not(F2=H)),
-    xmg:send(info,'Performed unification for child attribute \n'),
-    xmg:send(info,A).
+    xmg:send(debug,'Performed unification for child attribute \n'),
+    xmg:send(debug,A).
 unify_in_children(F2,[_-H|T],F21):-
     attvar(H),
     xmg_brick_havm_havm:h_avm(H,_,List),

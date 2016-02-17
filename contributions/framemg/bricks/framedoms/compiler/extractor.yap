@@ -19,7 +19,36 @@
 
 :- module(xmg_brick_framedoms_extractor, []).
 
-extract(Model,Model).
+extract(Model,ModelE):-
+    remove_subframes(Model,Model,ModelE),!.
+
+remove_subframes([],_,[]):-!.
+remove_subframes([H|T],Frames,T1):-
+    is_subframe(H,Frames),
+    remove_subframes(T,Frames,T1),!.
+remove_subframes([H|T],Frames,[H|T1]):-
+    not(is_subframe(H,Frames)),
+    remove_subframes(T,Frames,T1),!.
+
+is_subframe(Frame,[H|T]):-
+    not(Frame==H),
+    is_subframe_1(Frame,H),!.
+is_subframe(Frame,[H|T]):-
+    is_subframe(Frame,T).
+
+is_subframe_1(Frame,Frame1):-
+    Frame==Frame1,!.
+is_subframe_1(Frame,Frame1):-
+    attvar(Frame1),
+    xmg_brick_havm_havm:h_avm(Frame1,_,List),
+    is_subframe_list(Frame,List),!.
+
+is_subframe_list(Frame,[_-Frame1|T]):-
+    is_subframe_1(Frame,Frame1),!.
+is_subframe_list(Frame,[_|T]):-
+    is_subframe_list(Frame,T).
+
+
 
 
 
