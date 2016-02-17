@@ -36,7 +36,13 @@ prepare(frame(Frame,Trace),prepared(Frames,Doms)):--
 	%% écrire l'id de la classe courante
 	Trace=[Family|_],
 
-	write_lits(SynD,Relations,TableOut),
-
+	write_lits(FrameD,Doms,Frames),
+	
 	!.
+
+write_lits([],[],[]):-!.
+write_lits([dom(F1,Op,F2)|T],[dom(F1,Op,F2)|R],F):-
+    write_lits(T,R,F).
+write_lits([F1|T],R,[F1|F]):-
+    write_lits(T,R,F).
 

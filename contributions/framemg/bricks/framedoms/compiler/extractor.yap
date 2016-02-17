@@ -19,8 +19,7 @@
 
 :- module(xmg_brick_framedoms_extractor, []).
 
-extract(Model,Extracted):-
-    !.
+extract(Model,Model).
 
 
 

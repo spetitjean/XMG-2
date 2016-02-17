@@ -25,7 +25,7 @@
 
 %% deal with the constructor 'tree'
 
-xmg:xml_convert_term(framedoms:frame(Frame), elem(tree, features([id-Name]),children([Frame1]))):--
-		    xmg:convert_term(Frame,Frame1)
+xmg:xml_convert_term(framedoms:frame(Frame), elem(frame, children([Frame1]))):--
+		    xmg:xml_convert_term(frame:frame(Frame),Frame1),
  	!.
 	

@@ -19,12 +19,12 @@
 
 :-module(xmg_brick_framedoms_compiler).
 
-eval(Frame,[framedoms],framedoms:frame(Extracted),Class):-
+xmg:eval(frame,[framedoms],Frame,framedoms:frame(Extracted),Class):-
 	xmg:send(debug,' preparing '),
 	xmg_brick_framedoms_preparer:prepare(frame(Frame,[Class]),Prepared),
 	xmg:send(debug,' prepared '),
 	xmg_brick_framedoms_solver:solve(Prepared,solution(Solved)),
-	xmg_brick_tree_extractor:extract(Solved,Extracted),
+	xmg_brick_framedoms_extractor:extract(Solved,Extracted),
 	xmg:send(debug,' extracted '),
 	xmg_brick_mg_compiler:current(Previous).
 	%%xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML)
