@@ -20,35 +20,50 @@
 :- module(xmg_brick_framedoms_extractor, []).
 
 extract(Model,ModelE):-
-    remove_subframes(Model,Model,ModelE),!.
+    xmg:send(debug,'\nExtracting frame: '),
+    xmg:send(debug,Model),
+    remove_subframes(Model,Model,ModelE),
+    xmg:send(debug,'\nExtracted'),
+    !.
 
 remove_subframes([],_,[]):-!.
 remove_subframes([H|T],Frames,T1):-
-    is_subframe(H,Frames),
+    is_subframe(H,Frames),!,
     remove_subframes(T,Frames,T1),!.
 remove_subframes([H|T],Frames,[H|T1]):-
     not(is_subframe(H,Frames)),
+    xmg:send(info,'\nRemoved a frame'),
     remove_subframes(T,Frames,T1),!.
 
 is_subframe(Frame,[H|T]):-
     not(Frame==H),
-    is_subframe_1(Frame,H),!.
+    xmg:send(debug,'\nStarting is_subframe1 '),
+    is_subframe_1(Frame,[],H),
+    xmg:send(debug,'\ndone '),
+    !.
 is_subframe(Frame,[H|T]):-
-    is_subframe(Frame,T).
+    is_subframe(Frame,T),!.
 
-is_subframe_1(Frame,Frame1):-
+is_subframe_1(Frame,Seen,Frame1):-
     Frame==Frame1,!.
-is_subframe_1(Frame,Frame1):-
+is_subframe_1(Frame,Seen,Frame1):-
     attvar(Frame1),
+    not(seen(Frame1,Seen)),
     xmg_brick_havm_havm:h_avm(Frame1,_,List),
-    is_subframe_list(Frame,List),!.
+    is_subframe_list(Frame,[Frame1|Seen],List),
+    %%is_subframe_list(Frame,Seen,List),
+    !.
 
-is_subframe_list(Frame,[_-Frame1|T]):-
-    is_subframe_1(Frame,Frame1),!.
-is_subframe_list(Frame,[_|T]):-
-    is_subframe_list(Frame,T).
+is_subframe_list(Frame,Seen,[A-Frame1|T]):-
+    is_subframe_1(Frame,Seen,Frame1),!.
+is_subframe_list(Frame,Seen,[_|T]):-
+    is_subframe_list(Frame,Seen,T),!.
 
-
+seen(A,[H|T]):-
+    A==H,!.
+seen(A,[H|T]):-
+    seen(A,T),!.
+    
 
 
 

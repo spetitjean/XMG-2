@@ -28,7 +28,7 @@ new_name(Name):--
 	name::get(N),
 	atomic_concat(['X',N],Name).
 
-prepare(frame(Frame,Trace),prepared(Frames,Doms)):--  
+prepare(frame(Frame,Trace),prepared(Frames,Doms)):--
 	lists:remove_duplicates(Frame,FrameD),
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
