@@ -38,6 +38,12 @@ xmg:generate_instr((v(TFrame),frame:frame,c(Type))):--
 	decls::tget(TFrame,VFrame),	
 	code::enq(xmg_brick_havm_havm:h_avm(VFrame,Type,[])),
 	!.
+%% When using type variables
+xmg:generate_instr((v(TFrame),frame:frame,v(Type))):--
+	decls::tget(TFrame,VFrame),
+        decls::tget(Type,VType),
+        code::enq(xmg_brick_havm_havm:h_avm(VFrame,VType,[])),
+	!.
 
 xmg:generate_instr((v(TFrame),frame:pair,c(Left)-v(Right))):--
 	decls::tget(TFrame,VFrame),
