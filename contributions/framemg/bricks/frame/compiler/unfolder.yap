@@ -23,7 +23,7 @@
 :-xmg:edcg.
 :-xmg:unfolder_accs.
 
-:-edcg:weave([constraints,name,vars,consts],[unfold_frame/2, unfold_pairs/2, unfold_pair/2]).
+:-edcg:weave([constraints,name,vars,consts],[unfold_frame/2, unfold_pairs/2, unfold_pair/2, unfold_types/2, create_frames/2]).
 
 xmg:unfold_dimstmt(Frame,frame:dom(V1,V2,Op)):--
 	xmg:unfold_expr(V1,T1),
@@ -37,8 +37,8 @@ xmg:unfold_dimstmt(Frame,frame:frame(V,T,F)):--
 	constraints::enq((UStmt,frame:topframe,Frame)),
 	!.
 
-unfold_frame(frame:frame(Var,Type,Feats),TFrame):--
-	xmg:unfold_expr(Type,UType),
+unfold_frame(frame:frame(Var,Types,Feats),TFrame):--
+	unfold_types(Types,UTypes),
 	(
 	    Var=none 
 	->
@@ -46,12 +46,25 @@ unfold_frame(frame:frame(Var,Type,Feats),TFrame):--
 	 ;
 	 (
 	     xmg:unfold_expr(Var,TFrame)
-	)),
-	constraints::enq((TFrame,frame:frame,UType)),
+	 )),
+	create_frames(TFrame,UTypes),
 
 	unfold_pairs(Feats,TFrame),
 
 	!.
+
+create_frames(TFrame,[]):-- !.
+create_frames(TFrame,[H|T]):--
+    	constraints::enq((TFrame,frame:frame,H)),
+        create_frames(TFrame,T),!.
+
+unfold_types([Type],[UType]):--
+	   xmg:unfold_expr(Type,UType),!.
+unfold_types([Type|Types],[UType|UTypes]):--
+	   xmg:unfold_expr(Type,UType),
+           unfold_types(Types,UTypes),
+           %%constraints::enq(eq(UVector,UType2)),
+           !.
 
 unfold_pairs([],_):-- !.
 unfold_pairs([H|T],TFrame):--

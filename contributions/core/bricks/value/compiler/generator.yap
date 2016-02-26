@@ -29,7 +29,17 @@ xmg:generate_instr(eq(v(Var),v(ID))):--
 xmg:generate_instr(eq(v(Var),c(ID))):--
 	decls::tget(Var,GV),
 	code::enq((GV=ID)),
-!.
+	!.
+
+xmg:generate_instr(eq(c(ID),v(Var))):--
+	decls::tget(Var,GV),
+	code::enq((ID=GV)),
+	!.
+
+%% Useless, but should not be an error
+xmg:generate_instr(eq(c(ID),c(ID1))):--
+	code::enq((ID=ID1)),
+	!.
 
 %% xmg:generate_instr(eq(c(ID),v(Var))):--
 %% 	decls::tget(Var,GV),
