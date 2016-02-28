@@ -197,7 +197,7 @@ typeExists(Type,Types):-
 typeExists(Type,Types):-
 	xmg:send(info,'\n\nError: '),
 	xmg:send(info,Type),
-	xmg:send(info,' is not a type.'),halt.
+	xmg:send(info,' is not a type.').
 
 replace_zeros([],[]).
 replace_zeros([0|T],[_|T1]):-
