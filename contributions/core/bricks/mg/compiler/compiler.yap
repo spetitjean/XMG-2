@@ -172,8 +172,8 @@ eval:-
 	%% xmg:send(info,'\ngot trace\n'),
 
 	findall(Mutex,xmg:mutex(Mutex),Mutexes),
-	%% xmg:send(info,'\nMutexes:'),
-	%% xmg:send(info,Mutexes),
+	xmg:send(debug,'\nMutexes:'),
+	xmg:send(debug,Mutexes),
 	check_mutexes(Trace,Mutexes),
 
 	xmg:send_nl(info),xmg:send_nl(info),xmg:send(info,'                Computed '),xmg:send(info,Class),xmg:send_nl(info),xmg:send_nl(info),
@@ -253,7 +253,8 @@ fail_if_mutex([Class|T],Class,Mutex):-
 fail_if_mutex([Class|T],First,Mutex):-
 	xmg:mutex_add(Mutex,Class),!,
 	xmg:send(info,' mutex fail '),
+	%%halt.
 	fail.
 fail_if_mutex([Class|T],First,Mutex):-
-	%not(mutex_add(Mutex,Class)),!,
+	%%not(xmg:mutex_add(Mutex,Class)),!,
 	!,fail_if_mutex(T,First,Mutex),!.

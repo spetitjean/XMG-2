@@ -57,11 +57,11 @@ h_avm(X, Type, L) :-
 	xmg:send(debug,'\nConverting '),
 	xmg:send(debug,Type),
 	
-	(var(Type) -> (Vector=Type);
-	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector,CVector)),
+	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector,CVector),
 
 	xmg:send(debug,' to '),
 	xmg:send(debug,Vector),
+
 
 	get_attrconstraints(CVector,Must),
 

@@ -51,7 +51,7 @@
 :-edcg:weave([types,global_context,dim_types,type_decls],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
 :-edcg:weave([global_context,dim_types,type_decls],[type_classes/1]).
 :-edcg:weave([types,exports],[make_exports_global/1,make_params_global/1]).
-:-edcg:weave([type_decls],[type_decls/1, type_decl/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1,add_base_types/1, assert_consts/2, assert_const/2]).
+:-edcg:weave([type_decls],[type_decls/1, type_decl/1, type_only_principles/1, type_decl_if_principle/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1,add_base_types/1, assert_consts/2, assert_const/2]).
 
 :-edcg:weave([free],[new_free/2]).
 
@@ -285,13 +285,26 @@ gather_one(Decls,_,Decls):-!.
 
 
 type_decls([]):-- !.
-type_decls(_):--
+type_decls(L):--
 	  xmg:notype_mode,
+          type_only_principles(L),
 	  !.
 type_decls([H|T]):--
 	%%xmg:send(info,H),
 	type_decl(H),!,
 	type_decls(T),!.
+
+type_only_principles([]):--!.
+type_only_principles([H|T]):--
+	%%xmg:send(info,H),
+	type_decl_if_principle(H),!,
+        type_only_principles(T),!.
+
+type_decl_if_principle(principle-P):--
+		      type_decl(principle-P),!.
+type_decl_if_principle(_-P):--
+		      !.
+
 
 %% Warning: types have to be done before properties and feats
 %% Warning: fieldprecs must be processed before fields

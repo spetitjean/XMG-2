@@ -161,12 +161,19 @@ get_ftype(ftype(Type)):-
 
 %% convert a type list to a vector (with _) and a constant vector (with 0)
 
+
 fTypeToVector(Type,SVector,FVector):-
+        atom(Type),
 	xmg:ftypes(Types),
 	typeExists(Type,Types),
 	fTypeToSomeVector(Type,Types,Vector),
 	xmg:send(debug,Vector),
 	find_smaller_supertype(Vector,SVector,FVector),
+	!.
+%% Type is already a vector
+fTypeToVector(Type,SVector,FVector):-
+        not(atom(Type)),
+	find_smaller_supertype(Type,SVector,FVector),
 	!.
 fTypeToVector(Type,SVector,FVector):-
 	not(xmg:ftypes(Types)),
@@ -180,7 +187,7 @@ find_smaller_supertype(Vector,FVector,SVector):-
 	!.
 
 find_smaller_supertype_from(Vector,Vector,N):-
-	xmg:fReachableType(Vector,N),!.
+    xmg:fReachableType(Vector,N),!.
 find_smaller_supertype_from(Vector,SVector,N):-
 	M is N +1,
 	length(Vector,L),
@@ -193,11 +200,16 @@ find_smaller_supertype_from(Vector,_,_):-
 typeExists(Type,Types):-
 	var(Type),!.
 typeExists(Type,Types):-
-	lists:member(Type,Types),!.
+    lists:member(Type,Types),!.
+%% Type is already a vector
+%% typeExists([_|_],_):-!.
 typeExists(Type,Types):-
 	xmg:send(info,'\n\nError: '),
 	xmg:send(info,Type),
-	xmg:send(info,' is not a type.').
+	xmg:send(info,' is not a type. Types are:\n'),
+	xmg:send(info,Types),
+	!.
+	%%halt.
 
 replace_zeros([],[]).
 replace_zeros([0|T],[_|T1]):-
@@ -221,8 +233,10 @@ fVectorsToTypesAndAttrs([H|T],[H1|T1],[H2|T2]):-
 	fVectorsToTypesAndAttrs(T,T1,T2),!.
 
 fVectorToType(Vector,Type):-
+    %%find_smaller_supertype_from(Vector,SVector,0),
 	xmg:send(debug,'Converting vector '),
 	xmg:send(debug,Vector),
+	xmg:send(debug,SVector),
 	xmg:ftypes(Types),
 	%%xmg:send(info,Types),
 	fVectorToType(Vector,Types,Type),!.
@@ -371,10 +385,13 @@ filter_set(Set,[Constraint|T]):-
 	filter_set(Set,T).
 
 assert_valid_type(Set,Len):-
+%%    Len>0,
 	xmg:send(debug,'\nValid type: '),
 	xmg:send(debug,Set),
 	xmg:send(debug,Len),
-	asserta(xmg:fReachableType(Set,Len)),!.
+	asserta(xmg:fReachableType(Set,Len)),
+	!.
+%%assert_valid_type(_,0).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

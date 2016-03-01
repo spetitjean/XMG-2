@@ -30,7 +30,8 @@ post(Space,NodeList,IntVars,Plugin):-
 	colors(Space,NodeList,Plugin).
 
 colors(Space,NodeList,Colors):-
-	%xmg_compiler:send(info,Colors),
+    xmg:send(debug,'\nPosting colors:'),
+	xmg:send(debug,Colors),
 	do_cposts(Space,NodeList,Colors,1).
 
 
@@ -86,4 +87,6 @@ post(Space,X,isnone,XN):-
 	Eq :=: eq(X),
 	xmg_brick_tree_solver:nbNodes(Nodes),
 	Space += cardinality(Eq,2,Nodes),
+	%% Giving up when nodes have no color
+	false,
 	!.
