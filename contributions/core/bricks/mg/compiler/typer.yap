@@ -392,7 +392,7 @@ assert_type(type(Id,Type)):--
 	type_decls::tget(Id,Type),!.
 assert_type(type(Id,Type)):--
 	type_decls::tget(Id,T),not(T=Type),!,
-	xmg:send(info,'\n Multiple definition of type '),
+	xmg:send(info,'\nError: Multiple definition of type '),
 	xmg:send(info,Id),
 	halt,!.
 assert_type(type(Id,Type)):--
@@ -407,7 +407,7 @@ assert_const(Const,Type):--
 	type_decls::tget(const(Const),Type),!.
 assert_const(Const,Type):--
 	type_decls::tget(const(Const),T),not(T=Type),!,
-	xmg:send(info,'\n Multiple definition of const '),
+	xmg:send(info,'\nError: Multiple definition of const '),
 	xmg:send(info,Const),
 	halt,!.
 assert_const(Const,Type):--
@@ -431,7 +431,7 @@ assert_feat(feat(Id,Type)):--
 	xmg:feat(Id,Type),!.
 assert_feat(feat(Id,Type)):--
 	xmg:feat(Id,T),not(T=Type),!,
-	xmg:send(info,'\n Multiple definition of feature '),
+	xmg:send(info,'\nError: Multiple definition of feature '),
 	xmg:send(info,Id),
 	halt,!.
 assert_feat(feat(Id,Type)):--
