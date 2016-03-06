@@ -36,37 +36,37 @@
 xmg:print_appendix:-
 	xmg:fReachableTypes(FVectors),
 	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere are the valid types according to the hierarchy:\n\n'),
+	xmg:send(debug,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere are the valid types according to the hierarchy:\n\n'),
 	print_hierarchy(FTypes,FAttrs),
-	xmg:send(info,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
+	xmg:send(debug,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
 
 print_hierarchy([],[]).
 print_hierarchy([H|T],[H1|T1]):-
-	xmg:send(info,H),
-	xmg:send(info,'\nConstraints: '),
+	xmg:send(debug,H),
+	xmg:send(debug,'\nConstraints: '),
 	print_constraints(H1),
-	xmg:send(info,'\n'),
+	xmg:send(debug,'\n'),
 	
 	print_hierarchy(T,T1).
 
 print_constraints(C):-
-	xmg:send(info,'['),
+	xmg:send(debug,'['),
 	print_constraints(C,0),
-	xmg:send(info,']'),!.
+	xmg:send(debug,']'),!.
 
 print_constraints([],_).
 print_constraints([A-V],N):-
-	xmg:send(info,A),
-	xmg:send(info,'-'),
+	xmg:send(debug,A),
+	xmg:send(debug,'-'),
 	set_constraint_value(V,N,_),
-	xmg:send(info,V),
+	xmg:send(debug,V),
 	!.
 print_constraints([A-V|T],N):-
-	xmg:send(info,A),
-	xmg:send(info,'-'),
+	xmg:send(debug,A),
+	xmg:send(debug,'-'),
 	set_constraint_value(V,N,M),
-	xmg:send(info,V),
-	xmg:send(info,', '),
+	xmg:send(debug,V),
+	xmg:send(debug,', '),
 	print_constraints(T,M),
 	!.
 
