@@ -31,19 +31,22 @@ listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
 xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFeats))) :--
-	framesToXML(Frames,UFeats),
+        xmg:send(debug,'\nConverting frames (duplicates removed):'),
+        lists:remove_duplicates(Frames,DFrames),
+        xmg:send(debug,DFrames),
+	framesToXML(DFrames,UFeats),
 	!.
 
 
 framesToXML([],[]):-- !.
 framesToXML([H|T],[H1|T1]):--
-	frameToXML(H,H1),
+	   frameToXML(H,H1),
 	framesToXML(T,T1).
 
 frameToXML(dom(V1,Op,V2),XML ):--
 	  xmg_brick_havm_havm:const_h_avm(V1,C1),
 	  xmg_brick_havm_havm:const_h_avm(V2,C2),
-
+	  
 	  XML=elem(dominance, features([type-large, from-C1, to-C2])),
 		   !.
 

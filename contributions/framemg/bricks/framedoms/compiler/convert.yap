@@ -23,7 +23,7 @@
 :- xmg:edcg.
 
 
-%% deal with the constructor 'tree'
+%% deal with the constructor 'frame'
 
 xmg:xml_convert_term(framedoms:frame(Frame), Frame1):--
 		    xmg:xml_convert_term(frame:frame(Frame),Frame1),

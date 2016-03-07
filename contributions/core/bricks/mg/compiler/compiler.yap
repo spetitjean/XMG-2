@@ -223,7 +223,10 @@ eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	xmg:dimbrick(Dim,DimBrick),
 	findall(Solver,xmg:solver(Dim,Solver),Solvers),
 	xmg:eval(DimBrick,Solvers,Acc,XML,Class),
-	xmg:send(debug,' done\n'),
+	xmg:send(debug,'\nDone '),
+	xmg:send(debug,Dim),
+	xmg:send(debug,XML),
+	
 	eval_dims(T,T1,Class).
 
 		

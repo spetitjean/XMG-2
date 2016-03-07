@@ -313,10 +313,14 @@ type_decl(type-Decls):--
 type_decl(hierarchy-Decls):--
 	xmg_brick_hierarchy_typer:get_hierarchies(Decls),!.
 type_decl(ftype-Decls):--
-	xmg_brick_hierarchy_typer:get_ftypes(Decls),!.
+	 xmg_brick_hierarchy_typer:remove_ftypes(Decls,NDecls),
+	   assert_consts(NDecls,hierarchy:ftype),
+	 xmg_brick_hierarchy_typer:get_ftypes(Decls),!.
 type_decl(fconstraint-Decls):--
 	xmg_brick_hierarchy_typer:get_fconstraints(Decls),!.
 type_decl(ftypes-[ftypes(Decls)]):--
+	 xmg_brick_hierarchy_typer:remove_ftypes(Decls,NDecls),
+	 assert_consts(NDecls,hierarchy:ftype),
 	xmg_brick_hierarchy_typer:get_ftypes(Decls),!.
 type_decl(fconstraints-[fconstraints(Decls)]):--
 	xmg_brick_hierarchy_typer:get_fconstraints(Decls),!.
@@ -396,7 +400,7 @@ assert_type(type(Id,Type)):--
 	xmg:send(info,Id),
 	halt,!.
 assert_type(type(Id,Type)):--
-	type_decls::tput(Id,Type),!.
+	   type_decls::tput(Id,Type),!.
 
 assert_consts([],_):-- !.
 assert_consts([Const|T],Type):--
@@ -411,7 +415,9 @@ assert_const(Const,Type):--
 	xmg:send(info,Const),
 	halt,!.
 assert_const(Const,Type):--
-	type_decls::tput(const(Const),Type).
+	    type_decls::tput(const(Const),Type),
+            xmg:send(debug,'\nAsserted constant: '),
+            xmg:send(debug,Const).
 
 get_range(Sup,Sup,[]):-!.
 get_range(Inf,Sup,[int(Inf)|T]):-

@@ -28,6 +28,10 @@
 :-dynamic(xmg:fAttrConstraint/4).
 :-dynamic(xmg:fPathConstraint/4).
 
+:- xmg:edcg.
+:- edcg:using(xmg_brick_mg_typer:type_decls).
+%% Have to use threads here
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Printing the hierarchy (as an appendix)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +88,10 @@ set_constraint_value(A,N,M):-
 %% Hierarchies Declarations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+remove_ftypes([],[]).
+remove_ftypes([ftype(H)|T],[H|T1]):-
+    %%fTypeToVector(H,_,V),
+    remove_ftypes(T,T1),!.
 
 get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
@@ -145,11 +152,11 @@ get_hierarchy(hierarchy(Type,Pairs)):-
 
 
 
-get_ftypes([]):-!.
-get_ftypes([H|T]):-
+get_ftypes([]):--!.
+get_ftypes([H|T]):--
 	get_ftype(H),
 	get_ftypes(T),!.
-get_ftype(ftype(Type)):-
+get_ftype(ftype(Type)):--
 	xmg_brick_hierarchy_typer:type_ftype(Type),!.
 
 
@@ -161,7 +168,8 @@ get_ftype(ftype(Type)):-
 
 %% convert a type list to a vector (with _) and a constant vector (with 0)
 
-
+fTypeToVector(Type,Type,Type):-
+    var(Type),!.
 fTypeToVector(Type,SVector,FVector):-
         atom(Type),
 	xmg:ftypes(Types),

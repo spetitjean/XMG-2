@@ -19,20 +19,43 @@
 
 :- module(xmg_brick_framedoms_extractor, []).
 
-extract(Model,ModelE):-
+extract(Model,ModelEE):-
     xmg:send(debug,'\nExtracting frame: '),
     xmg:send(debug,Model),
     remove_subframes(Model,Model,ModelE),
     xmg:send(debug,'\nExtracted'),
+    remove_duplicates(ModelE,ModelEE),
+    xmg:send(debug,'\nExtracted frame: '),
+    xmg:send(debug,ModelEE),
     !.
+
+remove_duplicates([],[]):-!.
+remove_duplicates([H|T],T1):-
+    has_duplicate(H,T),
+    remove_duplicates(T,T1),!.
+remove_duplicates([H|T],[H|T1]):-
+    remove_duplicates(T,T1),!.
+
+has_duplicate(H,[H1|T]):-
+    xmg_brick_havm_havm:h_avm(H,_,V),
+    xmg_brick_havm_havm:h_avm(H1,_,V1),
+    xmg:send(debug,V),
+    xmg:send(debug,H),
+    xmg:send(debug,V1),
+    xmg:send(debug,H1),
+    
+    H==H1,
+    xmg:send(debug,'\nFound duplicate.'),!.
+has_duplicate(H,[_|T]):-
+    has_duplicate(H,T),!.
 
 remove_subframes([],_,[]):-!.
 remove_subframes([H|T],Frames,T1):-
     is_subframe(H,Frames),!,
+    xmg:send(info,'\nRemoved a frame'),
     remove_subframes(T,Frames,T1),!.
 remove_subframes([H|T],Frames,[H|T1]):-
     not(is_subframe(H,Frames)),
-    xmg:send(info,'\nRemoved a frame'),
     remove_subframes(T,Frames,T1),!.
 
 is_subframe(Frame,[H|T]):-

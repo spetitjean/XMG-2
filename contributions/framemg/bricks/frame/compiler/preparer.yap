@@ -19,8 +19,8 @@
 
 :- module(xmg_brick_frame_preparer, []).
 
-prepare(Frames,FramesND):-  
-	lists:remove_duplicates(Frames,FramesND),
+prepare(Frames,Frames):-  
+	%%lists:remove_duplicates(Frames,FramesND),
 	%%separate(FrameD,Nodes,Edges),
 	%%print_frames(FramesND),
 	!.

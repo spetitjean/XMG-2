@@ -55,6 +55,9 @@ unfold_frame(frame:frame(Var,Types,Feats),TFrame):--
 
 create_frames(TFrame,[]):-- !.
 create_frames(TFrame,[H|T]):--
+	     xmg:send(debug,'\nUnfolded this: '),
+	     xmg:send(debug,(TFrame,frame:frame,H)),
+
     	constraints::enq((TFrame,frame:frame,H)),
         create_frames(TFrame,T),!.
 

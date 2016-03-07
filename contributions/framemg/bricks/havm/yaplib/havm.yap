@@ -63,13 +63,18 @@ h_avm(X, Type, L) :-
 	xmg:send(debug,Vector),
 
 
-	get_attrconstraints(CVector,Must),
-
+	(var(CVector)->
+	     true;
+	 get_attrconstraints(CVector,Must)
+	),
 
 	list_to_rbtree(L,T),
 	%%xmg:send(info,T),
-	
-	add_must(Must,T,MT),
+
+	(var(Must)->
+	     MT=T;
+	 add_must(Must,T,MT)
+	),
 	%%xmg:send(info,MT),
 
 	put_atts(Y, avmfeats(Vector,MT,_)),
