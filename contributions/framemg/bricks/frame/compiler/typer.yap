@@ -33,6 +33,11 @@ xmg:stmt_type_constr(frame,frame).
 
 xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
 	     xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)),
+             xmg:send(info,'\nDim '),
+             xmg:send(info,Dim),
+             xmg:send(info,' has now type '),
+             xmg_brick_havm_havm:h_avm(FType,_,HAVM),
+             xmg:send(info,HAVM),
 	     !.
 xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
 	     xmg:type_expr(F1,Dim:frame),
@@ -42,11 +47,12 @@ xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
 xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
 	     xmg:type_expr(L,Dim:frame),
              %%xmg:type_expr(T,_),
-	     xmg:type_expr(F,FType),
+             xmg:type_expr(F,FType),
 	     !.
 
-xmg:type_expr(frame:pair(A,V),FType):--
-	     xmg:type_expr(V,_),
+xmg:type_expr(frame:pair(token(_,id(A)),V),FType):--
+	     xmg:type_expr(V,T),
+             xmg_brick_havm_havm:h_avm(FType,_,[A-T]),
 	     !.
 
 
