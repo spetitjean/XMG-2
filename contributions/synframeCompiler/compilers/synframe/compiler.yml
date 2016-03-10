@@ -17,6 +17,7 @@ iface:
   _AVM: avm
 dim_frame:
   tag: "frame"
+  solver: "framedoms"
   Stmt: frame
   Expr : value
 dim_syn:
