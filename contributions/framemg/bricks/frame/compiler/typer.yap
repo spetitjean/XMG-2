@@ -31,7 +31,23 @@ xmg:stmt_type(frame,Dim,Dim:frame(FType)):-
 xmg:stmt_type_constr(frame,frame).
 
 
-xmg:type_stmt(frame:F,_):-- !.
+xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
+	     xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)),
+	     !.
+xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
+	     xmg:type_expr(F1,Dim:frame),
+	     xmg:type_expr(F2,Dim:frame),
+	     !.
+
+xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
+	     xmg:type_expr(L,Dim:frame),
+             %%xmg:type_expr(T,_),
+	     xmg:type_expr(F,FType),
+	     !.
+
+xmg:type_expr(frame:pair(A,V),FType):--
+	     xmg:type_expr(V,_),
+	     !.
 
 
 %% xmg:type_stmt(syn:X,_):--

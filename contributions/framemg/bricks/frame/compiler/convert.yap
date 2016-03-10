@@ -52,7 +52,8 @@ frameToXML(dom(V1,Op,V2),XML ):--
 
 frameToXML(Frame,Frame1 ):--
 	  xmg_brick_havm_havm:h_avm(Frame,VType,Feats),
-     
+
+          %%(var(VType)-> xmg:send(info,'Found a non instantiated type variable');true),
           xmg_brick_hierarchy_typer:fVectorToType(VType,Type),
 	  %%xmg:send(info,Type),  
 	  xmg_brick_havm_havm:const_h_avm(Frame,Const),
