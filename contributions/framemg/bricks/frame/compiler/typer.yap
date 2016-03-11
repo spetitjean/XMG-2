@@ -24,6 +24,8 @@
 
 :-edcg:using([xmg_brick_mg_typer:types]).
 
+:- asserta(xmg:type(frame:frame)).
+
 %% statement type with default parameters
 xmg:stmt_type(frame,Dim,Dim:frame(FType)):-
 	xmg_brick_havm_havm:h_avm(FType,_,[]).
@@ -33,11 +35,11 @@ xmg:stmt_type_constr(frame,frame).
 
 xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
 	     xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)),
-             xmg:send(info,'\nDim '),
-             xmg:send(info,Dim),
-             xmg:send(info,' has now type '),
+             xmg:send(debug,'\nDim '),
+             xmg:send(debug,Dim),
+             xmg:send(debug,' has now type '),
              xmg_brick_havm_havm:h_avm(FType,_,HAVM),
-             xmg:send(info,HAVM),
+             xmg:send(debug,HAVM),
 	     !.
 xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
 	     xmg:type_expr(F1,Dim:frame),

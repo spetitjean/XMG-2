@@ -21,6 +21,7 @@
 
 :- xmg:edcg.
 
+:- dynamic(xmg:type/1).
 
 :-edcg:using([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls]).
 
@@ -140,7 +141,10 @@ feat_type(token(C,ID),Feat,_,Type):-
 
 type_def(TypeAttr,TypeDef):--
 	type_decls::tget(TypeAttr,TypeDef),
-	!.
+!.
+type_def(TypeAttr,TypeAttr):--
+	%% for types such as frame:frame
+	xmg:type(TypeAttr),!.
 type_def(TypeAttr,TypeAttr):--
 	var(TypeAttr),
 	!.
