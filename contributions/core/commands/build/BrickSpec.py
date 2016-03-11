@@ -8,7 +8,7 @@ def yaml_to_specs(desc):
     for name, plugs in desc.items():
         for bs in BrickSpec.make(name, plugs):
             #print("BS:")
-            #print(bs)
+            #print(bs.name)
             if bs.name in table:
                 raise Exception("BrickSpec collision: %s" % br.name)
             #print('OK')
