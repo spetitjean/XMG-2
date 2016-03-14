@@ -56,6 +56,13 @@ xmg:type_expr(frame:pair(token(_,id(A)),V),FType):--
 	     xmg:type_expr(V,T),
              xmg_brick_havm_havm:h_avm(FType,_,[A-T]),
 	     !.
+xmg:type_expr(frame:pair(token(C,id(A)),V),FType):--
+	     xmg:type_expr(V,T),
+             xmg:send(info,'\nWarning: inconsistent types\n'),
+             xmg:send(info,V),
+             xmg:send(info,'\n'),
+             xmg:send(info,C),
+	     !.
 
 
 %% xmg:type_stmt(syn:X,_):--

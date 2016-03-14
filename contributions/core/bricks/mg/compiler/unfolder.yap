@@ -45,7 +45,9 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
 	    ->
 	     ( true)
              ;
-	     ( check_types(OUDecls,Classes,Type_Decls) )
+	     (
+		 xmg:send(info,'\n typing classes '),
+		 check_types(OUDecls,Classes,Type_Decls) )
 	),
 	
 
