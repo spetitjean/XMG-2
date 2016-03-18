@@ -27,7 +27,8 @@
 :-dynamic(xmg:fAttrConstraint/2).
 :-dynamic(xmg:fAttrConstraint/4).
 :-dynamic(xmg:fPathConstraint/4).
-
+:-dynamic(xmg:fPathConstraintFromAtts/5).
+    
 :- xmg:edcg.
 :- edcg:using(xmg_brick_mg_typer:type_decls).
 %% Have to use threads here
@@ -127,6 +128,7 @@ get_fconstraints([]):-
 	xmg:send(debug,VAttConstraints),
 	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
 
+
 	%%xmg_brick_hierarchy_typer:build_matrix(Types,FSets,Matrix),
 	!.
 get_fconstraints([H|T]):-
@@ -205,8 +207,10 @@ find_smaller_supertype_from(Vector,_,_):-
 	xmg:send(info,'\nDid not find supertype for vector '),
 	xmg:send(info,Vector),false.
 
+
 typeExists(Type,Types):-
-	var(Type),!.
+    var(Type),!.
+typeExists(true,Types):-!.
 typeExists(Type,Types):-
     lists:member(Type,Types),!.
 %% Type is already a vector
@@ -411,17 +415,24 @@ attrConstraints_to_vectors([A|AT],Types,[A1|AT1]):-
 	attrConstraint_to_vector(A,Types,A1),
 	attrConstraints_to_vectors(AT,Types,AT1),!.
 
-attrConstraint_to_vector(attrconstraint(implies,Ts1,Attr,Value),Types,(Vector,Attr-CValue)):-
-	attr_value(Value,CValue),
+attrConstraint_to_vector(attrconstraint(implies,Ts1,Path,Value),Types,(Vector,TPath-CValue)):-
+    attr_value(Value,CValue),
+    transform_path(Path,TPath),
 	init_vector(Types,Vector),
 	set_to_left(Ts1,Types,Vector),
 	!.
 
-attrConstraint_to_vector(pathconstraint(implies,Ts1,Attr1,Attr2),Types,(Vector,Attr1,Attr2)):-
-	attr_value(Value,CValue),
+attrConstraint_to_vector(pathconstraint(implies,Ts1,Path1,Path2),Types,(Vector,TPath1,TPath2)):-
+    %%attr_value(Value,CValue),
+    transform_path(Path1,TPath1),
+    transform_path(Path2,TPath2),    
 	init_vector(Types,Vector),
 	set_to_left(Ts1,Types,Vector),
 	!.
+
+transform_path([Att],Att):- !.
+transform_path([H|T],path(H,T1)):-
+    transform_path(T,T1),!.
 
 attr_value(true,_):-!.
 attr_value(Value,Value).
@@ -431,8 +442,8 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 	generate_vector_attrs(V1,AttConstraints,Feats),
 	asserta(xmg:fattrconstraint(V1,Feats)),
 
-	xmg:send(debug,'\nAsserted '),
-	xmg:send(debug,xmg:fattrconstraint(V1,Feats)),
+	%%xmg:send(info,'\nAsserted '),
+	%%xmg:send(info,xmg:fattrconstraint(V1,Feats)),
 
 	generate_vectors_attrs(VT,AttConstraints),!.
 
@@ -441,8 +452,8 @@ generate_vector_attrs(Vector,[],[]):-!.
 generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],ACT2):-
 	not(not(Vector=AVector)),
 	generate_vector_attrs(Vector,ACT,ACT1),
-	insert(A1-V,ACT1,ACTT),
-	insert(A2-V,ACTT,ACT2),!.
+	insert(A1-(_,V),ACT1,ACTT),
+	insert(A2-(_,V),ACTT,ACT2),!.
 generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.	
 %% attribute constraints
@@ -451,7 +462,8 @@ generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	generate_vector_attrs(Vector,ACT,ACT1),
 	xmg:send(debug,'\n Adding '),
 	xmg:send(debug,Feat),
-	insert(Feat,ACT1,ACT2),
+	Feat=Att-Type,
+	insert(Att-(Type,_),ACT1,ACT2),
 	xmg:send(debug,ACT2),
 	!.
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
@@ -555,7 +567,11 @@ type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
 	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
 
 type_fconstraint(CT,types(Ts1),pathEq(Attr1,Attr2)):-
-	asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+        asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+
+type_fconstraint(CT,attrType(Attr,Type),pathEq(Attr1,Attr2)):-
+	asserta(xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2)),!.
+
 
 
 

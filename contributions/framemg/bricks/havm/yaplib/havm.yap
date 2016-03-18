@@ -35,7 +35,11 @@ verify_attributes(Var, Other, Goals) :-
 	    rb_visit(T1,Pairs),
 	    lists:append(Must,Pairs,PairsMust),
 
-	    unify_entries(T2,PairsMust,T3),
+	    add_feat_constraints(PairsMust,Final),
+
+	    
+
+	    unify_entries(T2,Final,T3),
 	    put_atts(Other, avmfeats(Type3,T3,U)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]
@@ -75,10 +79,91 @@ h_avm(X, Type, L) :-
 	     MT=T;
 	 add_must(Must,T,MT)
 	),
-	%%xmg:send(info,MT),
+	
+	!,
 
-	put_atts(Y, avmfeats(Vector,MT,_)),
+	add_feat_constraints(MT,Final),
+
+	
+	put_atts(Y, avmfeats(Vector,Final,_)),
 	X = Y.
+
+add_feat_constraints(MT,Final):-
+    	check_feat_constraints(MT,MT,ToApply),
+
+	xmg_brick_hierarchy_typer:generate_vector_attrs(_,ToApply,Feats),
+	create_attr_types(Feats,CToApply),
+
+	xmg:send(info,'\nCToApply: '),
+	xmg:send(info,CToApply),
+
+	xmg:send(info,CToApply),
+	merge_feats(CToApply,CToApply,MToApply),
+	xmg:send(info,MToApply),
+	
+	xmg:send(info,'\nMT: '),
+	xmg:send(info,MT),
+	xmg:send(info,'\nMToApply: '),
+	xmg:send(info,MToApply),
+	
+	add_must(MToApply,MT,Final),
+
+	xmg:send(info,'\nFinal: '),
+	xmg:send(info,Final),
+	
+	!.
+
+
+
+%% To check contraints on attributes (only leading to path equalities for now)
+check_feat_constraints(Feats,Feats,ToApply):-
+    findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
+    xmg:send(debug,'\nChecking these constraints on feats:\n'),
+    xmg:send(debug,FeatConstraints),
+    check_feat_constraints(FeatConstraints,Feats,Feats,ToApply),
+    !.
+
+check_feat_constraints([],Feats,Feats,[]).
+check_feat_constraints([H|T],Feats,Feats,[EH|ToApply]):-
+    check_feat_constraint(H,Feats,Feats),!,
+    extract_constraint(H,EH),
+    check_feat_constraints(T,Feats,Feats,ToApply),
+    !.
+check_feat_constraints([H|T],Feats,Feats,ToApply):-
+    not(check_feat_constraint(H,Feats,Feats1)),!,
+    check_feat_constraints(T,Feats,Feats,ToApply),
+    !.
+
+extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
+    transform_path(P1,TP1),
+    transform_path(P2,TP2),!.
+
+
+check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
+  
+    rb_lookup(Attr,Val,Feats),
+    xmg:send(debug,'\nFound attribute\n'),
+    h_avm(NVal,Type,[]),
+    xmg:send(debug,'\nCreated new h_avm\n'),
+    not(not(NVal=Val)),
+    xmg:send(debug,'\nGot the feature\n'),
+    !.
+check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats,Feats):-
+  
+    rb_lookup(Attr,Val,Feats),
+    xmg:send(debug,'\nFound attribute\n'),
+    attvar(Val),
+    h_avm(Val,_,ValFeats),
+    list_to_rbtree(ValFeats,RBValFeats),
+    check_feat_constraint(featconstraint(CT,[Else|Path],Type,Attr1,Attr2),RBValFeats,RBValFeats),
+    %%rb_visit(RBValFeats,Visit),
+    %%h_avm(Val,_,Visit),
+    !.
+%%check_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
+    
+transform_path([Att],Att):- !.
+transform_path([H|T],path(H,T1)):-
+    transform_path(T,T1),!.
 
 const_h_avm(A,C) :-
 	get_atts(A, avmfeats(_, _, C)).
@@ -96,20 +181,27 @@ get_attrconstraints(Type,MCT):-
 	xmg:send(debug,Type),
 
 	create_attr_types(C,CT),
+
 	merge_feats(CT,CT,MCT),!.
 
 create_attr_types([],[]).
-create_attr_types([A-V|T],[A-V|T1]):-
-	var(V),!,
+create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
+    !,
+    create_attr_types([A1-(Type,V)],New),
+    h_avm(V1,_,New),
+    create_attr_types(T,T1),
+    !.
+create_attr_types([A-(Type,V)|T],[A-V|T1]):-
+	var(Type),!,
 	create_attr_types(T,T1),!.
-create_attr_types([A-V|T],[A-V1|T1]):-
-	not(var(V)),!,
-	h_avm(V1,V,[]),
+create_attr_types([A-(Type,V)|T],[A-V|T1]):-
+	%%not(var(V)),!,
+	h_avm(V,Type,[]),
 	create_attr_types(T,T1),!.
 
 merge_feats([],Feats,[]).
 merge_feats([A-V|T],Feats,[A-V|T1]):-
-	lists:member(A-V1,Feats),
+	lists:member(A-V1,T),
 	V=V1,!,
 	merge_feats(T,Feats,T1),!.
 merge_feats([F|T],Feats,[F|T1]):-
@@ -117,7 +209,13 @@ merge_feats([F|T],Feats,[F|T1]):-
 
 add_must([],L,L).
 add_must([H-V|T],L,NewL):-
-	rb_insert(L,H,V,TL),
+    rb_lookup(H,V1,L),!,
+    V=V1,
+    add_must(T,L,NewL),!.
+    
+add_must([H-V|T],L,NewL):-
+    rb_insert(L,H,V,TL),
+
 	add_must(T,TL,NewL),!.
 	
 check_type(Vector):-
