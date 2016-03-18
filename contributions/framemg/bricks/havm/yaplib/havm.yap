@@ -94,22 +94,22 @@ add_feat_constraints(MT,Final):-
 	xmg_brick_hierarchy_typer:generate_vector_attrs(_,ToApply,Feats),
 	create_attr_types(Feats,CToApply),
 
-	xmg:send(info,'\nCToApply: '),
-	xmg:send(info,CToApply),
+	xmg:send(debug,'\nCToApply: '),
+	xmg:send(debug,CToApply),
 
-	xmg:send(info,CToApply),
+	xmg:send(debug,CToApply),
 	merge_feats(CToApply,CToApply,MToApply),
-	xmg:send(info,MToApply),
+	xmg:send(debug,MToApply),
 	
-	xmg:send(info,'\nMT: '),
-	xmg:send(info,MT),
-	xmg:send(info,'\nMToApply: '),
-	xmg:send(info,MToApply),
+	xmg:send(debug,'\nMT: '),
+	xmg:send(debug,MT),
+	xmg:send(debug,'\nMToApply: '),
+	xmg:send(debug,MToApply),
 	
 	add_must(MToApply,MT,Final),
 
-	xmg:send(info,'\nFinal: '),
-	xmg:send(info,Final),
+	xmg:send(debug,'\nFinal: '),
+	xmg:send(debug,Final),
 	
 	!.
 
