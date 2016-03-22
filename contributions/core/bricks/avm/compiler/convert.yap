@@ -70,7 +70,8 @@ xmlFeat(A-AVM,H1):--
 	)
     ;
 	(
-	    !,H1=elem(f, features([name-A]),children([elem(fs,features([value-CAVM]))]))
+	    %%!,H1=elem(f, features([name-A]),children([elem(fs,features([value-CAVM]))]))
+	    !,H1=elem(f, features([name-A]),children([elem(fs,features([coref-CAVM]))]))
 	)),
 	!.
 
@@ -90,7 +91,8 @@ xmlFeat(A-AD,H1):--
 	)
     ;
 	(
-	    !,H1=elem(f, features([name-A]),children([elem(vAlt, features([value-CLAD]))]))
+	    %%!,H1=elem(f, features([name-A]),children([elem(vAlt, features([value-CLAD]))]))
+	    !,H1=elem(f, features([name-A]),children([elem(vAlt, features([coref-CLAD]))]))
 	)),
 	!.
 
