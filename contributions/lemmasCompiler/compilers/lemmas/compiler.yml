@@ -1,0 +1,19 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+decls:
+  _ODecl: feats
+control:
+  _Stmt: dim_lemma
+  _Expr: value
+value: 
+  _Else: avm adisj avm.Dot control.Call
+dim_lemma:
+  tag: "lemma"
+  Stmt: lemma
+  Expr: value
+lemma:
+  _Expr: value
+avm:
+  _Expr: value
+  _Value: value
