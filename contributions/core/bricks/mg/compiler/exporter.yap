@@ -167,7 +167,7 @@ export_class(mg:class(token(_,id(Name)),P,I,E,D,_)):-
 	add_vars_no_duplicates(Exps,UD,Decls),
 
 	add_vars_no_duplicates(Decls,UP,AllDecls),
-	%%xmg:send(debug,declared(Name,AllDecls)),
+	xmg:send(debug,declared(Name,AllDecls)),
 	asserta(declared(Name,AllDecls)),!.
 
 maybe_star(some(mg:export(all)),D,D).
@@ -192,16 +192,16 @@ untype_one([H|T],[H1|T1]):-
 
 untype_part(value:var_or_const(token(C,id(ID))),id(ID,C)):-!.
 untype_part(value:var(token(C,id(ID))),id(ID,C)):-!.
-untype_part(mg:iclass(token(_,id(ID)),[],AS),import(id(ID,C),AS)):-
+untype_part(mg:iclass(token(C,id(ID)),Params,AS),import(id(ID,C),Params,AS)):-
 	!.
 untype_part(token(C,id(ID)),id(ID,C)):-
 	!.
 untype_part(value:const(token(C,id(ID))),id(ID,C)):-
 	!.
 untype_part(Decl,_):-
-	xmg:send(debug,'\n\nUnknown declaration: '),
-	xmg:send(debug,Decl),
-	false,
+	xmg:send(info,'\n\nUnknown declaration: '),
+	xmg:send(info,Decl),
+	halt,
 	!.
 
 
@@ -224,7 +224,7 @@ add_vars_no_duplicates(Exps,[H|T],[H-_|T1]):-
 	add_vars_no_duplicates(Exps,T,T1).
 
 imports_exports([],E,D,[]).
-imports_exports([import(id(I,C),AS)|TI],E,D,Exps):-
+imports_exports([import(id(I,C),P,AS)|TI],E,D,Exps):-
 	( 
 	   import_exports(I,Exps1)
 	;

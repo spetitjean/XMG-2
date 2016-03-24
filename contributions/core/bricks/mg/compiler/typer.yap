@@ -168,6 +168,14 @@ make_params_global([token(_,id(A))|T]):--
 	types::tget(A,Type),
 	exports::tput(A,Type),
 	make_params_global(T),!.
+make_params_global([value:var(token(_,id(A)))|T]):--
+	types::tget(A,Type),
+	exports::tput(A,Type),
+	make_params_global(T),!.
+make_params_global([value:var_or_const(token(_,id(A)))|T]):--
+	types::tget(A,Type),
+	exports::tput(A,Type),
+	make_params_global(T),!.
 make_params_global([A|T]):--
 	xmg:send(info,'\nNo type for:'),
 	xmg:send(info,A),
@@ -181,12 +189,13 @@ unify_imports([I|T]):--
 	unify_import(I),
 	unify_imports(T).
 
-unify_import(mg:iclass(token(_,id(A)),[],none)):--
+unify_import(mg:iclass(token(_,id(A)),_,none)):--
 	%%global_context::tget(A,Exports),
 	types::tget(class(A),(Params,CAVM)),
 	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
 	xmg_brick_mg_exporter:exports(N,List),
 	import_exports(List,FACAVM).
+
 
 xmg:do_forall((Params,cavm(Vars)),(NParams,NVars)):--
 	xmg:send(debug,'\n forall on '),

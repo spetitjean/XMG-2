@@ -192,10 +192,11 @@ generate_values([value(Value)|T]):-
 	generate_values(T).
 
 import_calls([],_,true):--!.
-import_calls([import(id(Class,C),AS)|T],List,ICalls):--
+import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
 	xmg_brick_mg_exporter:exports(Class,E),
-	do_unify_exports(E,List,AS,Exports),
-	Call=..[value_class,Class,params(_),exports(Exports)],
+        do_unify_exports(E,List,AS,Exports),
+        get_params(P,List,UP),
+	Call=..[value_class,Class,params(UP),exports(Exports)],
 	ICall=..[':',xmg,Call],
 	%% add Call to Trace
 	%%Put=..[put,Class],

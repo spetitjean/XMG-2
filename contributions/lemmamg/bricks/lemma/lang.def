@@ -5,12 +5,9 @@ LemmaStmt : Feat {$$=$1} | Equation {$$=$1} | Coanchor {$$=$1};
 
 Feat : id '<-' _Expr {$$=lemma:feat($1,$3)};
 
-Equation : 'equation' Path '=' Path {$$=lemma:equation($2,$4)};
+Equation : 'equation' id '->' _Expr '=' _Expr {$$=lemma:equation($2,$4,$6)};
 
 Coanchor : 'coanchor' id '->' _Expr '/' id {$$=lemma:coanchor($2,$4,$6)};
 
-Path : '?' id {$$=$2}
-         | id {$$=$1}
-         | id '.' Path {$$=lemma:dot($1,$3)};
 
 %%

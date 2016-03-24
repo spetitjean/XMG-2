@@ -133,7 +133,7 @@ xmg:token_to_id(token(Coord,id(VAR)), id(VAR,Coord)).
 unfold_var(value:var(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(value:var_or_const(Token),ID):- xmg:token_to_id(Token,ID), !.
 unfold_var(value:const(Token),ID):- xmg:token_to_id(Token,ID), !.
-unfold_var(mg:iclass(Token,Params,AS),import(ID,UAS)):- xmg:token_to_id(Token,ID), unfold_as(AS,UAS),!.
+unfold_var(mg:iclass(Token,Params,AS),import(ID,UParams,UAS)):- xmg:token_to_id(Token,ID), unfold_as(AS,UAS), unfold_vars(Params,UParams),!.
 unfold_var(Token,ID):- xmg:token_to_id(Token,ID), !.
 
 unfold_as(none,none).

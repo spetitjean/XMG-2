@@ -26,18 +26,28 @@
 
 xmg:generate_instr((lemma:feat(c(F),v(V)),Dim)):--
 	decls::tget(V,VV),
+		  
+	%%Set=..['::',xmg_acc:Dim,get(VAVM)],
+        %%code::enq(Set),
+
+	
+	
 	Acc=..['::',xmg_acc:Dim,put(feat(F,VV))],
-	code::enq(Acc),!.
+	code::enq(Acc),
+	!.
 xmg:generate_instr((lemma:feat(c(F),c(C)),Dim)):--
 	Acc=..['::',xmg_acc:Dim,put(feat(F,C))],
 	code::enq(Acc),!.
-xmg:generate_instr((lemma:equation(c(P1),v(P2)),Dim)):--
+xmg:generate_instr((lemma:equation(c(P1),v(P2),c(P3)),Dim)):--
 	decls::tget(P2,V),	
-	Acc=..['::',xmg_acc:Dim,put(equation(P1,V))],
+	Acc=..['::',xmg_acc:Dim,put(equation(P1,V,P3))],
         code::enq(Acc),!.
-xmg:generate_instr((lemma:equation(lemma:dot(c(P1),c(P2)),v(V)),Dim)):--
-	decls::tget(V,VV),	
-	Acc=..['::',xmg_acc:Dim,put(equation((P1,P2),VV))],
+xmg:generate_instr((lemma:equation(c(P1),c(P2),v(P3)),Dim)):--
+	decls::tget(P3,V),	
+	Acc=..['::',xmg_acc:Dim,put(equation(P1,P2,V))],
+        code::enq(Acc),!.
+xmg:generate_instr((lemma:equation(c(P1),c(P2),c(P3)),Dim)):--
+	Acc=..['::',xmg_acc:Dim,put(equation((P1,P2,P3),VV))],
         code::enq(Acc),!.
 xmg:generate_instr((lemma:coanchor(c(C),v(V),c(C1)),Dim)):--
 	decls::tget(V,VV),
