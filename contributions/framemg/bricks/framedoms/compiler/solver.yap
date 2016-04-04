@@ -37,7 +37,19 @@ solve_dom_star(F1,F2,Frames):-
     xmg:send(debug,F1),
     xmg:send(debug,FL1),
     xmg:send(debug,'\nNow unifying '),
+    attvar(F2),!,
     xmg_brick_havm_havm:h_avm(F2,_,Feats),
+    xmg:send(debug,Feats),
+    unify_star(F2,FL1,F21),
+    F2=F21,
+    xmg:send(debug,'unified \n').
+%% When F2 is not a typed feature structure (either constant or variable)
+solve_dom_star(F1,F2,Frames):-
+    find_label(F1,Frames,FL1),
+    xmg:send(debug,'found label \n'),
+    xmg:send(debug,F1),
+    xmg:send(debug,FL1),
+    xmg:send(debug,'\nNow unifying '),
     xmg:send(debug,Feats),
     unify_star(F2,FL1,F21),
     F2=F21,
