@@ -31,7 +31,7 @@ extract(Model,ModelEE):-
 
 remove_duplicates([],[]):-!.
 remove_duplicates([H|T],T1):-
-    has_duplicate(H,T),
+    has_duplicate(H,T),!,
     remove_duplicates(T,T1),!.
 remove_duplicates([H|T],[H|T1]):-
     remove_duplicates(T,T1),!.

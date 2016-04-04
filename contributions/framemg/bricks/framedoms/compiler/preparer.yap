@@ -29,8 +29,11 @@ new_name(Name):--
 	atomic_concat(['X',N],Name).
 
 prepare(frame(Frame,Trace),prepared(Frames,Doms)):--
-	lists:remove_duplicates(Frame,FrameD),
-	xmg_table:table_new(TableIn),
+       %% remove duplicates (should be moved here)
+       xmg_brick_framedoms_extractor:extract(Frame,FrameD),
+xmg:send(debug,'\nRemoved duplicates:\n'),
+xmg:send(debug,FrameD),
+xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
 
 	%% écrire l'id de la classe courante
