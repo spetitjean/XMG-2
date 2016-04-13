@@ -36,10 +36,11 @@ verify_attributes(Var, Other, Goals) :-
 	    lists:append(Must,Pairs,PairsMust),
 
 	    add_feat_constraints(PairsMust,Final),
+	    add_feat_constraints(Final,Final1),
 
 	    
 
-	    unify_entries(T2,Final,T3),
+	    unify_entries(T2,Final1,T3),
 	    put_atts(Other, avmfeats(Type3,T3,U)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]
@@ -82,14 +83,17 @@ h_avm(X, Type, L) :-
 	
 	!,
 
+	%% two passes, in case something happens deeper in the structure
 	add_feat_constraints(MT,Final),
+	add_feat_constraints(Final,Final1),
 
 	
-	put_atts(Y, avmfeats(Vector,Final,_)),
+	put_atts(Y, avmfeats(Vector,Final1,_)),
 	X = Y.
 
 add_feat_constraints(MT,Final):-
-    	check_feat_constraints(MT,MT,ToApply),
+    check_feat_constraints(MT,MT,ToApply,N),
+
 
 	xmg_brick_hierarchy_typer:generate_vector_attrs(_,ToApply,Feats),
 	create_attr_types(Feats,CToApply),
@@ -116,22 +120,27 @@ add_feat_constraints(MT,Final):-
 
 
 %% To check contraints on attributes (only leading to path equalities for now)
-check_feat_constraints(Feats,Feats,ToApply):-
+check_feat_constraints(Feats,Feats,ToApply,N):-
     findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
-    check_feat_constraints(FeatConstraints,Feats,Feats,ToApply),
+    OldFeats = Feats,
+    check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
+    %%(N>0 -> (check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_)) ; true ),
+    %%(OldFeats==Feats -> true ; check_feat_constraints(Feats,Feats,ToApply) ),
+    %%check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_),
     !.
 
-check_feat_constraints([],Feats,Feats,[]).
-check_feat_constraints([H|T],Feats,Feats,[EH|ToApply]):-
+check_feat_constraints([],Feats,Feats,[],N,N).
+check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
     check_feat_constraint(H,Feats,Feats),!,
     extract_constraint(H,EH),
-    check_feat_constraints(T,Feats,Feats,ToApply),
+    M is N+1,
+    check_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
-check_feat_constraints([H|T],Feats,Feats,ToApply):-
+check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
     not(check_feat_constraint(H,Feats,Feats1)),!,
-    check_feat_constraints(T,Feats,Feats,ToApply),
+    check_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
 extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
