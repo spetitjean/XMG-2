@@ -22,7 +22,10 @@
 :- xmg:edcg.
 
 
-xmg:xml_convert_term(lemma:solved(List,Form), elem(lemma, children([elem(features,children(CForm)),elem(lemma,features([value-List]))]))) :--
-	xmg:xml_convert_term(avm:avm(Form),CForm),
+xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-CAT]))) :--
+		    lists:member(feat(entry,Entry),Lemma),
+
+lists:member(feat(cat,CAT),Lemma),
+
 	!.
 
