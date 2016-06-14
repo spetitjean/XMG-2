@@ -28,6 +28,7 @@
 :-dynamic(unicity/1).
 :-dynamic(current/1).
 :-dynamic(debug_mode/0).
+:-dynamic(json_output/0).
 :-dynamic(xmg:notype_mode/0).
 
 :-dynamic(xmg:print_appendix/0).
@@ -45,6 +46,9 @@
 
 debug_mode_on:-
     asserta(debug_mode).
+
+json_output_on:-
+    asserta(json_output).
 
 notype_mode_on:-
 	asserta(xmg:notype_mode).
@@ -74,7 +78,7 @@ xmg:send_nl(info,N):-
 send(O,M):-!, xmg:send(O,M),!.
 
 
-compile_file(File,Eval,Encoding,Debug,NoTypes):-
+compile_file(File,Eval,Encoding,Debug,JSON,NoTypes):-
 	asserta(encoding(Encoding)),
 	(
 	    Debug='on'
@@ -82,6 +86,13 @@ compile_file(File,Eval,Encoding,Debug,NoTypes):-
 	     ( debug_mode_on, xmg:send(info,'\n\nDebug Mode ON\n\n\n'))
              ;
 	     ( true, xmg:send(info,'\n\nDebug Mode OFF. To activate, please use the option --debug\n\n\n'))
+	),
+	(
+	    JSON='on'
+	    ->
+	     ( json_output_on, xmg:send(info,'\n\nOutput language set to JSON\n\n\n'))
+             ;
+	     ( true, xmg:send(info,'\n\nUsing XML as output language. To switch to JSON, please use the option --json\n\n\n'))
 	),
 	(
 	    NoTypes='on'
@@ -188,7 +199,7 @@ eval:-
 	retract(current(Previous)),
 	asserta(current(Current)),
 	xmg:do_xml_convert(mg:entry(Class,Trace,EDims,Previous),XML),
-	xmg:printXML(XML,1),
+	print_solution(XML),
 	xmg:send(info,'Printed model '),
 	xmg:send(info,Previous),xmg:send_nl(info),xmg:send_nl(info),
 
@@ -198,6 +209,15 @@ eval:-
 	xmg:send_nl(info),
 	xmg:send_nl(info),
 	fail.
+
+
+print_solution(JSON):-
+    json_output,
+    xmg:printJSON(JSON,1),!.
+print_solution(XML):-
+    not(json_output),
+    xmg:printXML(XML,1),!.
+
 
 iface_last([],[]).
 iface_last([iface-I|T],T1):-

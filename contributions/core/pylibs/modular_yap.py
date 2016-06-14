@@ -28,13 +28,17 @@ class YAP(subprocess.Popen):
             pass
 
     @classmethod
-    def xmg_compile(cls, compiler, filename, debug, latin, types, **kargs):
+    def xmg_compile(cls, compiler, filename, debug, json, latin, types, **kargs):
         #import xmg.modular_program
         import xmg.command
         if debug:
             xmgDebug="on"
         else:
             xmgDebug="off"
+        if json:
+            xmgJSON="on"
+        else:
+            xmgJSON="off"
         if types:
             xmgType="on"
         else:
@@ -45,7 +49,7 @@ class YAP(subprocess.Popen):
             xmgLatin="utf8"
         xmgCompiler="use_module('%s/xmg/compiler/%s/generated/conf')," % (xmg.command.YAPDIR, compiler)
         return cls(
-                   goal=xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A,%s,%s,%s)" % (filename,xmgLatin,xmgDebug,xmgType),
+                   goal=xmgCompiler+"xmg_brick_mg_compiler:compile_file('%s',A,%s,%s,%s,%s)" % (filename,xmgLatin,xmgDebug,xmgJSON,xmgType),
                    **kargs)
 
   
