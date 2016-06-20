@@ -20,4 +20,123 @@
 :- module(xmg_brick_mg_printerJSON).
 
 xmg:printJSON(H, I) :-
-    !.
+  H=elem(_, features(Y)),
+  printIndent(I),
+  print('{\n'),
+  J = I+1,
+  printFeatures(Y, J),
+  print('\n'),
+  printIndent(I),
+  print('}\n'),!.
+xmg:printJSON(H, I) :-
+  H=elem(_, children(Y)),
+  printIndent(I),
+  print('{\n'),
+  J = I+1,
+  printChildren(Y, J),
+  print('\n'),
+  printIndent(I),
+  print('}\n'),!.
+xmg:printJSON(H, I) :-
+  H=elem(_, features(Y), children(Z)),
+  printIndent(I),
+  print('{\n'),
+  J = I+1,
+  printFeatures(Y, J),
+  print(',\n'),
+  printChildren(Z, J),
+  print('\n'),
+  printIndent(I),
+  print('}\n'),!.
+xmg:printJSON(H, I) :-
+  printIndent(I),
+  print('{\n'),
+  printElem(H, I),
+  print('\n'),
+  printIndent(I),
+  print('}\n'),!.
+
+printIndent(0) :-!.
+printIndent(I) :-
+	print('  '),
+  J is I-1,
+  printIndent(J),!.
+
+printElem(H, I) :-
+  H=elem(X),
+	printIndent(I),
+	print('"'),
+	print(X),
+	print('": null'),!.
+
+printElem(H, I) :-
+  H=elem(X, features(Y)),
+  printIndent(I),
+  print('"'),
+  print(X),
+  print('": {\n'),
+  J is I+1,
+  printFeatures(Y, J),
+  print('\n'),
+  printIndent(I),
+  print('}'),!.
+
+printElem(H, I) :-
+  	H=elem(X, children(Y)),
+  	printIndent(I),
+  	print('"'),
+  	print(X),
+  	print('": {\n'),
+  	J is I+1,
+  	printChildren(Y, J),
+  	print('\n'),
+    printIndent(I),
+  	print('}'),!.
+
+printElem(H, I) :-
+  	H=elem(X, data(Y)),
+  	printIndent(I),
+  	print('"'),
+  	print(X),
+  	print('": "'),
+  	printData(Y),
+  	print('"'),!.
+
+printElem(H, I) :-
+  H=elem(X, features(Y), children(Z)),
+  printIndent(I),
+  print('"'),
+  print(X),
+  print('": {\n'),
+  J is I+1,
+  printFeatures(Y, J),
+  print(',\n'),
+  printChildren(Z, J),
+  print('\n'),
+  printIndent(I),
+  print('}'),!.
+
+printFeatures([], _):-!.
+printFeatures([H1-H2], I) :-
+  printIndent(I),
+  print('"'),
+  print(H1),
+  print('": "'),
+  print(H2),
+  print('"'),!.
+printFeatures([H1-H2|T], I) :-
+  printIndent(I),
+  print('"'),
+  print(H1),
+  print('": "'),
+  print(H2),
+  print('",\n'),
+  printFeatures(T, I),!.
+
+printChildren([],_):-!.
+printChildren([H], I) :-
+	printElem(H, I),!.
+printChildren([H|T], I) :-
+	printElem(H, I),
+  print(',\n'),
+  printChildren(T,I),!.
