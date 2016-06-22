@@ -51,7 +51,8 @@ xmg:printJSON(H, I) :-
 xmg:printJSON(H, I) :-
   printIndent(I),
   print('{\n'),
-  printElem(H, I),
+  J = I+1,
+  printElem(H, J),
   print('\n'),
   printIndent(I),
   print('}\n'),!.
@@ -82,25 +83,25 @@ printElem(H, I) :-
   print('}'),!.
 
 printElem(H, I) :-
-  	H=elem(X, children(Y)),
-  	printIndent(I),
-  	print('"'),
-  	print(X),
-  	print('": {\n'),
-  	J is I+1,
-  	printChildren(Y, J),
-  	print('\n'),
-    printIndent(I),
-  	print('}'),!.
+  H=elem(X, children(Y)),
+  printIndent(I),
+  print('"'),
+  print(X),
+  print('": {\n'),
+  J is I+1,
+  printChildren(Y, J),
+  print('\n'),
+  printIndent(I),
+  print('}'),!.
 
 printElem(H, I) :-
-  	H=elem(X, data(Y)),
-  	printIndent(I),
-  	print('"'),
-  	print(X),
-  	print('": "'),
-  	printData(Y),
-  	print('"'),!.
+  H=elem(X, data(Y)),
+  printIndent(I),
+  print('"'),
+  print(X),
+  print('": "'),
+  print(Y),
+  print('"'),!.
 
 printElem(H, I) :-
   H=elem(X, features(Y), children(Z)),
