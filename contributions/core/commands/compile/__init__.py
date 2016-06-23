@@ -30,8 +30,11 @@ def handler_xmg_compile(args):
             rename=""
         else: rename=args.output
     else: 
-        rename_input=os.path.splitext(args.input)[0]       
-        rename=str(rename_input)+".xml"
+        rename_input=os.path.splitext(args.input)[0]
+        if not args.json:
+            rename=str(rename_input)+".xml"
+        else:
+            rename=str(rename_input)+".json"            
     if not rename == "":
         if os.path.exists(rename) and not args.force:
             parser.exit(status=1, message=rename+" already exists, use --force to overwrite\n") 
@@ -46,7 +49,7 @@ def handler_xmg_compile(args):
     finally:
         YAP.maybe_kill()
     if not rename == "":
-        parser.exit(status=0, message="XML produced in file '%s'\n" % rename )
+        parser.exit(status=0, message="Resource produced in file '%s'\n" % rename )
     else:
         parser.exit(status=0)
 

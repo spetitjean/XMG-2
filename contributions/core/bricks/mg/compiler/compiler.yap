@@ -156,10 +156,22 @@ compile_file(File,Eval):-
 	
 	asserta(current(0)),
 
-	xmg:send(out,'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'),
-	xmg:send(out,'<grammar>\n'),
+	print_header,
+	
 	eval,
     	maybe_print_appendices.	
+
+
+print_header:-
+    json_output,
+    !.
+
+print_header:-
+    not(json_output),
+    xmg:send(out,'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'),
+    xmg:send(out,'<grammar>\n'),
+    !.
+
 
 
 maybe_print_appendices:- xmg:print_appendix,fail.
@@ -225,13 +237,22 @@ iface_last([iface-I|T],T1):-
 iface_last([H|T],[H|T1]):-
 	iface_last(T,T1),!.
 
-eval:- xmg:send(out,'</grammar>\n'),
-       xmg:send(info,'\n\n________________________________________________\n________________________________________________'),
-       xmg:send(info,'\n\n      Process ended: '),
-       current(Number),
-       xmg:send(info,Number),
-       xmg:send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
-       !.
+eval:-
+    print_end_file,
+    xmg:send(info,'\n\n________________________________________________\n________________________________________________'),
+    xmg:send(info,'\n\n      Process ended: '),
+    current(Number),
+    xmg:send(info,Number),
+    xmg:send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
+    !.
+
+print_end_file:-
+    json_output,
+    !.
+print_end_file:-
+    not(json_output),
+    xmg:send(out,'</grammar>\n'),
+    !.
 
 eval_dims([],[],_):-!.
 eval_dims([trace-Acc|T],T1,Class):-!,
