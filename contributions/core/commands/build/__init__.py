@@ -1,6 +1,7 @@
 from xmg.command import subparsers
 from collections import OrderedDict
 import yaml
+import os
 
 
 #==============================================================================
@@ -18,6 +19,9 @@ def handler_xmg_build(args):
     axioms = determine_axioms(specs)
     build_and_connect(specs)
     from xmg.compgen.BrickCompiler import BrickCompiler
+    if not os.path.isdir("generated"):
+        print("Creating a directory for generated code")
+        os.makedirs("generated")
     compiler = BrickCompiler("generated", "generated/parser.yap")
     for b in specs.values():
         compiler.add_brick(b.brick, dim=b.brick.is_dimension)
