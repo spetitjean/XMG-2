@@ -95,7 +95,7 @@ remove_ftypes([ftype(H)|T],[H|T1]):-
     remove_ftypes(T,T1),!.
 
 get_fconstraints([]):-
-	xmg_brick_hierarchy_typer:build_types(types(Types,Sets)),
+	assert_types(Types),
 
 	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
 	xmg:send(debug,'\n\nType constraints:'),
@@ -105,7 +105,10 @@ get_fconstraints([]):-
 	xmg:send(debug,'\n\nConstraint vectors:'),
 	xmg:send(debug,CVectors),
 
-	xmg_brick_hierarchy_typer:filter_sets(Sets,CVectors,FSets),
+	build_types(types(Types,FSets,CVectors)),
+	
+	%%filter_sets(Sets,CVectors,FSets),
+	assert_sets(FSets),
 	xmg:send(debug,'\n\nFiltered types:'),
 	xmg:send(debug,FSets),
 	
@@ -266,20 +269,26 @@ fVectorToType([1|Vector],[Type|Types],[Type|Types1]):-
 
 %% building all possible type sets
 
-build_types(types(OTypes,Sets)):-
+assert_types(OTypes):-
 	%% get the list of elementary types
 	findall(Type,xmg:ftype(Type),Types),
 	ordsets:list_to_ord_set(Types,OTypes),
 	asserta(xmg:ftypes(OTypes)),
 	xmg:send(debug,'\nTypes are '),
-	xmg:send(debug,OTypes),
-	%% build all set combination of these elementary types
-	findall(Set,build_set(OTypes,Set),Sets),!.
+	xmg:send(debug,OTypes),!.
 
-build_set([],[]).
-build_set([_|T],[Bool|T1]):-
+build_types(types(OTypes,Sets,Constraints)):-
+	%% build all set combination of these elementary types
+	findall(Set,build_set(OTypes,Set,Constraints),Sets),!.
+
+build_set(OTypes,Set,Constraints):-
+    build_set_1(OTypes,Set),
+    not(filter_set(Set,Constraints)).
+
+build_set_1([],[]).
+build_set_1([_|T],[Bool|T1]):-
 	build_bool(Bool),
-	build_set(T,T1).
+	build_set_1(T,T1).
 
 build_bool(0).
 build_bool(1).
@@ -371,16 +380,22 @@ set_to_right(Type,Types,Vector,Vectors):-
 	xmg:send(info,Vector),
 	false.
 
-%% filtering sets by giving the shape of forbidden sets
+%% %% filtering sets by giving the shape of forbidden sets
 
-filter_sets([],_,[]).
-filter_sets([Set|Sets],Constraints,Sets1):-
-	filter_set(Set,Constraints),!,
-	filter_sets(Sets,Constraints,Sets1),!.
-filter_sets([Set|Sets],Constraints,[Set|Sets1]):-
+%% filter_sets([],_,[]).
+%% filter_sets([Set|Sets],Constraints,Sets1):-
+%% 	filter_set(Set,Constraints),!,
+%% 	filter_sets(Sets,Constraints,Sets1),!.
+%% filter_sets([Set|Sets],Constraints,[Set|Sets1]):-
+%% 	count_ones(Set,Len),
+%% 	assert_valid_type(Set,Len),
+%% 	filter_sets(Sets,Constraints,Sets1),!.
+
+assert_sets([]).
+assert_sets([Set|Sets]):-
 	count_ones(Set,Len),
 	assert_valid_type(Set,Len),
-	filter_sets(Sets,Constraints,Sets1),!.
+	assert_sets(Sets),!.
 
 count_ones([],0).
 count_ones([1|T],M):-
