@@ -40,8 +40,10 @@ xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFe
 
 framesToXML([],[]):-- !.
 framesToXML([H|T],[H1|T1]):--
+	   xmg:send(debug,'\nChecking havm for the last time'),
+	   xmg_brick_havm_havm:verify_attributes(H,H,_),
 	   frameToXML(H,H1),
-	framesToXML(T,T1).
+	   framesToXML(T,T1).
 
 frameToXML(dom(V1,Op,V2),XML ):--
 	  xmg_brick_havm_havm:const_h_avm(V1,C1),

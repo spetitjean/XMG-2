@@ -23,6 +23,7 @@ extract(Model,ModelEE):-
     xmg:send(debug,'\nExtracting frame: '),
     xmg:send(debug,Model),
     remove_subframes(Model,Model,ModelE),
+    %%ModelE=Model,
     xmg:send(debug,'\nExtracted'),
     remove_duplicates(ModelE,ModelEE),
     xmg:send(debug,'\nExtracted frame: '),
