@@ -29,7 +29,7 @@ verify_attributes(Var, Other, Goals) :-
 	get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
 	( get_atts(Other, avmfeats(Type2,T2,U)) ->
-	    unify_types(Type1,Type2,Type3,CType3),
+	      unify_types(Type1,Type2,Type3,CType3),
 	    %%check_type(Type1),
 	    get_attrconstraints(CType3,Must),
 	    rb_visit(T1,Pairs),
@@ -40,11 +40,28 @@ verify_attributes(Var, Other, Goals) :-
 	    add_feat_constraints(Final,Final1),
 	    rb_visit(Final1,LFinal1),
 
+	    %%xmg:send(info,'\n\nUnifying entries: '),
+	    
+	    %%xmg:send(info,T2),
+	    
+	    %%xmg:send(info,LFinal1),
+	    
 	    unify_entries(T2,LFinal1,T3),
-	    add_feat_constraints(T3,FinalT3),
+	    
+	    get_atts(Other,avmfeats(TypeC,TC,UC)),
+	    rb_visit(TC,LTC),
+	    %%xmg:send(info,'\nhas the type changed? '),
+	    %%xmg:send(info,LTC),
+	    (not(TC=T2)->(
+			  rb_visit(T3,T3List),     
+		 unify_entries(TC,T3List,T33));T3=T33),
+		 	    
+	    add_feat_constraints(T33,FinalT3),
 
+	    unify_types(TypeC,Type3,FinalType,_),
+	    
 
-	    put_atts(Other, avmfeats(Type3,FinalT3,U)),
+	    put_atts(Other, avmfeats(FinalType,FinalT3,UU)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
@@ -253,7 +270,19 @@ unify_types(T1,T2,T3,CT3):-
 	T1=T2,
 
 	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3,CT3),!.
-unify_types(T1,T2,_):-
+unify_types(T1,T2,T3,CT3):-
+    %% This should not happen (having 0s in vectors), but strangely does.
+    xmg:send(debug,'\n\n\nZeros in vector: \n'),
+    xmg:send(debug,T1),
+    xmg:send(debug,T2),
+    xmg_brick_hierarchy_typer:replace_zeros(T1,TT1),
+    xmg_brick_hierarchy_typer:replace_zeros(T2,TT2),
+    xmg:send(debug,TT1),
+    xmg:send(debug,TT2),
+    TT1=TT2,
+        xmg_brick_hierarchy_typer:find_smaller_supertype(TT1,T3,CT3),!.
+    
+unify_types(T1,T2,_,_):-
 	xmg:send(info,'\nCould not unify frame types '),
 	xmg:send(info, T1),
 	xmg:send(info, T2),
