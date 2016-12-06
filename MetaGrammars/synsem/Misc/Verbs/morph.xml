@@ -243,6 +243,11 @@
                 </fs>
             </lemmaref>
         </morph>
+        <morph lex="social" >
+            <lemmaref cat="adj"  name="social" >
+                <fs/>
+            </lemmaref>
+        </morph>
         <morph lex="the" >
             <lemmaref cat="det"  name="the" >
                 <fs>

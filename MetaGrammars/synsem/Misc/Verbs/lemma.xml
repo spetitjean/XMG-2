@@ -25,6 +25,18 @@
                 </sem>
             </anchor>
         </lemma>
+        <lemma name="bucket"  cat="n" >
+            <anchor tree_id="family[@name=commonnoun]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem>
+                    <semclass name="bucket" >
+                        <args/>
+                    </semclass>
+                </sem>
+            </anchor>
+        </lemma>
         <lemma name="by"  cat="p" >
             <anchor tree_id="family[@name=void]" >
                 <filter>
@@ -176,6 +188,14 @@
                         </args>
                     </semclass>
                 </sem>
+            </anchor>
+        </lemma>
+        <lemma name="social"  cat="adj" >
+            <anchor tree_id="family[@name=adjective]" >
+                <filter>
+                    <fs/>
+                </filter>
+                <sem/>
             </anchor>
         </lemma>
         <lemma name="the"  cat="det" >

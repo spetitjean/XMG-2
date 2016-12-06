@@ -4,6 +4,7 @@
 :- use_module(library(lists)).
 :- use_module(library(charsio)).
 %%:- use_module('xmg/brick/mg/edcg.yap').
+:- use_module(library(rbtrees)).
 
 :-use_module(library(readutil)).
 
@@ -150,9 +151,23 @@ rec_name(N,N1):-
 rec_name(N,N1):-
 	N=..[':',_,H|_],!,
 	rec_name(H,N1),!.
+rec_name(cavm(CAVM),AFSA):-
+    %% That is clearly not what we want
+    rb_visit(CAVM,FS),
+    extract_only_attrs(FS,FSA),
+    %%list_to_string(FSA,SFSA),
+    atomic_list_concat(['C-AVM with these attributes: ['|FSA],CFSA),
+    atom_codes(CFSA,AFSA),
+    !.
 rec_name(N,N1):-
 	N=..[H|_],
 	rec_name(H,N1),!.
+
+extract_only_attrs([],[']']).
+extract_only_attrs([H-H1],[H,']']).
+extract_only_attrs([H-H1|T],[H,', '|T1]):-
+    extract_only_attrs(T,T1),!.
+
 
 get_first_coord(token(C,_),C):-!.
 get_first_coord(N,C):-

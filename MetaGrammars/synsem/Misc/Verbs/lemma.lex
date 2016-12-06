@@ -70,11 +70,31 @@
 *EQUATIONS:
 *COANCHORS:
 
+*ENTRY: bucket
+*CAT: n
+*SEM: bucket
+*ACC: 1
+*FAM: commonnoun
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
 *ENTRY: the
 *CAT: det
 *SEM:
 *ACC: 1
 *FAM: determiner
+*FILTERS: []
+*EX: {}
+*EQUATIONS:
+*COANCHORS:
+
+*ENTRY: social
+*CAT: adj
+*SEM:
+*ACC: 1
+*FAM: adjective
 *FILTERS: []
 *EX: {}
 *EQUATIONS:

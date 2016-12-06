@@ -18,4 +18,5 @@ we	we	[pos = n; thirdsing = -; num = sg; i=we]
 you	you	[pos = n; thirdsing = -; num = pl; i=you]
 they	they	[pos = n; thirdsing = -; num = pl; i=they]
 the     the     [pos = det; thirdsing = +;]
+social  social  [pos = adj;]
 
