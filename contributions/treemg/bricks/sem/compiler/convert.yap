@@ -72,13 +72,13 @@ xmlPred(P,elem(semdominance,features([op-'ge']),children([elem(sym,features([var
 	xmlID(E1,V1),
 	xmlID(E2,V2),!.
 
-xmlID(ID,XID):--
+xmlID(ID,ID):--
 	var(ID),
-	new_name('@V',XID),!.
+	new_name('@V',ID),!.
 xmlID(c(ID),ID):-- !.
-xmlID(s(ID),XID):--
+xmlID(s(ID),ID):--
 	var(ID),
-	new_name('!C',XID),!.
+	new_name('!C',ID),!.
 xmlID(s(ID),ID):-- !.
 xmlID(v(ID),VID):--
      atomic_concat(['@V',ID],VID),!.
