@@ -40,7 +40,7 @@ xmg:print_appendix:-
 init_macros:-
 	xmg:sem_semantics(Sems),!,
 	xmg:send(info,'init macros\n'),
-	open('tmp/macro.mac',write,S,[alias(macros)]),
+	open('.more',write,S,[alias(macros)]),
 	xmg:send(info,Sems),
 	do_macros(Sems),
 	close(macros),!.

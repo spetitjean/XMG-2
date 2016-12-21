@@ -48,10 +48,14 @@ def handler_xmg_compile(args):
         YAP.communicate()
     finally:
         YAP.maybe_kill()
+    if os.path.exists('.more'):
+        print('An additional file was create, moving it to the file: more')
+        os.rename('.more','more.mac')
     if not rename == "":
         parser.exit(status=0, message="Resource produced in file '%s'\n" % rename )
     else:
         parser.exit(status=0)
+
 
 cmd = subparsers.add_parser(
     "compile", description="compile a metagrammar")
