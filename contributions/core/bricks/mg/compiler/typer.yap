@@ -350,6 +350,7 @@ type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):--
 	xmg_brick_mg_compiler:send(debug,OFields),
 	type_fields(OFields,1),
 	!.
+type_decl(none-_):--!.
 type_decl(Type-Decls):--
 	xmg_brick_mg_compiler:send(info,'  unknown decl type: '),
 	xmg_brick_mg_compiler:send(info,Type),

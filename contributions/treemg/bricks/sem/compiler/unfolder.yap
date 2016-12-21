@@ -20,6 +20,9 @@
 
 :-module(xmg_brick_sem_unfolder).
 
+:- dynamic(xmg:sem_semantics/1).
+:- dynamic(xmg:sem_extern/1).
+
 :- xmg:edcg.
 
 :- edcg:using([xmg_brick_mg_accs:constraints,xmg_brick_mg_accs:name,xmg_brick_mg_accs:vars,xmg_brick_mg_accs:consts]).
@@ -43,3 +46,25 @@ xmg:unfold_dimstmt(Sem,sem:scopeOver(S1,S2)):--
         xmg:unfold_expr(S2,U2),
 	constraints::enq((sem:scopeOver(U1,U2),Sem)),!.
 
+xmg:unfold(sem:semantics(IDs),none):--
+	  xmg:send(info,IDs),
+	  unfold_ids(IDs,UIDs),
+          asserta(xmg:sem_semantics(UIDs)),!.
+	  
+
+unfold_ids([],[]).
+unfold_ids([ID|T],[UID|T1]):-
+    unfold_id(ID,UID),
+    unfold_ids(T,T1),!.
+
+unfold_id(token(_,id(ID)),ID).
+
+xmg:unfold(sem:extern(IDs),none):--
+	  unfold_externs(IDs),
+	  !.
+
+unfold_externs([]).
+unfold_externs([E|T]):-
+    unfold_id(E,UE),
+    asserta(xmg:sem_extern(UE)),
+    unfold_externs(T).

@@ -2,7 +2,7 @@ mg:
   _Stmt: control
   _EDecls: decls
 decls:
-  _ODecl: feats
+  _ODecl: feats sem.Macro
 control:
   _Stmt: dim_sem dim_syn dim_iface stardim
   _Expr: value

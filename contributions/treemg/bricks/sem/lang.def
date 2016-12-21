@@ -19,4 +19,7 @@ Var : id {$$=$1}
     | '?' id {$$=$2}
     | '!' id {$$=$2};
 
+Macro : 'semantics' (id)+ {$$=sem:semantics($2)}
+    |   'extern' (id)+ {$$=sem:extern($2)};
+
 %%

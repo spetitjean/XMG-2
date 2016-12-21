@@ -28,6 +28,7 @@
 :-dynamic(unicity/1).
 :-dynamic(current/1).
 :-dynamic(debug_mode/0).
+:-dynamic(xmg:more_mode/0).
 :-dynamic(json_output/0).
 :-dynamic(xmg:notype_mode/0).
 
@@ -46,6 +47,9 @@
 
 debug_mode_on:-
     asserta(debug_mode).
+
+more_mode_on:-
+    asserta(xmg:more_mode).
 
 json_output_on:-
     asserta(json_output).
@@ -78,7 +82,7 @@ xmg:send_nl(info,N):-
 send(O,M):-!, xmg:send(O,M),!.
 
 
-compile_file(File,Eval,Encoding,Debug,JSON,NoTypes):-
+compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
 	asserta(encoding(Encoding)),
 	(
 	    Debug='on'
@@ -98,6 +102,14 @@ compile_file(File,Eval,Encoding,Debug,JSON,NoTypes):-
 	    NoTypes='on'
 	    ->
 	     ( notype_mode_on, xmg:send(info,'\n\nType checking OFF.\n\n\n'))
+             ;
+	     (true)
+	),!,
+	
+	(
+	    More='on'
+	    ->
+	     ( more_mode_on, xmg:send(info,'\n\nPrinting of additional files activated.\n\n\n'))
              ;
 	     (true)
 	 ),!,
