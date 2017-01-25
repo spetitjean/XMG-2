@@ -31,11 +31,17 @@ xmg:stmt_type(sem,Dim,sem):-!.
 xmg:type_stmt(sem:pred(L,P,Args),S):--
 	     xmg:type_expr(L,TL),
              xmg:type_expr(P,TP),
-	     xmg:type_expr(Args,TArgs),
+	     xmg:type_expr(sem:args(Args),TArgs),
 	     !.
 
 xmg:type_stmt(sem:scopeOver,S):--
 	     !.
+
+xmg:type_expr(sem:args([]),[]):--!.
+xmg:type_expr(sem:args([H|T]),[H1|T1]):--
+	 xmg:type_expr(H,H1),
+         xmg:type_expr(sem:args(T),T1),!.
+
 
 xmg:type_stmt(sem:A,_):--
 	 xmg:send(info,'\n\nType error in sem statement:\n'),

@@ -217,16 +217,22 @@ write_args([H|T],T2):--
 	write_args(T,T1),
 	atom_concat([H1,',',T1],T2),!.
 
-write_arg(A,A):--
+write_arg(value(A,_),A):--
 	var(A),
 	new_name('?V',A), !.
+write_arg(A,A):--
+	var(A),
+        new_name('?V',A), !.
 
+write_arg(value(A,_),A):-- !.
 write_arg(A,A):-- !.
 
 write_id(value(ID,_),ID):--
 	var(ID),
 	new_name('?V',ID),!.
 write_id(value(ID,_),ID):--
+	xmg:send(info,ID),!.
+write_id(c(ID),ID):--
 	xmg:send(info,ID),!.
 	
 write_id(ID,ID):--

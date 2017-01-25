@@ -55,6 +55,26 @@ post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
 	%% EqY       :=: eq(NodeU),      
 	%% Space += rel(EqX,'SRT_EQ',EqY),
 
+	%% version 1: if two nodes share a property that has to be unique, they have to be the same, or to be in different subtrees
+    
+
+	%% Parent   :=: parent(Node),   
+	%% ParentU   :=: parent(NodeU),   
+
+	%% Rel1 := boolvar(Space),
+	%% Rel2 := boolvar(Space),
+
+
+	%% Space += rel(Rel1,'IRT_NQ',Rel2),
+
+
+	%% Space += rel(Parent,'SRT_DISJ',ParentU,Rel1),
+
+	%% xmg_brick_tree_solver:get_rel(I1,I2,IntVars,IntVar),
+	%% Space += dom(IntVar,1,Rel2),
+
+	%% version 2: if two nodes share a property that has to be unique, they have to be the same
+
 	xmg_brick_tree_solver:get_rel(I1,I2,IntVars,IntVar),
 	Space += dom(IntVar,1),
     
