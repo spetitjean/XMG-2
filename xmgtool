@@ -1,0 +1,506 @@
+#! /usr/bin/python3
+# -*- python -*-
+import xml.parsers.expat, sys, argparse
+
+if sys.version_info[0] < 3:
+    raise Exception("xmgtool requires python version 3")
+
+class ParserXMG(object):
+
+    def __init__(self):
+        self.parser = xml.parsers.expat.ParserCreate()
+        self.parser.StartElementHandler = self.start_element
+        self.parser.EndElementHandler = self.end_element
+        self.parser.CharacterDataHandler = self.char_data
+        self.data = []
+        self.valt = None
+        self.STAG = {
+            "grammar": self.stag_grammar,
+            "entry": self.stag_entry,
+            "family": self.stag_family,
+            "trace": self.stag_trace,
+            "class": self.stag_class,
+            "tree": self.stag_tree,
+            "node": self.stag_node,
+            "narg": self.stag_narg,
+            "fs": self.stag_fs,
+            "f": self.stag_f,
+            "sym": self.stag_sym,
+            "vAlt": self.stag_vAlt,
+            "semantics": self.stag_semantics,
+            "literal": self.stag_literal,
+            "label": self.stag_label,
+            "predicate": self.stag_predicate,
+            "arg": self.stag_arg,
+            "interface": self.stag_interface,
+        }
+        self.ETAG = {
+            "grammar": self.etag_grammar,
+            "entry": self.etag_entry,
+            "family": self.etag_family,
+            "trace": self.etag_trace,
+            "class": self.etag_class,
+            "tree": self.etag_tree,
+            "node": self.etag_node,
+            "narg": self.etag_narg,
+            "fs": self.etag_fs,
+            "f": self.etag_f,
+            "sym": self.etag_sym,
+            "vAlt": self.etag_vAlt,
+            "semantics": self.etag_semantics,
+            "literal": self.etag_literal,
+            "label": self.etag_label,
+            "predicate": self.etag_predicate,
+            "arg": self.etag_arg,
+            "interface": self.etag_interface,
+        }
+
+    def start_element(self, name, attribs):
+        self.STAG[name](attribs)
+
+    def end_element(self, name):
+        self.ETAG[name]()
+
+    def char_data(self, data):
+        self.data.append(data)
+
+    def stag_grammar(self, attribs):
+        self.entries = []
+
+    def etag_grammar(self):
+        pass
+
+    def stag_entry(self, attribs):
+        self.entry = Entry()
+        self.entry.name = attribs["name"]
+
+    def etag_entry(self):
+        self.entries.append(self.entry)
+        self.entry = None
+
+    def stag_family(self, attribs):
+        self.data = []
+
+    def etag_family(self):
+        self.entry.family = "".join(self.data)
+        self.data = []
+
+    def stag_trace(self, attribs):
+        self.trace = []
+
+    def etag_trace(self):
+        self.trace.sort()
+        self.entry.trace = self.trace
+        self.trace = None
+
+    def stag_class(self, attribs):
+        self.data = []
+
+    def etag_class(self):
+        self.trace.append("".join(self.data))
+        self.data = []
+
+    def stag_tree(self, attribs):
+        self.tree = Tree()
+        self.tree.id = attribs["id"]
+        self.node_stack = []
+
+    def etag_tree(self):
+        self.tree.node = self.node
+        self.entry.tree = self.tree
+        self.tree = None
+        self.node = None
+
+    def stag_node(self, attribs):
+        node = Node()
+        node.type = attribs["type"]
+        node.children = []
+        if self.node_stack:
+            self.node_stack[-1].children.append(node)
+        self.node_stack.append(node)
+
+    def etag_node(self):
+        self.node = self.node_stack.pop()
+
+    def stag_narg(self, attribs):
+        self.fs_stack = []
+        self.f_stack = []
+
+    def etag_narg(self):
+        self.node_stack[-1].fs = self.fs
+        self.fs = None
+
+    def stag_fs(self, attribs):
+        fs = FS()
+        fs.coref = attribs.get("coref", None)
+        self.fs_stack.append(fs)
+
+    def etag_fs(self):
+        self.fs = self.value = self.fs_stack.pop()
+
+    def stag_f(self, attribs):
+        self.f_stack.append(attribs["name"])
+
+    def etag_f(self):
+        f = self.f_stack.pop()
+        self.fs_stack[-1][f] = self.value
+        self.value= None
+
+    def stag_sym(self, attribs):
+        varname = attribs.get("varname", None)
+        value = attribs.get("value", None)
+        if varname is not None:
+            self.value = Var(varname)
+        else:
+            self.value = Sym(value)
+
+    def etag_sym(self):
+        if self.valt:
+            self.valt.values.append(self.value)
+
+    def stag_vAlt(self, attribs):
+        valt = VAlt()
+        valt.coref = attribs.get("coref", None)
+        self.valt = valt
+
+    def etag_vAlt(self):
+        self.value = self.valt
+        self.valt = None
+
+    def stag_semantics(self, attribs):
+        pass
+
+    def etag_semantics(self):
+        pass
+
+    def stag_literal(self, attribs):
+        pass
+
+    def etag_literal(self):
+        pass
+
+    def stag_label(self, attribs):
+        pass
+
+    def etag_label(self):
+        pass
+
+    def stag_predicate(self, attribs):
+        pass
+
+    def etag_predicate(self):
+        pass
+
+    def stag_arg(self, attribs):
+        pass
+
+    def etag_arg(self):
+        pass
+
+    def stag_interface(self, attribs):
+        self.fs_stack = []
+        self.f_stack = []
+
+    def etag_interface(self):
+        self.entry.interface = self.value
+        self.value = None
+
+class Renaming(dict):
+
+    def __init__(self):
+        super(Renaming, self).__init__()
+        self._count = 0
+
+    def newvarname(self):
+        n = self._count
+        self._count = n+1
+        return "@XYZ%d" % n
+
+    def rename(self, name):
+        ren = self.get(name, None)
+        if ren is None:
+            ren = self.newvarname()
+            self[name] = ren
+        return ren
+
+class Entry(object):
+    def normalize_vars(self):
+        d = Renaming()
+        self.tree.normalize_vars(d)
+        self.interface.normalize_vars(d)
+    def pprint(self, fd=sys.stdout):
+        if not isinstance(fd, IndentableStream):
+            fd = IndentableStream(fd)
+        fd.writeln("Entry %s" % self.name)
+        with fd.indent():
+            fd.writeln("family = %s" % self.family)
+            fd.writeln("trace")
+            with fd.indent():
+                for x in self.trace:
+                    fd.writeln(x)
+            self.tree.pprint(fd)
+
+class Tree(object):
+    def normalize_vars(self, d):
+        self.node.normalize_vars(d)
+    def pprint(self, fd):
+        self.node.pprint(fd)
+
+class Node(object):
+    def normalize_vars(self, d):
+        if self.fs:
+            self.fs.normalize_vars(d)
+        for x in self.children:
+            x.normalize_vars(d)
+    def pprint(self, fd):
+        fd.writeln("node %s" % self.type)
+        if self.fs:
+            self.fs.pprint(fd)
+        with fd.indent():
+            for x in self.children:
+                x.pprint(fd)
+
+class FS(dict):
+    def normalize_vars(self, d):
+        items = list(self.items())
+        items.sort()
+        for x,y in items:
+            y.normalize_vars(d)
+    def pprint(self, fd):
+        items = list(self.items())
+        items.sort()
+        if items:
+            fd.write("[")
+            first = True
+            with fd.indent(INDENT_HERE):
+                for x,y in items:
+                    if not first and not fd.bol:
+                        fd.newline()
+                    fd.write("%s = " % x)
+                    y.pprint(fd)
+                    first = False
+            fd.writeln("]")
+
+class Var(object):
+    def __init__(self, varname):
+        self.varname = varname
+    def normalize_vars(self, d):
+        self.varname = d.rename(self.varname)
+    def pprint(self, fd):
+        fd.write("?")
+        fd.write(self.varname)
+
+class Sym(object):
+    def __init__(self, value):
+        self.value = value
+    def normalize_vars(self, d):
+        pass
+    def pprint(self, fd):
+        fd.write(self.value)
+
+class VAlt(object):
+    def __init__(self):
+        self.values = []
+    def normalize_vars(self, d):
+        pass
+    def pprint(self, fd):
+        first = True
+        for x in self.values:
+            if first:
+                first = False
+            else:
+                fd.write("|")
+            x.pprint(fd)
+
+class XMG(object):
+
+    @classmethod
+    def fromFile(cls, filename):
+        parser = ParserXMG()
+        with open(filename,"rb") as f:
+            parser.parser.ParseFile(f)
+        xmg = cls()
+        xmg.entries = parser.entries
+        xmg.table = table = {}
+        xmg.families = {}
+        for e in xmg.entries:
+            if e.name in table:
+                raise Exception("collision of entries: %s" % e.name)
+            e.normalize_vars()
+            table[e.name] = e
+            fam = xmg.families.get(e.family, None)
+            if fam is None:
+                fam = []
+                xmg.families[e.family] = fam
+            fam.append(e)
+        return xmg
+
+    def stat_families(self):
+        items = [(x,len(y)) for x,y in self.families.items()]
+        items.sort()
+        for x,y in items:
+            print("%s: %d" % (x,y))
+
+
+def stat_families_diff(xmg1, xmg2):
+    keys = frozenset(xmg1.families.keys()) | frozenset(xmg2.families.keys())
+    keys = list(keys)
+    keys.sort()
+    diffs = []
+    for k in keys:
+        n1 = len(xmg1.families.get(k,()))
+        n2 = len(xmg2.families.get(k,()))
+        if n1 != n2:
+            print("%20s  %4d  %4d" % (k,n1,n2))
+
+class IndentionContext(object):
+
+    def __init__(self, fd, prefix):
+        self.fd = fd
+        self.prefix = prefix
+        self.saved_prefix = None
+
+    def __enter__(self):
+        self.saved_prefix = self.fd.prefix
+        self.fd.prefix = self.prefix
+
+    def __exit__(self, x, y ,z):
+        self.fd.prefix = self.saved_prefix
+        return False
+
+INDENT_MORE = object()
+INDENT_HERE = object()
+
+class IndentableStream(object):
+
+    INDENT = "  "
+
+    def __init__(self, fd):
+        self.fd = fd
+        self.prefix = ""
+        self.bol = True
+        self.col = 0
+
+    def indent(self, how=INDENT_MORE):
+        if how is INDENT_MORE:
+            return IndentionContext(self, self.prefix + self.INDENT)
+        if how is INDENT_HERE:
+            return IndentionContext(self, " "*self.col)
+        return IndentionContext(self, " "*(len(self.prefix)+how))
+
+    def write(self, data):
+        for x in data.splitlines(True):
+            if not x:
+                continue
+            if self.bol and self.prefix:
+                self.fd.write(self.prefix)
+                self.bol = False
+                self.col = len(self.prefix)
+            self.fd.write(x)
+            self.bol = (x[-1] == "\n")
+            if self.bol:
+                self.col = 0
+            else:
+                self.col += len(x.strip("\r\n"))
+
+    def newline(self):
+        self.fd.write("\n")
+        self.bol = True
+        self.col = 0
+
+    def writeln(self, data):
+        self.write(data)
+        self.newline()
+
+#==============================================================================
+
+parser = argparse.ArgumentParser(description="XMG tool")
+subcmds = parser.add_subparsers()
+
+#==============================================================================
+# xmgtool pickle IFILE OFILE
+#==============================================================================
+
+def handler_pickle(args):
+    xmg = XMG.fromFile(args.input)
+    import pickle
+    with open(args.output, "wb") as f:
+        pickle.dump(xmg, f, -1)
+
+cmd = subcmds.add_parser(
+    "pickle", description="process and pickle an XML grammar")
+cmd.add_argument("input", metavar="IFILE", help="XML grammar file")
+cmd.add_argument("output", metavar="OFILE", help="pickled grammar file")
+cmd.set_defaults(handler=handler_pickle)
+
+#==============================================================================
+# xmgtool fstat FILE1 FILE2
+#==============================================================================
+
+def loadXMG(filename):
+    import pickle
+    with open(filename, "rb") as f:
+        return pickle.load(f)
+
+def handler_fstat(args):
+    xmg1 = loadXMG(args.XML1)
+    xmg2 = loadXMG(args.XML2)
+    stat_families_diff(xmg1, xmg2)
+
+cmd = subcmds.add_parser(
+    "fstat", description="show where the two grammars differ in number of entries for each family")
+cmd.add_argument("XML1", help="first (pickled) grammar file")
+cmd.add_argument("XML2", help="second (pickled) grammar file")
+cmd.set_defaults(handler=handler_fstat)
+
+#==============================================================================
+# xmgtool eprint XML ENTRY
+#==============================================================================
+
+def handler_eprint(args):
+    xmg = loadXMG(args.XML)
+    e = xmg.table[args.ENTRY]
+    e.pprint()
+
+cmd = subcmds.add_parser(
+    "eprint", description="pretty print an entry")
+cmd.add_argument("XML", help="(pickled) grammar file")
+cmd.add_argument("ENTRY", help="name of entry")
+cmd.set_defaults(handler=handler_eprint)
+
+#==============================================================================
+# xmgtool fprint XML FAMILY
+#==============================================================================
+
+def handler_fprint(args):
+    xmg = loadXMG(args.XML)
+    f = xmg.families[args.FAMILY]
+    for e in f:
+        e.pprint()
+
+cmd = subcmds.add_parser(
+    "fprint", description="pretty print a family")
+cmd.add_argument("XML", help="(pickled) grammar file")
+cmd.add_argument("FAMILY", help="name of family")
+cmd.set_defaults(handler=handler_fprint)
+
+#==============================================================================
+# xmgtool print XML
+#==============================================================================
+
+def handler_print(args):
+    xmg = loadXMG(args.XML)
+    for e in xmg.entries:
+        e.pprint()
+
+cmd = subcmds.add_parser(
+    "print", description="pretty print all entries")
+cmd.add_argument("XML", help="(pickled) grammar file")
+cmd.set_defaults(handler=handler_print)
+
+#==============================================================================
+# parse the command line and run the appropriate command
+#==============================================================================
+
+args = parser.parse_args()
+args.handler(args)
