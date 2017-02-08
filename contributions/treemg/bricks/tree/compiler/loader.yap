@@ -28,6 +28,9 @@
 :-	use_module('xmg/brick/unicity/compiler/preparer').
 :-	use_module('xmg/brick/unicity/compiler/solver').
 
+:-	use_module('xmg/brick/requires/compiler/preparer').
+:-	use_module('xmg/brick/requires/compiler/solver').
+
 :-	use_module('xmg/brick/colors/compiler/preparer').
 :-	use_module('xmg/brick/colors/compiler/solver').
 
