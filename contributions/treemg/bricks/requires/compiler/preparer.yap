@@ -29,6 +29,7 @@ prepare(Syn, prepared(Requires,Syn)) :-
 
 write_requires(_,[],[]) :- !.
 write_requires(Nodes,[R1|RT],[H1|T1]) :-
+    xmg:send(info,R1),
     write_require(Nodes,R1,H1),
     write_require_reduce(H1, false, false, B1, B2),
     %% fail here if the "requires" is not satisfied
@@ -42,9 +43,9 @@ write_require([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1]) :-
     xmg_brick_avm_avm:avm(Prop, PL),
     xmg_brick_avm_avm:avm(Feat, FL),
     ( ( lists:member(F1-V1, PL) ; lists:member(F1-V1, FL) )
-      -> B1=true ; else B1=false ),
+      -> B1=true ; B1=false ),
     ( ( lists:member(F2-V2, PL) ; lists:member(F2-V2, FL) )
-      -> B2=true ; else B2=false ),
+      -> B2=true ; B2=false ),
     !.
 write_require([_|Nodes], F1F2, T1) :-
     write_require(Nodes, F1F2, T1).

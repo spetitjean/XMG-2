@@ -29,9 +29,13 @@ principles(mg(Decls,_,_)):-
 	xmg:send(debug,'\nPrinciples:\n'),
 	xmg:send(debug,ListPrinciples),
 	unicities(Principles,Unicities),
+	requires(Principles,Requires),
 	xmg:send(debug,'\nUnicities:\n'),
 	xmg:send(debug,Unicities),
 	asserta(xmg:unicity(Unicities)),
+	xmg:send(debug,'\nRequires:\n'),
+	xmg:send(debug,Requires),
+	asserta(xmg:requires(Requires)),
 	asserta(xmg:principles(ListPrinciples)),!.
 
 get_principles([],[]):- !.
@@ -48,6 +52,14 @@ unicities([H|T],T1):-
 	xmg:send(debug,H),
 	xmg:send(debug,'\n\n'),
 	unicities(T,T1),!.
+
+requires([],[]):- !.
+requires([principle(requires,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
+	unicities(T,T1),!.
+requires([H|T],T1):- 
+	xmg:send(debug,H),
+	xmg:send(debug,'\n\n'),
+	requires(T,T1),!.
 
 list_principles([],_,[]).
 list_principles([principle(P,_,Dim)|T],Seen,[Pr|T1]):-
