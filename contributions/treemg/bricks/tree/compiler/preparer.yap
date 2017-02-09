@@ -103,7 +103,7 @@ prepare_plugin(Syn,Plugin,Out):-
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
 	xmg:send(debug,Module),
 	Prepare=..[prepare,Syn,Out],
-	Do=..[':',Module,Prepare],
+	Do=..[':',Module,Prepare],!,
 	Do,
 	!.
 prepare_plugin(Syn,Plugin,Out):-
