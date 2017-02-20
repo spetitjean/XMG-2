@@ -19,6 +19,9 @@
 
 :-module(xmg_brick_lemma_compiler).
 
+%% Turns off the trace
+xmg:trace_off.
+xmg:grammar_tags(['mcgrammar','lemmas']).
 
 xmg:eval(lemma,_,Lemma,Value,_):-
 	xmg_brick_lemma_solver:eval(Lemma,Value),

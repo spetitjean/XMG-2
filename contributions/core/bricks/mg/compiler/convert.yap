@@ -57,11 +57,38 @@ xmg:xml_convert_free(Free,Convert):--
 	var(Free),
 	new_name("@V",Convert).
 
-xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),elem(entry, features([name-Name]),children([elem(family, data(Class)),elem(trace, children(Trace1))|CDims]))):--
-	xmlTrace(Trace,Trace1),!,
+
+xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),Out):--
+		    xmg:convert_trace(Trace,Trace1),
+		    xmg:convert_trace(Family,Family1),
+
         atomic_concat([Class,'_',Number],Name),
 	xmg:xml_convert_term(Dims,CDims),
+	lists:append(Family1,Trace1,FTrace),
+	lists:append(FTrace,CDims,TCDims),
+	xmg:convert_entry(Name,TCDims,Out),
 	!.
+
+xmg:convert_entry(_,[TCDims],TCDims):-
+    %% There should be only one dimension here (lemma or morpheme)
+    %% could be something specific to entry later
+    xmg:trace_off.
+xmg:convert_entry(Name,TCDims,elem(entry, features([name-Name]),children(TCDims))).
+
+
+xmg:convert_family(_,[]):-
+    %% could be something specific to family later
+    xmg:trace_off,!.
+
+xmg:convert_family(Family,[elem(family, data(Class))]).
+
+
+xmg:convert_trace(_,[]):-
+    xmg:trace_off,!.
+
+xmg:convert_trace(Trace,[elem(trace, children(Trace1))]):-
+    xmlTrace(Trace,Trace1),!.
+
 
 xmg:xml_convert_term([],[]):-- !.
 xmg:xml_convert_term([H|T],[H1|T1]):--

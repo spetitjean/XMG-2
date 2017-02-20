@@ -22,10 +22,23 @@
 :- xmg:edcg.
 
 
-xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-CAT]))) :--
-		    lists:member(feat(entry,Entry),Lemma),
-
-lists:member(feat(cat,CAT),Lemma),
-
+xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-CAT]),children(Feats))) :--
+	lists:member(feat(entry,string(SEntry)),Lemma),
+        atom_codes(Entry,SEntry),
+        lists:member(feat(cat,CAT),Lemma),
+	xmg:send(info,Lemma),
+	xmg:xml_convert_term(lemma:feats(Lemma),Feats),
 	!.
+
+xmg:xml_convert_term(lemma:feats(Lemma),Feats):--
+	feat_tree(Lemma,Tree),
+        %% What to do with the gloss? Doesn't it belong to morph?
+	Feats=[Tree],
+	!.
+
+feat_tree(Lemma,Tree):-
+    	lists:member(feat(fam,Fam),Lemma),
+	atom_concat(['family[@name=',Fam,']'],FamFeat),
+	%% ToDo: Filters
+	Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))])),!.
 

@@ -34,6 +34,12 @@
 
 :-dynamic(xmg:print_appendix/0).
 
+%% Customizing tags in the output
+:-dynamic(xmg:grammar_tags/1). 
+:-dynamic(xmg:entry_tag/1).
+%% Delete the trace from the output
+:-dynamic(xmg:trace_off/0).
+
 :-multifile(xmg:send_others/2).
 
 %% xmg:eval extracts the models from a description. 
@@ -181,9 +187,18 @@ print_header:-
 print_header:-
     not(json_output),
     xmg:send(out,'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'),
-    xmg:send(out,'<grammar>\n'),
+    (xmg:grammar_tags(Tags)-> (print_tags(Tags,Out), xmg:send(out,Out))
+    ; xmg:send(out,'<grammar>\n')),
     !.
 
+print_tags([],''):-!.
+print_tags([H|T],Out):-
+    print_tag(H,Hout),
+    print_tags(T,Tout),
+    atom_concat([Hout,Tout],Out),!.
+
+print_tag(Tag,Out):-
+    atom_concat(['<',Tag,'>\n'],Out),!.
 
 
 maybe_print_appendices:- xmg:print_appendix,fail.
@@ -263,8 +278,19 @@ print_end_file:-
     !.
 print_end_file:-
     not(json_output),
-    xmg:send(out,'</grammar>\n'),
+    (xmg:grammar_tags(Tags)-> (print_closing_tags(Tags,Out), xmg:send(out,Out))
+     ; xmg:send(out,'</grammar>\n')),
     !.
+
+print_closing_tags([],''):-!.
+print_closing_tags([H|T],Out):-
+    print_closing_tags(T,Tout),
+    print_closing_tag(H,Hout),
+    atom_concat([Tout,Hout],Out),!.
+
+print_closing_tag(Tag,Out):-
+    atom_concat(['</',Tag,'>\n'],Out),!.
+
 
 eval_dims([],[],_):-!.
 eval_dims([trace-Acc|T],T1,Class):-!,
