@@ -1,0 +1,19 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+decls:
+  _ODecl: feats
+control:
+  _Stmt: dim_morpho
+  _Expr: value
+value: 
+  _Else: avm adisj avm.Dot control.Call
+dim_morpho:
+  tag: "morpho"
+  Stmt: morpho
+  Expr: value
+morpho:
+  _Expr: value
+avm:
+  _Expr: value
+  _Value: value

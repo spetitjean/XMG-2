@@ -1,0 +1,8 @@
+
+%%
+
+MoprhoStmt : Feat {$$=$1} ;
+
+Feat : id '<-' _Expr {$$=morpho:feat($1,$3)};
+
+%%
