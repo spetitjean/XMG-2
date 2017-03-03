@@ -30,5 +30,7 @@ class BrickGrammar(object):
         for Rule in G.rules:
             print(Rule)
         G.lr1.parser(file)
+  
+
         
 

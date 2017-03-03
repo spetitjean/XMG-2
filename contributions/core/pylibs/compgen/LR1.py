@@ -6,6 +6,9 @@ from xmg.compgen.shift import shift
 from xmg.compgen.reduce import reduce
 from xmg.compgen.next import next
 from xmg.compgen.accept import accept
+import time
+
+# The function _compute_graph takes time, something might be wrong with it
 
 class LR1(object):
 
@@ -125,7 +128,7 @@ class LR1(object):
                     table[X]=transition
                     if transition not in index:
                         enter(transition)
-                        stack.append(transition)
+                        stack.append(transition)    
             graph[I]=table
         self._graph=graph
         self._index=index
@@ -154,7 +157,7 @@ class LR1(object):
                     else : table[state][item.next]=next(Items[state][item.next])
         self._table=table
 
-    def parser(self,path): 
+    def parser(self,path):
         Table=self.table
         lines=[]
         i=0

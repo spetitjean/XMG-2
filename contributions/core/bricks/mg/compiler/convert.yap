@@ -59,9 +59,8 @@ xmg:xml_convert_free(Free,Convert):--
 
 
 xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),Out):--
-	Trace=[Family|_],!,
         xmg:convert_trace(Trace,Trace1),
-	xmg:convert_family(Family,Family1),
+	xmg:convert_family(Class,Family1),
 
         atomic_concat([Class,'_',Number],Name),
 	xmg:xml_convert_term(Dims,CDims),
