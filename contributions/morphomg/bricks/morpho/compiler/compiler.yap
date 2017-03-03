@@ -21,7 +21,7 @@
 
 %% Turns off the trace
 xmg:trace_off.
-xmg:grammar_tags(['mcgrammar','morph']).
+xmg:grammar_tags(['mcgrammar','morphs']).
 
 xmg:eval(morpho,_,Morph,Value,_):-
 	xmg_brick_morpho_solver:eval(Morph,Value),

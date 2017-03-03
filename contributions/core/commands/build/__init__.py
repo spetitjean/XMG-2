@@ -1,7 +1,7 @@
 from xmg.command import subparsers
 from collections import OrderedDict
 import yaml
-import os
+import os, time
 
 
 #==============================================================================
@@ -27,9 +27,16 @@ def handler_xmg_build(args):
         compiler.add_brick(b.brick, dim=b.brick.is_dimension)
         print("\nAdding "+b.brick._prefix+", dimension: "+str(b.dim))
     axiom_id = list(axioms)[0]
+    t0 = time.time()
     compiler.generate_parser(specs[axiom_id].brick)
+    t1 = time.time()
+    print('Parser generation time: ',t1-t0)
     compiler.generate_all()
+    t2 = time.time()
+    print('Additional generation time: ',t2-t1)
+    print('Total time: ',t2-t0)
 
+    
 # create the xmg subcommand
 cmd = subparsers.add_parser(
     "build", description="generate the code for a metagrammar compiler from the description in compiler.yaml")
