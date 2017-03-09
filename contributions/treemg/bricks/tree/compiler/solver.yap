@@ -312,6 +312,13 @@ get_node([H|T],N,S):-
 	M is N - 1,
 	get_node(T,M,S),!.
 
+get_number([H|T],H1,1):-
+    H==H1,!.
+get_number([H|T],H1,N):-
+    not(H==H1),
+    get_number(T,H1,M),
+    N is M+1,!.
+
 eq_vals(_,[],[],[],[],[]):- !.
 
 eq_vals(Space,

@@ -44,3 +44,7 @@ write_precede([Node|Nodes], F1V1, F2V2, [(B1,B2)|T1]) :-
       -> B2=true ; B2=false ),
     write_precede(Nodes,F1V1,F2V2,T1),
     !.
+write_precede([Node|Nodes], F1V1, F2V2, T1) :-
+    not(Node=node(Prop,Feat,_)),!,
+    write_precede(Nodes,F1V1,F2V2,T1),
+    !.

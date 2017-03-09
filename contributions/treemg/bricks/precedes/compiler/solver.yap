@@ -22,6 +22,7 @@
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
 
+
 post(Space, NodeList, IntVars, Precedes) :-
     rposts(Space, NodeList, IntVars, Precedes).
 
@@ -35,7 +36,7 @@ rpost(Space, NodeList, IntVars, Precede) :-
     %% L1 is the list of nodes that have F1=V1
     %% L2 is the list of nodes that have F2=V2
     rpost_split(NodeList, Precede, L1, L2),
-    rpost_do(L1, L2, Space, IntVars).
+    rpost_do(L1, L2, NodeList, Space, IntVars).
 
 rpost_split([], [], [], []).
 rpost_split([N|NL], [(B1,B2)|Precede], O1, O2) :-
@@ -46,20 +47,22 @@ rpost_split([N|NL], [(B1,B2)|Precede], O1, O2) :-
 %% rpost_do(L1,L2,_,_)
 %% for each (N1,N2) of a node N1 from L1 a node N2 from L2
 %% post the constraint that N1 precedes N2
-rpost_do([], _, _, _) :- !.
-rpost_do([N1|L1], L2, Space, IntVars) :-
-    rpost_do2(N1, L2, Space, IntVars),
-    rpost_do( L1, L2, Space, IntVars).
+rpost_do([], _, _, _, _) :- !.
+rpost_do([N1|L1], L2, NodeList, Space, IntVars) :-
+    rpost_do2(N1, L2, NodeList, Space, IntVars),
+    rpost_do( L1, L2, NodeList, Space, IntVars).
 
-rpost_do2(_, [], _, _) :- !.
-rpost_do2(N1, [N2|L2], Space, IntVars) :-
-    rpost_do3(N1, N2, Space, IntVars),
-    rpost_do2(N1, L2, Space, IntVars).
+rpost_do2(_, [], _,  _, _) :- !.
+rpost_do2(N1, [N2|L2], NodeList, Space, IntVars) :-
+    rpost_do3(N1, N2, NodeList, Space, IntVars),
+    rpost_do2(N1, L2, NodeList, Space, IntVars).
 
-rpost_do3(N1, N2, Space, IntVars) :-
+rpost_do3(N1, N2, NodeList, Space, IntVars) :-
     assert_node(N1),
+    xmg_brick_tree_solver:get_number(NodeList, N1,Num1),
     assert_node(N2),
-    xmg_brick_tree_solver:get_rel(N1,N2,IntVars,RelVar),
-    %% ???
-    %% which value should I use to represent precedence???
-    Space += dom(RelVar, 4).
+    xmg_brick_tree_solver:get_number(NodeList, N2,Num2),
+    xmg_brick_tree_solver:do_post(Space,IntVars,IntPVars,NodeList,hstep(more,Num1,Num2)),
+    %%xmg_brick_tree_solver:get_rel(Num1,Num2,IntVars,RelVar),
+    %%Space += dom(RelVar, 4),
+    !.
