@@ -1,6 +1,11 @@
+* make the creation of plugins less tedious: after writing the preparer and solver for the plugin, one has to edit the preparer of the general principle (e.g. tree) and the principles file in brick decls. 
+
 * YAP is broken (attributed variables cause errors after commit a34b45b), how can we simplify the installation?
+
 * repair brick morphtf (or the metagrammars)
+
 * provide minimal examples in Metagrammars for every compiler (type definitions, etc)
+
 * all these compiler.yap files should have better names, like executor.yap or evaluator.yap (except the one in brick mg, which is the compiler)
 
 * Bug in the LALR Parser generator:

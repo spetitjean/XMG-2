@@ -92,6 +92,7 @@ is_tree_plugin(color,colors).
 is_tree_plugin(rank,rank).
 is_tree_plugin(unicity,unicity).
 is_tree_plugin(requires,requires).
+is_tree_plugin(precedes,precedes).
 
 prepare_plugins(Syn,[],prepared([],Syn)):- !.
 prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
