@@ -50,12 +50,12 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% écrire les lits
 	write_lits(SynD,Relations,TableOut),
 
-	xmg:get_plugins(Plugins,OutPlugins),
+	xmg:get_plugins(tree,Plugins,OutPlugins),
 	
 	xmg:send(debug,'\nPlugins: '),
 	xmg:send(debug,Plugins),
 
-	prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)),
+	xmg:prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)),
 
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
@@ -74,44 +74,19 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 
 	!.
 
-%% this should go somewhere else
-xmg:get_plugins(TreePlugins,OutPlugins):-
-	findall(P,xmg:principle(P,Args,Dims),Plugins),
-	filter_tree_plugins(Plugins,[],TreePlugins,OutPlugins),!.
 
-filter_tree_plugins([],_,[],[]).
-filter_tree_plugins([H|T],Mem,[NH|T1],[_|T2]):-
-	is_tree_plugin(H,NH),
-	not(lists:member(NH,Mem)),!,
-	filter_tree_plugins(T,[NH|Mem],T1,T2).
-filter_tree_plugins([H|T],Mem,T1,T2):-
-	filter_tree_plugins(T,Mem,T1,T2),!.
 
-is_tree_plugin(tag,tag).
-is_tree_plugin(color,colors).
-is_tree_plugin(rank,rank).
-is_tree_plugin(unicity,unicity).
-is_tree_plugin(requires,requires).
-is_tree_plugin(precedes,precedes).
+%% This should be automatically generated when assembling the compiler:
+%% A plugin brick should provide a file with 2 fields, the name of the plugin and the principle it extends
+xmg:is_plugin(tree,tag,tag).
+xmg:is_plugin(tree,color,colors).
+xmg:is_plugin(tree,rank,rank).
+xmg:is_plugin(tree,unicity,unicity).
+xmg:is_plugin(tree,requires,requires).
+xmg:is_plugin(tree,precedes,precedes).
 
-prepare_plugins(Syn,[],prepared([],Syn)):- !.
-prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
-	prepare_plugin(Syn,Plugin,prepared(Out,NSyn)),
-	prepare_plugins(NSyn,T,prepared(TOut,NNSyn)),!.
 
-%% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
-prepare_plugin(Syn,Plugin,Out):-
-	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
-	xmg:send(debug,Module),
-	Prepare=..[prepare,Syn,Out],
-	Do=..[':',Module,Prepare],!,
-	Do,
-	!.
-prepare_plugin(Syn,Plugin,Out):-
-	xmg:send(info,'\nUnknown plugin:'),
-	xmg:send(info,Plugin),
-	false,
-	!.
+
 
 write_notunif([],[],_):--
 	!.

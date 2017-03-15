@@ -35,7 +35,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 
 	%%xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
 
-	xmg:get_plugins(TreePlugins,_),
+	xmg:get_plugins(tree,TreePlugins,_),
 	xmg:send(debug,TreePlugins),
 	
 	%%post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
