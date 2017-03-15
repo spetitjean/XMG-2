@@ -28,50 +28,94 @@ principles(mg(Decls,_,_)):-
 	list_principles(Principles,[],ListPrinciples),
 	xmg:send(debug,'\nPrinciples:\n'),
 	xmg:send(debug,ListPrinciples),
-	unicities(Principles,Unicities),
-	requires(Principles,Requires),
-	precedes(Principles,Precedes),
-	xmg:send(debug,'\nUnicities:\n'),
-	xmg:send(debug,Unicities),
-	asserta(xmg:unicity(Unicities)),
-	xmg:send(debug,'\nRequires:\n'),
-	xmg:send(debug,Requires),
-	asserta(xmg:requires(Requires)),
-	xmg:send(debug,'\nPrecedes:\n'),
-	xmg:send(debug,Precedes),
-	asserta(xmg:precedes(Precedes)),
-	asserta(xmg:principles(ListPrinciples)),!.
+
+	assert_principles(Principles,ListPrinciples),
+
+	asserta(xmg:principles(ListPrinciples)),
+	!.
+
+assert_principles(_,[]):-!.
+assert_principles(Principles,[principle(H,Dims)|T]):-
+    assert_principle(Principles,H),
+    assert_principles(Principles,T),!.
+
+
+assert_principle(_,rank).	      
+assert_principle(_,color).	      
+%% assert_principle(Principles,unicity):-	      				      
+%%     	unicities(Principles,Unicities),
+%% 	xmg:send(debug,'\nUnicities:\n'),
+%% 	xmg:send(debug,Unicities),
+%% 	asserta(xmg:unicity(Unicities)),!.
+%% assert_principle(Principles,requires):-	      				      
+%% 	requires(Principles,Requires),
+%% 	xmg:send(debug,'\nRequires:\n'),
+%% 	xmg:send(debug,Requires),
+%% 	asserta(xmg:requires(Requires)),!.
+%% assert_principle(Principles,precedes):-	      				      
+%% 	precedes(Principles,Precedes),
+%% 	xmg:send(debug,'\nPrecedes:\n'),
+%% 	xmg:send(debug,Precedes),
+%% 	asserta(xmg:precedes(Precedes)),!.
+
+assert_principle(Input,Principle):-	      				      
+	filter(Principle,Input,Output),
+	xmg:send(debug,Principle),
+	xmg:send(debug,Output),
+	Assert=..[Principle,Output],
+	ToAssert=..[':',xmg,Assert],
+	asserta(ToAssert),!.
+assert_principle(_,Principle):-
+    xmg:send(info,'\nWarning: do not know what to do with principle '),
+    xmg:send(info,Principle),!.	      
+
 
 get_principles([],[]):- !.
 get_principles([principle-Principles|_],Principles):-!.
 get_principles([H|T],Principles):-
 	get_principles(T,Principles),!.
 
-unicities([],[]):- !.
-unicities([principle(unicity,[eq(ID1,ID2)],Dim)|T],[feat(ID1,ID2,Dim)|T1]):-
-	unicities(T,T1),!.
-unicities([principle(unicity,[type(ID1)],Dim)|T],[feat(ID1,'+',Dim)|T1]):-
-	unicities(T,T1),!.
-unicities([H|T],T1):- 
-	xmg:send(debug,H),
-	xmg:send(debug,'\n\n'),
-	unicities(T,T1),!.
+%% unicities([],[]):- !.
+%% unicities([principle(unicity,[eq(ID1,ID2)],Dim)|T],[feat(ID1,ID2,Dim)|T1]):-
+%% 	unicities(T,T1),!.
+%% unicities([principle(unicity,[type(ID1)],Dim)|T],[feat(ID1,'+',Dim)|T1]):-
+%% 	unicities(T,T1),!.
+%% unicities([H|T],T1):- 
+%% 	xmg:send(debug,H),
+%% 	xmg:send(debug,'\n\n'),
+%% 	unicities(T,T1),!.
 
-requires([],[]):- !.
-requires([principle(requires,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
-	requires(T,T1),!.
-requires([H|T],T1):- 
-	xmg:send(debug,H),
-	xmg:send(debug,'\n\n'),
-	requires(T,T1),!.
+%% requires([],[]):- !.
+%% requires([principle(requires,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
+%% 	requires(T,T1),!.
+%% requires([H|T],T1):- 
+%% 	xmg:send(debug,H),
+%% 	xmg:send(debug,'\n\n'),
+%% 	requires(T,T1),!.
 
-precedes([],[]):- !.
-precedes([principle(precedes,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
-	precedes(T,T1),!.
-precedes([H|T],T1):- 
+%% precedes([],[]):- !.
+%% precedes([principle(precedes,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
+%% 	precedes(T,T1),!.
+%% precedes([H|T],T1):- 
+%% 	xmg:send(debug,H),
+%% 	xmg:send(debug,'\n\n'),
+%% 	precedes(T,T1),!.
+
+
+filter(_,[],[]):- !.
+%% two clauses used by e.g. unicity
+filter(Principle,[principle(Principle,[eq(ID1,ID2)],Dim)|T],[feat(ID1,ID2,Dim)|T1]):-
+	filter(Principle,T,T1),!.
+filter(Principle,[principle(Principle,[type(ID1)],Dim)|T],[feat(ID1,'+',Dim)|T1]):-
+	filter(Principle,T,T1),!.
+%% two clauses used by e.g. requires and precedes
+filter(Principle,[principle(Principle,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
+	filter(Principle,T,T1),!.
+filter(Principle,[H|T],T1):- 
 	xmg:send(debug,H),
 	xmg:send(debug,'\n\n'),
-	precedes(T,T1),!.
+	filter(Principle,T,T1),!.
+
 
 list_principles([],_,[]).
 list_principles([principle(P,_,Dim)|T],Seen,[Pr|T1]):-
