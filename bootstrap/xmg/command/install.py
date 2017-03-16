@@ -90,6 +90,27 @@ class ContribInstaller:
             self.link_file(
                 yapfile,
                 os.path.join(brick_dir_yap, os.path.basename(yapfile)))
+        plugin_def = os.path.join(path, "plugin.def")
+        if os.path.lexists(plugin_def):
+            plugins_global = os.path.join(self.data_rootdir, "xmg/plugins.yml")
+            import yaml
+            if os.path.exists(plugins_global):
+                plugins = yaml.load(open(plugins_global))
+            else:
+                plugins = {}
+            plugin = yaml.load(open(plugin_def))
+            plugins[name] = plugin
+            with open(plugins_global, "w") as f:
+                yaml.dump(plugins, f, indent=4, allow_unicode=True,
+                          default_flow_style=False)
+            self._create_yap_plugins(plugins)
+
+    def _create_yap_plugins(self, plugins):
+        with open(os.path.join(self.yap_rootdir, "xmg/plugins.yap"), "w") as f:
+            f.write(":- module(xmg_plugins, []).\n\n")
+            for plugin,info in plugins.items():
+                f.write("xmg:is_plugin(%s, %s, %s).\n" %
+                        (info['principle-for'], plugin, info['principle']))
 
     def extfiles(self, path, ext):
         import glob
