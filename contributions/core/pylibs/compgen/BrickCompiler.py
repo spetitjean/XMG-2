@@ -30,7 +30,7 @@ class BrickCompiler(object):
         
 
     def add_compiler(self,comp):
-        print(self._compilers)
+        #print(self._compilers)
         if comp in self._compilers:
             pass
         else:
@@ -118,7 +118,7 @@ class BrickCompiler(object):
             dimfile.write(',')
             dimfile.write(self._solvers[solver])
             dimfile.write(').\n')
-            # add dependencies
+            # add plugin dependencies
             yapdir=xmg.config['DEFAULT']['xmg_yap_rootdir']
             deppath=yapdir+"/xmg/brick/"+self._solvers[solver]+"/compiler/deps"
             print("Solver dep: "+deppath)
@@ -126,7 +126,7 @@ class BrickCompiler(object):
                 print("Exists")
                 depfile=open(deppath,"r")
                 for line in depfile.read().splitlines():
-                    print("\nAdding dependency:")
+                    print("\nAdding plugin dependency:")
                     print(line)
                     self.add_compiler("xmg/brick/"+line)
         dimfile.close()
