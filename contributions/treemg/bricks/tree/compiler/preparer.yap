@@ -76,18 +76,6 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 
 
 
-%% This should be automatically generated when assembling the compiler:
-%% A plugin brick should provide a file with 2 fields, the name of the plugin and the principle it extends
-xmg:is_plugin(tree,tag,tag).
-xmg:is_plugin(tree,color,colors).
-xmg:is_plugin(tree,rank,rank).
-xmg:is_plugin(tree,unicity,unicity).
-xmg:is_plugin(tree,requires,requires).
-xmg:is_plugin(tree,precedes,precedes).
-
-
-
-
 write_notunif([],[],_):--
 	!.
 
