@@ -18,6 +18,7 @@
 %% ========================================================================
 
 :- module(xmg_brick_mg_preparer, []).
+:- use_module('xmg/plugins').
 
 :- xmg:edcg.
 
@@ -27,7 +28,7 @@ xmg:get_plugins(Solver,TreePlugins,OutPlugins):-
 
 filter_plugins(Solver,[],_,[],[]).
 filter_plugins(Solver,[H|T],Mem,[NH|T1],[_|T2]):-
-	xmg:is_plugin(Solver,H,NH),
+	xmg:is_plugin(Solver,NH,H),
 	not(lists:member(NH,Mem)),!,
 	filter_plugins(Solver,T,[NH|Mem],T1,T2).
 filter_plugins(Solver,[H|T],Mem,T1,T2):-
@@ -41,6 +42,10 @@ xmg:prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
 
 %% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
 xmg:prepare_plugin(Syn,Plugin,Out):-
+        atomic_list_concat(['xmg/brick/', Plugin, '/compiler/preparer'], File1),
+        atomic_list_concat(['xmg/brick/', Plugin, '/compiler/solver'  ], File2),
+	use_module(File1, []),
+	use_module(File2, []),
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
 	xmg:send(debug,Module),
 	Prepare=..[prepare,Syn,Out],
