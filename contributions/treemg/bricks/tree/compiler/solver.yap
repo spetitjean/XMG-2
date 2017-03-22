@@ -227,26 +227,15 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
-	B>A,!,
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
-	Left:=:left(NB),
-	Right:=:right(NA),
-	Empty := intset([]),
-	Space += rel(Left,'SOT_INTER',Right,'SRT_NQ',Empty),
+	RightB:=:right(NB),
+	RightA:=:right(NA),
+	EqB :=: eq(NB),
+	Space += rel(RightB,'SOT_UNION',EqB,'SRT_NQ',RightA),
 	
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
-	A>B,!,
-	get_node(NodeList,A,NA),
-	get_node(NodeList,B,NB),
-	Left:=:left(NB),
-	Right:=:right(NA),
-	Empty := intset([]),
-	Space += rel(Left,'SOT_INTER',Right,'SRT_NQ',Empty),
-	
-	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,hstep(more,A,B)):-
 	B>A,!,
