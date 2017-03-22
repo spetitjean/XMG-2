@@ -1,0 +1,3 @@
+# -*- yaml -*-
+principle: excludes
+principle-for: tree

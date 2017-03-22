@@ -40,14 +40,26 @@ write_requires(Nodes,[R1|RT],[H1|T1]) :-
     xmg:send(info,R1),
     fail.
 
+%% don't use unification: test only for identity
+memberq(X, [Y|T]) :- X==Y -> true ; memberq(X, T).
+memberq_props(X, PL) :- memberq(X, PL), !.
+memberq_feats(X, FL) :-
+    ( memberq(X, FL)
+      ; lists:member(top-L, FL),
+	xmg_brick_avm_avm:avm(L, FL2),
+	memberq(X, FL2)
+      ; lists:member(bot-L, FL),
+	xmg_brick_avm_avm:avm(L, FL2),
+	memberq(X, FL2) ), !.
+
 write_require([],_,[]) :- !.
 write_require([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1]) :-
     Node=node(Prop,Feat,_),!,
     xmg_brick_avm_avm:avm(Prop, PL),
     xmg_brick_avm_avm:avm(Feat, FL),
-    ( ( lists:member(F1-V1, PL) ; lists:member(F1-V1, FL) )
+    ( ( memberq_props(F1-V1, PL) ; memberq_feats(F1-V1, FL) )
       -> B1=true ; B1=false ),
-    ( ( lists:member(F2-V2, PL) ; lists:member(F2-V2, FL) )
+    ( ( memberq_props(F2-V2, PL) ; memberq_feats(F2-V2, FL) )
      -> B2=true ; B2=false ),
     write_require(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1),
     !.
