@@ -72,6 +72,19 @@ xmg:unfold_dimstmt(Syn,syn:prec(token(_,Op),N1,N2)):--
 	constraints::enq((syn:prec(T1,Op,T2,C),Syn)),
 	!.
 
+xmg:unfold_dimstmt(Syn,syn:notdom(token(_,Op),N1,N2)):-- 
+	%%xmg:new_target_var(T1),
+	%%xmg:new_target_var(T2),
+	xmg:unfold_expr(N1,T1),
+	xmg:unfold_expr(N2,T2),
+	constraints::enq((syn:notdom(T1,Op,T2,C),Syn)),
+	!.
+xmg:unfold_dimstmt(Syn,syn:notprec(token(_,Op),N1,N2)):-- 
+	xmg:unfold_expr(N1,T1),
+	xmg:unfold_expr(N2,T2),
+	constraints::enq((syn:notprec(T1,Op,T2,C),Syn)),
+	!.
+
 
 
 

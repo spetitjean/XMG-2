@@ -226,6 +226,28 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
 	Space += dom(IntVar,5),  
 	!.
 
+do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
+	B>A,!,
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+	Left:=:left(NB),
+	Right:=:right(NA),
+	Empty := intset([]),
+	Space += rel(Left,'SOT_INTER',Right,'SRT_NQ',Empty),
+	
+	!.
+
+do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
+	A>B,!,
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+	Left:=:left(NB),
+	Right:=:right(NA),
+	Empty := intset([]),
+	Space += rel(Left,'SOT_INTER',Right,'SRT_NQ',Empty),
+	
+	!.
+
 do_post(Space,IntVars,IntPVars,NodeList,hstep(more,A,B)):-
 	B>A,!,
 	get_rel(A,B,IntVars,IntVar),
@@ -254,6 +276,12 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(any,A,B)):-
 	
 	IntSet:= intset([1,5]),
 	Space += dom(IntVar,IntSet),  
+	!.
+
+do_post(Space,IntVars,IntPVars,NodeList,Const):-
+    xmg:send(info,'\nConstraint not supported: '),
+    xmg:send(info,Const),
+    false,
 	!.
 
 

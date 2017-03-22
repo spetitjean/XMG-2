@@ -65,6 +65,21 @@ xmg:generate_instr((syn:prec(v(N1),Op,v(N2),C),Syn)):--
 	code::enq(AccPrec),	
 	!.
 
+xmg:generate_instr((syn:notdom(v(N1),Op,v(N2),C),Syn)):--
+
+	decls::tget(N1,V1),
+	decls::tget(N2,V2),
+	AccDom=..['::',xmg_acc:Syn,put(notdom(V1,Op,V2,C))],
+	code::enq(AccDom),	
+	!.
+xmg:generate_instr((syn:notprec(v(N1),Op,v(N2),C),Syn)):--
+
+	decls::tget(N1,V1),
+	decls::tget(N2,V2),
+	AccPrec=..['::',xmg_acc:Syn,put(notprec(V1,Op,V2,C))],
+	code::enq(AccPrec),	
+	!.
+
 
 
 

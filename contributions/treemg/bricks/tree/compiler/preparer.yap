@@ -33,6 +33,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
+	
 	count(SynD,Nodes,Doms,Precs,0,TableIn,TableOut) with name(_),
 
 	add_constraints(SynD,SynD,[],SynDC),
@@ -41,15 +42,18 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	Trace=[Family|_],
 
 	%%xmg:send(info,TableOut),
-
+	
 	count_noteqs(SynDC,Noteqs),
 
 	%% écrire les couples de noeuds qui ne peuvent pas unifier
+
 	write_notunif(SynDC,NotUnifs,TableOut) ,
 
 	%% écrire les lits
+
 	write_lits(SynD,Relations,TableOut),
 
+	
 	xmg:get_plugins(tree,Plugins,OutPlugins),
 	
 	xmg:send(debug,'\nPlugins: '),
@@ -161,8 +165,21 @@ write_lit(prec(node(_,_,A),'>>*',node(_,_,C),_),hstep(any,A2,C2),Table):--
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
-write_lit(synarity(node(A,_,_),node(_,_,C)),'none',Table):--
+write_lit(notprec(node(_,_,A),'>>',node(_,_,C),_),not(hstep(one,A2,C2)),Table):--
+	xmg_brick_syn_nodename:nodename(A,A1),
+	xmg_table:table_get(Table,A1,A2),
+	xmg_brick_syn_nodename:nodename(C,C1),
+	xmg_table:table_get(Table,C1,C2),
 	!.
+
+write_lit(synarity(node(A,_,_),node(_,_,C)),'none',Table):--
+	 !.
+
+write_lit(Lit,_,_):--
+	 xmg:send(info,'\nUnsupported litteral: '),
+         xmg:send(info,Lit),
+         false,
+	 !.
 
 write_nodes([],[],[],_,Table):--
 	!.
