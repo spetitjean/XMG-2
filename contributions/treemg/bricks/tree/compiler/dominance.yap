@@ -1,3 +1,5 @@
+%% -*- prolog -*-
+
 :- use_module(library(gecode)).
 
 :- op(500, xfx, ':=:').

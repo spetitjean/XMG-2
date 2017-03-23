@@ -227,13 +227,55 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
+        B>A,!,
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
-	RightB:=:right(NB),
-	RightA:=:right(NA),
-	EqB :=: eq(NB),
-	Space += rel(RightB,'SOT_UNION',EqB,'SRT_NQ',RightA),
+
+	get_rel(A,B,IntVars,IntVar),
+
+	lists:length(NodeList,N),
 	
+	Full := intset(1,N),
+	Empty := intset([]),
+	EmptyVar := setvar(Space,Empty,Empty),
+
+	Inter := setvar(Space,Empty,Full),
+
+	Right:=:right(NA),
+	Left:=:left(NB),
+	
+	Space += rel(Right,'SOT_INTER',Left,'SRT_EQ',Inter),
+
+	IsRight := boolvar(Space),
+	Space += dom(IntVar,4,IsRight),
+
+	Space += rel(Inter,'SRT_NQ',EmptyVar,IsRight),
+	!.
+
+do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
+        A>B,!,
+	get_node(NodeList,A,NA),
+	get_node(NodeList,B,NB),
+
+	get_rel(B,A,IntVars,IntVar),
+
+	lists:length(NodeList,N),
+	
+	Full := intset(1,N),
+	Empty := intset([]),
+	EmptyVar := setvar(Space,Empty,Empty),
+
+	Inter := setvar(Space,Empty,Full),
+
+	Right:=:right(NA),
+	Left:=:left(NB),
+	
+	Space += rel(Right,'SOT_INTER',Left,'SRT_EQ',Inter),
+
+	IsRight := boolvar(Space),
+	Space += dom(IntVar,5,IsRight),
+
+	Space += rel(Inter,'SRT_NQ',EmptyVar,IsRight),
 	!.
 
 
