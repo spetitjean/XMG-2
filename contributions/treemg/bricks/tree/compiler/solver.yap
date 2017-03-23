@@ -246,10 +246,10 @@ do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
 	
 	Space += rel(Right,'SOT_INTER',Left,'SRT_EQ',Inter),
 
-	IsRight := boolvar(Space),
-	Space += dom(IntVar,4,IsRight),
+	IsLeft := boolvar(Space),
+	Space += dom(IntVar,4,IsLeft),
 
-	Space += rel(Inter,'SRT_NQ',EmptyVar,IsRight),
+	Space += rel(Inter,'SRT_NQ',EmptyVar,IsLeft),
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
@@ -272,10 +272,10 @@ do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
 	
 	Space += rel(Right,'SOT_INTER',Left,'SRT_EQ',Inter),
 
-	IsRight := boolvar(Space),
-	Space += dom(IntVar,5,IsRight),
+	IsLeft := boolvar(Space),
+	Space += dom(IntVar,5,IsLeft),
 
-	Space += rel(Inter,'SRT_NQ',EmptyVar,IsRight),
+	Space += rel(Inter,'SRT_NQ',EmptyVar,IsLeft),
 	!.
 
 
