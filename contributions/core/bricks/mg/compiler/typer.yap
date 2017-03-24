@@ -224,7 +224,13 @@ unify_import(mg:iclass(token(_,id(A)),_,none)):--
 	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
 	xmg_brick_mg_exporter:exports(N,List),
 	import_exports(List,FACAVM).
-
+unify_import(mg:iclass(token(_,id(A)),_,AS)):--
+	%% TODO: something about the AS
+	%%global_context::tget(A,Exports),
+	types::tget(class(A),(Params,CAVM)),
+	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
+	xmg_brick_mg_exporter:exports(N,List),
+	import_exports(List,FACAVM).
 
 xmg:do_forall((Params,cavm(Vars)),(NParams,NVars)):--
 	xmg:send(debug,'\n forall on '),
