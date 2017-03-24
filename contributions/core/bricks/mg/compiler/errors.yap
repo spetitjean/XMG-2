@@ -136,7 +136,7 @@ vs_to_string(A) -->>
 	C=coord(File,Line,_),
 	get_lines(File,Line,Lines),
 	queue::enq_list("\n        "),
-	xmg:send(info,Lines),
+	%%xmg:send(info,Lines),
 	queue::enq_list(Lines),
 	!.
 vs_to_string(Term) -->>
@@ -172,11 +172,11 @@ extract_only_attrs([H-H1|T],[H,', '|T1]):-
 get_first_coord(token(C,_),C):-!.
 get_first_coord(N,C):-
 	N=..[':',_,H|_],!,
-	xmg:send(info,H),
+	%%xmg:send(info,H),
 	get_first_coord(H,C),!.
 get_first_coord(N,C):-
 	N=..[_,H|_],!,
-	xmg:send(info,H),
+	%%xmg:send(info,H),
 	get_first_coord(H,C),!.
 
 

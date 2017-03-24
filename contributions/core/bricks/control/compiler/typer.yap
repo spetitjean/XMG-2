@@ -92,16 +92,15 @@ xmg:type_stmt(control:eq(S1,S2),_):--
 xmg:check_types(_,_,Type,Type2):-
 	Type=Type2,!.
 xmg:check_types(S1,S2,Type,Type2):-
-	xmg:send(info,'\n\n\nType Checker error: '),
+	%% xmg:send(info,'\n\n\nType Checker error: '),
 
-	xmg:send(info,S1),
-	xmg:send(info,Type),
-	xmg:send(info,'\nand\n'),
+	%% xmg:send(info,S1),
+	%% xmg:send(info,Type),
+	%% xmg:send(info,'\nand\n'),
 
-	xmg:send(info,S2),
-	xmg:send(info,Type2),
-	xmg:send(info,'\n\n\n'),
-
+	%% xmg:send(info,S2),
+	%% xmg:send(info,Type2),
+	%% xmg:send(info,'\n\n\n'),
 
 	throw(xmg(type_error(incompatible_exprs(expr(S1,Type),expr(S2,Type2))))).
 
@@ -111,21 +110,31 @@ xmg:type_stmt(control:call(S1,S2),void):--
 
 xmg:type_expr(control:call(token(_,id(S1)),Params),Type):--
 	%% params should be checked here
-	xmg:send(debug,Params),
 	types::tget(class(S1),ClassType),
 	xmg:do_forall(ClassType,(ParamsTypes,Type)),
+	xmg:send(debug,'\n\nParam types expected for '),
+	xmg:send(debug,S1),
+	xmg:send(debug,': '),
+	xmg:send(debug,ParamsTypes),
+	xmg:send(debug,'\nClass type was (before forall) '),
+	xmg:send(debug,ClassType),
+	xmg:send(debug,'\n'),
 	type_params(Params,ParamsTypes),
 	!.
 
 
 xmg:type_stmt(control:X,Type):--
-	xmg:send(info,X),
 	throw(xmg(type_error(incompatible_types(control:X,Type)))).
 
 
 type_params([],_):-- !.
 type_params([Expr|T],[Param-Type|T1]):--
-	xmg:send(debug,Expr),
+	xmg:send(debug,'\nTyping param '),
+        xmg:send(debug,Expr),
+	xmg:send(debug,' -> '),
+        xmg:send(debug,Param),
+	xmg:send(debug,' with type '),
 	xmg:send(debug,Type),
+
 	xmg:type_expr(Expr,Type),
 	type_params(T,T1),!.

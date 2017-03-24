@@ -114,11 +114,13 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 
 	put_global_in_table(GContextList) with types(TableOut,TableGOut),
 	unify_imports(I) with types(TableGOut,UTableOut),
-	xmg:send(debug,'\nTypes table:'),
+
+	xmg:send(debug,'\n\nInitial table for '),
+	xmg:send(debug,N),
+	xmg:send(debug,': '),
 	xmg:send(debug,UTableOut),
-	%%xmg:send(info,S),
 	xmg:type_stmt(S,void) with types(UTableOut,TypedTable),
-	xmg:send(debug,'\nTyped table:'),
+	xmg:send(debug,'\n\nTyped table: '),
 	xmg:send(debug,TypedTable),
 	xmg:send(debug,'\n\n'),
 
@@ -131,13 +133,40 @@ type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
 
 	%% build a constant avm for params
 	xmg_table:table_new(IParams),
+
+	xmg:send(debug,'\nBuilding parameters using types: '),
+	xmg:send(debug,TypedTable),
+
 	make_params_global(P) with (types(TypedTable,_), exports(IParams,Params)),
 	rbtrees:rb_visit(Params,ParamList),
 
-	global_context::tput(class(N),(ParamList,CAVM)),
+	%% ParamList has to be ordered now
+	order_params(P,ParamList,OParamList),
+	
+	global_context::tput(class(N),(OParamList,CAVM)),
+
+	xmg:send(debug,'\n\nClass '),
+	xmg:send(debug,N),
+	xmg:send(debug,' now has type '),
+	xmg:send(debug,(ParamList,CAVM)),
+	xmg:send(debug,'\n'),
+	
 	type_classes(T),!.
 type_classes([_|T]):--
-	type_classes(T),!.
+	    type_classes(T),!.
+
+order_params(none,_,[]).
+order_params(some(P),ParamList,OParamList):-
+             order_params(P,ParamList,OParamList).
+order_params([],_,[]).
+order_params([H|T],ParamList,[H1|T1]):-
+		get_param(H,ParamList,H1),
+		order_params(T,ParamList,T1),!.
+
+get_param(value:var_or_const(token(_,id(P))),List,P-GP):-
+    lists:member(P-GP,List),
+    !.
+
 
 
 put_in_table([]):-- !.
