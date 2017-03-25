@@ -205,7 +205,7 @@ import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
 	import_calls(T,List,T1),
 	ICalls=..[',',Gen,T1],!.
 import_calls([H|T],List,ICalls):--
-	xmg:send(info,' could not call '),
+	xmg:send(info,'\nError: could not call '),
 	xmg:send(info,H),false,!.
 
 
@@ -245,7 +245,11 @@ get_params([],_,[]):-- !.
 get_params([id(ID,_)|T],List,[Var|T1]):--
 	decls::tget(ID,Var),
 	%lists:member(id(ID,_)-Var,List),
-	get_params(T,List,T1),!.
+        get_params(T,List,T1),!.
+get_params([id(ID,_)|T],List,[ID|T1]):--
+	%% Here ID is a constant
+	get_params(T,List,T1),				 
+	  !.
 
 callDims([],[]):-!.
 callDims([iface-IFace|T],[IFace,_|T1]):-

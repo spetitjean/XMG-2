@@ -56,7 +56,7 @@ declare ?X ?Y ?Z
 }
 
 class dummier
-%%import dummy[]
+import dummy[]
 export C C1
 declare ?T ?C ?A ?P ?C1 ?A1
 {
