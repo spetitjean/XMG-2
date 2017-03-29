@@ -41,19 +41,30 @@ xmg:prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
 
 
 %% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
-xmg:prepare_plugin(Syn,Plugin,Out):-
+xmg:prepare_plugin(Dim,Plugin,prepared(Out,NDim)):-
         atomic_list_concat(['xmg/brick/', Plugin, '/compiler/preparer'], File1),
         atomic_list_concat(['xmg/brick/', Plugin, '/compiler/solver'  ], File2),
 	use_module(File1, []),
 	use_module(File2, []),
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
 	xmg:send(debug,Module),
-	Prepare=..[prepare,Syn,Out],
-	Do=..[':',Module,Prepare],!,
-	Do,
+	Get=..[get_instances,I],
+	DoGet=..[':',Module,Get],
+	DoGet,
+	prepare_instances(Dim,I,Module,Out,NDim),
+	%% xmg:send(info,'\nDONE: '),
+	%% xmg:send(info,prepared(Out,NDim)),
 	!.
 xmg:prepare_plugin(Syn,Plugin,Out):-
 	xmg:send(info,'\nUnknown plugin:'),
 	xmg:send(info,Plugin),
 	false,
 	!.
+
+prepare_instances(Dim,[],_,[],Dim).
+prepare_instances(Dim,[I|T],Module,[P|TP],NDim):-
+    	Prepare=..[prepare_instance,Dim,I,P,IDim],
+	DoPrepare=..[':',Module,Prepare],!,
+	    DoPrepare,
+	prepare_instances(IDim,T,Module,TP,NDim),!.
+    

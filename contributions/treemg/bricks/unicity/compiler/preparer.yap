@@ -19,38 +19,37 @@
 
 :- module(xmg_brick_unicity_preparer, []).
 
-prepare(Syn,prepared(Unicities,Syn)):- 
+get_instances(I):-
+    xmg:unicity(I).
+
+prepare_instances(Syn,prepared(Unicities,Syn)):- 
 	xmg:unicity(LUnicities), 
-	%%xmg:send(info,'\nUnicity:\n'),
-	%%xmg:send(info,LUnicities),
-	%%xmg:send(info,'\n'),
-
-
-	write_unicities(Syn,LUnicities,Unicities),
+	prepare_list(Syn,LUnicities,Unicities),
 	!.
 
-write_unicities(_,[],[]):- !.
+prepare_list(Nodes,[],[],Nodes):- !.
 
-write_unicities(Nodes,[U1|UT],[H1|T1]):-
-	write_unicity(Nodes,U1,H1),
-	write_unicities(Nodes,UT,T1),!.
+prepare_list(Nodes,[U1|UT],[H1|T1],Nodes):-
+	prepare_instance(Nodes,U1,H1,INodes),
+	prepare_list(INodes,UT,T1,Nodes),!.
 
-write_unicity([],_,[]):-!.
-write_unicity([Node|T],feat(A,V,_),['true'|T1]):-
+prepare_instance([],_,[],[]):-!.
+prepare_instance([H|T],I,[H1|T1],[H|T2]):-
+    prepare(H,I,H1,H),
+    prepare_instance(T,I,T1,T2),!.
+prepare_instance([_|T],I,T1,T2):-
+    prepare_instance(T,I,T1,T2),!.
+
+
+prepare(Node,feat(A,V,_),'true',Node):-
 	Node=node(Prop,Feat,_),
 	xmg_brick_avm_avm:avm(Prop,PL),
-	lists:member(A-V,PL),!,	
-	write_unicity(T,feat(A,V,_),T1),!.
-write_unicity([Node|T],feat(A,V,_),['true'|T1]):-
+	lists:member(A-V,PL),!.	
+prepare(Node,feat(A,V,_),'true',Node):-
 	Node=node(Prop,Feat,_),
 	xmg_brick_avm_avm:avm(Feat,PL),
-	lists:member(A-V,PL),!,	
-	write_unicity(T,feat(A,V,_),T1),!.
-write_unicity([Node|T],feat(A,V,_),['false'|T1]):-
-	Node=node(Prop,Feat,_),
-	write_unicity(T,feat(A,V,_),T1),!.
-write_unicity([_|T],feat(A,V,_),T1):-
-	write_unicity(T,feat(A,V,_),T1),!.
-
+	lists:member(A-V,PL),!.
+prepare(Node,feat(A,V,_),'false',Node):-
+        Node=node(Prop,Feat,_).
 
 

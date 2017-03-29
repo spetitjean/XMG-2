@@ -19,21 +19,23 @@
 
 :- module(xmg_brick_tag_preparer, []).
 
-prepare(Syn,prepared(TagOps,Syn)):-  
-	write_tagops(Syn,TagOps),
+
+
+prepare_instances(Syn,prepared(TagOps,Syn)):-  
+	prepare_instance(Syn,TagOps),
 	!.
 
 
-write_tagops([],[]):- !.
+prepare_instance([],[]):- !.
 
-write_tagops([node(Prop,_,_)|T],[H1|T1]):-
-	write_tagop(Prop,H1),
-	write_tagops(T,T1),!.
+prepare_instance([node(Prop,_,_)|T],[H1|T1]):-
+	prepare(Prop,H1),
+	prepare_instance(T,T1),!.
 
-write_tagops([_|T],Tagops):-
-	write_tagops(T,Tagops),!.
+prepare_instance([_|T],Tagops):-
+	prepare_instance(T,Tagops),!.
 
-write_tagop(PropAVM,tagop(C)):-
+prepare(PropAVM,tagop(C)):-
 	xmg_brick_avm_avm:avm(PropAVM, Props),
 	search_tagop(Props,C),
 	!.

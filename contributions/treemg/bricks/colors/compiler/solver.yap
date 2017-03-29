@@ -29,7 +29,7 @@
 post(Space,NodeList,IntVars,Plugin):-
 	colors(Space,NodeList,Plugin).
 
-colors(Space,NodeList,Colors):-
+colors(Space,NodeList,[Colors]):-
     xmg:send(debug,'\nPosting colors:'),
 	xmg:send(debug,Colors),
 	do_cposts(Space,NodeList,Colors,1).

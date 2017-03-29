@@ -22,36 +22,39 @@
 
 :- module(xmg_brick_precedes_preparer, []).
 
-prepare(Syn, prepared(Precedes,Syn)) :-
+get_instances(I):-
+    xmg:precedes(I).
+
+prepare_instances(Syn, prepared(Precedes,Syn)) :-
     xmg:precedes(LPrecedes),
-    write_precedes(Syn,LPrecedes,Precedes),
+    prepare_list(Syn,LPrecedes,Precedes),
     !.
 
-write_precedes(_,[],[]) :- !.
-write_precedes(Nodes,[(feat(F1,V1,_),feat(F2,V2,_))|RT],[H1|T1]) :-
-    write_precede(Nodes,F1-V1,F2-V2,H1),
-    write_precedes(Nodes,RT,T1),
+prepare_list(Dim,[],[],Dim) :- !.
+prepare_list(Nodes,[(feat(F1,V1,_),feat(F2,V2,_))|RT],[H1|T1],NNodes) :-
+    prepare_instance(Nodes,(F1-V1,F2-V2),H1,INodes),
+    prepare_list(INodes,RT,T1,NNodes),
     !.
 
-write_precede([],_,_,[]) :- !.
-write_precede([Node|Nodes], F1V1, F2V2, [(B1,B2)|T1]) :-
+prepare_instance([],(_,_),[],[]) :- !.
+prepare_instance([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1],[Node|Nodes1]) :-
     Node=node(Prop,Feat,_), !,
     xmg_brick_avm_avm:avm(Prop, PL),
     xmg_brick_avm_avm:avm(Feat, FL),
-    ( ( lists:member(F1V1, PL) ; lists:member(F1V1, FL) )
+    ( ( lists:member(F1-V1, PL) ; lists:member(F1-V1, FL) )
       -> B1=true ; B1=false ),
-    ( ( lists:member(F2V2, PL) ; lists:member(F2V2, FL) )
+    ( ( lists:member(F2-V2, PL) ; lists:member(F2-V2, FL) )
       -> B2=true ; B2=false ),
-    write_precede(Nodes,F1V1,F2V2,T1),
+    prepare_instance(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1,Nodes1),
     !.
-write_precede([Node|Nodes], F1V1, F2V2, T1) :-
+prepare_instance([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), T1, [Node|Nodes1]) :-
     not(Node=node(Prop,Feat,_)),!,
-    write_precede(Nodes,F1V1,F2V2,T1),
+    prepare_instance(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1, Nodes1),
     !.
 
 %% prepare/3 is for preparing 1 instance of the principle
 
-prepare(Nodes, (feat(F1,V1,_),feat(F2,V2,_)), (B1,B2)) :-
+prepare(Node, (feat(F1,V1,_),feat(F2,V2,_)), (B1,B2)) :-
     Node=node(Prop,Feat,_),
     xmg_brick_avm_avm:avm(Prop, PL),
     xmg_brick_avm_avm:avm(Feat, FL),

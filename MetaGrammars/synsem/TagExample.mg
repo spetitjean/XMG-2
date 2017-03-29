@@ -78,7 +78,9 @@ class subjCan
 export S
 declare ?W ?N ?M ?S ?NN ?NV
 { <syn>{
-  node S (color=white)[cat = s]{
+  node S
+       (color=white)
+       [cat = s]{
        	node NN(color=red,mark=subst)[cat=n,top = [idx=?W,num = ?N, pers=?M] ]
 	node NV(color=white)[cat = v, top=[num=?N, pers=?M] ]
 	}

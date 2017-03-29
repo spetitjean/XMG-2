@@ -19,36 +19,40 @@
 
 :- module(xmg_brick_colors_preparer, []).
 
-prepare(Syn,prepared(Colors,SynNC)):-  
-	write_colors_or_not(Syn,Colors,SynNC),
+get_instances([color]).
+
+prepare_instances(Syn,prepared(Colors,SynNC)):-  
+	prepare_instance(Syn,I,Colors,SynNC),
 	!.
 
-write_colors_or_not(Nodes,Colors,NodesNC):-
-	%%xmg_brick_mg_compiler:principle(color),!,
-	write_colors(Nodes,Colors,NodesNC),!.
-write_colors_or_not(Nodes,[],Nodes):- !.
+prepare_list(Dim,[],[],Dim):- !.
 
-write_colors([],[],[]):- !.
+prepare_list(Dim,[U1|UT],[H1|T1],NDim):-
+	prepare_instance(Dim,U1,H1,IDim),
+	prepare_list(IDim,UT,T1,NDim),!.
 
-write_colors([node(Prop,Feat,Name)|T],[H1|T1],[node(PropNC,Feat,Name)|T2]):-
-	write_color(Name,Prop,H1),!,
-	no_color(Prop,PropNC),!,
-	write_colors(T,T1,T2),!.
+prepare_instance([],I,[],[]):- !.
 
-write_colors([H|T],Colors,[H|T1]):-
-	write_colors(T,Colors,T1),!.
+prepare_instance([Node|T],I,[H1|T1],[PNode|T2]):-
+	prepare(Node,I,H1,PNode),!,
+	prepare_instance(T,I,T1,T2),!.
 
-write_color(Name,PropAVM,color(C)):-
-	xmg_brick_avm_avm:avm(PropAVM, Props),!,
+prepare_instance([H|T],I,Colors,[H|T1]):-
+	prepare_instance(T,I,Colors,T1),!.
+
+prepare(node(P,F,N),I,color(C),node(PNC,F,N)):-
+	xmg_brick_avm_avm:avm(P, Props),
 	%%xmg:send(info,Props),
-	xmg_brick_syn_nodename:nodename(Name,NodeName),!,
-	search_color(NodeName,Props,C),!.
+	xmg_brick_syn_nodename:nodename(N,NodeName),
+	search_color(NodeName,Props,C),
+	no_color(P,PNC),!.
 
-
-search_color(Name,[],none):-
+prepare(node(P,F,N),I,none,node(P,F,N)):-
 	%%throw(xmg(principle_error(undefined_color(Name)))),	
-	xmg:send(info,'\nNo color for node '),
-	xmg:send(info,Name),
+        xmg:send(info,'\nNo color for node '),
+    	xmg_brick_syn_nodename:nodename(N,NodeName),
+
+	xmg:send(info,N),
 	xmg:send(info,'. This should not happen.\n\n'),
 	!.
 
@@ -57,8 +61,6 @@ search_color(_,[color-C|_],C):-!.
 
 search_color(Name,[_|T],C):-
 	search_color(Name,T,C),!.
-
-
 
 
 no_color(AVM,NCAVM):-

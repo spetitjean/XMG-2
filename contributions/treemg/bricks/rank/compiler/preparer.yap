@@ -19,21 +19,25 @@
 
 :- module(xmg_brick_rank_preparer, []).
 
-prepare(Syn,prepared(Ranks,Syn)):-  
-	write_ranks(Syn,Ranks),
-	!.
+get_instances([rank]).
+    
+prepare_list(Nodes,[],[],Nodes):- !.
 
-write_ranks([],[]):- !.
+prepare_list(Nodes,[U1|UT],[H1|T1],Nodes):-
+	prepare_instance(Nodes,U1,H1,Nodes),
+	prepare_list(Nodes,UT,T1,Nodes),!.
 
-write_ranks([node(Prop,_,_)|T],[H1|T1]):-
-	write_rank(Prop,H1),
-	write_ranks(T,T1),!.
+prepare_instance([],_,[],[]):- !.
 
-write_ranks([_|T],Ranks):-
-	write_ranks(T,Ranks),!.
+prepare_instance([H|T],I,[H1|T1],[H|T2]):-
+	prepare(H,I,H1,H),
+	prepare_instance(T,I,T1,T2),!.
 
-write_rank(PropAVM,rank(C)):-
-	xmg_brick_avm_avm:avm(PropAVM, Props),
+prepare_instance([H|T],I,Ranks,[H|T2]):-
+	prepare_instance(T,I,Ranks,T2),!.
+
+prepare(node(P,F,N),I,rank(C),node(P,F,N)):-
+	xmg_brick_avm_avm:avm(P, Props),
 	search_rank(Props,C),
 	!.
 

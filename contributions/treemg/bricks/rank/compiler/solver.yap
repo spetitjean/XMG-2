@@ -26,7 +26,7 @@
 :- op(500, xfx, ':=:').
 
 
-post(Space,NodeList,IntVars,Ranks):-
+post(Space,NodeList,IntVars,[Ranks]):-
 	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-

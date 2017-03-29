@@ -215,10 +215,11 @@ add_vars(Exps,[H|T],[H-_|T1]):-
 add_vars_no_duplicates(Exps,[],Exps).
 add_vars_no_duplicates(Exps,[id(H,C)|T],T1):-
 	lists:member(id(H,_)-_,Exps),!,
-	xmg:send(debug,' Multiple declarations of variable '),
-	xmg:send(debug,H),
-	xmg:send(debug,C),
-	false,
+	xmg:send(info,'\n\nWarning: Multiple declarations of variable '),
+	xmg:send(info,H),
+	xmg:send(info,', '),
+	xmg:send(info,C),
+	xmg:send(info,'\n\n'),
 	add_vars_no_duplicates(Exps,T,T1).
 add_vars_no_duplicates(Exps,[H|T],[H-_|T1]):-
 	add_vars_no_duplicates(Exps,T,T1).

@@ -22,23 +22,29 @@
 
 :- module(xmg_brick_requires_preparer, []).
 
-prepare(Syn, prepared(Requires,Syn)) :-
+get_instances(I):-
+    xmg:requires(I).
+
+prepare_instances(Syn, prepared(Requires,Syn)) :-
     xmg:requires(LRequires),
-    write_requires(Syn,LRequires,Requires),
+    prepare_list(Syn,LRequires,Requires),
     !.
 
-write_requires(_,[],[]) :- !.
-write_requires(Nodes,[R1|RT],[H1|T1]) :-
-    write_require(Nodes,R1,H1),
-    write_require_reduce(H1, false, false, B1, B2),
-    %% fail here if the "requires" is not satisfied
-    (B2=true ; B1=false),
-    write_requires(Nodes,RT,T1),
+prepare_list(Dim,[],[],Dim) :- !.
+prepare_list(Nodes,[R1|RT],[H1|T1],NNodes) :-
+    prepare_instance(Nodes,R1,H1,INodes),
+    prepare_list(INodes,RT,T1,NNodes),
     !.
-write_requires(Nodes,[R1|RT],[H1|T1]) :-
+prepare_list(Nodes,[R1|RT],[H1|T1],_) :-
     xmg:send(info,'\nFail caused by requires: '),
     xmg:send(info,R1),
     fail.
+
+prepare_instance(Nodes,R1,H1,Nodes):-
+    write_require(Nodes,R1,H1),
+    write_require_reduce(H1, false, false, B1, B2),
+    %% fail here if the "requires" is not satisfied
+    (B2=true ; B1=false),!.
 
 %% don't use unification: test only for identity
 memberq(X, [Y|T]) :- X==Y -> true ; memberq(X, T).
