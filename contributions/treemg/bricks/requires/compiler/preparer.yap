@@ -25,24 +25,10 @@
 get_instances(I):-
     xmg:requires(I).
 
-prepare_instances(Syn, prepared(Requires,Syn)) :-
-    xmg:requires(LRequires),
-    prepare_list(Syn,LRequires,Requires),
-    !.
-
-prepare_list(Dim,[],[],Dim) :- !.
-prepare_list(Nodes,[R1|RT],[H1|T1],NNodes) :-
-    prepare_instance(Nodes,R1,H1,INodes),
-    prepare_list(INodes,RT,T1,NNodes),
-    !.
-prepare_list(Nodes,[R1|RT],[H1|T1],_) :-
-    xmg:send(info,'\nFail caused by requires: '),
-    xmg:send(info,R1),
-    fail.
 
 prepare_instance(Nodes,R1,H1,Nodes):-
-    write_require(Nodes,R1,H1),
-    write_require_reduce(H1, false, false, B1, B2),
+    prepare(Nodes,R1,H1),
+    prepare_reduce(H1, false, false, B1, B2),
     %% fail here if the "requires" is not satisfied
     (B2=true ; B1=false),!.
 
@@ -58,8 +44,8 @@ memberq_feats(X, FL) :-
 	xmg_brick_avm_avm:avm(L, FL2),
 	memberq(X, FL2) ), !.
 
-write_require([],_,[]) :- !.
-write_require([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1]) :-
+prepare([],_,[]) :- !.
+prepare([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1]) :-
     Node=node(Prop,Feat,_),!,
     xmg_brick_avm_avm:avm(Prop, PL),
     xmg_brick_avm_avm:avm(Feat, FL),
@@ -67,13 +53,13 @@ write_require([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1]) :-
       -> B1=true ; B1=false ),
     ( ( memberq_props(F2-V2, PL) ; memberq_feats(F2-V2, FL) )
      -> B2=true ; B2=false ),
-    write_require(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1),
+    prepare(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1),
     !.
-write_require([_|Nodes], F1F2, T1) :-
-    write_require(Nodes, F1F2, T1).
+prepare([_|Nodes], F1F2, T1) :-
+    prepare(Nodes, F1F2, T1).
 
-write_require_reduce([], B1, B2, B1, B2) :- !.
-write_require_reduce([(A1,A2)|AT], B1, B2, OB1, OB2) :-
+prepare_reduce([], B1, B2, B1, B2) :- !.
+prepare_reduce([(A1,A2)|AT], B1, B2, OB1, OB2) :-
     ((A1=true;B1=true) -> MB1=true ; MB1=false),
     ((A2=true;B2=true) -> MB2=true ; MB2=false),
-    write_require_reduce(AT, MB1, MB2, OB1, OB2), !.
+    prepare_reduce(AT, MB1, MB2, OB1, OB2), !.

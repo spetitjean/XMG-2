@@ -20,12 +20,6 @@
 :- module(xmg_brick_rank_preparer, []).
 
 get_instances([rank]).
-    
-prepare_list(Nodes,[],[],Nodes):- !.
-
-prepare_list(Nodes,[U1|UT],[H1|T1],Nodes):-
-	prepare_instance(Nodes,U1,H1,Nodes),
-	prepare_list(Nodes,UT,T1,Nodes),!.
 
 prepare_instance([],_,[],[]):- !.
 

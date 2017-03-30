@@ -25,17 +25,6 @@
 get_instances(I):-
     xmg:precedes(I).
 
-prepare_instances(Syn, prepared(Precedes,Syn)) :-
-    xmg:precedes(LPrecedes),
-    prepare_list(Syn,LPrecedes,Precedes),
-    !.
-
-prepare_list(Dim,[],[],Dim) :- !.
-prepare_list(Nodes,[(feat(F1,V1,_),feat(F2,V2,_))|RT],[H1|T1],NNodes) :-
-    prepare_instance(Nodes,(F1-V1,F2-V2),H1,INodes),
-    prepare_list(INodes,RT,T1,NNodes),
-    !.
-
 prepare_instance([],(_,_),[],[]) :- !.
 prepare_instance([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1],[Node|Nodes1]) :-
     Node=node(Prop,Feat,_), !,

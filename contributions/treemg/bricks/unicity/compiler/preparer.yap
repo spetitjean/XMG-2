@@ -22,17 +22,6 @@
 get_instances(I):-
     xmg:unicity(I).
 
-prepare_instances(Syn,prepared(Unicities,Syn)):- 
-	xmg:unicity(LUnicities), 
-	prepare_list(Syn,LUnicities,Unicities),
-	!.
-
-prepare_list(Nodes,[],[],Nodes):- !.
-
-prepare_list(Nodes,[U1|UT],[H1|T1],Nodes):-
-	prepare_instance(Nodes,U1,H1,INodes),
-	prepare_list(INodes,UT,T1,Nodes),!.
-
 prepare_instance([],_,[],[]):-!.
 prepare_instance([H|T],I,[H1|T1],[H|T2]):-
     prepare(H,I,H1,H),

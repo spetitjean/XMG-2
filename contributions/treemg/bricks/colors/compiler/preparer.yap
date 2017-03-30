@@ -21,15 +21,6 @@
 
 get_instances([color]).
 
-prepare_instances(Syn,prepared(Colors,SynNC)):-  
-	prepare_instance(Syn,I,Colors,SynNC),
-	!.
-
-prepare_list(Dim,[],[],Dim):- !.
-
-prepare_list(Dim,[U1|UT],[H1|T1],NDim):-
-	prepare_instance(Dim,U1,H1,IDim),
-	prepare_list(IDim,UT,T1,NDim),!.
 
 prepare_instance([],I,[],[]):- !.
 

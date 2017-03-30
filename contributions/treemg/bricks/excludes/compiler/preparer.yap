@@ -26,16 +26,6 @@
 get_instances(I):-
     xmg:excludes(I).
 
-prepare_instances(Syn, prepared(Excludes,Syn)) :-
-    xmg:excludes(LExcludes),
-    prepare_list(Syn,LExcludes,Excludes),
-    !.
-
-prepare_list(Dim,[],[],Dim) :- !.
-prepare_list(Dim,[R1|RT],[H1|T1],NDim) :-
-    prepare_instance(Dim,R1,H1,IDim),
-    prepare_list(IDim,RT,T1,NDim),
-    !.
 
 prepare_instance(Dim,R1,H1,Dim):-
     xmg_brick_requires_preparer:write_require(Nodes,R1,H1),
