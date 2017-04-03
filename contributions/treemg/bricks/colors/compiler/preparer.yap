@@ -19,26 +19,38 @@
 
 :- module(xmg_brick_colors_preparer, []).
 
+:-edcg:using(xmg_brick_mg_preparer:preparer).
+:-edcg:weave([preparer],[prepare/2]).
+
 get_instances([color]).
 
 
-prepare_instance([],I,[],[]):- !.
+prepare(I,Out):--
+	preparer::tget(nodes,Nodes),
+        prepare_list(Nodes,I,Out,NNodes),
+        preparer::tput(nodes,NNodes),!.
 
-prepare_instance([Node|T],I,[H1|T1],[PNode|T2]):-
-	prepare(Node,I,H1,PNode),!,
-	prepare_instance(T,I,T1,T2),!.
 
-prepare_instance([H|T],I,Colors,[H|T1]):-
-	prepare_instance(T,I,Colors,T1),!.
+prepare_list([],I,[],[]):-
+    !.
 
-prepare(node(P,F,N),I,color(C),node(PNC,F,N)):-
+prepare_list([Node|T],I,[H1|T1],[PNode|T2]):-
+	prepare_one(Node,I,H1,PNode),!,
+	prepare_list(T,I,T1,T2),!.
+
+prepare_list([H|T],I,Colors,[H|T1]):-
+		prepare_list(T,I,Colors,T1),!.
+
+
+
+prepare_one(node(P,F,N),I,color(C),node(PNC,F,N)):-
 	xmg_brick_avm_avm:avm(P, Props),
 	%%xmg:send(info,Props),
 	xmg_brick_syn_nodename:nodename(N,NodeName),
 	search_color(NodeName,Props,C),
 	no_color(P,PNC),!.
 
-prepare(node(P,F,N),I,none,node(P,F,N)):-
+prepare_one(node(P,F,N),I,none,node(P,F,N)):-
 	%%throw(xmg(principle_error(undefined_color(Name)))),	
         xmg:send(info,'\nNo color for node '),
     	xmg_brick_syn_nodename:nodename(N,NodeName),
@@ -58,7 +70,8 @@ no_color(AVM,NCAVM):-
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	lists:member(color-C,LAVM),!,
 	lists:delete(LAVM,color-C,NCLAVM),
-	xmg_brick_avm_avm:avm(NCAVM,NCLAVM),!.
+	xmg_brick_avm_avm:avm(NCAVM,NCLAVM),
+	xmg:send(debug,'\nremoved color!'),!.
 
 no_color(AVM,AVM):-
 	!.

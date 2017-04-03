@@ -26,7 +26,19 @@ get_instances(I):-
     xmg:requires(I).
 
 
-prepare_instance(Nodes,R1,H1,Nodes):-
+:-edcg:using(xmg_brick_mg_preparer:preparer).
+:-edcg:weave([preparer],[prepare/2]).
+
+get_instances([color]).
+
+
+prepare(I,Out):--
+	preparer::tget(nodes,Nodes),
+        prepare_list(Nodes,I,Out,NNodes),
+        preparer::tput(nodes,NNodes),!.
+
+
+prepare_list(Nodes,R1,H1,Nodes):-
     prepare(Nodes,R1,H1),
     prepare_reduce(H1, false, false, B1, B2),
     %% fail here if the "requires" is not satisfied

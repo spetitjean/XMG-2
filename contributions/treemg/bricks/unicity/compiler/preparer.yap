@@ -19,26 +19,34 @@
 
 :- module(xmg_brick_unicity_preparer, []).
 
+:-edcg:using(xmg_brick_mg_preparer:preparer).
+:-edcg:weave([preparer],[prepare/2]).
+
 get_instances(I):-
     xmg:unicity(I).
 
-prepare_instance([],_,[],[]):-!.
-prepare_instance([H|T],I,[H1|T1],[H|T2]):-
-    prepare(H,I,H1,H),
-    prepare_instance(T,I,T1,T2),!.
-prepare_instance([_|T],I,T1,T2):-
-    prepare_instance(T,I,T1,T2),!.
+prepare(I,Out):--
+	preparer::tget(nodes,Nodes),
+        prepare_list(Nodes,I,Out,NNodes),
+        preparer::tput(nodes,NNodes),!.
+
+prepare_list([],_,[],[]):-!.
+prepare_list([H|T],I,[H1|T1],[H|T2]):-
+    prepare_one(H,I,H1,H),
+    prepare_list(T,I,T1,T2),!.
+prepare_list([_|T],I,T1,T2):-
+    prepare_list(T,I,T1,T2),!.
 
 
-prepare(Node,feat(A,V,_),'true',Node):-
+prepare_one(Node,feat(A,V,_),'true',Node):-
 	Node=node(Prop,Feat,_),
 	xmg_brick_avm_avm:avm(Prop,PL),
 	lists:member(A-V,PL),!.	
-prepare(Node,feat(A,V,_),'true',Node):-
+prepare_one(Node,feat(A,V,_),'true',Node):-
 	Node=node(Prop,Feat,_),
 	xmg_brick_avm_avm:avm(Feat,PL),
 	lists:member(A-V,PL),!.
-prepare(Node,feat(A,V,_),'false',Node):-
+prepare_one(Node,feat(A,V,_),'false',Node):-
         Node=node(Prop,Feat,_).
 
 

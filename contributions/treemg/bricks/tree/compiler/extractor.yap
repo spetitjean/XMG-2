@@ -174,13 +174,13 @@ unify_node([NNode|T],node(P,F,N),NodeList):-
 	unify_node(T,node(P,F,N),NodeList),
 	!.
 unify_node([N1|T],node(P2,F2,NN2),NodeList):-
-	%% get_node(N1,NodeList,node(P1,F1,NN1)),!,
-	%% xmg_nodename:nodename(NN1,Name1),
-	%% xmg_nodename:nodename(NN2,Name2),
+	 xmg_brick_tree_solver:get_node(N1,NodeList,node(P1,F1,NN1)),!,
+	 xmg_brick_avm_avm:avm(P1,PP1),
+	 xmg_brick_avm_avm:avm(P2,PP2),
 	
-	%% xmg_brick_mg_compiler:send(info,' could not unify '),
-	%% xmg_brick_mg_compiler:send(info,Name1),
-	%% xmg_brick_mg_compiler:send(info,Name2),
+	 xmg:send(info,'\nCould not unify '),
+	 xmg:send(info,PP1),
+	 xmg:send(info,PP2),
 	false,
 	!.
 

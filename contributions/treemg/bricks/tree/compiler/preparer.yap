@@ -21,6 +21,7 @@
 
 :- xmg:edcg.
 :-edcg:thread(name,edcg:counter).
+:-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([name],[count/7,new_name/1]).
 
 new_name(Name):--
@@ -53,24 +54,24 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 
 	write_lits(SynD,Relations,TableOut),
 
+	get_nodes(SynD,GetNodes),
 	
 	xmg:get_plugins(tree,Plugins,OutPlugins),
 	
 	xmg:send(debug,'\nPlugins: '),
 	xmg:send(debug,Plugins),
 
-	xmg:prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)),
+	xmg_table:table_new(Extras),
+	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
 
+	xmg:prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,_),
+	
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
 	%% xmg_brick_tag_preparer:prepare(SynNC,prepared(TagOps,SynNC)),
 	%% xmg_brick_unicity_preparer:prepare(SynNC,prepared(Unicities,SynNC)),
 
-
-	%% écrire les noeuds
-
 	write_nodes(SynNC,NodeNames,NodeList,1,TableOut),
-
 
 	%%Unicities=[],
 	xmg_table:table_entries(TableOut,TableList),
@@ -79,6 +80,11 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	!.
 
 
+get_nodes([],[]).
+get_nodes([node(P,F,N)|T],[node(P,F,N)|T1]):-
+    get_nodes(T,T1),!.
+get_nodes([_|T],T1):-
+    get_nodes(T,T1),!.
 
 write_notunif([],[],_):--
 	!.

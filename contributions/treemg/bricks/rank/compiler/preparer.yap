@@ -19,18 +19,26 @@
 
 :- module(xmg_brick_rank_preparer, []).
 
+:-edcg:using(xmg_brick_mg_preparer:preparer).
+:-edcg:weave([preparer],[prepare/2]).
+
 get_instances([rank]).
 
-prepare_instance([],_,[],[]):- !.
+prepare(I,Out):--
+	preparer::tget(nodes,Nodes),
+        prepare_list(Nodes,I,Out,NNodes),
+        preparer::tput(nodes,NNodes),!.
 
-prepare_instance([H|T],I,[H1|T1],[H|T2]):-
-	prepare(H,I,H1,H),
-	prepare_instance(T,I,T1,T2),!.
+prepare_list([],_,[],[]):-!.
 
-prepare_instance([H|T],I,Ranks,[H|T2]):-
-	prepare_instance(T,I,Ranks,T2),!.
+prepare_list([H|T],I,[H1|T1],[H|T2]):-
+	prepare_one(H,I,H1,H),
+	prepare_list(T,I,T1,T2),!.
 
-prepare(node(P,F,N),I,rank(C),node(P,F,N)):-
+prepare_list([H|T],I,Ranks,[H|T2]):-
+	prepare_list(T,I,Ranks,T2),!.
+
+prepare_one(node(P,F,N),I,rank(C),node(P,F,N)):-
 	xmg_brick_avm_avm:avm(P, Props),
 	search_rank(Props,C),
 	!.

@@ -22,11 +22,20 @@
 
 :- module(xmg_brick_precedes_preparer, []).
 
+:-edcg:using(xmg_brick_mg_preparer:preparer).
+:-edcg:weave([preparer],[prepare/2]).
+
+
 get_instances(I):-
     xmg:precedes(I).
 
-prepare_instance([],(_,_),[],[]) :- !.
-prepare_instance([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1],[Node|Nodes1]) :-
+prepare(I,Out):--
+	preparer::tget(nodes,Nodes),
+        prepare_list(Nodes,I,Out,NNodes),
+        preparer::tput(nodes,NNodes),!.
+
+prepare_list([],(_,_),[],[]) :- !.
+prepare_list([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1],[Node|Nodes1]) :-
     Node=node(Prop,Feat,_), !,
     xmg_brick_avm_avm:avm(Prop, PL),
     xmg_brick_avm_avm:avm(Feat, FL),
@@ -34,20 +43,20 @@ prepare_instance([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), [(B1,B2)|T1],[Node
       -> B1=true ; B1=false ),
     ( ( lists:member(F2-V2, PL) ; lists:member(F2-V2, FL) )
       -> B2=true ; B2=false ),
-    prepare_instance(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1,Nodes1),
+    prepare_list(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1,Nodes1),
     !.
-prepare_instance([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), T1, [Node|Nodes1]) :-
+prepare_list([Node|Nodes], (feat(F1,V1,_),feat(F2,V2,_)), T1, [Node|Nodes1]) :-
     not(Node=node(Prop,Feat,_)),!,
     prepare_instance(Nodes,(feat(F1,V1,_),feat(F2,V2,_)),T1, Nodes1),
     !.
 
-%% prepare/3 is for preparing 1 instance of the principle
+%% %% prepare/3 is for preparing 1 instance of the principle
 
-prepare(Node, (feat(F1,V1,_),feat(F2,V2,_)), (B1,B2)) :-
-    Node=node(Prop,Feat,_),
-    xmg_brick_avm_avm:avm(Prop, PL),
-    xmg_brick_avm_avm:avm(Feat, FL),
-    ( ( lists:member(F1V1, PL) ; lists:member(F1V1, FL) )
-      -> B1=true ; B1=false ),
-    ( ( lists:member(F2V2, PL) ; lists:member(F2V2, FL) )
-      -> B2=true ; B2=false ),!.
+%% prepare(Node, (feat(F1,V1,_),feat(F2,V2,_)), (B1,B2)) :-
+%%     Node=node(Prop,Feat,_),
+%%     xmg_brick_avm_avm:avm(Prop, PL),
+%%     xmg_brick_avm_avm:avm(Feat, FL),
+%%     ( ( lists:member(F1V1, PL) ; lists:member(F1V1, FL) )
+%%       -> B1=true ; B1=false ),
+%%     ( ( lists:member(F2V2, PL) ; lists:member(F2V2, FL) )
+%%       -> B2=true ; B2=false ),!.

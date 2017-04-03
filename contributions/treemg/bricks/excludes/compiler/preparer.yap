@@ -23,17 +23,32 @@
 :- module(xmg_brick_excludes_preparer, []).
 :- use_module(xmg_brick_requires_preparer).
 
+:-edcg:using(xmg_brick_mg_preparer:preparer).
+:-edcg:weave([preparer],[prepare/2]).
+
 get_instances(I):-
     xmg:excludes(I).
 
-
-prepare_instance(Dim,R1,H1,Dim):-
+prepare(R1,H1):--
+    preparer::tget(nodes,Nodes),
     xmg_brick_requires_preparer:write_require(Nodes,R1,H1),
     xmg_brick_requires_preparer:write_require_reduce(H1, false, false, B1, B2),
     %% fail here if the "excludes" is not satisfied
     (B1=false ; B2=false), !.
 
-prepare_instance(Dim,R1,H1,Dim):-
+prepare(R1,H1):--
     xmg:send(info,'\nFail caused by excludes: '),
     xmg:send(info,R1),
     fail.
+       
+       
+%% prepare_instance(Dim,R1,H1,Dim):-
+%%     xmg_brick_requires_preparer:write_require(Nodes,R1,H1),
+%%     xmg_brick_requires_preparer:write_require_reduce(H1, false, false, B1, B2),
+%%     %% fail here if the "excludes" is not satisfied
+%%     (B1=false ; B2=false), !.
+
+%% prepare_instance(Dim,R1,H1,Dim):-
+%%     xmg:send(info,'\nFail caused by excludes: '),
+%%     xmg:send(info,R1),
+%%     fail.

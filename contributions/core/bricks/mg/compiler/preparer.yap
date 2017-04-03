@@ -20,7 +20,13 @@
 :- module(xmg_brick_mg_preparer, []).
 :- use_module('xmg/plugins').
 
+
 :- xmg:edcg.
+:-edcg:thread(preparer,edcg:table).
+:-edcg:weave([preparer],[xmg:prepare_plugins/3, xmg:prepare_plugin/3, prepare_instances/5]).
+
+:- multifile(xmg:prepare_plugin/3).
+:- multifile(xmg:prepare_plugins/3).
 
 xmg:get_plugins(Solver,TreePlugins,OutPlugins):-
 	findall(P,xmg:principle(P,Args,Dims),Plugins),
@@ -34,14 +40,14 @@ filter_plugins(Solver,[H|T],Mem,[NH|T1],[_|T2]):-
 filter_plugins(Solver,[H|T],Mem,T1,T2):-
 	filter_plugins(Solver,T,Mem,T1,T2),!.
 
-xmg:prepare_plugins(Syn,[],prepared([],Syn)):- !.
-xmg:prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):-
+xmg:prepare_plugins(Syn,[],prepared([],Syn)):-- !.
+xmg:prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):--
 	xmg:prepare_plugin(Syn,Plugin,prepared(Out,NSyn)),
 	xmg:prepare_plugins(NSyn,T,prepared(TOut,NNSyn)),!.
 
 
 %% calls a preparer plugin named Plugin, which is located in the module xmg_brick_Plugin_preparer
-xmg:prepare_plugin(Dim,Plugin,prepared(Out,NDim)):-
+xmg:prepare_plugin(Dim,Plugin,prepared(Out,ODim)):--
         atomic_list_concat(['xmg/brick/', Plugin, '/compiler/preparer'], File1),
         atomic_list_concat(['xmg/brick/', Plugin, '/compiler/solver'  ], File2),
 	use_module(File1, []),
@@ -54,17 +60,23 @@ xmg:prepare_plugin(Dim,Plugin,prepared(Out,NDim)):-
 	prepare_instances(Dim,I,Module,Out,NDim),
 	%% xmg:send(info,'\nDONE: '),
 	%% xmg:send(info,prepared(Out,NDim)),
+	preparer::tget(nodes,ODim),
+	%%xmg:send(info,ODim),
 	!.
-xmg:prepare_plugin(Syn,Plugin,Out):-
+xmg:prepare_plugin(Syn,Plugin,Out):--
 	xmg:send(info,'\nUnknown plugin:'),
 	xmg:send(info,Plugin),
 	false,
 	!.
 
-prepare_instances(Dim,[],_,[],Dim).
-prepare_instances(Dim,[I|T],Module,[P|TP],NDim):-
-    	Prepare=..[prepare_instance,Dim,I,P,IDim],
+prepare_instances(Dim,[],_,[],Dim):--!.
+prepare_instances(Dim,[I|T],Module,[P|TP],NDim):--
+	preparer::get(In),
+        %% cannot use the threads properly here, so give them explicitely
+        Prepare=..[prepare,I,P,In,Out],
 	DoPrepare=..[':',Module,Prepare],!,
-	    DoPrepare,
+	DoPrepare,
+	preparer::set(Out),
+	
 	prepare_instances(IDim,T,Module,TP,NDim),!.
     
