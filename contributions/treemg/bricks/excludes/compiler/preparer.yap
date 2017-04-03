@@ -21,7 +21,8 @@
 %% there cannot be both a node with p1=v1 and a node with p2=v2
 
 :- module(xmg_brick_excludes_preparer, []).
-:- use_module(xmg_brick_requires_preparer).
+:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
+:- use_module(library(apply), [include/3]).
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).
@@ -29,26 +30,14 @@
 get_instances(I):-
     xmg:excludes(I).
 
-prepare(R1,H1):--
+prepare((feat(F1,V1,_),feat(F2,V2,_)), (L1,L2)) :--
     preparer::tget(nodes,Nodes),
-    xmg_brick_requires_preparer:write_require(Nodes,R1,H1),
-    xmg_brick_requires_preparer:write_require_reduce(H1, false, false, B1, B2),
-    %% fail here if the "excludes" is not satisfied
-    (B1=false ; B2=false), !.
+    include(node_with_prop_or_featq(F1-V1), Nodes, L1),
+    (L1=[] -> true
+     ; include(node_with_prop_or_featq(F2-V2), Nodes, [])),
+    !.
 
 prepare(R1,H1):--
     xmg:send(info,'\nFail caused by excludes: '),
     xmg:send(info,R1),
     fail.
-       
-       
-%% prepare_instance(Dim,R1,H1,Dim):-
-%%     xmg_brick_requires_preparer:write_require(Nodes,R1,H1),
-%%     xmg_brick_requires_preparer:write_require_reduce(H1, false, false, B1, B2),
-%%     %% fail here if the "excludes" is not satisfied
-%%     (B1=false ; B2=false), !.
-
-%% prepare_instance(Dim,R1,H1,Dim):-
-%%     xmg:send(info,'\nFail caused by excludes: '),
-%%     xmg:send(info,R1),
-%%     fail.

@@ -18,6 +18,7 @@
 %% ========================================================================
 
 :- module(xmg_brick_tree_preparer, []).
+:- use_module(library(apply), [include/3]).
 
 :- xmg:edcg.
 :-edcg:thread(name,edcg:counter).
@@ -54,7 +55,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 
 	write_lits(SynD,Relations,TableOut),
 
-	get_nodes(SynD,GetNodes),
+	include(is_node, SynD, GetNodes),
 	
 	xmg:get_plugins(tree,Plugins,OutPlugins),
 	
@@ -64,7 +65,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
 
-	xmg:prepare_plugins(SynD,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,_),
+	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,_),
 	
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
@@ -80,11 +81,8 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	!.
 
 
-get_nodes([],[]).
-get_nodes([node(P,F,N)|T],[node(P,F,N)|T1]):-
-    get_nodes(T,T1),!.
-get_nodes([_|T],T1):-
-    get_nodes(T,T1),!.
+is_node(node(_,_,_)).
+
 
 write_notunif([],[],_):--
 	!.

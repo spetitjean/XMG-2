@@ -18,38 +18,20 @@
 %% ========================================================================
 
 :- module(xmg_brick_rank_preparer, []).
+:- use_module(library(apply), [maplist/3]).
+:- use_module('xmg/brick/avm/avm', [avm/2]).
+:- use_module('xmg/brick/tree/utils', [node_with_prop/2]).
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).
 
 get_instances([rank]).
 
-prepare(I,Out):--
-	preparer::tget(nodes,Nodes),
-        prepare_list(Nodes,I,Out,NNodes),
-        preparer::tput(nodes,NNodes),!.
+prepare(I, Out) :--
+    preparer::tget(nodes,Nodes),
+    maplist(prepare_one, Nodes, Out), !.
 
-prepare_list([],_,[],[]):-!.
-
-prepare_list([H|T],I,[H1|T1],[H|T2]):-
-	prepare_one(H,I,H1,H),
-	prepare_list(T,I,T1,T2),!.
-
-prepare_list([H|T],I,Ranks,[H|T2]):-
-	prepare_list(T,I,Ranks,T2),!.
-
-prepare_one(node(P,F,N),I,rank(C),node(P,F,N)):-
-	xmg_brick_avm_avm:avm(P, Props),
-	search_rank(Props,C),
-	!.
-
-search_rank([],none):-
-	!.
-
-search_rank([rank-R|_],R):-!.
-
-search_rank([_|T],C):-
-	search_rank(T,C),!.
-
-
-
+prepare_one(Node, Rank, Result) :-
+    node_with_prop(rank-C, Node)
+    -> Result=rank(C)
+    ;  Result=none.

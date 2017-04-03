@@ -18,6 +18,7 @@
 %% ========================================================================
 
 :- module(xmg_brick_colors_preparer, []).
+:- use_module(library(apply), [maplist/3]).
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).
@@ -26,44 +27,29 @@ get_instances([color]).
 
 
 prepare(I,Out):--
-	preparer::tget(nodes,Nodes),
-        prepare_list(Nodes,I,Out,NNodes),
-        preparer::tput(nodes,NNodes),!.
+    preparer::tget(nodes, Nodes),
+    maplist(prepare_one, Nodes, Out),
+    maplist(no_color, Nodes, NNodes),
+    preparer::tput(nodes,NNodes), !.
 
 
-prepare_list([],I,[],[]):-
-    !.
-
-prepare_list([Node|T],I,[H1|T1],[PNode|T2]):-
-	prepare_one(Node,I,H1,PNode),!,
-	prepare_list(T,I,T1,T2),!.
-
-prepare_list([H|T],I,Colors,[H|T1]):-
-		prepare_list(T,I,Colors,T1),!.
-
-
-
-prepare_one(node(P,F,N),I,color(C),node(PNC,F,N)):-
+prepare_one(node(P,F,N), Color) :- 
 	xmg_brick_avm_avm:avm(P, Props),
 	%%xmg:send(info,Props),
-	xmg_brick_syn_nodename:nodename(N,NodeName),
-	search_color(NodeName,Props,C),
-	no_color(P,PNC),!.
+	xmg_brick_syn_nodename:nodename(N, NodeName),
+	search_color(NodeName,Props,Color).
 
-prepare_one(node(P,F,N),I,none,node(P,F,N)):-
-	%%throw(xmg(principle_error(undefined_color(Name)))),	
-        xmg:send(info,'\nNo color for node '),
-    	xmg_brick_syn_nodename:nodename(N,NodeName),
 
-	xmg:send(info,N),
-	xmg:send(info,'. This should not happen.\n\n'),
-	!.
-
-%%search_color(_,[color-const(C,_)|_],C):-!.
-search_color(_,[color-C|_],C):-!.
-
-search_color(Name,[_|T],C):-
-	search_color(Name,T,C),!.
+search_color(Name, [], Color) :-
+    Color=none,
+    xmg:send(info,'\nNo color for node '),
+    xmg:send(info,Name),
+    xmg:send(info,'. This should not happen.\n\n'),
+    !.
+search_color(_, [color-C|_], color(C)) :-
+    !.
+search_color(Name, [_|T], C) :-
+    search_color(Name, T, C).
 
 
 no_color(AVM,NCAVM):-
