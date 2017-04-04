@@ -38,14 +38,15 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	xmg_table:table_put(Extras,space,Space,TS),
 	xmg_table:table_put(TS,nodes,NodeList,TSN),
 	xmg_table:table_put(TSN,intvars,IntVars,TSNI),
-	xmg:post_plugins(Plugins) with solver(TSNI,_),
+	xmg_table:table_put(TSNI,onodes,NodeList1,TSNO),
+	xmg:post_plugins(Plugins) with solver(TSNO,_),
 
 	xmg_brick_mg_compiler:send(debug,' doing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
 	xmg_brick_mg_compiler:send(debug,' doing posts '),
-
+	%%xmg:send(info,Relations),
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
 	xmg_brick_mg_compiler:send(debug,' branching '),
