@@ -26,10 +26,14 @@
 :- op(500, xfx, ':=:').
 
 :-edcg:using(xmg_brick_mg_solver:solver).
-:-edcg:weave([solver],[post/4]).
+:-edcg:weave([solver],[post/1]).
 
 
-post(Space,NodeList,IntVars,[Ranks]):--
+post([Ranks]):--
+    	solver::tget(space,Space),
+        solver::tget(nodes,NodeList),
+        solver::tget(intvars,IntVars),
+
 	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-

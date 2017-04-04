@@ -35,8 +35,10 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
 
 	xmg_table:table_new(Extras),
-	xmg_table:table_put(Extras,nodes,NodeList,TNodes),
-	xmg:post_plugins(Plugins,Space,NodeList,IntVars) with solver(TNodes,_),
+	xmg_table:table_put(Extras,space,Space,TS),
+	xmg_table:table_put(TS,nodes,NodeList,TSN),
+	xmg_table:table_put(TSN,intvars,IntVars,TSNI),
+	xmg:post_plugins(Plugins) with solver(TSNI,_),
 
 	xmg_brick_mg_compiler:send(debug,' doing nposts '),
 

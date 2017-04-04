@@ -21,17 +21,18 @@
 
 :-xmg:edcg.
 :-edcg:thread(solver,edcg:table).
-:-edcg:weave([solver],[xmg:post_plugins/4, xmg:post_plugin/4]).
+:-edcg:weave([solver],[xmg:post_plugins/1, xmg:post_plugin/1]).
 
 
 
-xmg:post_plugins([],_,_,_):-- !.
-xmg:post_plugins([Plugin|Plugins],Space,NodeList,IntVars):--	
-	xmg:post_plugin(Plugin,Space,NodeList,IntVars),
-	xmg:post_plugins(Plugins,Space,NodeList,IntVars),!.
+xmg:post_plugins([]):-- !.
+xmg:post_plugins([Plugin|Plugins]):--
+	xmg:post_plugin(Plugin),
+	xmg:post_plugins(Plugins),!.
 
 
-xmg:post_plugin(Plugin-PlugList,Space,NodeList,IntVars):--
+xmg:post_plugin(Plugin-PlugList):--
+
 	xmg:send(debug,' posting '),
         xmg:send(debug,Plugin),
 	xmg:send(debug,'\n'),
@@ -41,7 +42,7 @@ xmg:post_plugin(Plugin-PlugList,Space,NodeList,IntVars):--
 
 	solver::get(In),
         %% cannot use the threads properly here, so give them explicitely	
-	Post=..[post,Space,NodeList,IntVars,PlugList,In,Out],
+	Post=..[post,PlugList,In,Out],
 	Do=..[':',Module,Post],
 	Do,
 	xmg:send(debug,'\nposted'),

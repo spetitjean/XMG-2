@@ -25,9 +25,13 @@
 :- op(500, xfx, ':=:').
 
 :-edcg:using(xmg_brick_mg_solver:solver).
-:-edcg:weave([solver],[post/4]).
+:-edcg:weave([solver],[post/1]).
 
-post(Space,NodeList,IntVars,Unicities):--
+post(Unicities):--
+    	solver::tget(space,Space),
+        solver::tget(nodes,NodeList),
+        solver::tget(intvars,IntVars),
+
 	post_unicities(Space,NodeList,IntVars,Unicities),!.
 
 
