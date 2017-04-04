@@ -19,4 +19,32 @@
 
 :- module(xmg_brick_mg_solver, []).
 
+:-xmg:edcg.
+:-edcg:thread(solver,edcg:table).
+:-edcg:weave([solver],[xmg:post_plugins/4, xmg:post_plugin/4]).
 
+
+
+xmg:post_plugins([],_,_,_):-- !.
+xmg:post_plugins([Plugin|Plugins],Space,NodeList,IntVars):--	
+	xmg:post_plugin(Plugin,Space,NodeList,IntVars),
+	xmg:post_plugins(Plugins,Space,NodeList,IntVars),!.
+
+
+xmg:post_plugin(Plugin-PlugList,Space,NodeList,IntVars):--
+	xmg:send(debug,' posting '),
+        xmg:send(debug,Plugin),
+	xmg:send(debug,'\n'),
+	%%xmg:send(debug,PlugList),
+
+	atom_concat(['xmg_brick_',Plugin,'_solver'],Module),
+
+	solver::get(In),
+        %% cannot use the threads properly here, so give them explicitely	
+	Post=..[post,Space,NodeList,IntVars,PlugList,In,Out],
+	Do=..[':',Module,Post],
+	Do,
+	xmg:send(debug,'\nposted'),
+
+	solver::set(Out),
+	!.

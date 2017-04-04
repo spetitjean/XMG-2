@@ -25,8 +25,11 @@
 
 :- op(500, xfx, ':=:').
 
+:-edcg:using(xmg_brick_mg_solver:solver).
+:-edcg:weave([solver],[post/4]).
 
-post(Space,NodeList,IntVars,[Ranks]):-
+
+post(Space,NodeList,IntVars,[Ranks]):--
 	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-

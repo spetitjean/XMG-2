@@ -22,25 +22,21 @@
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
 
+:- edcg:using(xmg_brick_mg_solver:solver).
+
 :- op(500, xfx, ':=:').
 
 
-solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugins,Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):-
+solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(Plugins),Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
 	!,		
 	Space:=space,!,
 	
 	new_nodes(NodeList,Space,Nodes),!,
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
 
-
-	%%xmg_brick_unicity_solver:post_unicities(Space,NodeList,IntVars,Unicities),
-
-	xmg:get_plugins(tree,TreePlugins,_),
-	xmg:send(debug,TreePlugins),
-	
-	%%post_plugins([colors,rank,tag,unicity],Space,NodeList,IntVars,Plugins),
-	xmg:send(debug,TreePlugins),
-	post_plugins(TreePlugins,Space,NodeList,IntVars,Plugins),
+	xmg_table:table_new(Extras),
+	xmg_table:table_put(Extras,nodes,NodeList,TNodes),
+	xmg:post_plugins(Plugins,Space,NodeList,IntVars) with solver(TNodes,_),
 
 	xmg_brick_mg_compiler:send(debug,' doing nposts '),
 
@@ -68,27 +64,6 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,Plugi
 
 
 
-post_plugins([],_,_,_,_):- !.
-post_plugins([Plugin|T],Space,NodeList,IntVars,plugins(Plugins)):-	
-	lists:member(Plugin-PlugList,Plugins),
-	post_plugin(Plugin,Space,NodeList,IntVars,PlugList),
-	post_plugins(T,Space,NodeList,IntVars,plugins(Plugins)),!.
-
-
-post_plugin(Plugin,Space,NodeList,IntVars,PlugList):-
-	xmg:send(debug,' posting '),
-	xmg:send(debug,Plugin),
-	xmg:send(debug,'\n'),
-	%%xmg:send(debug,PlugList),
-
-	atom_concat(['xmg_brick_',Plugin,'_solver'],Module),
-	Post=..[post,Space,NodeList,IntVars,PlugList],
-	Do=..[':',Module,Post],
-	%%xmg:send(debug,Do),
-	Do,
-	xmg:send(debug,' posted\n'),
-		
-	!.
 
 do_posts(_,IntVars,IntPVars,NodeList,[]):- !.
 

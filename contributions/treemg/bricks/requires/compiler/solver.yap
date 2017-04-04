@@ -19,7 +19,11 @@
 
 :- module(xmg_brick_requires_solver, []).
 
+:-edcg:using(xmg_brick_mg_solver:solver).
+:-edcg:weave([solver],[post/4]).
+
+
 %% there is nothing to do because if there should be a failure, it already
 %% occurred in the preparer.
 
-post(Space, NodeList, IntVars, Requires).
+post(Space, NodeList, IntVars, Requires):-- !.

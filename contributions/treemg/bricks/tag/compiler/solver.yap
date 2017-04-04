@@ -6,7 +6,11 @@
 
 :- op(500, xfx, ':=:').
 
-post(Space,NodeList,IntVars,TagOps):-
+:-edcg:using(xmg_brick_mg_solver:solver).
+:-edcg:weave([solver],[post/4]).
+
+
+post(Space,NodeList,IntVars,TagOps):--
 	post_tags(Space,NodeList,TagOps),!.
 
 post_tags(Space,NodeList,TagOps):-

@@ -25,8 +25,11 @@
 
 :- op(500, xfx, ':=:').
 
+:-edcg:using(xmg_brick_mg_solver:solver).
+:-edcg:weave([solver],[post/4]).
 
-post(Space,NodeList,IntVars,Plugin):-
+
+post(Space,NodeList,IntVars,Plugin):--
 	colors(Space,NodeList,Plugin).
 
 colors(Space,NodeList,[Colors]):-

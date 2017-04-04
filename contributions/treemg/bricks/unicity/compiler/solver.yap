@@ -24,7 +24,10 @@
 
 :- op(500, xfx, ':=:').
 
-post(Space,NodeList,IntVars,Unicities):-
+:-edcg:using(xmg_brick_mg_solver:solver).
+:-edcg:weave([solver],[post/4]).
+
+post(Space,NodeList,IntVars,Unicities):--
 	post_unicities(Space,NodeList,IntVars,Unicities),!.
 
 

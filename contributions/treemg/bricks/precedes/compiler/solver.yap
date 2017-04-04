@@ -22,8 +22,11 @@
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
 
+:-edcg:using(xmg_brick_mg_solver:solver).
+:-edcg:weave([solver],[post/4]).
 
-post(Space, NodeList, IntVars, Precedes) :-
+
+post(Space, NodeList, IntVars, Precedes) :--
     rposts(Space, NodeList, IntVars, Precedes).
 
 rposts(_,_,_,[]) :- !.
