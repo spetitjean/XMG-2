@@ -52,7 +52,7 @@ search_color(Name, [_|T], C) :-
     search_color(Name, T, C).
 
 
-no_color(AVM,NCAVM):-
+no_color(node(AVM,F,N),node(NCAVM,F,N)):-
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	lists:member(color-C,LAVM),!,
 	lists:delete(LAVM,color-C,NCLAVM),

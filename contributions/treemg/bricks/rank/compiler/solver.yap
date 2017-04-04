@@ -30,14 +30,13 @@ post(Space,NodeList,IntVars,[Ranks]):-
 	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-
-
-	rposts(Space,NodeList,Ranks,1,RankList),!,
+    rposts(Space,NodeList,Ranks,1,RankList),!,
 	lists:keysort(RankList,SRankList),!,
 	(
 	    SRankList=[]
 	->
 	RankRels=[]
-    ;
+    ;    
 	(
 	    SRankList=[RH|RT],
 	    do_rposts(Space,[RH|RT],RT,RankRels,IntVars)

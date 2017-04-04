@@ -41,7 +41,7 @@ memberq(Elem, [H|T]) :-
 implements(Module, Predicate/N) :-
     length(Args, N),
     PredArgs =.. [Predicate | Args],
-    Clause =.. [Module:PredArgs, ':-', _]
+    Clause =.. [Module:PredArgs, ':-', _],
     clause(Clause).
 
 

@@ -29,9 +29,10 @@ get_instances([rank]).
 
 prepare(I, Out) :--
     preparer::tget(nodes,Nodes),
-    maplist(prepare_one, Nodes, Out), !.
+    maplist(prepare_one, Nodes, Out),
+    !.
 
-prepare_one(Node, Rank, Result) :-
+prepare_one(Node, Result) :-
     node_with_prop(rank-C, Node)
     -> Result=rank(C)
-    ;  Result=none.
+    ;  Result=rank(none).

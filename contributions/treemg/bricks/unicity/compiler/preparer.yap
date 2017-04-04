@@ -19,6 +19,7 @@
 
 :- module(xmg_brick_unicity_preparer, []).
 :- use_module(library(apply), [include/3]).
+:- use_module(library(apply), [maplist/3]).
 :- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
@@ -32,5 +33,5 @@ prepare(feat(A,V,_), Out) :--
     maplist(prepare_one(A-V), Nodes, Out).
 
 prepare_one(FV, Node, Result) :-
-    node_with_prop_or_featq(FV, Node)+
+    node_with_prop_or_featq(FV, Node)
     -> Result=true ; Result=false.

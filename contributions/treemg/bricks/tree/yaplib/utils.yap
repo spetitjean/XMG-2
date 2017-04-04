@@ -23,12 +23,12 @@
 	      node_with_prop_or_featq/2,
 	      node_with_prop/2,
 	      node_with_feat/2,
-	      node_with_prop_or_feat/2,
+	      node_with_prop_or_feat/2
 	  ]).
 
 :- use_module(library(lists), [member/2]).
-:- use_module('xmg/utils', [memberq/3]).
-:- use_module('xmg/brick/avm/avm', [amv/2]).
+:- use_module('xmg/utils', [memberq/2]).
+:- use_module('xmg/brick/avm/avm', [avm/2]).
 
 
 %==============================================================================
