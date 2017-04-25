@@ -22,8 +22,18 @@
 :-xmg:edcg.
 :-xmg:generator_accs.
 
+:-edcg:using(xmg_brick_mg_generator:decls).
+:-edcg:using(xmg_brick_mg_generator:name).
+%:-edcg:using(xmg_brick_mg_generator:code).
+
 xmg:generate_instr((morphtf:eq(c(F),c(V)),Dim)):--
 	code::enq(xmg_brick_avm_avm:avm(AVM,[F-V])),
+	code::enq(xmg_acc:Dim::get(AVM)),
+	!.
+
+xmg:generate_instr((morphtf:eq(c(F),v(V)),Dim)):--
+		  decls::tget(V,Var),
+	code::enq(xmg_brick_avm_avm:avm(AVM,[F-Var])),
 	code::enq(xmg_acc:Dim::get(AVM)),
 	!.
 

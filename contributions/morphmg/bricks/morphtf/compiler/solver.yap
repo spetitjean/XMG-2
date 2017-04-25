@@ -21,5 +21,5 @@
 
 eval_morph(AVM,morphtf(Feats)):-
 	%%xmg_brick_avm_avm:avm(AVM,Feats),
-	Feats=AVM,
+    Feats=AVM,
 	!.

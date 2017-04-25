@@ -175,7 +175,7 @@ compile_file(File,Eval):-
 	asserta(current(0)),
 
 	print_header,
-	
+	xmg:send(debug,'\nEval starting'),
 	eval,
     	maybe_print_appendices.	
 

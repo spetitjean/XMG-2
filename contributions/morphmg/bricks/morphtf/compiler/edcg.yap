@@ -1,7 +1,7 @@
 %% -*- prolog -*-
 
 %% ========================================================================
-%% Copyright (C) 2015  Simon Petitjean
+%% Copyright (C) 2017 Simon Petitjean
 
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU General Public License as published by
@@ -17,13 +17,14 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_morphtf_compiler).
+
+:-module(xmg_brick_morphtf_edcg).
+
+:- xmg:edcg.
 
 
-xmg:eval(morphtf,_,Morph,morphtf:morphtf(Value),_):-
-	xmg:send(info,Morph),
-	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
-	%%xmg:send_nl(info,2),
-	xmg:send(debug,' Value : '),
-	xmg:send(debug,Value).
+%% À générer dans un fichier du compiler
+%% :-edcg:thread(xmg_acc:nom_dim, xmg_brick_syn_edcg:accu_type).
 
+%%:-edcg:class_alias(accu_type, edcg:value).
+:- edcg:class( accu_type,   [edcg:set,edcg:get], _ ).

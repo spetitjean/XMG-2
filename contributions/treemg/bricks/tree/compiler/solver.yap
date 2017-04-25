@@ -34,6 +34,11 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	new_nodes(NodeList,Space,Nodes),!,
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
 
+	%% Here are the threads used by the plugins:
+	%% space
+	%% nodes - the list of nodes used by the solver
+	%% onodes - the list of original nodes (node(Props,Feats,Name))
+	%% intvars 
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,space,Space,TS),
 	xmg_table:table_put(TS,nodes,NodeList,TSN),

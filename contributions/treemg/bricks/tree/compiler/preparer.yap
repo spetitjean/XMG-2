@@ -65,8 +65,8 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
 
-	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,_),
-	
+	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,FNodes),
+
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
 	%% xmg_brick_tag_preparer:prepare(SynNC,prepared(TagOps,SynNC)),

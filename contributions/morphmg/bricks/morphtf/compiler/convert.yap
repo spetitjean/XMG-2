@@ -23,9 +23,13 @@
 
 :- edcg:using(xmg_brick_mg_convert:name).
 
-xmg:xml_convert_term(morphtf:morphtf(AVM),elem(morphtf,children([elem(feats,children(Feats)),elem(fields,children(Fields))]))):--
+xmg:xml_convert_term(morphtf:morphtf(morphtf(AVM)),elem(morphtf,children([elem(feats,children(Feats)),elem(fields,children(Fields))]))):--
+		    xmg:send(debug,'\nConverting tf: '),
+	xmg:send(debug,AVM),
+
+
 	xmg_brick_avm_avm:avm(AVM,LAVM),
-	%%xmg:send(info,LAVM),
+	xmg:send(debug,LAVM),
 	order_list(LAVM,L1,L2),
 	xmg:send(info,L2),
 
@@ -55,7 +59,7 @@ order_list([A-B|T],T1,[N-field(A,B)|T2]):-
 	xmg:field(A,N),!,
 	order_list(T,T1,T2).
 order_list([A-B|T],[A-B|T1],T2):-
-	xmg:feat(A,Type),!,
+	%xmg:feat(A,Type),!,
 	order_list(T,T1,T2).
 order_list([H|T],_,_):-
 	xmg:send(info,'UNEXPECTED IN MORPH: '),

@@ -66,11 +66,15 @@ rpost_do2(N1, [N2|L2],  ONodeList,NodeList, Space, IntVars) :-
 
 rpost_do3(N1, N2, ONodeList, NodeList, Space, IntVars) :-
     %%assert_node(N1),
-    %% xmg:send(info,ONodeList),
+    %%xmg:send(info,ONodeList),
+    %%xmg:send(info,NodeList),
     %% xmg:send(info,N1),
     %% N1=node(_,F,_),
     %% xmg_brick_avm_avm:avm(F,FS),
     %% xmg:send(info,FS),
+
+    %% N1 and N2 come from the preparer, they have to be found in
+    %% ONodeList and might still have colors
     get_node(N1,ONodeList,Num1),
     get_node(N2,ONodeList,Num2),
     %%xmg:send(info,Num1),
@@ -82,6 +86,7 @@ rpost_do3(N1, N2, ONodeList, NodeList, Space, IntVars) :-
     %%xmg_brick_tree_solver:get_rel(Num1,Num2,IntVars,RelVar),
     %%Space += dom(RelVar, 4),
     !.
+
 
 get_node(node(_,F,N),[Num-node(_,F1,N1)|_],Num):-
     N==N1,!.

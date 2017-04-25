@@ -24,3 +24,5 @@ dim_iface:
   tag: "iface"
   Stmt: iface
   Expr: value
+morphtf:
+  _Else: adisj

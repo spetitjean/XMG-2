@@ -64,6 +64,7 @@ assert_principle(Input,Principle):-
 	xmg:send(debug,Output),
 	Assert=..[Principle,Output],
 	ToAssert=..[':',xmg,Assert],
+	xmg:send(info,Assert),
 	asserta(ToAssert),!.
 assert_principle(_,Principle):-
     xmg:send(info,'\nWarning: do not know what to do with principle '),
