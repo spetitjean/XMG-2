@@ -51,6 +51,13 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	xmg:send(debug,'\nwith type '),
 	xmg:send(debug,Type),
 	feat_type(Attr,UAttr,Type,TypeAttr),
+	xmg:send(debug,'\nTypeAttr for '),
+	xmg:send(debug,Attr),
+	xmg:send(debug,':  '),
+	xmg:send(debug,TypeAttr),
+	xmg:send(debug,' ('),
+	xmg:send(debug,UAttr),
+	xmg:send(debug,')'),
 	type_def(TypeAttr,TypeDef),
 	value_type(Value,TypeDef),
 	extend_type(Type,UAttr,TypeDef),
@@ -125,9 +132,9 @@ xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--
 feat_type(token(_,id(Feat)),Feat,AVM,Type):-
 	xmg_brick_avm_avm:avm(AVM,AVMFeats),
 	xmg:send(debug,AVMFeats),
-	lists:member(Feat-_,AVMFeats),
+	lists:member(Feat-HERE,AVMFeats),
+	(var(HERE) -> fail),
 	xmg_brick_avm_avm:dot(AVM,Feat,Type),
-
 	!.
 %% when typing a single feat
 feat_type(token(_,id(Feat)),Feat,_,Type):-

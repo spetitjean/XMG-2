@@ -47,7 +47,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
   {
    %% Pattern 1: cvcvc
    <morph>{
-	pattern= p1;
+	pattern: p1;
 
 	R1 >> V1;
 	V1 >> R2;
@@ -57,7 +57,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 2: cvccvc 
    <morph>{
-	pattern= p2;
+	pattern: p2;
    
 	field C21;
 	C21 <- ?RR2;
@@ -70,7 +70,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
   |
    %% Pattern 3: cvvcvc 
    <morph>{
-	pattern= p3;
+	pattern: p3;
    
 	field V11;
 	V11 <- ?VV1;
@@ -83,7 +83,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
  |
    %% Pattern 4: ?vccvc
    <morph>{
-	pattern= p4;
+	pattern: p4;
    	field V0;
 	V0 <- "ʕ";
 	%%V0 <- "ء";	
@@ -97,7 +97,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
  |
    %% Pattern 5: cvcvccvc (takattab), cv + Pattern 2
    <morph>{
-	pattern= p5;
+	pattern: p5;
    	field V0;
 	V0 <- ?VV1;
 	field R0;
@@ -116,7 +116,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    | 
   %% Pattern 6: cvcvvcvc (takaatab), cv + Pattern 3
    <morph>{
-	pattern= p6;
+	pattern: p6;
    	field V0;
 	V0 <- ?VV1;
 	field R0;
@@ -135,7 +135,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 7: ccvcvc (nkatab): n + Pattern 1
    <morph>{
-	pattern= p7;
+	pattern: p7;
 	field R0;
 	R0 <- "n";
 	%%R0 <- "ن";
@@ -149,7 +149,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 8: ccvcvc (ktatab): second consonant is replicated after the first one
    <morph>{
-	pattern= p8;
+	pattern: p8;
 	field R11;
 	R11 <- ?RR2;
 
@@ -162,8 +162,8 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 9: ccvcvc (ktabab): second consonant is replaced by the third one and moved after the first one
    <morph>{
-	active= +;
-	pattern= p9;
+	active: +;
+	pattern: p9;
 	field R21;
 	R21 <- ?RR3;
 
@@ -176,7 +176,7 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 10: ccvccvc (staktab): Pattern 4 with sk instead of ʕ
    <morph>{
-	pattern= p10;
+	pattern: p10;
    	field R0;
 	R0 <- "s";
 	%%R0 <- "ث";
@@ -193,8 +193,8 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 11: ccvvcvc (ktaabab): Pattern 9 with doubled first vowel (and as for 9, no passive)
    <morph>{
-	active= +;
-	pattern= p11;
+	active: +;
+	pattern: p11;
 	field R21;
 	R21 <- ?RR3;
 	field V11;
@@ -210,8 +210,8 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 12: ccvvcvc (ktawtab): Pattern 11 with doubled vowel degraded into "w" (and as for 9, no passive)
    <morph>{
-	active= +;
-	pattern= p12;
+	active: +;
+	pattern: p12;
 	field R21;
 	R21 <- ?RR2;
 	field V11;
@@ -228,8 +228,8 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 13: ccvvcvc (ktawwab): Pattern 12 with R21 degraded into "w" (and as for 9, no passive)
    <morph>{
-	active= +;
-	pattern= p13;
+	active: +;
+	pattern: p13;
 	field R21;
 	R21 <- "w";
 	%%R21 <- "و";
@@ -247,8 +247,8 @@ declare ?RR1 ?RR2 ?RR3 ?VV1 ?VV2
    |
    %% Pattern 14: ccvvcvc (ktanbab): Pattern 13 with  (and as for 9, no passive)
    <morph>{
-	active= +;
-	pattern= p14;
+	active: +;
+	pattern: p14;
 	field R21;
 	R21 <- ?RR3;
 	field V11;
@@ -281,7 +281,7 @@ declare ?VV1 ?VV2
     %% Active
     {
       <morph>{
-	active= +
+	active: +
       }
       ;
       ?VV1= "a";
@@ -294,7 +294,7 @@ declare ?VV1 ?VV2
     %% Passive
     {
       <morph>{
-        active= -
+        active: -
       }
       ;
       ?VV1= "u";
