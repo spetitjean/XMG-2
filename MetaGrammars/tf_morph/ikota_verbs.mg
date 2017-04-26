@@ -8,8 +8,8 @@ type NUMBER = {sg,pl}
 type PROXI  = {none,imminent,day,near,far}
 type NCLASS = {C1,C1A,C2,C3,C3A,C4,C5,C5A,C6,C7,C8,C9,C14}
 type PERSON = [1..3]
-type CHAMPS = [[f_sujet : string, f_temps : string, f_racine : string, f_voix : string, f_aspect : string, f_theme : string, f_eloignement : string]]
-type TRAITS = [[vclass : CLASS, voice : VOICE, tense : TENSE, n : NUMBER, proxi : PROXI, nc : NCLASS, p : PERSON, neg : bool, prog : bool, active : bool]]
+type CHAMPS = [|f_sujet : string, f_temps : string, f_racine : string, f_voix : string, f_aspect : string, f_theme : string, f_eloignement : string|]
+type TRAITS = [|vclass : CLASS, voice : VOICE, tense : TENSE, n : NUMBER, proxi : PROXI, nc : NCLASS, p : PERSON, neg : bool, prog : bool, active : bool|]
 
 use dimtype with (CHAMPS, TRAITS) dims (morph)
 
