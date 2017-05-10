@@ -223,7 +223,7 @@ unify_import(mg:iclass(token(_,id(A)),_,none)):--
 	types::tget(class(A),(Params,CAVM)),
 	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
 	xmg_brick_mg_exporter:exports(N,List),
-	xmg:send(info,List),
+	%%xmg:send(info,List),
 	import_exports(List,FACAVM).
 unify_import(mg:iclass(token(_,id(A)),_,AS)):--
 	%% TODO: something about the AS
