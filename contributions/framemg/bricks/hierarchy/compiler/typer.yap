@@ -50,53 +50,60 @@ init_print_hierarchy:-
 
 	xmg:send(info,'init print hierarchy\n'),
 	open('.more',write,S,[alias(hierarchy)]),
-	write(hierarchy,'<hierarchy>\n'),
+	write(hierarchy,'<type_info>\n'),
+	write(hierarchy,'  <hierarchy>\n'),
 	print_hierarchy(FTypes,FAttrs),
+	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+	write(hierarchy,'  <type_constraints>\n'),
+	print_type_constraints(Constraints),
+	write(hierarchy,'</type_info>\n'),
 	close(hierarchy),!.
 
 print_hierarchy([],[]):-
-        write(hierarchy,'</hierarchy>'),!.
+        write(hierarchy,'  </hierarchy>\n'),!.
 print_hierarchy([H|T],[H1|T1]):-
-        write(hierarchy,'  <entry>\n'),
-        write(hierarchy,'    <ctype>\n'),
-	print_type(H),
+        write(hierarchy,'    <entry>\n'),
+        write(hierarchy,'      <ctype>\n'),
+	print_type('ctype',H),
 	print_constraints(H1),
-	write(hierarchy,'  </entry>\n'),
+	write(hierarchy,'    </entry>\n'),
 	print_hierarchy(T,T1).
 
-print_type([]):-
-    write(hierarchy,'    </ctype>\n'),!.
+print_type(Label,[]):-
+    write(hierarchy,'      </'),
+    write(hierarchy,Label),
+    write(hierarchy,'>\n'),!.
 
-print_type([H|T]):-
-    write(hierarchy,'      <type>'),
+print_type(Label,[H|T]):-
+    write(hierarchy,'        <type val="'),
     write(hierarchy,H),
-    write(hierarchy,'</type>\n'),
-    print_type(T),!.
+    write(hierarchy,'"/>\n'),
+    print_type(Label,T),!.
 	
 
 print_constraints(C):-
-	write(hierarchy,'    <constraints>\n'),
+	write(hierarchy,'      <constraints>\n'),
 	print_constraints(C,0),
-	write(hierarchy,'    </constraints>\n'),!.
+	write(hierarchy,'      </constraints>\n'),!.
 
 print_constraints([],_).
 print_constraints([A-V],N):-
-	write(hierarchy,'      <constraint>'),
+	write(hierarchy,'        <constraint>'),
 	write(hierarchy,A),
 	write(hierarchy,'-'),
 	set_constraint_value(V,N,_),
 	write(hierarchy,V),
-	write(hierarchy,'      </constraint>\n'),
+	write(hierarchy,'        </constraint>\n'),
 	!.
 print_constraints([A-V|T],N):-
-    	write(hierarchy,'      <constraint>'),
+    	write(hierarchy,'        <constraint>'),
 	write(hierarchy,A),
 	write(hierarchy,'-'),
 	set_constraint_value(V,N,M),
 	write(hierarchy,V),
 	write(hierarchy,', '),
 	print_constraints(T,M),
-	write(hierarchy,'      </constraint>\n'),
+	write(hierarchy,'        </constraint>\n'),
 	!.
 
 set_constraint_value(A,N,M):-
@@ -107,6 +114,23 @@ set_constraint_value(A,N,M):-
 set_constraint_value(A,N,M):-
 	not(var(A)),
 	M is N,!.
+
+print_type_constraints([]):-
+    write(hierarchy,'  </type_constraints>\n'),!.
+
+print_type_constraints([fconstraint(CType,Type1,Type2)|T]):-
+    write(hierarchy,'    <type_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <ctype1>\n'),    
+    print_type('ctype1',Type1),
+    write(hierarchy,'      <ctype2>\n'),
+    print_type('ctype2',Type2),
+    write(hierarchy,'    </type_constraint>\n'),
+    print_type_constraints(T),!.
+
+    
+    
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
