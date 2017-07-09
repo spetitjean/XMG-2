@@ -37,42 +37,66 @@
 %% Printing the hierarchy (as an appendix)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Next: do this in the xml file
 xmg:print_appendix:-
-	xmg:fReachableTypes(FVectors),
-	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-	xmg:send(debug,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\nHere are the valid types according to the hierarchy:\n\n'),
-	print_hierarchy(FTypes,FAttrs),
-	xmg:send(debug,'\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n').
+    xmg:more_mode,
+    init_print_hierarchy,!.
 
-print_hierarchy([],[]).
+xmg:print_appendix:-
+    not(xmg:more_mode),!.
+
+init_print_hierarchy:-
+        xmg:fReachableTypes(FVectors),
+    	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
+
+	xmg:send(info,'init print hierarchy\n'),
+	open('.more',write,S,[alias(hierarchy)]),
+	write(hierarchy,'<hierarchy>\n'),
+	print_hierarchy(FTypes,FAttrs),
+	close(hierarchy),!.
+
+print_hierarchy([],[]):-
+        write(hierarchy,'</hierarchy>'),!.
 print_hierarchy([H|T],[H1|T1]):-
-	xmg:send(debug,H),
-	xmg:send(debug,'\nConstraints: '),
+        write(hierarchy,'  <entry>\n'),
+        write(hierarchy,'    <ctype>\n'),
+	print_type(H),
 	print_constraints(H1),
-	xmg:send(debug,'\n'),
-	
+	write(hierarchy,'  </entry>\n'),
 	print_hierarchy(T,T1).
 
+print_type([]):-
+    write(hierarchy,'    </ctype>\n'),!.
+
+print_type([H|T]):-
+    write(hierarchy,'      <type>'),
+    write(hierarchy,H),
+    write(hierarchy,'</type>\n'),
+    print_type(T),!.
+	
+
 print_constraints(C):-
-	xmg:send(debug,'['),
+	write(hierarchy,'    <constraints>\n'),
 	print_constraints(C,0),
-	xmg:send(debug,']'),!.
+	write(hierarchy,'    </constraints>\n'),!.
 
 print_constraints([],_).
 print_constraints([A-V],N):-
-	xmg:send(debug,A),
-	xmg:send(debug,'-'),
+	write(hierarchy,'      <constraint>'),
+	write(hierarchy,A),
+	write(hierarchy,'-'),
 	set_constraint_value(V,N,_),
-	xmg:send(debug,V),
+	write(hierarchy,V),
+	write(hierarchy,'      </constraint>\n'),
 	!.
 print_constraints([A-V|T],N):-
-	xmg:send(debug,A),
-	xmg:send(debug,'-'),
+    	write(hierarchy,'      <constraint>'),
+	write(hierarchy,A),
+	write(hierarchy,'-'),
 	set_constraint_value(V,N,M),
-	xmg:send(debug,V),
-	xmg:send(debug,', '),
+	write(hierarchy,V),
+	write(hierarchy,', '),
 	print_constraints(T,M),
+	write(hierarchy,'      </constraint>\n'),
 	!.
 
 set_constraint_value(A,N,M):-
