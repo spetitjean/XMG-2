@@ -59,6 +59,7 @@ frameToXML(Frame,Frame1 ):--
           xmg_brick_hierarchy_typer:fVectorToType(VType,Type),
 	  %%xmg:send(info,Type),  
 	  xmg_brick_havm_havm:const_h_avm(Frame,Const),
+	  typeToXML(Type,XMLType),
 	(
 	    (
 		var(Const),!,
@@ -66,15 +67,24 @@ frameToXML(Frame,Frame1 ):--
 		%%xmg:send(info,New),
 		New=Const,
 		featsToXML(Feats,XMLFeats),
-		Frame1=elem(fs,features([coref-Const,type-Type]),children(XMLFeats))
+		Frame1=elem(fs,features([coref-Const]),children([XMLType|XMLFeats]))
 	
 	    )
 	;
 	    (
-		!, Frame1=elem(fs,features([coref-Const,type-Type]))
+		!, Frame1=elem(fs,features([coref-Const], children([XMLType])))
 		)
 	),
 	!.
+
+typeToXML(Type,elem(ctype,children(AtomicTypes))):-
+    atomicTypesToXML(Type,AtomicTypes).
+
+atomicTypesToXML([],[]).
+atomicTypesToXML([H|T],[elem(type,features([val-H]))|T1]):-
+    atomicTypesToXML(T,T1),!.
+
+
 
 featsToXML([],[]):-- !.
 featsToXML([H|T],[H1|T1]):--
