@@ -98,7 +98,7 @@ featToXML(Attr-Value,elem(f,features([name-Attr]),children([XMLValue]))):--
 
 valToXML(Frame,XMLFrame):--
 	frameToXML(Frame,XMLFrame),!.
-valToXML(Var,elem(sym,features([value-Var]))):--
+valToXML(Var,elem(sym,features([varname-Var]))):--
 	var(Var),
 	xmg:convert_new_name('@V',Var),
 	!.
