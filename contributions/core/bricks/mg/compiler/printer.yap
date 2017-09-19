@@ -85,6 +85,11 @@ printElem(H, I) :-
 	print('>\n'),!
 	.
 
+printElem(H,I) :-
+        xmg:send(info,'\nError: Could not print elem: '),
+	xmg:send(info,H),
+	false,!.
+
 printFeatures([]):-!.
 printFeatures([H1-H2]):-
 	print(H1), print('="'), print(H2), print('"'),!.

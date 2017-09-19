@@ -72,7 +72,7 @@ frameToXML(Frame,Frame1 ):--
 	    )
 	;
 	    (
-		!, Frame1=elem(fs,features([coref-Const], children([XMLType])))
+		!, Frame1=elem(fs,features([coref-Const]), children([XMLType]))
 		)
 	),
 	!.
