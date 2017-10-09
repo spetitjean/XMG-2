@@ -366,9 +366,12 @@ type_decl(fconstraint-Decls):--
 type_decl(ftypes-[ftypes(Decls)]):--
 	 xmg_brick_hierarchy_typer:remove_ftypes(Decls,NDecls),
 	 assert_consts(NDecls,hierarchy:ftype),
-	xmg_brick_hierarchy_typer:get_ftypes(Decls),!.
+	 xmg_brick_hierarchy_typer:get_ftypes(Decls),
+	 xmg_brick_hierarchy_typer:assert_types(Types),
+	 !.
 type_decl(fconstraints-[fconstraints(Decls)]):--
-	xmg_brick_hierarchy_typer:get_fconstraints(Decls),!.
+	 xmg_brick_hierarchy_typer:get_fconstraints(Decls),
+         asserta(xmg:hierarchy(built)),!.
 type_decl(property-Decls):--
 	type_properties(Decls),!.
 type_decl(feat-Decls):--

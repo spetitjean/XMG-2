@@ -85,14 +85,13 @@ h_avm(X, Type, L) :-
 	xmg_brick_hierarchy_typer:fTypeToVector(Type,Vector,CVector),
 
 	xmg:send(debug,' to '),
-	xmg:send(debug,Vector),
-
+	xmg:send(debug,Vector),		
 
 	(var(CVector)->
 	     true;
 	 get_attrconstraints(CVector,Must)
 	),
-
+	
 	list_to_rbtree(L,T),
 	%%xmg:send(info,T),
 
@@ -109,6 +108,7 @@ h_avm(X, Type, L) :-
 
 	
 	put_atts(Y, avmfeats(Vector,Final1,_)),
+
 	X = Y.
 
 
@@ -226,6 +226,9 @@ get_attrconstraints(Type,MCT):-
 
 	merge_feats(CT,CT,MCT),!.
 
+get_attrconstraints(Type,MCT):-
+	not(xmg:fattrconstraint(Type,C)),!.
+
 create_attr_types([],[]).
 create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
     !,
@@ -268,7 +271,7 @@ check_type(Vector):-
 
 unify_types(T1,T2,T3,CT3):-
 	T1=T2,
-
+	
 	xmg_brick_hierarchy_typer:find_smaller_supertype(T1,T3,CT3),!.
 unify_types(T1,T2,T3,CT3):-
     %% This should not happen (having 0s in vectors), but strangely does.
