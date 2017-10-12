@@ -238,9 +238,8 @@ fTypeToVector(Type,SVector,FVector):-
 	find_smaller_supertype(Type,SVector,FVector),
 	!.
 fTypeToVector(Type,SVector,FVector):-
-	not(xmg:ftypes(Types)),
-	xmg:send(info,'\n\nError: no frame type was defined'),
-	halt.
+        not(xmg:ftypes(Types)),
+    	throw(xmg(type_error(no_frame_type))).
 
 find_smaller_supertype(Vector,FVector,SVector):-
     check_hierarchy,

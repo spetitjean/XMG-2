@@ -444,10 +444,8 @@ get_feat_type(F-T,F-T):--
 assert_type(type(Id,Type)):--
 	type_decls::tget(Id,Type),!.
 assert_type(type(Id,Type)):--
-	type_decls::tget(Id,T),not(T=Type),!,
-	xmg:send(info,'\nError: Multiple definition of type '),
-	xmg:send(info,Id),
-	halt,!.
+	   type_decls::tget(Id,T),not(T=Type),!,
+	throw(xmg(type_error(multiple_type(Id)))).
 assert_type(type(Id,Type)):--
 	   type_decls::tput(Id,Type),!.
 
@@ -460,9 +458,8 @@ assert_const(Const,Type):--
 	type_decls::tget(const(Const),Type),!.
 assert_const(Const,Type):--
 	type_decls::tget(const(Const),T),not(T=Type),!,
-	xmg:send(info,'\nError: Multiple definition of const '),
-	xmg:send(info,Const),
-	halt,!.
+	throw(xmg(type_error(multiple_const(Const)))).
+
 assert_const(Const,Type):--
 	    type_decls::tput(const(Const),Type),
             xmg:send(debug,'\nAsserted constant: '),
@@ -485,10 +482,9 @@ add_base_types([H|T]):--
 assert_feat(feat(Id,Type)):--
 	xmg:feat(Id,Type),!.
 assert_feat(feat(Id,Type)):--
-	xmg:feat(Id,T),not(T=Type),!,
-	xmg:send(info,'\nError: Multiple definition of feature '),
-	xmg:send(info,Id),
-	halt,!.
+	   xmg:feat(Id,T),not(T=Type),!,
+           throw(xmg(type_error(multiple_feature(Id)))).
+
 assert_feat(feat(Id,Type)):--
 	not(xmg:feat(Id,_)),
 	%%xmg:send(info,'\n\nassert feat \n '),

@@ -156,10 +156,7 @@ type_def(TypeAttr,TypeAttr):--
 	var(TypeAttr),
 	!.
 type_def(TypeAttr,_):--
-	xmg:send(info,'\n\nError! Type '),
-	xmg:send(info,TypeAttr),
-	xmg:send(info,' is undefined.'),
-	halt,
+	throw(xmg(type_error(type_not_defined(TypeAttr)))),
 	!.
 
 value_type(Value,Type):--

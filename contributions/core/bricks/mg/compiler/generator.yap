@@ -196,10 +196,7 @@ generate_values([value(Value)|T]):-
 generate_values([value(Value)|T]):-
     %% Value part
     not(xmg:is_class(Value)),
-    xmg:send(info,'\n\nError: could not value class '),
-    xmg:send(info,Value),
-    xmg:send(info,', the class does not exist.'),
-    halt.
+    throw(xmg(generator_error(class_not_defined(Value)))).
 
 
 
@@ -217,9 +214,7 @@ import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
 	import_calls(T,List,T1),
 	ICalls=..[',',Gen,T1],!.
 import_calls([H|T],List,ICalls):--
-	xmg:send(info,'\nError: could not call '),
-	xmg:send(info,H),false,!.
-
+	throw(xmg(generator_error(cannot_call(H)))),!.
 
 do_unify_exports(E,List,none,Exports):--
 	unify_exports(E,List,Exports),!.

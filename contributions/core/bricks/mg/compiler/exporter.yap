@@ -129,12 +129,7 @@ whichImport([id(H,C)|T],Acc):-
 	lists:member(H,Acc),!,
 	whichImport(T,Acc).
 whichImport([id(H,C)|T],Acc):-
-    xmg:send(info,'Error while importing class '),
-    xmg:send(info,H),
-    xmg:send(info,' at '),
-    xmg:send(info,C),
-    xmg:send(info,'\n'),!,
-    halt.
+    throw(xmg(exporter_error(failed_import(H,C)))).
 
 %% Export variables
 
