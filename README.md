@@ -1,1 +1,1 @@
-To install and use XMG2, please check the documentation at the [Documentation](dokufarm.phil.hhu.de/xmg/)
+To install and use XMG2, please check the [documentation](dokufarm.phil.hhu.de/xmg/)
