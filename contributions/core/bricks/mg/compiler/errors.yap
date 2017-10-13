@@ -206,6 +206,8 @@ xmg_message(exporter_error(variable_not_declared(A,C)),Msg):- !,
 	Msg=error(export,[hint('variable not declared',A),C]).
 xmg_message(exporter_error(failed_import(A,C)),Msg):- !,
 	Msg=error(export,[hint('failed to import class',A),C]).
+xmg_message(exporter_error(failed_call(A,C)),Msg):- !,
+	Msg=error(export,[hint('failed to call class '#A#" in class "#C)]).
 
 %% errors in unfolder
 xmg_message(unfolder_error(cycle_detected_with_class(A,C)),Msg):- !,
