@@ -21,7 +21,7 @@
 :- use_module('xmg/plugins').
 
 
-:- xmg:edcg.
+:-xmg:edcg.
 :-edcg:thread(preparer,edcg:table).
 :-edcg:weave([preparer],[xmg:prepare_plugins/3, xmg:prepare_plugin/3, prepare_instances/5]).
 

@@ -23,6 +23,7 @@
 :- module(xmg_brick_requires_preparer, []).
 :- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
 :- use_module(library(apply), [include/3]).
+:- xmg:edcg.
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).

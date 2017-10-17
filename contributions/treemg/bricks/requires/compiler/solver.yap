@@ -18,6 +18,7 @@
 %% ========================================================================
 
 :- module(xmg_brick_requires_solver, []).
+:- xmg:edcg.
 
 :-edcg:using(xmg_brick_mg_solver:solver).
 :-edcg:weave([solver],[post/1]).

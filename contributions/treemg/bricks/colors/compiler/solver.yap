@@ -21,7 +21,7 @@
 
 :- use_module(library(gecode)).
 :- use_module('xmg/brick/tree/compiler/dominance').
-
+:- xmg:edcg.
 
 :- op(500, xfx, ':=:').
 
