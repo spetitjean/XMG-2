@@ -25,6 +25,7 @@
 
 :- multifile(xmg:punctuation/1).
 :- multifile(xmg:keyword/1).
+:- xmg:edcg.
 
 :- edcg:thread(macros  ,edcg:table  ). % table of macros
 :- edcg:thread(toks    ,edcg:queue  ). % accumulated tokens
@@ -73,7 +74,7 @@
 %%=============================================================================
 
 input_getc(C) :-- chars::pop(C), update_line_col_code(C).
-input_gets(S) :-- chars::pops(S), update_line_col_string(S).
+input_gets(S) :--     xmg:send(info,' gets!'), chars::pops(S),     xmg:send(info,S),     xmg:send(info,': got'), update_line_col_string(S).
 
 update_line_col_code(C) :--
     C=0'\n %'
@@ -130,8 +131,8 @@ coord(coord(F,L,C)) -->>
 
 more_tokens -->>
     token(T,C), !,
-	%% xmg:send(info,T),
-	%% xmg:send(info,'\n'),
+	xmg:send(info,T),
+	xmg:send(info,'\n'),
     (T=id(include) -> more_tokens_include ;
      T=id(macro)   -> more_tokens_macro ;
      (toks::put(C), toks::put(T))),
@@ -344,8 +345,11 @@ more_dimtype2 -->>
 %    xmg_tokenizer_punct:punctuation(P),
 punctuation(T,C) :--
     coord(C),
+    xmg:send(info,'HERE'),
     xmg:punctuation(A),
+    xmg:send(info,A),
     atom_codes(A,S),
+    xmg:send(info,' OVER HERE'),
     input_gets(S), !,
     punctuation_to_token(A,T).
 

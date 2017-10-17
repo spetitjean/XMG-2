@@ -29,7 +29,7 @@ type AGR=[cat    : CAT,
 type LABEL !
 type PHON !
 
-type LEXIQUE = {manger}
+type LEXIQUE = {ranger}
 
 type MARK  = {subst,nadj,foot,none}
 type RANK  = [1..5]
@@ -134,8 +134,8 @@ declare
 
 class lexemeManger 
 declare ?X ?Y
-{ transitifDirect[]*=[suj=?X,obj=?Y,anch=manger]
-  ; BinaryRel[manger]*=[arg0 =?X,arg1 = ?Y]
+{ transitifDirect[]*=[suj=?X,obj=?Y,anch=ranger]
+  ; BinaryRel[ranger]*=[arg0 =?X,arg1 = ?Y]
     }
 
 %Simple transitive

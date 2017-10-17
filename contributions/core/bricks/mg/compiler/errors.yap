@@ -1,5 +1,6 @@
 %% -*- prolog -*-
 
+:- xmg:edcg.
 :- module(xmg_brick_mg_errors, []).
 :- use_module(library(lists)).
 :- use_module(library(charsio)).
@@ -24,12 +25,12 @@
 
 %% message: xmg(Message)
 
-user:generate_message_hook(error(unhandled_exception,xmg(Exc)), In, Out) :--
+user:generate_message_hook(error(unhandled_exception,xmg(Exc))) -->
 	xmg_message(Exc,Msg),
-	format_msg(Msg) with queue([]-Out, []-In).
-user:generate_message_hook(xmg(Exc), In, Out) :--
+	format_msg(Msg).
+user:generate_message_hook(xmg(Exc)) -->
 	xmg_message(Exc,Msg),
-	format_msg(Msg) with queue([]-Out, []-In).
+	format_msg(Msg).
 
 format_msg(Msg) -->>
 	nonvar(Msg),
