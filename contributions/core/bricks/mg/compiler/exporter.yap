@@ -32,7 +32,7 @@ export_metagrammar(mg:mg(Decls,Classes,Values),mg:mg(Decls,OClasses,Values)):-
 
 	%% before doing the export, check for cycles and order classes
 	lists:length(Classes,L),
-	asserta(classNumber(L)),
+	asserta(classNumber(L)),!,
 	xmg_brick_mg_compiler:send(debug,' ordering classes\n'),
 	order_classes(Classes,Calls,OClasses),!,
 	xmg_brick_mg_compiler:send(debug,' classes ordered\n'),
@@ -64,7 +64,7 @@ order_classes(Classes,Calls,OClasses):-
 
 order_classes([],[],_,[],_,_):- !.
 order_classes([],Classes,Acc,OClasses,Laps,Calls):-!,
-	classNumber(Num),
+						   classNumber(Num),
 	(
 	    ( 
 		Laps<Num,
@@ -73,9 +73,11 @@ order_classes([],Classes,Acc,OClasses,Laps,Calls):-!,
 	    )
 	;
 	(
-	    xmg_brick_mg_compiler:send(info,'\n\nCould not order classes for exports\n'),!,
-	    xmg_brick_mg_compiler:send(info,Classes),
-	    whatsWrong(Classes,Acc)
+	    %%xmg_brick_mg_compiler:send(info,'\n\nCould not order classes for exports\n'),!,
+	    %%xmg_brick_mg_compiler:send(info,Classes),
+	    whatsWrong(Classes,Acc),
+	    whatsWrongCalls(Calls,Acc),
+	    halt
 	)
     ).
 order_classes([Mutex|Classes],MClasses,Acc,OClasses,Laps,Calls):-
@@ -91,9 +93,9 @@ order_classes([Class|Classes],MClasses,Acc,OClasses,Laps,Calls):-
 	order_classes(Classes,[Class|MClasses],Acc,OClasses,Laps,Calls).
 
 class_before(mg:class(token(_,id(Class)),_,I,_,_,_),Acc,Calls):-
-	imports_before(I,Acc),
+        imports_before(I,Acc),!,
 	lists:member((Class,CCall),Calls),
-	calls_before(CCall,Acc).
+	calls_before(CCall,Acc),!.
 
 imports_before([],_):-!.
 imports_before([mg:iclass(token(_,id(Class)),_,_)|T],Acc):-
@@ -121,20 +123,34 @@ calls_before([Call|T],Acc):-
 
 whatsWrong([],Acc):-!.
 whatsWrong([mg:class(token(_,id(Class)),_,I,_,_,_)|T],Acc):-
-	xmg_brick_mg_compiler:send(debug,' in class '),xmg_brick_mg_compiler:send(debug,Class),xmg_brick_mg_compiler:send(debug,'\n'),
-	whichImport(I,Acc),!,
+    %%xmg_brick_mg_compiler:send(info,' in class '),xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send(info,'\n'),
+    whichImport(I,Acc),!,
 	whatsWrong(T,Acc).
 
-whichImport([id(H,C)|T],Acc):-
+whichImport(none,Acc):-
+    !.
+whichImport(some(mg:import(I)),Acc):-
+    whichImport(I,Acc),!.
+whichImport([],Acc):-
+	!.
+whichImport([mg:iclass(token(Coord,id(H)),_,_)|T],Acc):-
 	lists:member(H,Acc),!,
 	whichImport(T,Acc).
-whichImport([id(H,C)|T],Acc):-
-    xmg:send(info,'Error while importing class '),
-    xmg:send(info,H),
-    xmg:send(info,' at '),
-    xmg:send(info,C),
-    xmg:send(info,'\n'),!,
-    halt.
+whichImport([mg:iclass(token(Coord,id(H)),_,_)|T],Acc):-
+    throw(xmg(exporter_error(failed_import(H,Coord)))).
+
+
+whatsWrongCalls([],Acc):-!.
+whatsWrongCalls([(Class,Calls)|T],Acc):-
+    whichCall(Class,Calls,Acc),
+    whatsWrongCalls(T,Acc).
+
+whichCall(Class,[],Acc):-!.
+whichCall(Class,[H|T],Acc):-
+    lists:member(H,Acc),!,
+	whichCall(Class,T,Acc).
+whichCall(Class,[Call|T],Acc):-
+    throw(xmg(exporter_error(failed_call(Call,Class)))).
 
 %% Export variables
 

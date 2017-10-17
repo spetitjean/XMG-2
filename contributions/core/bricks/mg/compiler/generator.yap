@@ -25,6 +25,7 @@
 :-edcg:thread(code,edcg:queue).
 
 :-multifile(xmg:generate_instr/7).
+:-dynamic(xmg:is_class/1).
 
 
 :-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, import_calls/3,  unify_exports/3, unify_exports_as/4, do_unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
@@ -159,6 +160,7 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	xmg_brick_mg_compiler:send(debug,Class),
 	xmg_brick_mg_compiler:send(debug,'\n'),
 	xmg_brick_mg_compiler:send(debug,Clause),
+	asserta(xmg:is_class(Class)),
 	!.
 
 extract_code([],true).
@@ -187,9 +189,16 @@ generate_values([]).
 %% 	asserta(Compute),
 %% 	generate_values(T).
 generate_values([value(Value)|T]):-
-	%% Value part
+    %% Value part
+    xmg:is_class(Value),
 	asserta(xmg:value(Value)),
 	generate_values(T).
+generate_values([value(Value)|T]):-
+    %% Value part
+    not(xmg:is_class(Value)),
+    throw(xmg(generator_error(class_not_defined(Value)))).
+
+
 
 import_calls([],_,true):--!.
 import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
@@ -205,9 +214,7 @@ import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
 	import_calls(T,List,T1),
 	ICalls=..[',',Gen,T1],!.
 import_calls([H|T],List,ICalls):--
-	xmg:send(info,'\nError: could not call '),
-	xmg:send(info,H),false,!.
-
+	throw(xmg(generator_error(cannot_call(H)))),!.
 
 do_unify_exports(E,List,none,Exports):--
 	unify_exports(E,List,Exports),!.

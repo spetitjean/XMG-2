@@ -1,3 +1,5 @@
+%% -*- prolog -*-
+
 %% ========================================================================
 %% Copyright (C) 2014  Simon Petitjean
 
@@ -84,6 +86,9 @@ printElem(H, I) :-
 	print(X),
 	print('>\n'),!
 	.
+
+printElem(H,I) :-
+    	throw(xmg(printer_error(cannot_print(H)))).
 
 printFeatures([]):-!.
 printFeatures([H1-H2]):-

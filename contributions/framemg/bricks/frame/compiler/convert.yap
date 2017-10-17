@@ -72,7 +72,8 @@ frameToXML(Frame,Frame1 ):--
 	    )
 	;
 	    (
-		!, Frame1=elem(fs,features([coref-Const], children([XMLType])))
+		%!, Frame1=elem(fs,features([coref-Const]), children([XMLType]))
+	        !, Frame1=elem(fs,features([coref-Const]))
 		)
 	),
 	!.
@@ -98,10 +99,15 @@ featToXML(Attr-Value,elem(f,features([name-Attr]),children([XMLValue]))):--
 
 valToXML(Frame,XMLFrame):--
 	frameToXML(Frame,XMLFrame),!.
-valToXML(Var,elem(sym,features([value-Var]))):--
+valToXML(Var,elem(sym,features([varname-Var]))):--
 	var(Var),
 	xmg:convert_new_name('@V',Var),
 	!.
+valToXML(Var,elem(sym,features([varname-Var]))):--
+	atom(Var),
+	atom_chars(Var,['@'|_]),
+	!.
+
 valToXML(const(Val,_),elem(sym,features([value-Val]))):-- !.
 valToXML(Val,elem(sym,features([value-Val]))):-- !.
 

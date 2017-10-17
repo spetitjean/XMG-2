@@ -111,7 +111,7 @@ declare ?M ?N ?X ?NV ?NVV ?NPh
 }*=[anch=?X]
 }
 
-class transitifDirect 
+class transitifDirect
 declare 
 	?X ?Y
 { 

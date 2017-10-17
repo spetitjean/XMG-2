@@ -58,6 +58,10 @@ format_specs([H|T]) -->>
 %% format a line spec
 %% <line> ::= hint(L,M) | coord(F,L,C) | line(VS) | unit
 
+format_spec(hint(L)) -->> !,
+        vs_to_string(L) with queue([]-LL,[]-[]),
+	queue::enq("~t~s~12+"-[LL]),
+	queue::enq(nl).
 format_spec(hint(L,M)) -->> !,
 	vs_to_string(L) with queue([]-LL,[]-[]),
 	vs_to_string(M) with queue([]-MM,[]-[]),
@@ -201,6 +205,10 @@ xmg_message(syntax_error(intervalle(I,J,C)), Msg) :- !,
 %% errors in exporter
 xmg_message(exporter_error(variable_not_declared(A,C)),Msg):- !,
 	Msg=error(export,[hint('variable not declared',A),C]).
+xmg_message(exporter_error(failed_import(A,C)),Msg):- !,
+	Msg=error(export,[hint('failed to import class',A),C]).
+xmg_message(exporter_error(failed_call(A,C)),Msg):- !,
+	Msg=error(export,[hint('failed to call class '#A#" in class "#C)]).
 
 %% errors in unfolder
 xmg_message(unfolder_error(cycle_detected_with_class(A,C)),Msg):- !,
@@ -213,22 +221,41 @@ xmg_message(unfolder_error(no_unfolding(A)),Msg):- !,
 %% errors in type checking
 xmg_message(type_error(property_not_declared(X,C)),Msg):- !,
 	Msg=error(types,[hint('property not declared',X),C]).
+xmg_message(type_error(type_not_defined(X)),Msg):- !,
+	Msg=error(types,[hint('type not defined',X)]).
 xmg_message(type_error(feature_not_declared(X,C)),Msg):- !,
 	Msg=error(types,[hint('feature not declared',X),C]).
 xmg_message(type_error(value_not_in_range(X,C)),Msg):- !,
 	Msg=error(types,[hint('value not in range',X),C]).
-xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,				Msg=error(types,[hint('variable not declared',X),C]).
+xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,
+	Msg=error(types,[hint('variable not declared',X),C]).
 xmg_message(type_error(unknown_constant(X,C)),Msg):- !,
 	Msg=error(types,[hint('unknown constant',X),C]).
 xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
 	Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
 xmg_message(type_error(incompatible_exprs(expr(E1,T1),expr(E2,T2))),Msg):- !,
-	Msg=error(types,[hint('incompatible expressions',exprs_types(E1,T1,E2,T2))]).
+	 Msg=error(types,[hint('incompatible expressions',exprs_types(E1,T1,E2,T2))]).
+xmg_message(type_error(multiple_type(X)),Msg):- !,
+	Msg=error(types,[hint('multiple definitions of type',X)]).
+xmg_message(type_error(multiple_const(X)),Msg):- !,
+	Msg=error(types,[hint('multiple definitions of constant (in type definitions)',X)]).
+xmg_message(type_error(multiple_feature(X)),Msg):- !,
+	Msg=error(types,[hint('multiple definitions of feature',X)]).
+
+xmg_message(type_error(no_frame_type),Msg):- !,
+	Msg=error(types,[hint('no frame type declared, please use frame-types = {list_of_atomic_types}')]).
 
 %% generator errors
 xmg_message(generator_error(unknown_instruction(I)),Msg):- !,
 	Msg=error(generator,[hint('unknown instruction',I)]).
+xmg_message(generator_error(class_not_defined(I)),Msg):- !,
+	Msg=error(generator,[hint('undefined class used for valuation',I)]).
+xmg_message(generator_error(cannot_call(I)),Msg):- !,
+	Msg=error(generator,[hint('undefined class used for call',I)]).
 
+%% printer errors
+xmg_message(printer_error(cannot_print(I)),Msg):- !,
+	Msg=error(printer,[hint('cannot print',I)]).
 
 %% Modules errors
 xmg_message(compiler_error(unknown_module(Module)), Msg):- !,

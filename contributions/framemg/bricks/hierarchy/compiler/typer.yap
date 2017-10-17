@@ -22,8 +22,10 @@
 :-dynamic(xmg:fconstraint/3).
 :-dynamic(xmg:fConstraint/3).
 :-dynamic(xmg:ftypes/1).
+:-dynamic(xmg:hierarchy/1).
 :-dynamic(xmg:fReachableType/2).
 :-dynamic(xmg:fReachableTypes/1).
+:-dynamic(xmg:fattrconstraint/2).
 :-dynamic(xmg:fAttrConstraint/2).
 :-dynamic(xmg:fAttrConstraint/4).
 :-dynamic(xmg:fPathConstraint/4).
@@ -143,8 +145,7 @@ remove_ftypes([ftype(H)|T],[H|T1]):-
     remove_ftypes(T,T1),!.
 
 get_fconstraints([]):-
-	assert_types(Types),
-
+	xmg:ftypes(Types),
 	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
 	xmg:send(debug,'\n\nType constraints:'),
 	xmg:send(debug,Constraints),
@@ -237,18 +238,26 @@ fTypeToVector(Type,SVector,FVector):-
 	find_smaller_supertype(Type,SVector,FVector),
 	!.
 fTypeToVector(Type,SVector,FVector):-
-	not(xmg:ftypes(Types)),
-	xmg:send(info,'\n\nError: no frame type was defined'),
-	halt.
+        not(xmg:ftypes(Types)),
+    	throw(xmg(type_error(no_frame_type))).
 
 find_smaller_supertype(Vector,FVector,SVector):-
+    check_hierarchy,
 	find_smaller_supertype_from(Vector,SVector,0),
-	%%xmg:send(info,SVector),
 	replace_zeros(SVector,FVector),
-	!.
+			!.
+
+check_hierarchy:-
+    xmg:hierarchy(built),!.
+check_hierarchy:-
+    get_fconstraints([]),!.
 
 find_smaller_supertype_from(Vector,Vector,N):-
     xmg:fReachableType(Vector,N),!.
+%% if no constraint is defined, any type is reacheable
+find_smaller_supertype_from(Type,Type,0):-
+    not(xmg:fReachableType(Anything,Anyotherthing)),
+    !.
 find_smaller_supertype_from(Vector,SVector,N):-
 	M is N +1,
 	length(Vector,L),
@@ -271,6 +280,7 @@ typeExists(Type,Types):-
 	xmg:send(info,Type),
 	xmg:send(info,' is not a type. Types are:\n'),
 	xmg:send(info,Types),
+	xmg:send(info,'\n'),
 	!.
 	%%halt.
 
