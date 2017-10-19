@@ -77,7 +77,6 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%%Unicities=[],
 	xmg_table:table_entries(TableOut,TableList),
 	inverse_table(TableList,TableInv,TableInvF),
-
 	!.
 
 

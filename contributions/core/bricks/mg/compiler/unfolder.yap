@@ -46,7 +46,7 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
 	     ( true)
              ;
 	     (
-		 xmg:send(info,'\n typing classes '),
+		 xmg:send(info,'\n typing classes'),
 		 check_types(OUDecls,Classes,Type_Decls) )
 	),
 	
@@ -105,12 +105,12 @@ xmg:unfold(mg:value(token(_,id(ID))),value(ID)):-!.
 check_types(OUDecls,Classes,Type_Decls):-
     %% the type_mg_decls actually has to be done in any case,
     %% it is important for the principles
+        %% the following line is commmented because it makes the whole thing crash
         %%xmg:send(debug,'\n typing decls'),
 	%%xmg_brick_mg_typer:type_mg_decls(OUDecls,Type_Decls),!,
-
-	xmg:send(debug,'\n typing classes'),
 	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
-	xmg:send(info,'\n typed\n'),
+	%% The following line is commented because it prints "./lists.yap " instead of what it should! 
+	%%xmg:send(info,'\n Typed[2]'),
 	!.
 
 unfold_vars(none,[]):-!.
