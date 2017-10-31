@@ -31,8 +31,11 @@ new_name(Name):--
 	atomic_concat(['X',N],Name).
 
 prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)):--  
-	lists:remove_duplicates(Syn,SynD),
-	%%print_nodes(SynD),
+        %% remove_duplicates works differently in the last versions of yap
+	%%lists:remove_duplicates(Syn,SynD),
+        SynD=Syn,
+	
+        %%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableInv),
 	

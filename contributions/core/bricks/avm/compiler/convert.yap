@@ -37,6 +37,10 @@ xmlFeats([H|T],[H1|T1]):--
 
 xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
 	var(V),
+        not(attvar(V)),
+		    xmg:send(info,'\nHERE AVM CONVERT'),
+		    xmg:send(info,V),
+
 	xmg:convert_new_name('@V',V),
 	!.
 %% xmlFeat(A-V,elem(f,features([name-A,varname-V]))):--
