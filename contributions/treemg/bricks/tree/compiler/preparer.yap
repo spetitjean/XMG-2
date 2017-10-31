@@ -33,7 +33,8 @@ new_name(Name):--
 prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(OutPlugins),TableInvF,NodeList)):--  
         %% remove_duplicates works differently in the last versions of yap
 	%%lists:remove_duplicates(Syn,SynD),
-        SynD=Syn,
+        remove_node_duplicates(Syn,Syn,SynD),
+        %%SynD=Syn,
 	
         %%print_nodes(SynD),
 	xmg_table:table_new(TableIn),
@@ -82,6 +83,20 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	inverse_table(TableList,TableInv,TableInvF),
 	!.
 
+remove_node_duplicates([],_,[]).
+remove_node_duplicates([Node|T],Syn,H1):-
+    is_node(Node),
+    node_in(Node,T),!,
+    xmg:send(debug,'\nRemoving one duplicate node: '),
+    xmg:send(debug,Node),
+    remove_node_duplicates(T,T,H1),!.
+remove_node_duplicates([H|T],Syn,[H|T1]):-
+    remove_node_duplicates(T,Syn,T1),!.
+
+node_in(node(_,_,N),[node(_,_,N1)|_]):-
+    N==N1,!.
+node_in(Node,[_|T]):-
+    node_in(Node,T),!.
 
 is_node(node(_,_,_)).
 

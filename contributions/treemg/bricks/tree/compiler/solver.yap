@@ -30,13 +30,9 @@
 
 solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(Plugins),Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
 	!,		
-	xmg:send(info,'\nSolving: creating space\n'),
 	Space:=space,!,
-	xmg:send(info,'\nSolving: space created\n'),
 	new_nodes(NodeList,Space,Nodes),!,
-	xmg:send(info,'\nNodes created\n'),
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
-	xmg:send(info,'\nGlobal constraints done\n'),
 
 	%% Here are the threads used by the plugins:
 	%% space
