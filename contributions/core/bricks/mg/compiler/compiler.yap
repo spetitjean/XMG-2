@@ -27,7 +27,7 @@
 :-dynamic(xmg:principle/3).
 :-dynamic(unicity/1).
 :-dynamic(current/1).
-:-dynamic(debug_mode/0).
+:-dynamic(xmg:debug_mode/1).
 :-dynamic(xmg:more_mode/0).
 :-dynamic(json_output/0).
 :-dynamic(xmg:notype_mode/0).
@@ -52,7 +52,7 @@
 %debug_mode(false).
 
 debug_mode_on:-
-    asserta(debug_mode).
+    asserta(xmg:debug_mode(true)).
 
 more_mode_on:-
     asserta(xmg:more_mode).
@@ -69,11 +69,11 @@ xmg:send(I,Mess):-
 xmg:send(info,Mess):-
         print(user_error,Mess),!.
 xmg:send(debug,Mess):-
-	debug_mode,!,
+	xmg:debug_mode(true),!,
 	%%xmg:send(info,'\nDEBUG: '),
 	print(user_error,Mess),!.
 xmg:send(debug,_):-
-	not(debug_mode),!.
+	not(xmg:debug_mode(true)),!.
 xmg:send(out,Mess):-
 	print(user_output,Mess),!.
 xmg:send_nl(info):-
