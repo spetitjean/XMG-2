@@ -7,6 +7,7 @@ from xmg.compgen.reduce import reduce
 from xmg.compgen.next import next
 from xmg.compgen.accept import accept
 import time
+import re
 
 # The function _compute_graph takes time, something might be wrong with it
 
@@ -187,7 +188,22 @@ class LR1(object):
                 if rightsize==0:
                     params="[]"
                 else:
-                    params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]"
+                    params="["
+                    for j in range(1,rightsize+1):
+                        if not j==1:
+                            params=params+", "
+                        VAR="VAR__PARAM__"+str(j)
+                        RE=VAR+"\W"
+                        REC=re.compile(RE)
+                        #print("Matching "+RE+" with "+action)
+                        #print(REC.search(action))
+                        if REC.search(action):
+                            params=params+VAR
+                        else:
+                            # Here should be "_"
+                            params=params+VAR
+                    params=params+"]"
+                    #params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]"
                 lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    "+action+".\n")
                     
             i=i+1
