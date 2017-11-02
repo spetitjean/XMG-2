@@ -29,7 +29,7 @@
 
 :-edcg:weave([decls,name], [new_name/2,var_or_const/2,generate/5]).
 
-xmg:generate_instr((v(Target),avm:avm(Coord))) :--
+xmg:generate_instr((v(Target),avm:avm(_))) :--
 	decls::tget(Target,Var),
 	code::enq(xmg_brick_avm_avm:avm(Var,[])),
 	!.
@@ -61,7 +61,7 @@ xmg:avm_dot(Member-Value,List) :-
 	%%xmg:send(info,' in '),
 	%%xmg:send(info,List).
 xmg:avm_dot(Member-_,List):-
-	not(lists:member(Member-Value,List)),
+	not(lists:member(Member-_,List)),
 	xmg:send(info,'\nDid not find key '),
 	xmg:send(info,Member),
 	xmg:send(info,' in '),

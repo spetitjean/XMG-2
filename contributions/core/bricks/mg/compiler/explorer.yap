@@ -34,7 +34,7 @@ find_calls_in_classes(MG,Classes):--
 
 	xmg:find_calls_in_classes(MG) with classes([]-Classes,[]-[]),!.
 
-xmg:find_calls_in_classes(mg:mg(Decls,Classes,Values)):--
+xmg:find_calls_in_classes(mg:mg(_,Classes,_)):--
 	%%xmg:send(info,Classes),
 	xmg:find_calls_in_classes(Classes),!.
 
@@ -43,7 +43,7 @@ xmg:find_calls_in_classes([H|T]):--
 	xmg:find_calls_in_classes(H),
 	xmg:find_calls_in_classes(T),!.
 
-xmg:find_calls_in_classes(mg:class(token(_,id(Name)),Params,Imports,Exports,Decls,Stmts)):--
+xmg:find_calls_in_classes(mg:class(token(_,id(Name)),_,_,_,_,Stmts)):--
 	%%xmg:send(info,Name),
 	xmg:find_calls(Stmts) with calls([]-Calls,[]-[]),
 	classes::enq((Name,Calls)),!.

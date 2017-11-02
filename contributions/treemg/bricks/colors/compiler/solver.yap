@@ -32,7 +32,7 @@
 post(Plugin):--
     	solver::tget(space,Space),
         solver::tget(nodes,NodeList),
-        solver::tget(intvars,IntVars),
+        %%solver::tget(intvars,IntVars),
 
 	colors(Space,NodeList,Plugin).
 
@@ -43,7 +43,7 @@ colors(Space,NodeList,[Colors]):-
 
 
 
-do_cposts(_,[],[],N):- !.
+do_cposts(_,[],[],_):- !.
 
 do_cposts(Space,[Node|T],[color(red)|TC],N):-
 	post(Space,Node,isred,N),
@@ -90,7 +90,7 @@ post(Space,X,iswhite,XN):-
 	Space += cardinality(Eq,2,Nodes),
 	!.
 
-post(Space,X,isnone,XN):-
+post(Space,X,isnone,_):-
 	Eq :=: eq(X),
 	xmg_brick_tree_solver:nbNodes(Nodes),
 	Space += cardinality(Eq,2,Nodes),

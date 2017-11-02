@@ -26,7 +26,7 @@
 %% deal with the constructor 'tree'
 
 xmg:xml_convert_term(tree:tree(Tree,Family,Number), elem(tree, features([id-Name]),children([Syn1]))):--
-	lists:remove_duplicates(Sem,SemD),!,
+	%%lists:remove_duplicates(Sem,SemD),!,
  	xmg:xml_convert(Tree,Syn1),!,
 	%%xmg:send(info,Syn1),
 	%%xmg:send(info,Family),

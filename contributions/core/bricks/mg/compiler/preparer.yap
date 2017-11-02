@@ -29,15 +29,15 @@
 :- multifile(xmg:prepare_plugins/3).
 
 xmg:get_plugins(Solver,TreePlugins,OutPlugins):-
-	findall(P,xmg:principle(P,Args,Dims),Plugins),
+	findall(P,xmg:principle(P,_,_),Plugins),
 	filter_plugins(Solver,Plugins,[],TreePlugins,OutPlugins),!.
 
-filter_plugins(Solver,[],_,[],[]).
+filter_plugins(_,[],_,[],[]).
 filter_plugins(Solver,[H|T],Mem,[NH|T1],[_|T2]):-
 	xmg:is_plugin(Solver,NH,H),
 	not(lists:member(NH,Mem)),!,
 	filter_plugins(Solver,T,[NH|Mem],T1,T2).
-filter_plugins(Solver,[H|T],Mem,T1,T2):-
+filter_plugins(Solver,[_|T],Mem,T1,T2):-
 	filter_plugins(Solver,T,Mem,T1,T2),!.
 
 xmg:prepare_plugins(Syn,[],prepared([],Syn)):-- !.
@@ -57,20 +57,20 @@ xmg:prepare_plugin(Dim,Plugin,prepared(Out,ODim)):--
 	Get=..[get_instances,I],
 	DoGet=..[':',Module,Get],
 	DoGet,
-	prepare_instances(Dim,I,Module,Out,NDim),
+	prepare_instances(Dim,I,Module,Out,_),
 	%% xmg:send(info,'\nDONE: '),
 	%% xmg:send(info,prepared(Out,NDim)),
 	preparer::tget(nodes,ODim),
 	%%xmg:send(info,ODim),
 	!.
-xmg:prepare_plugin(Syn,Plugin,Out):--
+xmg:prepare_plugin(_,Plugin,_):--
 	xmg:send(info,'\nUnknown plugin:'),
 	xmg:send(info,Plugin),
 	false,
 	!.
 
 prepare_instances(Dim,[],_,[],Dim):--!.
-prepare_instances(Dim,[I|T],Module,[P|TP],NDim):--
+prepare_instances(_,[I|T],Module,[P|TP],NDim):--
 	preparer::get(In),
         %% cannot use the threads properly here, so give them explicitely
         Prepare=..[prepare,I,P,In,Out],
@@ -78,5 +78,5 @@ prepare_instances(Dim,[I|T],Module,[P|TP],NDim):--
 	DoPrepare,
 	preparer::set(Out),
 	
-	prepare_instances(IDim,T,Module,TP,NDim),!.
+	prepare_instances(_,T,Module,TP,NDim),!.
     

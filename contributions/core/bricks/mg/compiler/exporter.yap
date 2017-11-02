@@ -105,7 +105,7 @@ imports_before([mg:iclass(token(_,id(Class)),_,_)|T],Acc):-
 imports_before(none,_):-!.
 imports_before(some(mg:import(I)),Acc):-
 	imports_before(I,Acc),!.
-imports_before(I,Acc):-
+imports_before(_,_):-
 	%% xmg:send(debug,'\n\nDo not know what to do with import: '),
 	%% xmg:send(debug,I),
 	%% xmg:send(debug,Acc),
@@ -121,35 +121,35 @@ calls_before([Call|T],Acc):-
 	calls_before(T,Acc).
 
 
-whatsWrong([],Acc):-!.
-whatsWrong([mg:class(token(_,id(Class)),_,I,_,_,_)|T],Acc):-
+whatsWrong([],_):-!.
+whatsWrong([mg:class(token(_,id(_)),_,I,_,_,_)|T],Acc):-
     %%xmg_brick_mg_compiler:send(info,' in class '),xmg_brick_mg_compiler:send(info,Class),xmg_brick_mg_compiler:send(info,'\n'),
     whichImport(I,Acc),!,
 	whatsWrong(T,Acc).
 
-whichImport(none,Acc):-
+whichImport(none,_):-
     !.
 whichImport(some(mg:import(I)),Acc):-
     whichImport(I,Acc),!.
-whichImport([],Acc):-
+whichImport([],_):-
 	!.
-whichImport([mg:iclass(token(Coord,id(H)),_,_)|T],Acc):-
+whichImport([mg:iclass(token(_,id(H)),_,_)|T],Acc):-
 	lists:member(H,Acc),!,
 	whichImport(T,Acc).
-whichImport([mg:iclass(token(Coord,id(H)),_,_)|T],Acc):-
+whichImport([mg:iclass(token(Coord,id(H)),_,_)|_],_):-
     throw(xmg(exporter_error(failed_import(H,Coord)))).
 
 
-whatsWrongCalls([],Acc):-!.
+whatsWrongCalls([],_):-!.
 whatsWrongCalls([(Class,Calls)|T],Acc):-
     whichCall(Class,Calls,Acc),
     whatsWrongCalls(T,Acc).
 
-whichCall(Class,[],Acc):-!.
+whichCall(_,[],_):-!.
 whichCall(Class,[H|T],Acc):-
     lists:member(H,Acc),!,
 	whichCall(Class,T,Acc).
-whichCall(Class,[Call|T],Acc):-
+whichCall(Class,[Call|_],_):-
     throw(xmg(exporter_error(failed_call(Call,Class)))).
 
 %% Export variables
@@ -222,7 +222,7 @@ untype_part(Decl,_):-
 
 
 add_vars(Exps,[],Exps).
-add_vars(Exps,[id(H,C)|T],T1):-
+add_vars(Exps,[id(H,_)|T],T1):-
 	lists:member(id(H,_)-_,Exps),!,
 	add_vars(Exps,T,T1).
 add_vars(Exps,[H|T],[H-_|T1]):-
@@ -240,8 +240,8 @@ add_vars_no_duplicates(Exps,[id(H,C)|T],T1):-
 add_vars_no_duplicates(Exps,[H|T],[H-_|T1]):-
 	add_vars_no_duplicates(Exps,T,T1).
 
-imports_exports([],E,D,[]).
-imports_exports([import(id(I,C),P,AS)|TI],E,D,Exps):-
+imports_exports([],_,_,[]).
+imports_exports([import(id(I,C),_,AS)|TI],E,D,Exps):-
 	( 
 	   import_exports(I,Exps1)
 	;
@@ -260,14 +260,14 @@ imports_exports([import(id(I,C),P,AS)|TI],E,D,Exps):-
 replace_as(Exps,none,Exps):- !.
 replace_as(Exps,some(List),NExps):- 
 	replace_as(Exps,List,NExps),!.
-replace_as(Exps,[],[]).
+replace_as(_,[],[]).
 replace_as(Exps,[mg:ias(value:var(token(C,id(H))),none)|T],[id(H,C)-Var|T1]):-
 	%%xmg:send(info,'HERE NONE'),
 	lists:member(id(H,_)-Var,Exps),!,
 	replace_as(Exps,T,T1),!.
-replace_as(Exps,[mg:ias(value:var(token(C,id(H))),value:var(token(_,id(H2))))|T],[id(H2,C)-Var|T1]):-
-	%%xmg:send(info,'HERE VAR'),
-	replace_as(Exps,T,T1),!.
+%% replace_as(Exps,[mg:ias(value:var(token(C,id(H))),value:var(token(_,id(H2))))|T],[id(H2,C)-H|T1]):-
+%% 	%%xmg:send(info,'HERE VAR'),
+%% 	replace_as(Exps,T,T1),!.
 
 import_exports(I,Exp):-
 	exports(I,Exp).

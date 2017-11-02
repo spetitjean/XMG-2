@@ -31,7 +31,7 @@ xmg:find_calls(control:or(S1,S2)):--
 	xmg:find_calls(S1),
 	xmg:find_calls(S2),!.
 
-xmg:find_calls(control:stmt(S1,S2)):--
+xmg:find_calls(control:stmt(S1,_)):--
 	%%xmg:send(info,S1),
 	xmg:find_calls(S1),!.
 
@@ -40,11 +40,11 @@ xmg:find_calls(control:eq(E1,E2)):--
 	xmg:find_calls(E2),
 	!.
 
-xmg:find_calls(control:dot(E1,E2)):--
+xmg:find_calls(control:dot(E1,_)):--
 	xmg:find_calls(E1),
 	!.
 
-xmg:find_calls(control:call(token(_,id(Class)),Params)):--!,
+xmg:find_calls(control:call(token(_,id(Class)),_)):--!,
 	calls::enq(Class),
 	!.
 

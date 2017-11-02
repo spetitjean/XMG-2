@@ -29,14 +29,14 @@ xmg:type_expr(value:var(token(C,id(ID))),Type):--
 	     types::tget(ID,Type1),
              xmg:check_types(Type,Type1,C),
         !.
-xmg:type_expr(value:var(token(C,id(ID))),Type):--
+xmg:type_expr(value:var(token(C,id(ID))),_):--
              throw(xmg(generator_error(unknown_variable(ID,C)))).
 
 xmg:type_expr(value:const(token(C,id(ID))),Type):--
 	     types::tget(ID,Type1),
              xmg:check_types(Type,Type1,C),
         !.
-xmg:type_expr(value:const(token(C,id(ID))),Type):--
+xmg:type_expr(value:const(token(C,id(ID))),_):--
         throw(xmg(generator_error(unknown_constant(ID,C)))).
 
 
@@ -85,11 +85,11 @@ xmg:type_expr(token(C,id(ID)),Type):--
 
 
 xmg:type_expr(token(C,id(ID)),Type):--
-	type_decls::tget(const(ID),T),!,
+	type_decls::tget(const(ID),_),!,
 	throw(xmg(type_error(incompatible_types(ID,Type,C)))),
 	!.
 
-xmg:type_expr(token(C,id(ID)),Type):--
+xmg:type_expr(token(C,id(ID)),_):--
 	throw(xmg(type_error(unknown_constant(ID,C)))),
 	!.
 
@@ -100,7 +100,7 @@ xmg:type_expr(token(C,id(ID)),Type):--
 type_disj([Value],Type):--
 	 xmg:type_expr(Value,Type),!.
 type_disj([Value|Values],Type):--
-	 xmg:type_expr(Values,Type),
+	 xmg:type_expr(Value,Type),
          type_disj(Values,Type),
 	 !.
 
@@ -108,7 +108,7 @@ type_disj([Value|Values],Type):--
 %% typing an intersection of cavm
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xmg:type_expr(value:inter(token(C1,id(ID1)),token(C2,id(ID2))),Type):--
+xmg:type_expr(value:inter(token(_,id(ID1)),token(_,id(ID2))),Type):--
 	     types::tget(ID1,Type1),
 	     types::tget(ID2,Type2),
 	     xmg_brick_avm_avm:cavm(Type1,CAVM1),

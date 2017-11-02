@@ -404,9 +404,10 @@ tokenize_file(Path, Tokens, Encoding) :--
 %%=============================================================================
 
 tokenize(  file(Path  ), Tokens)           :- !, tokenize_file(Path, Tokens, utf8).
-tokenize(  file(Path  ), Tokens, Encoding) :- !, tokenize_file(Path, Tokens, Encoding).
-tokenize(string(String), Tokens)           :- !, tokenize_string('<string>', String, Tokens, utf8).
-tokenize(string(String), Tokens, Encoding) :- !, tokenize_string('<string>', String, Tokens, Encoding).
+tokenize(  string(String), Tokens)           :- !, tokenize_string('<string>', String, Tokens, utf8).
 tokenize(       Path   , Tokens)           :- atom(Path), !, tokenize(file(Path), Tokens, utf8).
-tokenize(       Path   , Tokens, Encoding) :- atom(Path), !, tokenize(file(Path), Tokens, Encoding).
 tokenize(       String , Tokens)           :- !, tokenize(string(String), Tokens).
+
+tokenize(  file(Path  ), Tokens, Encoding) :- !, tokenize_file(Path, Tokens, Encoding).
+tokenize(  string(String), Tokens, Encoding) :- !, tokenize_string('<string>', String, Tokens, Encoding).
+tokenize(       Path   , Tokens, Encoding) :- atom(Path), !, tokenize(file(Path), Tokens, Encoding).

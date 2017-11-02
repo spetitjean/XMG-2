@@ -63,7 +63,7 @@ xmg:generate_instrs([]):-- !.
 xmg:generate_instrs([H|T]):--
 	xmg:generate_instr(H),
 	xmg:generate_instrs(T),!.
-xmg:generate_instrs([H|T]):--
+xmg:generate_instrs([H|_]):--
 	throw(xmg(generator_error(unknown_instruction(H)))).
 
 generate(mg(_,Classes,Values)):-
@@ -140,16 +140,16 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 	Trace=..['::',xmg_acc:trace,Put],
 
 	%% add Debug info
-	Debug=(xmg:send(info,Class),xmg:send(info,'\n'),xmg:send(info,IGenerated),xmg:send(info,'\n\n')),
+	%%Debug=(xmg:send(info,Class),xmg:send(info,'\n'),xmg:send(info,IGenerated),xmg:send(info,'\n\n')),
 	%% Debug=(xmg:send(info,Class),xmg:send(info,'\n\n')),
 
-	DebugEnd=(xmg:send(info,Class),xmg:send(info,' executed \n'),xmg:send(info,'\n\n')),
+	%%DebugEnd=(xmg:send(info,Class),xmg:send(info,' executed \n'),xmg:send(info,'\n\n')),
 
 	Gen=..[',',Trace,IGenerated],
 
-	GenDebug=..[',',Debug,Gen],
+	%%GenDebug=..[',',Debug,Gen],
 
-	GenDebugEnd=..[',',GenDebug,DebugEnd],
+	%%GenDebugEnd=..[',',GenDebug,DebugEnd],
 
 	%%xmg:send(info,IGenerated),
 
@@ -193,7 +193,7 @@ generate_values([value(Value)|T]):-
     xmg:is_class(Value),
 	asserta(xmg:value(Value)),
 	generate_values(T).
-generate_values([value(Value)|T]):-
+generate_values([value(Value)|_]):-
     %% Value part
     not(xmg:is_class(Value)),
     throw(xmg(generator_error(class_not_defined(Value)))).
@@ -201,7 +201,7 @@ generate_values([value(Value)|T]):-
 
 
 import_calls([],_,true):--!.
-import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
+import_calls([import(id(Class,_),P,AS)|T],List,ICalls):--
 	xmg_brick_mg_exporter:exports(Class,E),
         do_unify_exports(E,List,AS,Exports),
         get_params(P,List,UP),
@@ -213,7 +213,7 @@ import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
 	Gen=ICall,
 	import_calls(T,List,T1),
 	ICalls=..[',',Gen,T1],!.
-import_calls([H|T],List,ICalls):--
+import_calls([H|_],_,_):--
 	throw(xmg(generator_error(cannot_call(H)))),!.
 
 do_unify_exports(E,List,none,Exports):--
@@ -222,28 +222,28 @@ do_unify_exports(E,List,AS,Exports):--
 	unify_exports_as(E,List,AS,Exports),!.
 
 unify_exports([],_,[]):-- !.
-unify_exports([id(ID,C)-_|T],List,[ID-V|T1]):--
+unify_exports([id(ID,_)-_|T],List,[ID-V|T1]):--
 	decls::tget(ID,V),
 	%%lists:member(id(ID,_)-V,List),
 	unify_exports(T,List,T1),!.
 
 unify_exports_as([],_,_,[]):-- !.
-unify_exports_as([id(A,C)-_|T],List,AS,[A-VA|T1]):--
+unify_exports_as([id(A,_)-_|T],List,AS,[A-VA|T1]):--
 	lists:member(v(A)-none,AS),!,
 	%%xmg:send(info,'\nAS none'),
 	decls::tget(A,VA),	
 	unify_exports_as(T,List,AS,T1),!.
-unify_exports_as([id(A,C)-_|T],List,AS,[A-VA|T1]):--
+unify_exports_as([id(A,_)-_|T],List,AS,[A-VA|T1]):--
 	lists:member(v(A)-v(B),AS),!,
 	%%xmg:send(info,'\nAS value'),
 	decls::tget(B,VA),
 	unify_exports_as(T,List,AS,T1),!.
-unify_exports_as([id(A,C)-_|T],List,AS,[A-_|T1]):--
+unify_exports_as([id(A,_)-_|T],List,AS,[A-_|T1]):--
 	unify_exports_as(T,List,AS,T1),!.
 
 
 list_exports([],_,[]):-- !.
-list_exports([id(ID,C)-_|T],List,[ID-V|T1]):--
+list_exports([id(ID,_)-_|T],List,[ID-V|T1]):--
 	decls::tget(ID,V),
 	%lists:member(id(ID,_)-V,List),
 	list_exports(T,List,T1),!.
@@ -261,7 +261,7 @@ get_params([id(ID,_)|T],List,[ID|T1]):--
 callDims([],[]):-!.
 callDims([iface-IFace|T],[IFace,_|T1]):-
 	callDims(T,T1),!.
-callDims([Dim-CDim|T],[_-CDim,[]-[]|T1]):-
+callDims([_-CDim|T],[_-CDim,[]-[]|T1]):-
 	callDims(T,T1),!.
 
 
@@ -270,28 +270,28 @@ var_or_const(Var,NVar):--
 	new_name(Name,'xmgvar'),
 	Var=id(Name,no_coord),
 	decls::tput(Name,NVar),!.
-var_or_const(id(A,C),Var):--
+var_or_const(id(A,_),Var):--
 	decls::tget(A,Var),!.
-var_or_const(id(A,C),const(A,T)):--
+var_or_const(id(A,_),const(A,T)):--
 	xmg_brick_mg_typer:type(T,TD),
 	lists:member(id(A,_),TD),
 	!.
-var_or_const(id(A,C),feat(A)):--
+var_or_const(id(A,_),feat(A)):--
 	xmg_brick_mg_typer:feat(A,_),!.
-var_or_const(id(A,C),field(A)):--
+var_or_const(id(A,_),field(A)):--
 	xmg_brick_mg_typer:field(A,_),!.
 
 
-var_or_const(id(A,C),var(B)):--
+var_or_const(id(A,C),var(_)):--
 	throw(xmg(generator_error(variable_not_declared(A,C)))),!.
 var_or_const(id(A,C),const(A,unknown)):--
 	throw(xmg(generator_error(unknown_constant(A,C)))),!.
 var_or_const(id(A,C),const(A,unknown)):--
 	throw(xmg(generator_error(unknown_identifier(A,C)))),!.
 
-var_or_const(string(A,C),const(A,string)):-- !.
-var_or_const(int(A,C),const(A,int)):-- !.
-var_or_const(bool(A,C),const(A,bool)):-- !.
+var_or_const(string(A,_),const(A,string)):-- !.
+var_or_const(int(A,_),const(A,int)):-- !.
+var_or_const(bool(A,_),const(A,bool)):-- !.
 
 %% put_in_table([]):-- !.
 %% put_in_table([id(A,_)-B|T]):--

@@ -34,7 +34,7 @@ post([Ranks]):--
         solver::tget(nodes,NodeList),
         solver::tget(intvars,IntVars),
 
-	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
+	ranks(Space,NodeList,IntVars,Ranks,_),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-
     rposts(Space,NodeList,Ranks,1,RankList),!,
@@ -52,7 +52,7 @@ ranks(Space,NodeList,IntVars,Ranks,RankRels):-
 
 rposts(_,[],[],_,[]):- !.
 
-rposts(Space,[Node|T],[rank(none)|TC],N,T1):-
+rposts(Space,[_|T],[rank(none)|TC],N,T1):-
 	M is N+1,
 	rposts(Space,T,TC,M,T1),!.
 
@@ -61,43 +61,43 @@ rposts(Space,[Node|T],[rank(Rank)|TC],N,[Rank-rank(Node,N)|T1]):-
 	M is N+1,
 	rposts(Space,T,TC,M,T1),!.
 
-do_rposts(Space,[],_,[],IntVars):-
+do_rposts(_,[],_,[],_):-
 	!.
-do_rposts(Space,[_],_,[],IntVars):-
+do_rposts(_,[_],_,[],_):-
 	!.
-do_rposts(Space,[H,H1|T],[],Rels,IntVars):-
+do_rposts(Space,[_,H1|T],[],Rels,IntVars):-
 	do_rposts(Space,[H1|T],T,Rels,IntVars),!.
-do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
+do_rposts(Space,[R1-rank(X,N1)|T],[_-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
 	assert_node(X),
 	assert_node(Y),
 
-	EqX       :=: eq(X),      
-	UpX       :=: up(X) ,     
-	DownX     :=: down(X),    
-	LeftX     :=: left(X),    
-	RightX    :=: right(X),   
-	EqDownX   :=: eqdown(X),   
-	EqUpX     :=: equp(X),    
-	SideX     :=: side(X),    
-	ChildrenX :=: children(X), 
+	%%EqX       :=: eq(X),      
+	%%UpX       :=: up(X) ,     
+	%%DownX     :=: down(X),    
+	%%LeftX     :=: left(X),    
+	%%RightX    :=: right(X),   
+	%%EqDownX   :=: eqdown(X),   
+	%%EqUpX     :=: equp(X),    
+	%%SideX     :=: side(X),    
+	%%ChildrenX :=: children(X), 
 	ParentX   :=: parent(X),   
-	UpCardX   :=: upcard(X),   
-	IsRootX   :=: isroot(X),
-	RbX       :=: rb(X),
+	%%UpCardX   :=: upcard(X),   
+	%%IsRootX   :=: isroot(X),
+	%%RbX       :=: rb(X),
 
-	EqY       :=: eq(Y),      
-	UpY       :=: up(Y) ,     
-	DownY     :=: down(Y),    
-	LeftY     :=: left(Y),    
-	RightY    :=: right(Y),   
-	EqDownY   :=: eqdown(Y),   
-	EqUpY     :=: equp(Y),    
-	SideY     :=: side(Y),    
-	ChildrenY :=: children(Y), 
+	%%EqY       :=: eq(Y),      
+	%%UpY       :=: up(Y) ,     
+	%%DownY     :=: down(Y),    
+	%%LeftY     :=: left(Y),    
+	%%RightY    :=: right(Y),   
+	%%EqDownY   :=: eqdown(Y),   
+	%%EqUpY     :=: equp(Y),    
+	%%SideY     :=: side(Y),    
+	%%ChildrenY :=: children(Y), 
 	ParentY   :=: parent(Y),   
-	UpCardY   :=: upcard(Y),   
-	IsRootY   :=: isroot(Y),
-	RbY       :=: rb(Y),
+	%%UpCardY   :=: upcard(Y),   
+	%%IsRootY   :=: isroot(Y),
+	%%RbY       :=: rb(Y),
 
 	Rel1 := boolvar(Space),
 	Rel2 := boolvar(Space),

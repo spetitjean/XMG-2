@@ -94,7 +94,7 @@ avm_dot(X,F,V) :-
      -> V=VV
      ;  rb_insert(T,F,V,TT),
 	put_atts(X, avmfeats(TT,C))),!.
-avm_dot(X,F,V):-
+avm_dot(_,F,_):-
     xmg:send(debug,'\nDot error: no value for attribute '),
     xmg:send(debug,F),
     false.
@@ -102,7 +102,7 @@ avm_dot(X,F,V):-
 
 cavm_dot(cavm(T),F,V) :-        %% should signal an error if not applicable
     rb_lookup(F,V,T).
-cavm_dot(cavm(X),F,V):-
+cavm_dot(cavm(_),F,_):-
     xmg:send(debug,'\nDot error: no value for attribute '),
     xmg:send(debug,F),
     false.
@@ -144,7 +144,7 @@ print_avm(I,AVM,_):-!,
     xmg:send(I,AVM),!.
 
 
-print_inside(I,[],_):- !.
+print_inside(_,[],_):- !.
 print_inside(I,[A-V|T],N):-
     xmg:send(I,'\n'),
     indent(I,N),

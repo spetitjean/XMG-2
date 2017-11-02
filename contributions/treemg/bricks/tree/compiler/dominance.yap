@@ -21,7 +21,7 @@ init_node(Node,Space,N,I) :-
 	Empty := intset([]),
 	Full := intset(1,N),
 	FullVar := setvar(Space,Full,Full),
-	EmptyVar := setvar(Space,Empty,Empty),
+	%%EmptyVar := setvar(Space,Empty,Empty),
 	[Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,RB] := setvars(Space,11,Empty,Full),
 	M is N-1,
 	UpCard := intvar(Space,0,M),
@@ -380,12 +380,12 @@ node_parent_rel(Space,X,Y,ParentorNot,IParentorNot):-
 	RightX    :=: right(X),   
 	EqDownX   :=: eqdown(X),   
 	EqUpX     :=: equp(X),    
-	SideX     :=: side(X),    
+	%%SideX     :=: side(X),    
 	ChildrenX :=: children(X), 
 	ParentX   :=: parent(X),   
-	UpCardX   :=: upcard(X),   
-	IsRootX   :=: isroot(X),
-	RbX       :=: rb(X),
+	%%UpCardX   :=: upcard(X),   
+	%%IsRootX   :=: isroot(X),
+	%%RbX       :=: rb(X),
 
 	EqY       :=: eq(Y),      
 	UpY       :=: up(Y) ,     
@@ -394,12 +394,12 @@ node_parent_rel(Space,X,Y,ParentorNot,IParentorNot):-
 	RightY    :=: right(Y),   
 	EqDownY   :=: eqdown(Y),   
 	EqUpY     :=: equp(Y),    
-	SideY     :=: side(Y),    
+	%%SideY     :=: side(Y),    
 	ChildrenY :=: children(Y), 
 	ParentY   :=: parent(Y),   
-	UpCardY   :=: upcard(Y),   
-	IsRootY   :=: isroot(Y),
-	RbY       :=: rb(Y),
+	%%UpCardY   :=: upcard(Y),   
+	%%IsRootY   :=: isroot(Y),
+	%%RbY       :=: rb(Y),
 
 
 	%%Space += linear([ParentorNot,IParentorNot],'IRT_LQ',1),
@@ -503,8 +503,8 @@ global_rels(Space,[N|Nodes],IntVars1,IntVars2):-
 	node_rels(Space,[N|Nodes],Nodes,IntVars1,IntVars2),
 	!.
 
-node_rels(Space,[],_,[],[]):-!.
-node_rels(Space,[H],_,[],[]):-!.
+node_rels(_,[],_,[],[]):-!.
+node_rels(_,[_],_,[],[]):-!.
 node_rels(Space,[_,H|T],[],I,J):-
 	node_rels(Space,[H|T],T,I,J).
 node_rels(Space,[Node1|T1],[Node2|T2],[H|T],[HH,HHH|TP]):-

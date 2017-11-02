@@ -87,7 +87,7 @@ printElem(H, I) :-
 	print('>\n'),!
 	.
 
-printElem(H,I) :-
+printElem(H,_) :-
     	throw(xmg(printer_error(cannot_print(H)))).
 
 printFeatures([]):-!.

@@ -64,12 +64,12 @@ xmg:unfold_dimstmt(Syn,syn:dom(token(_,Op),N1,N2)):--
 	%%xmg:new_target_var(T2),
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((syn:dom(T1,Op,T2,C),Syn)),
+	constraints::enq((syn:dom(T1,Op,T2,_),Syn)),
 	!.
 xmg:unfold_dimstmt(Syn,syn:prec(token(_,Op),N1,N2)):-- 
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((syn:prec(T1,Op,T2,C),Syn)),
+	constraints::enq((syn:prec(T1,Op,T2,_),Syn)),
 	!.
 
 xmg:unfold_dimstmt(Syn,syn:notdom(token(_,Op),N1,N2)):-- 
@@ -77,12 +77,12 @@ xmg:unfold_dimstmt(Syn,syn:notdom(token(_,Op),N1,N2)):--
 	%%xmg:new_target_var(T2),
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((syn:notdom(T1,Op,T2,C),Syn)),
+	constraints::enq((syn:notdom(T1,Op,T2,_),Syn)),
 	!.
 xmg:unfold_dimstmt(Syn,syn:notprec(token(_,Op),N1,N2)):-- 
 	xmg:unfold_expr(N1,T1),
 	xmg:unfold_expr(N2,T2),
-	constraints::enq((syn:notprec(T1,Op,T2,C),Syn)),
+	constraints::enq((syn:notprec(T1,Op,T2,_),Syn)),
 	!.
 
 
@@ -109,9 +109,9 @@ unfold_children(Syn,URoot,syn:children(Child,Brothers),UChild):--
 unfold_child(Syn,URoot,syn:child(Op,Child),UChild):--
 	unfold_treeDomOp(Op,UOp),
 	unfold_node_or_tree(Syn,Child,UChild),
-	constraints::enq((syn:dom(URoot,UOp,UChild,C),Syn)),
+	constraints::enq((syn:dom(URoot,UOp,UChild,_),Syn)),
 	!.
-unfold_child(Syn,URoot,Child,UChild):--
+unfold_child(_,_,Child,_):--
 	xmg:send(info,'\n\nCould not unfold Child:\n'),
 	xmg:send(info,Child),
 	xmg:send(info,'\n\n'),
@@ -119,13 +119,13 @@ unfold_child(Syn,URoot,Child,UChild):--
 	!.
 
 	
-unfold_brothers(Syn,URoot,UChild,none):-- !.
+unfold_brothers(_,_,_,none):-- !.
 unfold_brothers(Syn,URoot,UChild,brothers(Op,Children)):--
 	unfold_treePrecOp(Op,UOp),
 	%%xmg:send(info,'\n\n'),
 	%%xmg:send(info,Children),
 	unfold_children(Syn,URoot,Children,UChild1),
-	constraints::enq((syn:prec(UChild,UOp,UChild1,C),Syn)),
+	constraints::enq((syn:prec(UChild,UOp,UChild1,_),Syn)),
 	!.
 
 unfold_node_or_tree(Syn,NodeOrTree,UNodeOrTree):--

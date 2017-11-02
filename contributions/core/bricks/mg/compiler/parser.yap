@@ -124,16 +124,16 @@ buildAction(PreAction,Left,Id,RId):--
 
 	
 
-makeBody(PreAction,Left,[]):-- !.
+makeBody(_,_,[]):-- !.
 makeBody(PreAction,Left,[H|T]):--
 	ref_or_not(PreAction,Left,H,RH),
 	makeBody(PreAction,Left,T),
 	stack2::push(RH),!.
 
-ref_or_not(PreAction,Left,get('left'),Left):-!.
-ref_or_not(PreAction,Left,get(Ref),Elt):-
+ref_or_not(_,Left,get('left'),Left):-!.
+ref_or_not(PreAction,_,get(Ref),Elt):-
 	lists:nth(Ref,PreAction,Elt),!.
-ref_or_not(PreAction,Left,put(Put),Put):-!.
+ref_or_not(_,_,put(Put),Put):-!.
 	
 
 
@@ -145,13 +145,13 @@ pop2N([H1,H2|T],N,[H1,H2|T1],L):-
 	M is N-1,
 	pop2N(T,M,T1,L),
 	!.
-pop2N([H1,H2|T],N,[H3,H4|T1],L):-
+pop2N([_,_|T],N,[_,_|T1],L):-
 	M is N-1,
 	pop2N(T,M,T1,L),
 	!.
 
 
-tokArgs(token(Coord,Token),Tok,Args):-
+tokArgs(token(_,Token),Tok,Args):-
 	Token=..[Tok|Args],!.
 
 
@@ -160,22 +160,22 @@ tokArgs(token(Coord,Token),Tok,Args):-
 %% 	write(Token),nl,write(State),
 %% 	lastError([error(State,_,_)|_],_),!,fail.
 
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
+parse_sem([State|_],[Token|_]):--
+	tokArgs(Token,Tok,_),
 	%%xmg_brick_mg_compiler:send(info,Token),
 	generated_parser:action(State,Tok,'accept'),!.
 
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
-	generated_parser:action(State,Tok,'reduce',NRule),
-	generated_parser:action(State,Tok,'shift',NState),
+parse_sem([State|_],[Token|_]):--
+	tokArgs(Token,Tok,_),
+	generated_parser:action(State,Tok,'reduce',_),
+	generated_parser:action(State,Tok,'shift',_),
 	xmg_brick_mg_compiler:send(debug,'\nreduce/shift confict on token '),
 	xmg_brick_mg_compiler:send(debug,Token),
 
 	false,!.
 
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
+parse_sem([State|_],[Token|_]):--
+	tokArgs(Token,Tok,_),
 	generated_parser:action(State,Tok,'reduce',NRule),
 	generated_parser:action(State,Tok,'reduce',NRule1),
 	not(NRule=NRule1),
@@ -184,8 +184,8 @@ parse_sem([State|States],[Token|Tokens]):--
 
 	false,!.
 
-parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
+parse_sem([State|_],[Token|_]):--
+	tokArgs(Token,Tok,_),
 	generated_parser:action(State,Tok,'shift',NState),
 	generated_parser:action(State,Tok,'shift',NState1),
 	not(NState=NState1),
@@ -200,7 +200,7 @@ parse_sem([State|States],[Token|Tokens]):--
 	
 
 parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
+	tokArgs(Token,Tok,_),
 
 	generated_parser:action(State,Tok,'reduce',NRule),
 
@@ -209,18 +209,18 @@ parse_sem([State|States],[Token|Tokens]):--
 	%% REDUCE
 	generated_parser:rule(NRule,Left,RightSize),
 
-	pop2N([State|States],RightSize,Pop,Stack),
+	pop2N([State|States],RightSize,_,Stack),
 	Stack=[Top|_],
 	generated_parser:next(Top,Left,Next),
 	%%generated_parser:ruleAction(NRule,Action),
 	%%xmg_brick_mg_compiler:send(info,RightSize), 
 	preAction(RightSize) with stack2([],PreAction),
 	%%xmg_brick_mg_compiler:send(info,PreAction), 
-	makeAction(PreAction,OneLeft,NRule),
+	makeAction(PreAction,_,NRule),
 	parse_sem([Next,Left|Stack],[Token|Tokens]).
 
 parse_sem([State|States],[Token|Tokens]):--
-	tokArgs(Token,Tok,Args),
+	tokArgs(Token,Tok,_),
 	
 	generated_parser:action(State,Tok,'shift',NState),
 
@@ -238,10 +238,10 @@ parse_sem([State|States],[Token|Tokens]):--
 
 
 
-parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
+parse_sem([_|_],[token(coord(_,_,_),_)|_]):--
 	%% error is before last
 	steps::get(Steps),
-	lastError(Err,StepE),
+	lastError(_,StepE),
 	%%errors::top(error(Err,StepE)),
 	Steps < StepE,
 	%% xmg:send(info,'\n\nstep n°'),
@@ -255,7 +255,7 @@ parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
 	),
 	fail.
 
-parse_sem([State|States],[token(Coord,Token)|Tokens]):--
+parse_sem([State|_],[token(Coord,_)|_]):--
 	steps::get(Step),
 	lastError(LastE,StepE),!,
 	%%errors::top(error(LastE,StepE)),!,
@@ -306,7 +306,7 @@ throw_error([H|T],Expected,_,_):-
 parse_sem(States,Tokens,Sem):--
 	asserta(lastError([none],0)),
 	parse_sem(States,Tokens) with (stack([],Sem), steps(_)),!.
-parse_sem(States,Tokens,Sem):--
+parse_sem(_,_,_):--
 	throw_errors,!.
 
 parse_file(File,Sem):--
@@ -318,12 +318,12 @@ parse_file(File,Sem):--
 	xmg_brick_mg_compiler:send(debug,'\n'),
 	remove_coords(Tokens,Toks),
 	%%xmg_brick_mg_compiler:send(debug,Toks),
-	parse_sem([0],Toks,Sem) with errors(Errors,[error(error(none,none,none),0)]),!.
+	parse_sem([0],Toks,Sem) with errors(_,[error(error(none,none,none),0)]),!.
 
 remove_coords([coord(A,B,C)],[token(coord(A,B,C),'(EOF)')]):- !.
 remove_coords([Token],[token(coord(0,0,end),'(EOF)')]):-
 	xmg_brick_mg_compiler:send(debug,Token),!.
-remove_coords([coord(A1,B1,C1),coord(A,B,C)|T],T1):-
+remove_coords([coord(_,_,_),coord(A,B,C)|T],T1):-
 	%xmg_brick_mg_compiler:send(info,H),
 	remove_coords([coord(A,B,C)|T],T1),!.
 remove_coords([coord(A,B,C),Token|T],[token(coord(A,B,C),Token)|T1]):- 

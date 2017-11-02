@@ -33,7 +33,7 @@ get_instances(I):-
     xmg:requires(I).
 
 
-prepare((feat(F1,V1,_),feat(F2,V2,_)), (L1,L2)) :--
+prepare((feat(F1,V1,_),feat(F2,V2,_)), (L1,_)) :--
     preparer::tget(nodes,Nodes),
     include(node_with_prop_or_featq(F1-V1), Nodes, L1),
     (L1=[] -> true

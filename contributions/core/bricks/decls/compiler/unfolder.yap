@@ -29,7 +29,7 @@ sort_decls([H|T],[Head-Found|Sorted]):-
 	find(Head,[H|T],Found,Rest),
 	sort_decls(Rest,Sorted),!.
 
-find(Head,[],[],[]):- !.
+find(_,[],[],[]):- !.
 find(Head,[H|T],[H|T1],Rest):-
 	H=..[Head|_],!,
 	find(Head,T,T1,Rest),!.
@@ -40,7 +40,7 @@ find(Head,[H|T],T1,[H|Rest]):-
 xmg:unfold(decls:type(token(_,id(UType)),label),type(UType,label)):-!.
 xmg:unfold(decls:type(token(_,id(UType)),TypeDef),type(UType,UTypeDef)):-	
 	unfold_typedef(TypeDef,UTypeDef),!.
-xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),Rename),property(UProp,UPropType,none)):-!.
+xmg:unfold(decls:property(token(_,id(UProp)),token(_,id(UPropType)),_),property(UProp,UPropType,none)):-!.
 xmg:unfold(decls:principle(Pr,Args,Dims),principle(UPr,UArgs,UDims)):-
 	unfold_id_or_constr(Pr,UPr),
 	%%xmg:send(info,Args),
@@ -70,15 +70,15 @@ unfold_args([],[]):- !.
 unfold_args([H|T],[H1|T1]):-
 	unfold_arg(H,H1),
 	unfold_args(T,T1),!.
-unfold_args([H|T],_):-
+unfold_args([H|_],_):-
 	xmg:send(info,'\nUnknown principle arg: '),
 	xmg:send(info,H),
 	false,!.
 
 unfold_arg(token(_,id(V)),V):-!.
 unfold_arg(decls:principle_type(token(_,id(P1))),type(P1)):-!.
-unfold_arg(decls:eq(token(C,id(Prop)),token(C1,int(Int))),eq(Prop,Int)):-!.
-unfold_arg(decls:eq(token(C,id(Prop)),token(C1,id(Prop2))),eq(Prop,Prop2)):-!.
+unfold_arg(decls:eq(token(_,id(Prop)),token(_,int(Int))),eq(Prop,Int)):-!.
+unfold_arg(decls:eq(token(_,id(Prop)),token(_,id(Prop2))),eq(Prop,Prop2)):-!.
 unfold_arg(token(_,dimtype(Brick,Type)),modtype(Brick,Type)):-!.
 
 

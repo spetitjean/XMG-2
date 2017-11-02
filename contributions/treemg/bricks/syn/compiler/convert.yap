@@ -72,9 +72,9 @@ xmg:xml_convert_term(syn:props(Props),props(NName,N,XMLMark)):--
 	xmlMark(Props,XMLMark),!.
 
 xmlMark([],'std'):-!.
-xmlMark([mark-'flex'|T],'lex'):-!.
+xmlMark([mark-'flex'|_],'lex'):-!.
 
-xmlMark([mark-Prop|T],Prop):-!.
+xmlMark([mark-Prop|_],Prop):-!.
 
 xmlMark([_-_|T],Props):-
 	xmlMark(T,Props),!.
@@ -83,14 +83,14 @@ xmlName([],Name,N):-
 	xmg_brick_syn_nodename:nodename(N,Name),
 	!.
 
-xmlName([name-Prop|T],Prop,_):-!.
+xmlName([name-Prop|_],Prop,_):-!.
 
 xmlName([_-_|T],Props,N):-
 	xmlName(T,Props,N),!.
 
 xmlBound([],'none'):-!.
 
-xmlBound([bound-Prop|T],Bound):-
+xmlBound([bound-Prop|_],Bound):-
 	xmg_brick_syn_most:most(Prop,Bound),
 	!.
 
@@ -101,7 +101,7 @@ xmlBound([_-_|T],Props):-
 %% Convert descriptions (nodes and relations)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xmg:xml_convert_term(syn:desc(Syn,Family,Number),elem(syntactic_desc,children(Syn1))):--
+xmg:xml_convert_term(syn:desc(Syn,_,_),elem(syntactic_desc,children(Syn1))):--
 	handle_most(Syn,SynH),!,
 	lists:remove_duplicates(SynH,SynD),!,
 	xmlSyn(SynD) with (nodes([]-A,[]-[]), dominances([]-B,[]-[]), precedences([]-C,[]-[]), arities([]-D,[]-[])),!,
@@ -126,7 +126,7 @@ xmlSyn1(node(PropAVM,FeatAVM,N)):--
 
 	xmlBound(Props,XMLBound),
 	xmlMark(Props,XMLType),
-	clean_props(Props,CProps),
+	%%clean_props(Props,CProps),
 	%% fs const is var
 	(
 	    var(CAVM)->
@@ -197,18 +197,19 @@ xmlSyn1(dom(A,'->*',C,AVM)):--
     ),!.
 
 
-xmlSyn1(dom(A,'-L>',C,AVM)):--
+xmlSyn1(dom(A,'-L>',C,_)):--
 	!,
 	A=node(_,_,A1),
 	C=node(_,_,C1),
-	xmg_brick_syn_nodename:nodename(A1,A1Name),
-	xmg_brick_syn_nodename:nodename(C1,C1Name),!.
-xmlSyn1(dom(A,'-R>',C,AVM)):--
+	xmg_brick_syn_nodename:nodename(A1,_),
+	xmg_brick_syn_nodename:nodename(C1,_),!.
+xmlSyn1(dom(A,'-R>',C,_)):--
 	!,
 	A=node(_,_,A1),
 	C=node(_,_,C1),
-	xmg_brick_syn_nodename:nodename(A1,A1Name),
-	xmg_brick_syn_nodename:nodename(C1,C1Name),!.
+	xmg_brick_syn_nodename:nodename(A1,_),
+	xmg_brick_syn_nodename:nodename(C1,_),
+	!.
 
 %% For precedences
 xmlSyn1(prec(A,'>>',C,_)):--

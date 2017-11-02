@@ -25,16 +25,16 @@
 :-edcg:using([xmg_brick_mg_typer:types]).
 
 
-xmg:stmt_type(sem,Dim,sem):-!.
+xmg:stmt_type(sem,_,sem):-!.
 
 
-xmg:type_stmt(sem:pred(L,P,Args),S):--
-	     xmg:type_expr(L,TL),
-             xmg:type_expr(P,TP),
-	     xmg:type_expr(sem:args(Args),TArgs),
+xmg:type_stmt(sem:pred(L,P,Args),_):--
+	     xmg:type_expr(L,_),
+             xmg:type_expr(P,_),
+	     xmg:type_expr(sem:args(Args),_),
 	     !.
 
-xmg:type_stmt(sem:scopeOver,S):--
+xmg:type_stmt(sem:scopeOver,_):--
 	     !.
 
 xmg:type_expr(sem:args([]),[]):--!.

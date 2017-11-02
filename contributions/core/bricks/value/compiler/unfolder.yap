@@ -27,14 +27,14 @@
 
 	
 
-xmg:unfold_expr(token(C,int(Int)),c(Int)):--
+xmg:unfold_expr(token(_,int(Int)),c(Int)):--
 	!.
-xmg:unfold_expr(token(C,bool(Bool)),c(Bool)):--
+xmg:unfold_expr(token(_,bool(Bool)),c(Bool)):--
 	       !.
-xmg:unfold_expr(token(C,string(String)),c(string(String))):--
+xmg:unfold_expr(token(_,string(String)),c(string(String))):--
 	!.
-xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
-	       vars::tget(ID,G),!.
+xmg:unfold_expr(value:var(token(_,id(ID))),v(ID)):--
+	       vars::tget(ID,_),!.
 xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
 	xmg:send(info,'\n\nVariable was not declared: '),
         xmg:send(info,ID),
@@ -42,10 +42,10 @@ xmg:unfold_expr(value:var(token(C,id(ID))),v(ID)):--
 	xmg:send(info,C),
 	halt,!.
 
-xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
-	       consts::tget(ID,G),!.
-xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
-	       vars::tget(ID,sconst(G)),!.
+xmg:unfold_expr(value:const(token(_,id(ID))),c(ID)):--
+	       consts::tget(ID,_),!.
+xmg:unfold_expr(value:const(token(_,id(ID))),c(ID)):--
+	       vars::tget(ID,sconst(_)),!.
 xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	xmg:send(info,'\n\nVariable or constant was not declared: '),
         xmg:send(info,ID),
@@ -54,9 +54,9 @@ xmg:unfold_expr(value:const(token(C,id(ID))),c(ID)):--
 	halt,!.
 
 
-xmg:unfold_expr(token(C,id(ID)),v(ID)):--
-	       vars::tget(ID,G),!.
-xmg:unfold_expr(token(C,id(ID)),c(ID)):--
+xmg:unfold_expr(token(_,id(ID)),v(ID)):--
+	       vars::tget(ID,_),!.
+xmg:unfold_expr(token(_,id(ID)),c(ID)):--
                !.
 
 

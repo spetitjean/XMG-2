@@ -28,7 +28,7 @@
 
 get_instances([rank]).
 
-prepare(I, Out) :--
+prepare(_, Out) :--
     preparer::tget(nodes,Nodes),
     maplist(prepare_one, Nodes, Out),
     !.

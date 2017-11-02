@@ -27,4 +27,4 @@
 %% there is nothing to do because if there should be a failure, it already
 %% occurred in the preparer.
 
-post(Requires):-- !.
+post(_):-- !.

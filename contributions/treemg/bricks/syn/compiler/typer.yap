@@ -46,7 +46,7 @@ xmg:type_stmt(syn:node(ID,Props,Feats),Syn:tree(FType,PType)):--
 	Type=Syn:node(Syn:tree(FType,PType)),
 	!.
 
-xmg:type_stmt(syn:dom(Dom,N1,N2),Syn:tree(FType,PType)):--
+xmg:type_stmt(syn:dom(_,N1,N2),Syn:tree(FType,PType)):--
 	%%xmg:get_var_type(N1,T1),
 	xmg:type_expr(N1,T1),
 	T1=Syn:node(Syn:tree(FType,PType)),
@@ -60,7 +60,7 @@ xmg:type_stmt(syn:notdom(Dom,N1,N2),Type):--
 	xmg:type_stmt(syn:dom(Dom,N1,N2),Type),
 	!.
 
-xmg:type_stmt(syn:prec(Prec,N1,N2),Syn:tree(FType,PType)):--
+xmg:type_stmt(syn:prec(_,N1,N2),Syn:tree(FType,PType)):--
 	%%xmg:get_var_type(N1,T1),
 	xmg:type_expr(N1,T1),
 	T1=Syn:node(Syn:tree(FType,PType)),
@@ -87,7 +87,7 @@ xmg:type_stmt(syn:children(Tree,brothers(_,Brothers)),Type):--
 	xmg:type_stmt(Brothers,Type),
 	!.
 
-xmg:type_stmt(syn:child(Op,Tree),Type):--
+xmg:type_stmt(syn:child(_,Tree),Type):--
 	xmg:type_stmt(Tree,Type),
 	!.
 

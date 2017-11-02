@@ -55,7 +55,7 @@
 
 :-edcg:weave([free],[new_free/2]).
 
-xmg:check_types(T1,T2,Coord):-
+xmg:check_types(T1,T2,_):-
     xmg:send(debug,'Checking types'),
     T1=T2,!.
 xmg:check_types(T1,T2,Coord):- 
@@ -98,12 +98,12 @@ type_metagrammar(MG):-
 do_type_classes(Classes,Type_Decls):--
 	xmg_table:table_new(TableIn),
 	xmg_table:table_new(TableDimIn),
-	type_classes(Classes) with (global_context(TableIn,TableOut),dim_types(TableDimIn,TableDimOut),type_decls(Type_Decls,_)).
+	type_classes(Classes) with (global_context(TableIn,_),dim_types(TableDimIn,_),type_decls(Type_Decls,_)).
 
 
 type_classes([]):--
 	!.
-type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
+type_classes([mg:class(token(_,id(N)),P,I,_,_,S)|T]):--
 	!,
 	xmg:send(debug,N),
 	global_context::get(GContext),
@@ -205,7 +205,7 @@ make_params_global([value:var_or_const(token(_,id(A)))|T]):--
 	types::tget(A,Type),
 	exports::tput(A,Type),
 	make_params_global(T),!.
-make_params_global([A|T]):--
+make_params_global([A|_]):--
 	xmg:send(info,'\nNo type for:'),
 	xmg:send(info,A),
 	halt,!.
@@ -221,16 +221,16 @@ unify_imports([I|T]):--
 unify_import(mg:iclass(token(_,id(A)),_,none)):--
 	%%global_context::tget(A,Exports),
 	types::tget(class(A),(Params,CAVM)),
-	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
-	xmg_brick_mg_exporter:exports(N,List),
+	xmg:do_forall((Params,CAVM),(_,FACAVM)),
+	xmg_brick_mg_exporter:exports(_,List),
 	%%xmg:send(info,List),
 	import_exports(List,FACAVM).
-unify_import(mg:iclass(token(_,id(A)),_,AS)):--
+unify_import(mg:iclass(token(_,id(A)),_,_)):--
 	%% TODO: something about the AS
 	%%global_context::tget(A,Exports),
 	types::tget(class(A),(Params,CAVM)),
-	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
-	xmg_brick_mg_exporter:exports(N,List),
+	xmg:do_forall((Params,CAVM),(_,FACAVM)),
+	xmg_brick_mg_exporter:exports(_,List),
 	import_exports(List,FACAVM).
 
 xmg:do_forall((Params,cavm(Vars)),(NParams,NVars)):--
@@ -262,22 +262,22 @@ new_free([V-H|T],[V-H|T1]):--
 	new_free(T,T1),
 	!.
 %% with lists
-new_free([H|T],[V-F|T1]):--
+new_free([H|T],[_-F|T1]):--
 	free::tget(H,F),!,
 	xmg:send(debug,'\nBINDING NEW VAR'),
 	new_free(T,T1),!.
-new_free([H|T],[V-F|T1]):--
+new_free([H|T],[_-F|T1]):--
 	var(H),
 	not(attvar(H)),
 	xmg:send(debug,'\nCREATING NEW VAR'),
 	free::tput(H,F),
 	new_free(T,T1),!.
-new_free([H|T],[V-H|T1]):--
+new_free([H|T],[_-H|T1]):--
 	new_free(T,T1),
 	!.	
 
 
-import_exports([],CAVM):-- !.
+import_exports([],_):-- !.
 import_exports([H|T],CAVM):--
 	import_export(H,CAVM),
 	import_exports(T,CAVM).
@@ -347,7 +347,7 @@ type_only_principles([H|T]):--
 
 type_decl_if_principle(principle-P):--
 		      type_decl(principle-P),!.
-type_decl_if_principle(_-P):--
+type_decl_if_principle(_-_):--
 		      !.
 
 
@@ -367,7 +367,7 @@ type_decl(ftypes-[ftypes(Decls)]):--
 	 xmg_brick_hierarchy_typer:remove_ftypes(Decls,NDecls),
 	 assert_consts(NDecls,hierarchy:ftype),
 	 xmg_brick_hierarchy_typer:get_ftypes(Decls),
-	 xmg_brick_hierarchy_typer:assert_types(Types),
+	 xmg_brick_hierarchy_typer:assert_types(_),
 	 !.
 type_decl(fconstraints-[fconstraints(Decls)]):--
 	 xmg_brick_hierarchy_typer:get_fconstraints(Decls),
@@ -390,7 +390,7 @@ type_decl(fields-fields(field-Fields,fieldprec-FieldPrecs)):--
 	type_fields(OFields,1),
 	!.
 type_decl(none-_):--!.
-type_decl(Type-Decls):--
+type_decl(Type-_):--
 	xmg_brick_mg_compiler:send(info,'  unknown decl type: '),
 	xmg_brick_mg_compiler:send(info,Type),
 	halt,!.
@@ -404,7 +404,7 @@ get_type(type(Type,enum(List))):--
 	assert_type(type(Type,Type)),
 	assert_consts(List,Type).
 get_type(type(Type,range(Inf,Sup))):--
-	get_range(Inf,Sup,Range),
+	get_range(Inf,Sup,_),
 	assert_type(type(Type,int)).
 get_type(type(Type,label)):--
 	assert_type(type(Type,_)),!.
@@ -539,7 +539,7 @@ assert_field_precs([fieldprec(id(F1,_),id(F2,_))|T]):-
 prepare_fields([],[]):- !.
 prepare_fields([field(id(ID,_))|T],[ID|PT]):-
 	prepare_fields(T,PT),!.
-prepare_fields([U|T],[ID|PT]):-
+prepare_fields([U|_],[_|_]):-
 	xmg_brick_mg_compiler:send(info,'UNEXPECTED '),
 	xmg_brick_mg_compiler:send(info,U),halt,!.
 
@@ -553,7 +553,7 @@ order_fields(Fields,First,[First|OFields]):-
 	lists:delete(Fields,First,NFields),
 	fieldprec(First,Next),!,
 	order_fields(NFields,Next,OFields),!.
-order_fields(Fields,First,[First|OFields]):- !,
+order_fields(_,First,[First|_]):- !,
 	xmg_brick_mg_compiler:send(info,'\nCould not order fields, nothing seems to follow '),
 	xmg_brick_mg_compiler:send(info,First),
 	halt,!.
@@ -565,7 +565,7 @@ find_first([],_):- !,
 find_first([F1|T],F2):-
 	fieldprec(_,F1),!,
 	find_first(T,F2),!.
-find_first([F1|T],F1):- !.
+find_first([F1|_],F1):- !.
 
 
 type_fields([],_).

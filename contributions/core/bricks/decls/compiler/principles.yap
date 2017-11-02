@@ -35,7 +35,7 @@ principles(mg(Decls,_,_)):-
 	!.
 
 assert_principles(_,[]):-!.
-assert_principles(Principles,[principle(H,Dims)|T]):-
+assert_principles(Principles,[principle(H,_)|T]):-
     assert_principle(Principles,H),
     assert_principles(Principles,T),!.
 
@@ -73,7 +73,7 @@ assert_principle(_,Principle):-
 
 get_principles([],[]):- !.
 get_principles([principle-Principles|_],Principles):-!.
-get_principles([H|T],Principles):-
+get_principles([_|T],Principles):-
 	get_principles(T,Principles),!.
 
 %% unicities([],[]):- !.
@@ -110,7 +110,7 @@ filter(Principle,[principle(Principle,[eq(ID1,ID2)],Dim)|T],[feat(ID1,ID2,Dim)|T
 filter(Principle,[principle(Principle,[type(ID1)],Dim)|T],[feat(ID1,'+',Dim)|T1]):-
 	filter(Principle,T,T1),!.
 %% two clauses used by e.g. requires and precedes
-filter(Principle,[principle(Principle,[eq(ID1,ID2),eq(ID3,ID4)],Dim)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
+filter(Principle,[principle(Principle,[eq(ID1,ID2),eq(ID3,ID4)],_)|T],[(feat(ID1,ID2,_),feat(ID3,ID4,_))|T1]):-
 	filter(Principle,T,T1),!.
 filter(Principle,[H|T],T1):- 
 	xmg:send(debug,H),
@@ -123,7 +123,7 @@ list_principles([principle(P,_,Dim)|T],Seen,[Pr|T1]):-
 	Pr=principle(P,Dim),
 	not(lists:member(Pr,Seen)),!,
 	list_principles(T,[Pr|Seen],T1).
-list_principles([H|T],Seen,T1):-
+list_principles([_|T],Seen,T1):-
 	list_principles(T,Seen,T1),!.
 
 get_val(id(ID,_),ID):- !.

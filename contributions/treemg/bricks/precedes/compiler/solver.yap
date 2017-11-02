@@ -83,14 +83,14 @@ rpost_do3(N1, N2, ONodeList, NodeList, Space, IntVars) :-
     %%assert_node(N2),
     %%xmg_brick_tree_solver:get_number(NodeList, N2,Num2),
     %%xmg:send(info,hstep(more,Num1,Num2)),
-    xmg_brick_tree_solver:do_post(Space,IntVars,IntPVars,NodeList,hstep(more,Num1,Num2)),
+    xmg_brick_tree_solver:do_post(Space,IntVars,_,NodeList,hstep(more,Num1,Num2)),
     %%xmg_brick_tree_solver:get_rel(Num1,Num2,IntVars,RelVar),
     %%Space += dom(RelVar, 4),
     !.
 
 
-get_node(node(_,F,N),[Num-node(_,F1,N1)|_],Num):-
+get_node(node(_,_,N),[Num-node(_,_,N1)|_],Num):-
     N==N1,!.
-get_node(node(_,F,N),[Num-node(_,F1,N1)|T],M):-
+get_node(node(_,F,N),[_-node(_,_,N1)|T],M):-
     not(N==N1),
     get_node(node(_,F,N),T,M),!.

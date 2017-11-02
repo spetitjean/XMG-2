@@ -24,12 +24,13 @@ do_post(Space, IntVars, ONodeList, NodeList, (Node1, Rel, Node2)) :-
     get_node(Node1, ONodeList, Num1),
     get_node(Node2, ONodeList, Num2),
     rel_to_step(Num1, Rel, Num2, Step),
-    xmg_brick_tree_solver:do_post(Space,IntVars,IntPVars,NodeList,hstep(more,Num1,Num2)),
+    %%xmg_brick_tree_solver:do_post(Space,IntVars,_,NodeList,hstep(more,Num1,Num2)),
+    xmg_brick_tree_solver:do_post(Space,IntVars,_,NodeList,Step),
     !.
 
-get_node(node(_,F,N),[Num-node(_,F1,N1)|_],Num):-
+get_node(node(_,_,N),[Num-node(_,_,N1)|_],Num):-
     N==N1,!.
-get_node(node(_,F,N),[Num-node(_,F1,N1)|T],M):-
+get_node(node(_,F,N),[_-node(_,_,N1)|T],M):-
     not(N==N1),
     get_node(node(_,F,N),T,M),!.
 

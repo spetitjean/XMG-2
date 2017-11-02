@@ -63,7 +63,7 @@ xmg:unfold([],[]):- !.
 xmg:unfold([H|T],[H1|T1]):-
 	xmg:unfold(H,H1),
 	xmg:unfold(T,T1),!.
-xmg:unfold([H|T],[H1|T1]):-
+xmg:unfold([H|_],[_|_]):-
     throw(xmg(unfolder_error(no_unfolding(H)))).
 
 
@@ -102,7 +102,7 @@ xmg:unfold(mg:class(token(Coord,id(N)),P,I,E,D,S),class(N,UP,UI,UE,UD,built(Cons
 xmg:unfold(mg:value(token(_,id(ID))),value(ID)):-!.
 
 
-check_types(OUDecls,Classes,Type_Decls):-
+check_types(_,Classes,Type_Decls):-
     %% the type_mg_decls actually has to be done in any case,
     %% it is important for the principles
         %% the following line is commmented because it makes the whole thing crash

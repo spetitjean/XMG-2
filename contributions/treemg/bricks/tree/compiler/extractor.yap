@@ -91,7 +91,7 @@ children_eqs([C|T],[Leqs|L],Eqs):-
 	remove_children(Leqs,T,T1),
 	children_eqs(T1,L,Eqs),!.
 
-search_in_eqs(C,[H|T],H):-
+search_in_eqs(C,[H|_],H):-
 	lists:member(C,H),!.
 search_in_eqs(C,[_|T],Eq):-
 	search_in_eqs(C,T,Eq),!.
@@ -126,7 +126,7 @@ fusion([H|T],[H1|T1],[H1-H|T2]):-
 
 
 
-unify_in_trees([],[],NodeList):- !.
+unify_in_trees([],[],_):- !.
 unify_in_trees([H],[H1], NodeList):-
 	unify_in_tree(H,H1,NodeList),!.
 unify_in_trees([H|T],[H1|T1], NodeList):-
@@ -142,7 +142,7 @@ unify_in_tree(A,A1,NodeList):-
 unify_node([NNode],node(P,F,N),NodeList):-
 	xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),
 	!.
-unify_node([N1],node(P2,F2,NN2),NodeList):-
+unify_node([_],node(_,_,_),_):-
 	%% get_node(N1,NodeList,node(P1,F1,NN1)),!,
 	%% xmg_nodename:nodename(NN1,Name1),
 	%% xmg_nodename:nodename(NN2,Name2),
@@ -173,8 +173,8 @@ unify_node([NNode|T],node(P,F,N),NodeList):-
 	xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),!,
 	unify_node(T,node(P,F,N),NodeList),
 	!.
-unify_node([N1|T],node(P2,F2,NN2),NodeList):-
-	 xmg_brick_tree_solver:get_node(N1,NodeList,node(P1,F1,NN1)),!,
+unify_node([N1|_],node(P2,_,_),NodeList):-
+	 xmg_brick_tree_solver:get_node(N1,NodeList,node(P1,_,_)),!,
 	 xmg_brick_avm_avm:avm(P1,PP1),
 	 xmg_brick_avm_avm:avm(P2,PP2),
 	

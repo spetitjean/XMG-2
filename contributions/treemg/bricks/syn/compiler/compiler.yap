@@ -20,11 +20,11 @@
 :-module(xmg_brick_syn_compiler).
 
 xmg:eval(syn,[tree],Syn,XML,Class):-
-    xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
+    xmg_brick_tree_compiler:eval(Syn,_,XML,Class).
 xmg:eval(syn,[rrg],Syn,XML,Class):-
-	xmg_brick_rrg_compiler:eval(Syn,Solvers,XML,Class).
+	xmg_brick_rrg_compiler:eval(Syn,_,XML,Class).
 xmg:eval(syn,[],Syn,XML,Class):-
-	xmg_brick_syn_compiler:eval(Syn,Solvers,XML,Class).
+	xmg_brick_syn_compiler:eval(Syn,_,XML,Class).
 
 %% %% TAG compiler
 %% eval(Syn,[tree],XML,Class):-

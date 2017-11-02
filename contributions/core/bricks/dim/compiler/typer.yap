@@ -34,7 +34,7 @@ xmg:stmt_type(Brick,Dim,Params,Type):--
 	Type=..[':',Dim,DimType],!.
 
 %% in case there is no type constructor (like in iface)
-xmg:stmt_type(Brick,Dim,Params,Type):--
+xmg:stmt_type(_,_,Params,Type):--
 	xmg:send(debug,Params),
 	get_types(Params,[Type]),!.
 

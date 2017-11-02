@@ -69,7 +69,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
 
-	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,FNodes),
+	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,_),
 
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
@@ -84,7 +84,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	!.
 
 remove_node_duplicates([],_,[]).
-remove_node_duplicates([Node|T],Syn,H1):-
+remove_node_duplicates([Node|T],_,H1):-
     is_node(Node),
     node_in(Node,T),!,
     xmg:send(debug,'\nRemoving one duplicate node: '),
@@ -110,7 +110,7 @@ write_notunif([noteq(A,B)|T],[noteq(A1,B1)|T1],Table):--
 	write_notunif(T,T1,Table),!.
 	
 
-write_lits([],[],Table):--
+write_lits([],[],_):--
 	!.
 
 write_lits([H|T],L,Table):--
@@ -127,7 +127,7 @@ write_lits([H|T],L,Table):--
     ),
 	!.
 
-write_lit(node(PropAVM,FeatAVM,N),'none',Table):--
+write_lit(node(_,_,_),'none',_):--
 	!.
 
 write_lit(dom(node(_,_,A),'->',node(_,_,C),_),vstep(one,A2,C2),Table):--
@@ -193,7 +193,7 @@ write_lit(notprec(node(_,_,A),'>>',node(_,_,C),_),not(hstep(one,A2,C2)),Table):-
 	xmg_table:table_get(Table,C1,C2),
 	!.
 
-write_lit(synarity(node(A,_,_),node(_,_,C)),'none',Table):--
+write_lit(synarity(node(_,_,_),node(_,_,_)),'none',_):--
 	 !.
 
 write_lit(Lit,_,_):--
@@ -202,7 +202,7 @@ write_lit(Lit,_,_):--
          false,
 	 !.
 
-write_nodes([],[],[],_,Table):--
+write_nodes([],[],[],_,_):--
 	!.
 
 write_nodes([H|T],L,NodeList,N,Table):--
@@ -223,12 +223,12 @@ write_nodes([H|T],L,NodeList,N,Table):--
 	write_nodes(T,T1,NodeList1,M,Table),
 	!.
 
-write_node(node(PropAVM,FeatAVM,N),N2,Table):--
+write_node(node(_,_,N),N2,Table):--
 	xmg_brick_syn_nodename:nodename(N,N1),
 	xmg_table:table_get(Table,N1,N2),
 	!.
 
-write_node(A,'none',Table):-- !.
+write_node(_,'none',_):-- !.
 
 
 
@@ -270,7 +270,7 @@ count([prec(_,_,_,_)|T],Nodes,Doms,Precs,I,Table,TableOut):--
 	count(T,Nodes,Doms,PrecsR,I,Table,TableOut),
 	Precs is PrecsR +1,!.
 
-count([H|T],Nodes,Doms,Precs,I,Table,TableOut):--
+count([_|T],Nodes,Doms,Precs,I,Table,TableOut):--
 	count(T,Nodes,Doms,Precs,I,Table,TableOut),!.
 
 count_noteqs([],0):- !.
@@ -308,7 +308,7 @@ add_constraint(node(Props1,Feats1,_),node(Props2,Feats2,_),L,L):-
 	no_color(Props2,PropsNC2),
 	not(not(PropsNC1=PropsNC2)),
 	not(not(Feats1=Feats2)),!.
-add_constraint(node(_,Feats1,Node1),node(_,Feats2,Node2),L,[noteq(Nodename1,Nodename2)|L]):-
+add_constraint(node(_,_,Node1),node(_,_,Node2),L,[noteq(Nodename1,Nodename2)|L]):-
 
 	xmg_brick_syn_nodename:nodename(Node1,Nodename1),
 	xmg_brick_syn_nodename:nodename(Node2,Nodename2),
@@ -344,8 +344,8 @@ print_node(node(P,F,N)):-
 	xmg:send(info,node(P,F,N)),
 	xmg:send_nl(info),
 	xmg_brick_syn_nodename:nodename(N,Name),
-	xmg_brick_avm_avm:avm(P,AP),
-	xmg_brick_avm_avm:avm(F,AF),
+	xmg_brick_avm_avm:avm(P,_),
+	xmg_brick_avm_avm:avm(F,_),
 	xmg:send(info,Name),
 	xmg_brick_avm_avm:print_avm(P),
 	xmg_brick_avm_avm:print_avm(F),

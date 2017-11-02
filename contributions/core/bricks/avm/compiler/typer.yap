@@ -28,7 +28,7 @@
 :-edcg:weave([xmg_brick_mg_typer:types,xmg_brick_mg_typer:global_context,xmg_brick_mg_typer:dim_types,xmg_brick_mg_typer:type_decls],[value_type/2,type_def/2,extend_type/3]).
 
 
-xmg:type_expr(avm:avm(Coord,Feats),Type):--
+xmg:type_expr(avm:avm(_,Feats),Type):--
 	(
 	    var(Type)->
 	      xmg_brick_avm_avm:avm(Type,[])
@@ -62,7 +62,7 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	value_type(Value,TypeDef),
 	extend_type(Type,UAttr,TypeDef),
 	!.
-xmg:type_expr(avm:feat(Attr,Value),Type):--
+xmg:type_expr(avm:feat(Attr,Value),_):--
 	throw(xmg(type_error(incompatible_types(Attr,Value)))).
 
 %% when typing a structured type
@@ -143,7 +143,7 @@ feat_type(token(_,id(Feat)),Feat,_,Type):-
 feat_type(token(_,id(Feat)),Feat,_,Type):-
 	xmg:property(Feat,Type),
 	!.
-feat_type(token(C,ID),Feat,_,Type):-
+feat_type(token(C,ID),_,_,_):-
 	throw(xmg(type_error(feature_not_declared(ID,C)))).
 
 type_def(TypeAttr,TypeDef):--

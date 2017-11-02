@@ -27,14 +27,14 @@
 get_instances([color]).
 
 
-prepare(I,Out):--
+prepare(_,Out):--
     preparer::tget(nodes, Nodes),
     maplist(prepare_one, Nodes, Out),
     maplist(no_color, Nodes, NNodes),
     preparer::tput(nodes,NNodes), !.
 
 
-prepare_one(node(P,F,N), Color) :- 
+prepare_one(node(P,_,N), Color) :- 
 	xmg_brick_avm_avm:avm(P, Props),
 	%%xmg:send(info,Props),
 	xmg_brick_syn_nodename:nodename(N, NodeName),

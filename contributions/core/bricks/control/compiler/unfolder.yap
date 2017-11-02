@@ -80,7 +80,7 @@ xmg:unfold_stmt(control:call(token(_,id(Class)),Params)):--
 	constraints::enq((Target,control:call(Class,P))),
 	!.
 
-xmg:unfold_dimstmt(Dim,control:eq(E1,E2)):--
+xmg:unfold_dimstmt(_,control:eq(E1,E2)):--
 	xmg:unfold_expr(E1,V1),
 	xmg:unfold_expr(E2,V2),
 	(
@@ -91,10 +91,10 @@ xmg:unfold_dimstmt(Dim,control:eq(E1,E2)):--
 	),
 	constraints::enq(eq(V1,V2)),
 	!.
-xmg:unfold_dimstmt(Dim,control:call(token(_,id(Class)),Params)):--
+xmg:unfold_dimstmt(_,control:call(token(_,id(Class)),Params)):--
 	xmg:new_target_var(Target),
 	xmg:unfold_exprs(Params, P),
-	constraints::enq((Target,control:call(CT,P))),
+	constraints::enq((Target,control:call(Class,P))),
 	!.
 
 xmg:unfold_stmt(none):-- !.

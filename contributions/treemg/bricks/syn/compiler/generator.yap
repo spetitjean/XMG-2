@@ -93,7 +93,7 @@ new_name(Name,Prefix):--
 	name::get(Get),
 	atomic_concat([Prefix,Get],Name),!.
 
-generate_Stmt(Stmt,List,Class,VStmt,Acc):--
+generate_Stmt(Stmt,_,_,VStmt,Acc):--
 	var_Stmt(Stmt,VStmt,Acc).
 
 var_Stmt(or(S1,S2),Or,Acc):--
@@ -104,7 +104,7 @@ var_Stmt(and(S1,S2),And,Acc):--
 	var_Stmt(S1,VS1,Acc),
 	var_Stmt(S2,VS2,Acc),
 	And=..[',',VS1,VS2].
-var_Stmt(eq(Left,Right),Generated,Acc):--
+var_Stmt(eq(Left,Right),Generated,_):--
 	var_or_const(Left,GLeft),
 	var_or_const(Right,GRight),
 	Generated=..['=',GLeft,GRight],!.
@@ -113,7 +113,7 @@ var_Stmt(synnode(N,props(Props),feats(Feats),C),Generated,Acc):--
 	VNode=xmg_brick_syn_engine:inode(VN,N),
 	
 	xmg_brick_avm_generator:generate(avm,Feats,GFeats,FOut,C),
-	xmg_brick_avm_generator:generate(avm,Props,GProps,POut,C),
+	xmg_brick_avm_generator:generate(avm,Props,GProps,_,C),
 	AVMFeats=xmg_brick_avm_avm:avm(AVMF,GFeats),
 	AVMProps=xmg_brick_avm_avm:avm(AVMP,GProps),
 	VFeats=xmg_brick_syn_engine:inodefeats(VN,AVMF),
@@ -127,13 +127,13 @@ var_Stmt(synnode(N,props(Props),feats(Feats),C),Generated,Acc):--
 	add_out(Generated1,FOut,Generated0),
 	%% + POut
 	Generated=..[',',Generated0,AccNode].
-var_Stmt(syndom(Dom,N1,N2,C),Generated,Acc):--
+var_Stmt(syndom(Dom,N1,N2,_),Generated,Acc):--
 	var_or_const(N1,VN1),
 	var_or_const(N2,VN2),
 	VDom=dom(VN1,Dom,VN2,none),
 	Add=..[put,VDom],
 	Generated=..['::',xmg_brick_mg_generator:Acc,Add].
-var_Stmt(synprec(Prec,N1,N2,C),Generated,Acc):--
+var_Stmt(synprec(Prec,N1,N2,_),Generated,Acc):--
 	var_or_const(N1,VN1),
 	var_or_const(N2,VN2),
 	VPrec=prec(VN1,Prec,VN2),

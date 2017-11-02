@@ -169,8 +169,8 @@ rec_name(N,N1):-
 	rec_name(H,N1),!.
 
 extract_only_attrs([],[']']).
-extract_only_attrs([H-H1],[H,']']).
-extract_only_attrs([H-H1|T],[H,', '|T1]):-
+extract_only_attrs([H-_],[H,']']).
+extract_only_attrs([H-_|T],[H,', '|T1]):-
     extract_only_attrs(T,T1),!.
 
 
@@ -259,7 +259,7 @@ xmg_message(printer_error(cannot_print(I)),Msg):- !,
 
 %% Modules errors
 xmg_message(compiler_error(unknown_module(Module)), Msg):- !,
-	Msg=error(compiler,[hint('unknown module',Module),C]).
+	Msg=error(compiler,[hint('unknown module',Module)]).
 
 
 

@@ -40,7 +40,7 @@ xmg:print_appendix:-
 init_macros:-
 	xmg:sem_semantics(Sems),!,
 	xmg:send(info,'init macros\n'),
-	open('.more',write,S,[alias(macros)]),
+	open('.more',write,_,[alias(macros)]),
 	xmg:send(info,Sems),
 	do_macros(Sems),
 	close(macros),!.
@@ -113,7 +113,7 @@ get_externs([],[]):- !.
 get_externs([H-H1|T],[H-H1|T1]):-
 	xmg:sem_extern(H),
 	get_externs(T,T1),!.
-get_externs([H-H1|T],T1):-
+get_externs([H-_|T],T1):-
 	not(xmg:sem_extern(H)),
 	get_externs(T,T1),!.
 
@@ -128,7 +128,7 @@ write_macro_sem(Sem,Sem2):--
 
 write_macro_iface([],[]):-- !.
 
-write_macro_iface([A-value(V,P)|T],[AV|T1]):--
+write_macro_iface([A-value(V,_)|T],[AV|T1]):--
 	atom(V),
 	atom_chars(V,['?'|_]),
 	write_macro_iface(T,T1),
@@ -136,7 +136,7 @@ write_macro_iface([A-value(V,P)|T],[AV|T1]):--
 	make_couple(A,V,AV),
 	!.
 
-write_macro_iface([A-value(V,P)|T],[AV|T1]):--
+write_macro_iface([A-value(V,_)|T],[AV|T1]):--
 	(
 	(
 	    atom(V),!, Val=V,
@@ -164,12 +164,12 @@ write_macro_iface([A-value(V,P)|T],[AV|T1]):--
 	make_couple(A,Val,AV),
 	!.
 
-write_macro_iface([A-value(AVM,P)|T],T1):--
-	xmg_brick_avm_avm:avm(AVM,LAVM),
+write_macro_iface([_-value(AVM,_)|T],T1):--
+	xmg_brick_avm_avm:avm(AVM,_),
 	write_macro_iface(T,T1),!.
 
 
-write_macro_iface([A-value(V,P)|T],[AV|T1]):--
+write_macro_iface([A-value(V,_)|T],[AV|T1]):--
 	var(V),
 	new_name('?V',V),
 	%%AV=..['=',A,V],
@@ -178,7 +178,7 @@ write_macro_iface([A-value(V,P)|T],[AV|T1]):--
 
 %% this should not happen
 write_macro_iface([A-B|T],[AV|T1]):--
-	write_macro_iface([A-value(B,P)|T],[AV|T1]),!.
+	write_macro_iface([A-value(B,_)|T],[AV|T1]),!.
 
 write_sem([],''):-- !.
 

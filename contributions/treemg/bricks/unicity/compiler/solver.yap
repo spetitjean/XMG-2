@@ -36,7 +36,7 @@ post(Unicities):--
 	post_unicities(Space,NodeList,IntVars,Unicities),!.
 
 
-post_unicities(Space,Nodelist,IntVars,[]):- !.
+post_unicities(_,_,_,[]):- !.
 post_unicities(Space,NodeList,IntVars,[U1|UT]):-
 	%%xmg_compiler:send(info,' one unicity '),
 	%%xmg_compiler:send(info,U1),
@@ -44,17 +44,17 @@ post_unicities(Space,NodeList,IntVars,[U1|UT]):-
 	%%xmg_compiler:send(info,' one done '),
 	post_unicities(Space,NodeList,IntVars,UT),!.
 
-post_unicities_first(Space,[],IntVars,[],_):- !.
+post_unicities_first(_,[],_,[],_):- !.
 post_unicities_first(Space,[Node|T],IntVars,['true'|TU],I1):-
 	I2 is I1+1,
 	post_unicities_others(Space,T,TU,IntVars,Node,I1,I2),!.
-post_unicities_first(Space,[Node|T],IntVars,['false'|TU],I1):-
+post_unicities_first(Space,[_|T],IntVars,['false'|TU],I1):-
 	I2 is I1 +1,
 	post_unicities_first(Space,T,IntVars,TU,I2),!.
 
 
 
-post_unicities_others(Space,[],[],IntVars,_,_,_):- !.
+post_unicities_others(_,[],[],_,_,_,_):- !.
 post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
 	assert_node(Node),
 	assert_node(NodeU),
@@ -91,7 +91,7 @@ post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
 
 	%% post eq(Node)=eq(NodeU)
 	post_unicities_others(Space,T,TU,IntVars,NodeU,I1,I3),!.
-post_unicities_others(Space,[Node|T],[false|TU],IntVars,NodeU,I1,I2):-
+post_unicities_others(Space,[_|T],[false|TU],IntVars,NodeU,I1,I2):-
 	I3 is I2+1,
 	post_unicities_others(Space,T,TU,IntVars,NodeU,I1,I3),!.
 

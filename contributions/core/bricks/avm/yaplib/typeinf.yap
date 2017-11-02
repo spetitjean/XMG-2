@@ -116,7 +116,7 @@ typeinf(X, T, L) :-
 %% identifiers in the global context
 %% ==================================================================
 
-typeinf(X, T, L) :-
+typeinf(X, T, _) :-
     ground(X),
     global_type(X, TF), !,
     instantiate_polytype(TF, TF2), T=TF2.
@@ -177,30 +177,30 @@ instantiate_polytype(T, T).
 %% exemple
 %% ==================================================================
 
-global_cons_decl(dom,(node,node),literal).
-global_cons_decl(doms,(node,node),literal).
-global_cons_decl(domp,(node,node),literal).
-global_cons_decl(prec,(node,node),literal).
-global_cons_decl(precs,(node,node),literal).
-global_cons_decl(precp,(node,node),literal).
-global_cons_decl(new,(node,Props,Feats),literal) :-
-    global_type_plug(props, Props),
-    global_type_plug(feats, Feats).
+%% global_cons_decl(dom,(node,node),literal).
+%% global_cons_decl(doms,(node,node),literal).
+%% global_cons_decl(domp,(node,node),literal).
+%% global_cons_decl(prec,(node,node),literal).
+%% global_cons_decl(precs,(node,node),literal).
+%% global_cons_decl(precp,(node,node),literal).
+%% global_cons_decl(new,(node,Props,Feats),literal) :-
+%%     global_type_plug(props, Props),
+%%     global_type_plug(feats, Feats).
 
-%% type color = {red,black,white}
-global_type(red, color).
-global_type(black, color).
-global_type(white, color).
+%% %% type color = {red,black,white}
+%% global_type(red, color).
+%% global_type(black, color).
+%% global_type(white, color).
 
-%% type cat = {d,n,np,v,vp,s}
-global_type(d, cat).
-global_type(n, cat).
-global_type(np, cat).
-global_type(v, cat).
-global_type(vp, cat).
-global_type(s, cat).
+%% %% type cat = {d,n,np,v,vp,s}
+%% global_type(d, cat).
+%% global_type(n, cat).
+%% global_type(np, cat).
+%% global_type(v, cat).
+%% global_type(vp, cat).
+%% global_type(s, cat).
 
-global_type_plug(props, A) :-
-    avm(A, [color=color]).
-global_type_plug(feats, A) :-
-    avm(A, [cat=cat]).
+%% global_type_plug(props, A) :-
+%%     avm(A, [color=color]).
+%% global_type_plug(feats, A) :-
+%%     avm(A, [cat=cat]).
