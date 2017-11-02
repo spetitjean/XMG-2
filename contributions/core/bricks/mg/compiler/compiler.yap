@@ -72,7 +72,7 @@ xmg:send(debug,Mess):-
 	debug_mode,!,
 	%%xmg:send(info,'\nDEBUG: '),
 	print(user_error,Mess),!.
-xmg:send(debug,Mess):-
+xmg:send(debug,_):-
 	not(debug_mode),!.
 xmg:send(out,Mess):-
 	print(user_output,Mess),!.
@@ -129,7 +129,7 @@ compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
 	 halt.
 
 
-compile_file(File,Eval):-
+compile_file(File,_):-
 	xmg_compiler_conf:init,
 	%%findall(Module,xmg_modules_def:module_def(_,Module),Modules),
 	%%xmg:xmg:send(info,Modules),
@@ -249,6 +249,15 @@ eval:-
 	xmg:send_nl(info),
 	fail.
 
+eval:-
+    print_end_file,
+    xmg:send(info,'\n\n________________________________________________\n________________________________________________'),
+    xmg:send(info,'\n\n      Process ended: '),
+    current(Number),
+    xmg:send(info,Number),
+    xmg:send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
+    !.
+
 
 print_solution(JSON):-
     json_output,
@@ -263,15 +272,6 @@ iface_last([iface-I|T],T1):-
 	lists:append(T,[iface-I],T1),!.
 iface_last([H|T],[H|T1]):-
 	iface_last(T,T1),!.
-
-eval:-
-    print_end_file,
-    xmg:send(info,'\n\n________________________________________________\n________________________________________________'),
-    xmg:send(info,'\n\n      Process ended: '),
-    current(Number),
-    xmg:send(info,Number),
-    xmg:send(info,' models found.\n________________________________________________\n________________________________________________\n\n'),
-    !.
 
 print_end_file:-
     json_output,
@@ -293,9 +293,9 @@ print_closing_tag(Tag,Out):-
 
 
 eval_dims([],[],_):-!.
-eval_dims([trace-Acc|T],T1,Class):-!,
+eval_dims([trace-_|T],T1,Class):-!,
 	eval_dims(T,T1,Class).
-eval_dims([skolem-Acc|T],T1,Class):-
+eval_dims([skolem-_|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	xmg:send(debug,Dim),
@@ -332,11 +332,11 @@ fail_if_mutex([],_,_):- !.
 fail_if_mutex([Class|T],Class,Mutex):-
 	!,
 	fail_if_mutex(T,Class,Mutex),!.
-fail_if_mutex([Class|T],First,Mutex):-
+fail_if_mutex([Class|_],_,Mutex):-
 	xmg:mutex_add(Mutex,Class),!,
 	xmg:send(info,' mutex fail '),
 	%%halt.
 	fail.
-fail_if_mutex([Class|T],First,Mutex):-
+fail_if_mutex([_|T],First,Mutex):-
 	%%not(xmg:mutex_add(Mutex,Class)),!,
 	!,fail_if_mutex(T,First,Mutex),!.

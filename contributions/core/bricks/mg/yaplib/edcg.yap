@@ -376,7 +376,7 @@ expand_goal_to_pred_arity(Goal, M:T, Result) :-
 %% ============================================================================
 
 edcg_clause(H, B, (TH:-TB)) :-
-    goal_to_pred_arity__args__accs(H, MH:FH/FN, HArgs, HAccs),!,
+    goal_to_pred_arity__args__accs(H, MH:FH/_, HArgs, HAccs),!,
     new_head(MH:FH, HArgs, HAccs, HCtx, TH),
     expand_goal_(B, TB, HCtx, BCtx),
     finish_acc(BCtx).
@@ -439,7 +439,7 @@ expand_goal_((Th::[H|T]), G, Ctx1, Ctx2) :- !,
 expand_goal_((Th::Method), G, Ctx1, Ctx2) :- !,
     expand_thread(Th, M1:T1),
     edcg_info(M1:T1, thread(M2:C2)),
-    edcg_info(M2:C2, class(Methods,Init,Final)),
+    edcg_info(M2:C2, class(Methods,_,_)),
     Method=..[M|Args],
     lookup_accessor(M, Methods, Meth),
     edcg_info(Meth, method(Args, Old, New, Joiner)),
@@ -502,11 +502,11 @@ context_extend(E, Ctx1, Ctx2, N) :-
     E2=..[T2|Args],
     context_extend(M2:E2, Ctx1, Ctx2, N).
 
-context_extend_get_init(Thread,value(X),Y) :-
+context_extend_get_init(_,value(X),Y) :-
     !, (X=Y -> true; edcg_error("this should never happen (1)")).
 context_extend_get_init(Thread,no_value,_) :-
     !, edcg_error("thread requires an init value: ~w", [Thread]).
-context_extend_get_init(Thread,_,_) :-
+context_extend_get_init(_,_,_) :-
     edcg_error("this should never happen (2)").
 
 context_reduce(N, [_=(X,Y)|Ctx1], Ctx2, (X=Y,E)) :-
@@ -529,7 +529,7 @@ user:term_expansion(X,Y) :- edcg:term_expansion(X,Y).
 %% ============================================================================
 
 :- edcg:method( noop, Old, New, Old=New ).
-:- edcg:method( set(X), Old, New, New=X ).
+:- edcg:method( set(X), _, New, New=X ).
 :- edcg:method( get(X), Old, New, (X=Old, New=Old) ).
 :- edcg:method( incr, Old, New, New is Old+1 ).
 :- edcg:method( decr, Old, New, New is Old-1 ).
@@ -557,13 +557,13 @@ user:term_expansion(X,Y) :- edcg:term_expansion(X,Y).
 :- edcg:method( tdel(K), Old, New,  xmg_table:table_delete(Old,K,New) ).
 :- edcg:method( tget(K,V), Old, New, (xmg_table:table_get(Old,K,V), New=Old) ).
 
-:- edcg:method( drop, Old, New, (Old=[]) ).
+:- edcg:method( drop, Old, _, (Old=[]) ).
 
 
 :- edcg:class( value,   [set, get, put=set, noop, close=noop, value=get] ).
 :- edcg:class( counter, [set, get, incr, decr, add, sub, mul, put=set, noop, close=noop, value=get], 0 ).
 :- edcg:class( stack,   [push, pop, top, put=push, get=pop, pops=extend, empty=empty, noop, drop, close=sclose, value=get, set], [] ).
-:- edcg:class( queue,   [enq, enq_list, deq, top=topq, pop=deq, put=enq, get=deq, empty=emptyq, noop, close=qclose, value=get], H-H, Q-[] ).
+:- edcg:class( queue,   [enq, enq_list, deq, top=topq, pop=deq, put=enq, get=deq, empty=emptyq, noop, close=qclose, value=get], H-H, _-[] ).
 :- edcg:class( list,    [append, extend, put=append, noop, close=lclose, value=get, default=extend], _, [] ).
 :- edcg:class( table,   [tget, tput, tdel, get, set] ).
 
