@@ -193,15 +193,12 @@ class LR1(object):
                         if not j==1:
                             params=params+", "
                         VAR="VAR__PARAM__"+str(j)
-                        RE=VAR+"\W"
+                        RE=VAR+"(\W|\Z)"
                         REC=re.compile(RE)
-                        #print("Matching "+RE+" with "+action)
-                        #print(REC.search(action))
                         if REC.search(action):
                             params=params+VAR
                         else:
-                            # Here should be "_"
-                            params=params+VAR
+                            params=params+"_"
                     params=params+"]"
                     #params="[VAR__PARAM__"+",VAR__PARAM__".join(map(str,(range(1,rightsize+1))))+"]"
                 lines.append("ruleAction("+str(i)+",VAR__RESULT,"+params+"):-\n    "+action+".\n")
