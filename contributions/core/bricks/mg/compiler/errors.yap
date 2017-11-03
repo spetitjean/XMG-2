@@ -1,15 +1,15 @@
 %% -*- prolog -*-
 
-:- xmg:edcg.
 :- module(xmg_brick_mg_errors, []).
+
+:- xmg:edcg.
 :- use_module(library(lists)).
 :- use_module(library(charsio)).
-%%:- use_module('xmg/brick/mg/edcg.yap').
 :- use_module(library(rbtrees)).
 
 :-use_module(library(readutil)).
 
-:- multifile user:generate_message_hook/3.
+:- multifile(user:generate_message_hook/3).
 % :- source.
 
 
@@ -25,12 +25,12 @@
 
 %% message: xmg(Message)
 
-user:generate_message_hook(error(unhandled_exception,xmg(Exc))) -->
+user:generate_message_hook(error(unhandled_exception,xmg(Exc)), In, Out):--
 	xmg_message(Exc,Msg),
-	format_msg(Msg).
-user:generate_message_hook(xmg(Exc)) -->
+	format_msg(Msg) with queue([]-Out, []-In).
+user:generate_message_hook(xmg(Exc), In, Out) :--
 	xmg_message(Exc,Msg),
-	format_msg(Msg).
+        format_msg(Msg) with queue([]-Out, []-In).
 
 format_msg(Msg) -->>
 	nonvar(Msg),
