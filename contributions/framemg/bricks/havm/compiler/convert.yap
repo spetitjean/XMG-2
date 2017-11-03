@@ -23,6 +23,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 :- module(xmg_brick_havm_convert).
+:- xmg:edcg.
 
 %%:- edcg:thread(name,edcg:counter).
 

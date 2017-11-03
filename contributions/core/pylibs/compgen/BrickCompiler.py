@@ -208,6 +208,12 @@ class BrickCompiler(object):
             #tokenizefile.write('punctuation(\''+punct+'\') -->> input_gets("'+punct+'"), !.\n')
             tokenizefile.write('xmg:punctuation(\''+punct+'\').\n')
 
+        tokenizefile.write('xmg:punctuation(\'+\').\n')
+        tokenizefile.write('xmg:punctuation(\'-\').\n')
+
+        tokenizefile.write('xmg:punctuation_to_token(\'+\', bool(\'+\')).\n')
+        tokenizefile.write('xmg:punctuation_to_token(\'-\', bool(\'-\')).\n')
+
         tokenizefile.close()
         print("Part of tokenizer generated in %s/tokenizer_punct.yap"%self._folder)
 

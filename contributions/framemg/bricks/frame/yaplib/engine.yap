@@ -19,6 +19,7 @@
 
 
 :- module(xmg_brick_frame_engine,[]).
+:- xmg:edcg.
 
 :- edcg:thread(cname,edcg:counter).
 

@@ -14,9 +14,9 @@ property mark: MARK
 frame-types = {dying, kicking}
 %frame-attributes = {actor,theme,goal,mover,path,cause,effect}
 frame-constraints = { 
-	dying -> patient:+,
-	kicking -> patient:+,
-	kicking -> actor:+,
+	dying -> patient : +,
+	kicking -> patient : +,
+	kicking -> actor : +,
 	kicking dying -> -
 }
 

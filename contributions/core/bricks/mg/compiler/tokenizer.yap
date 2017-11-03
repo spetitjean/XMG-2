@@ -24,6 +24,7 @@
 %%:- use_module(library(lists)).
 
 :- multifile(xmg:punctuation/1).
+:- multifile(xmg:punctuation_to_token/2).
 :- multifile(xmg:keyword/1).
 :- xmg:edcg.
 
@@ -358,11 +359,11 @@ punctuation_to_token(A,A).
 %% DENYS!!!
 %% move this out to where it belongs
 
-xmg:punctuation('+').
-xmg:punctuation('-').
+%% xmg:punctuation('+').
+%% xmg:punctuation('-').
 
-xmg:punctuation_to_token('+', bool('+')).
-xmg:punctuation_to_token('-', bool('-')).
+%% xmg:punctuation_to_token('+', bool('+')).
+%% xmg:punctuation_to_token('-', bool('-')).
 
 %%=============================================================================
 %% read a file and return its contents as a string.
