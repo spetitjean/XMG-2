@@ -105,7 +105,7 @@ vs_to_string(coord(F,L,C)) -->> !,
 	(name(C,CC),
 	 queue::enq_list(", column "),
 	 queue::enq_list(CC)).
-vs_to_string(exprs_types(E1,T1,E2,T2))-->> 
+vs_to_string(exprs_types(E1,T1,_,T2))-->> 
 	queue::enq_list("Incompatible types: "),
 	get_first_coord(E1,C),
 	vs_to_string(C),

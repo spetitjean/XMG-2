@@ -48,8 +48,8 @@ verify_attributes(Var, Other, Goals) :-
 	    
 	    unify_entries(T2,LFinal1,T3),
 	    
-	    get_atts(Other,avmfeats(TypeC,TC,UC)),
-	    rb_visit(TC,LTC),
+	    get_atts(Other,avmfeats(TypeC,TC,_)),
+	    rb_visit(TC,_),
 	    %%xmg:send(info,'\nhas the type changed? '),
 	    %%xmg:send(info,LTC),
 	    (not(TC=T2)->(
@@ -61,7 +61,7 @@ verify_attributes(Var, Other, Goals) :-
 	    unify_types(TypeC,Type3,FinalType,_),
 	    
 
-	    put_atts(Other, avmfeats(FinalType,FinalT3,UU)),
+	    put_atts(Other, avmfeats(FinalType,FinalT3,_)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
@@ -116,7 +116,7 @@ h_avm(X, Type, L) :-
 add_feat_constraints(MT,Final):-
     xmg:send(debug,'\nStarting add_feat_constraints: '),
     xmg:send(debug,MT),
-    check_feat_constraints(MT,MT,ToApply,N),
+    check_feat_constraints(MT,MT,ToApply,_),
     xmg:send(debug,'\nToApply:'),
     xmg:send(debug,ToApply),
 
@@ -126,7 +126,7 @@ add_feat_constraints(MT,Final):-
 
 	xmg:send(debug,'\nCToApply: '),
 	xmg:send(debug,CToApply),
-	xmg_brick_avm_avm:avm(E,CToApply),
+	xmg_brick_avm_avm:avm(_,CToApply),
 
 	merge_feats(CToApply,CToApply,MToApply),
 	
@@ -149,7 +149,7 @@ check_feat_constraints(Feats,Feats,ToApply,N):-
     findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
-    OldFeats = Feats,
+    %%OldFeats = Feats,
     check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
     %%(N>0 -> (check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_)) ; true ),
     %%(OldFeats==Feats -> true ; check_feat_constraints(Feats,Feats,ToApply) ),
@@ -165,16 +165,16 @@ check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
     check_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
 check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
-    not(check_feat_constraint(H,Feats,Feats1)),!,
+    not(check_feat_constraint(H,Feats,_)),!,
     check_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
-extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
+extract_constraint(featconstraint(_,_,_,P1,P2),(_,TP1,TP2)):-
     transform_path(P1,TP1),
     transform_path(P2,TP2),!.
 
 
-check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
+check_feat_constraint(featconstraint(_,[Attr],Type,_,_),Feats,Feats):-
   
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
@@ -226,8 +226,8 @@ get_attrconstraints(Type,MCT):-
 
 	merge_feats(CT,CT,MCT),!.
 
-get_attrconstraints(Type,MCT):-
-	not(xmg:fattrconstraint(Type,C)),!.
+get_attrconstraints(Type,_):-
+	not(xmg:fattrconstraint(Type,_)),!.
 
 create_attr_types([],[]).
 create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
@@ -244,7 +244,7 @@ create_attr_types([A-(Type,V)|T],[A-V|T1]):-
 	h_avm(V,Type,[]),
 	create_attr_types(T,T1),!.
 
-merge_feats([],Feats,[]).
+merge_feats([],_,[]).
 merge_feats([A-V|T],Feats,[A-V|T1]):-
 	lists:member(A-V1,T),
 	V=V1,!,
@@ -371,7 +371,7 @@ comp_types_types([H|T],Types):-
 	comp_type_types(H,Types),
 	comp_types_types(T,Types).
 
-comp_type_types(Type,[]).
+comp_type_types(_,[]).
 comp_type_types(Type,[H|T]):-
 	comp_type_type(Type,H),
 	comp_type_types(Type,T).
@@ -410,7 +410,7 @@ reduce_set([H|T],Set,RSet):-
 %% the set can be reduced when some types are subtypes of others
 
 
-remove_supertypes(Type,[],[]).
+remove_supertypes(_,[],[]).
 remove_supertypes(Type,[H|T],T1):-
 	supertype(Type,H,H),!,
 	remove_supertypes(Type,T,T1).
@@ -475,7 +475,7 @@ print_h_avm(AVM,Indent):-
 	xmg:send(info,']\n'),
 	!.	
 
-print_feats([],I).
+print_feats([],_).
 print_feats([A-V|T],I):-
 	indent(I),
 	xmg:send(info,A),
@@ -487,7 +487,7 @@ print_feats([A-V|T],I):-
 print_value(AVM,I):-
 	J is I +2,
 	print_h_avm(AVM,J).
-print_value(V,I):-
+print_value(V,_):-
 	xmg:send(info,V),
 	xmg:send(info,'\n'),
 	!.

@@ -22,7 +22,7 @@
 solve(prepared(Frames,Doms),solution(Frames)):-
     solve_doms(Doms,Frames).
 
-solve_doms([],Frames).
+solve_doms([],_).
 solve_doms([H|T],Frames):-
     solve_dom(H,Frames),
     solve_doms(T,Frames).
@@ -50,14 +50,13 @@ solve_dom_star(F1,F2,Frames):-
     xmg:send(debug,F1),
     xmg:send(debug,FL1),
     xmg:send(debug,'\nNow unifying '),
-    xmg:send(debug,Feats),
     unify_star(F2,FL1,F21),
     F2=F21,
     xmg:send(debug,'unified \n').
 
-find_label(F1,[H|T],FL1):-
+find_label(F1,[H|_],FL1):-
     find_label_1(F1,H,FL1).
-find_label(F1,[H|T],FL1):-
+find_label(F1,[_|T],FL1):-
     find_label(F1,T,FL1).
 
 %% TODO
@@ -68,9 +67,9 @@ find_label_1(F1,Frame,Frame1):-
     xmg_brick_havm_havm:h_avm(Frame,_,List),
     find_label_in_children(F1,List,Frame1).
 
-find_label_in_children(F1,[_-H|T],H):-
+find_label_in_children(F1,[_-H|_],H):-
     F1==H.
-find_label_in_children(F1,[_-H|T],FL):-
+find_label_in_children(F1,[_-H|_],FL):-
     attvar(H),
     xmg_brick_havm_havm:h_avm(H,_,List),
     find_label_in_children(F1,List,FL).
@@ -89,15 +88,15 @@ unify_star(F2,Frame,F21):-
     xmg:send(debug,List),
     unify_in_children(F2,List,F21).
 
-unify_in_children(F2,[A-H|T],H):-
+unify_in_children(F2,[A-H|_],H):-
     not(not(F2=H)),
     xmg:send(debug,'Performed unification for child attribute \n'),
     xmg:send(debug,A).
-unify_in_children(F2,[_-H|T],F21):-
+unify_in_children(F2,[_-H|_],F21):-
     attvar(H),
     xmg_brick_havm_havm:h_avm(H,_,List),
     xmg:send(debug,List),
     unify_in_children(F2,List,F21).
-unify_in_children(F2,[_-H|T],F21):-
+unify_in_children(F2,[_-_|T],F21):-
     unify_in_children(F2,T,F21).
     

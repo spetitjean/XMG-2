@@ -42,7 +42,7 @@ xmlHFeats([A-V|T],[elem(f,features([name-A]),children([elem(sym,features([varnam
 	atom(V),
 	xmlHFeats(T,T1),!.
 
-xmlHFeats([A-const(V,Type)|T],[elem(f,features([name-A]),children([elem(sym,features([value-Val]))]))|T1]):--
+xmlHFeats([A-const(V,_)|T],[elem(f,features([name-A]),children([elem(sym,features([value-Val]))]))|T1]):--
 	(
 	    atom(V);
 	    integer(V)

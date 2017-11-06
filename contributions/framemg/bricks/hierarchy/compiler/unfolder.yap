@@ -64,9 +64,11 @@ unfold_id(token(_,id(ID)),ID).
 unfold_idsOrAttr(ids(IDS),types(UIDS)):-
 	unfold_list(IDS,UIDS),!.
 unfold_idsOrAttr(token(_,bool(+)),types([_])):-
-	unfold_list(IDS,UIDS),!.
+	%%unfold_list(IDS,UIDS),
+	!.
 unfold_idsOrAttr(token(_,bool(-)),types([false])):-
-	unfold_list(IDS,UIDS),!.
+	%%unfold_list(IDS,UIDS),
+	!.
 
 unfold_idsOrAttr(attrType(ID1,ID2),attrType(UID1,UID2)):-
 	unfold_list(ID1,UID1),

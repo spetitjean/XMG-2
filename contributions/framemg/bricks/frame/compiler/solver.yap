@@ -34,7 +34,7 @@ solve(prepared(Nodes, Edges),solution(Tree)):-
 
 
 find_root([Node],[],Node):-!.
-find_root(Nodes,[],Node):-
+find_root(Nodes,[],_):-
 	xmg_compiler:send(info,'no root found, candidates were: '),
 	print_nodes(Nodes),
 	xmg_compiler:send_nl(info,2),false,
@@ -54,9 +54,9 @@ no_root([H|T],H1,[H|T1]):-
 	no_root(T,H1,T1),!.
 
 make_tree(Root,Edges,tree([],Root,Children)):-
-	find_children(Root,Edges,Edges,Children,Labels),!.
+	find_children(Root,Edges,Edges,Children,_),!.
 
-find_children(Root,Edges,[],[],[]):-!.
+find_children(_,_,[],[],[]):-!.
 find_children(Root,Edges,[edge(N1,N2,P)|T],[tree(Label,N2,Children)|T1],Labels):-
 	Root==N1,!,
 	%% xmg_compiler:send(debug,'searching '),
@@ -66,7 +66,7 @@ find_children(Root,Edges,[edge(N1,N2,P)|T],[tree(Label,N2,Children)|T1],Labels):
 	%%xmg_compiler:send(info,P),
 	get_label(P,Label),
 	check_subtype(N1,N2),
-	find_children(N2,Edges,Edges,Children,Labels2),
+	find_children(N2,Edges,Edges,Children,_),
 	find_children(Root,Edges,T,T1,TLabels),
 	add_label(N1-Label,TLabels,Labels),!.
 find_children(Root,Edges,[_|T],T1,Labels):-
@@ -124,7 +124,7 @@ get_eq_nodes(Var,[Node|Nodes],[Node|Nodes1]):-
 	get_var(Node,Var1),
 	Var==Var1,
 	get_eq_nodes(Var,Nodes,Nodes1),!.
-get_eq_nodes(Var,[Node|Nodes],Nodes1):-
+get_eq_nodes(Var,[_|Nodes],Nodes1):-
 	var(Var),
 	get_eq_nodes(Var,Nodes,Nodes1),!.
 get_eq_nodes(none,_,[]):-!.
@@ -141,7 +141,7 @@ check_identifiability(Node1,Node2,Edges):-
 	check_incoming(Node1,Node2,Edges),
 	check_outcoming(Node1,Node2,Edges),
 	!.
-check_identifiability(Node1,Node2,Edges):-
+check_identifiability(Node1,Node2,_):-
 	xmg_compiler:send(info,'  identifiability failed  '),
 	xmg_compiler:send(info,Node1),
 	xmg_compiler:send(info,Node2),
@@ -158,7 +158,7 @@ check_outcoming(Node1,Node2,Edges):-
 	get_outcoming(Node2,Edges,Out2),
 	compatible_edges(Out1,Out2),!.
 
-get_incoming(Node,[],[]):- !.
+get_incoming(_,[],[]):- !.
 get_incoming(Node,[edge(Node1,Node,P)|T],[Node1-L|T1]):- 
 	!,
 	get_label(P,L),
@@ -166,7 +166,7 @@ get_incoming(Node,[edge(Node1,Node,P)|T],[Node1-L|T1]):-
 get_incoming(Node,[_|T],T1):- 
 	get_incoming(Node,T,T1),!.
 
-get_outcoming(Node,[],[]):- !.
+get_outcoming(_,[],[]):- !.
 get_outcoming(Node,[edge(Node,Node1,P)|T],[Node1-L|T1]):- 
 	!,
 	get_label(P,L),
@@ -186,14 +186,14 @@ check_subtype(Node1,Node2):-
 	get_type(Node1,Type1),
 	get_type(Node2,Type2),
 	xmg_typer_hierarchy:subtype(_,Type2,Type1),!.
-check_subtype(Node1,Node2):-
+check_subtype(Node1,_):-
 	get_type(Node1,none),!.
-check_subtype(Node1,Node2):-
+check_subtype(_,Node2):-
 	get_type(Node2,none),!.
 check_subtype(Node1,Node2):-
 	get_type(Node1,Type1),
 	get_type(Node2,Type2),	
-	xmg_compiler:send(info,Type2),
+	xmg_compiler:send(info,Type1),
 	xmg_compiler:send(info,' is not a subtype of '),
 	xmg_compiler:send(info,Type2),!.
 
@@ -204,8 +204,8 @@ get_type(node(A,_,_),Var):-
 get_type(_,none):-!.
 
 print_nodes([]):-!.
-print_nodes([node(A,B,C)|T]):-
-	xmg_h_avm:h_avm(A,AVMA),
+print_nodes([node(A,_,C)|T]):-
+	xmg_h_avm:h_avm(A,_),
 	%%xmg_compiler:send(info,AVMA),
 	xmg_nodename_frame:nodename(C,NC),
 	xmg_compiler:send(info,NC),

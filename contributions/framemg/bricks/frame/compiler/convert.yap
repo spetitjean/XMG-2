@@ -45,7 +45,7 @@ framesToXML([H|T],[H1|T1]):--
 	   frameToXML(H,H1),
 	   framesToXML(T,T1).
 
-frameToXML(dom(V1,Op,V2),XML ):--
+frameToXML(dom(V1,_,V2),XML ):--
 	  xmg_brick_havm_havm:const_h_avm(V1,C1),
 	  xmg_brick_havm_havm:const_h_avm(V2,C2),
 	  

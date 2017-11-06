@@ -26,8 +26,8 @@ xmg:eval(frame,[framedoms],Frame,framedoms:frame(Extracted),Class):-
 	xmg_brick_framedoms_solver:solve(Prepared,solution(Solved)),
 	xmg_brick_framedoms_extractor:extract(Solved,Extracted),
 	xmg:send(debug,' extracted '),
-	xmg:send(debug,Extracted),
-	xmg_brick_mg_compiler:current(Previous).
+	xmg:send(debug,Extracted).
+	%%xmg_brick_mg_compiler:current(Previous)
 	%%xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML)
 
 

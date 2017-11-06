@@ -37,7 +37,7 @@ remove_duplicates([H|T],T1):-
 remove_duplicates([H|T],[H|T1]):-
     remove_duplicates(T,T1),!.
 
-has_duplicate(H,[H1|T]):-
+has_duplicate(H,[H1|_]):-
     xmg_brick_havm_havm:h_avm(H,_,V),
     xmg_brick_havm_havm:h_avm(H1,_,V1),
     xmg:send(debug,V),
@@ -59,16 +59,16 @@ remove_subframes([H|T],Frames,[H|T1]):-
     not(is_subframe(H,Frames)),
     remove_subframes(T,Frames,T1),!.
 
-is_subframe(Frame,[H|T]):-
+is_subframe(Frame,[H|_]):-
     not(Frame==H),
     xmg:send(debug,'\nStarting is_subframe1 '),
     is_subframe_1(Frame,[],H),
     xmg:send(debug,'\ndone '),
     !.
-is_subframe(Frame,[H|T]):-
+is_subframe(Frame,[_|T]):-
     is_subframe(Frame,T),!.
 
-is_subframe_1(Frame,Seen,Frame1):-
+is_subframe_1(Frame,_,Frame1):-
     Frame==Frame1,!.
 is_subframe_1(Frame,Seen,Frame1):-
     attvar(Frame1),
@@ -78,14 +78,14 @@ is_subframe_1(Frame,Seen,Frame1):-
     %%is_subframe_list(Frame,Seen,List),
     !.
 
-is_subframe_list(Frame,Seen,[A-Frame1|T]):-
+is_subframe_list(Frame,Seen,[_-Frame1|_]):-
     is_subframe_1(Frame,Seen,Frame1),!.
 is_subframe_list(Frame,Seen,[_|T]):-
     is_subframe_list(Frame,Seen,T),!.
 
-seen(A,[H|T]):-
+seen(A,[H|_]):-
     A==H,!.
-seen(A,[H|T]):-
+seen(A,[_|T]):-
     seen(A,T),!.
     
 

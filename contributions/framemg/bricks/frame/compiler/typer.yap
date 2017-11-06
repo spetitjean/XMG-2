@@ -41,12 +41,12 @@ xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
              xmg_brick_havm_havm:h_avm(FType,_,HAVM),
              xmg:send(debug,HAVM),
 	     !.
-xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
+xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(_)):--
 	     xmg:type_expr(F1,Dim:frame),
 	     xmg:type_expr(F2,Dim:frame),
 	     !.
 
-xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
+xmg:type_expr(frame:frame(L,_,F),Dim:frame(FType)):--
 	     xmg:type_expr(L,Dim:frame),
              %%xmg:type_expr(T,_),
              xmg:type_expr(F,FType),
@@ -56,8 +56,8 @@ xmg:type_expr(frame:pair(token(_,id(A)),V),FType):--
 	     xmg:type_expr(V,T),
              xmg_brick_havm_havm:h_avm(FType,_,[A-T]),
 	     !.
-xmg:type_expr(frame:pair(token(C,id(A)),V),FType):--
-	     xmg:type_expr(V,T),
+xmg:type_expr(frame:pair(token(C,id(_)),V),_):--
+	     xmg:type_expr(V,_),
              xmg:send(info,'\nWarning: inconsistent types\n'),
              xmg:send(info,V),
              xmg:send(info,'\n'),

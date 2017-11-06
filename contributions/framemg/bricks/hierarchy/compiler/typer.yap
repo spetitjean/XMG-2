@@ -51,7 +51,7 @@ init_print_hierarchy:-
     	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
 
 	xmg:send(info,'init print hierarchy\n'),
-	open('.more',write,S,[alias(hierarchy)]),
+	open('.more',write,_,[alias(hierarchy)]),
 	write(hierarchy,'<type_info>\n'),
 	write(hierarchy,'  <hierarchy>\n'),
 	print_hierarchy(FTypes,FAttrs),
@@ -237,8 +237,8 @@ fTypeToVector(Type,SVector,FVector):-
         not(atom(Type)),
 	find_smaller_supertype(Type,SVector,FVector),
 	!.
-fTypeToVector(Type,SVector,FVector):-
-        not(xmg:ftypes(Types)),
+fTypeToVector(_,_,_):-
+        not(xmg:ftypes(_)),
     	throw(xmg(type_error(no_frame_type))).
 
 find_smaller_supertype(Vector,FVector,SVector):-
@@ -256,7 +256,7 @@ find_smaller_supertype_from(Vector,Vector,N):-
     xmg:fReachableType(Vector,N),!.
 %% if no constraint is defined, any type is reacheable
 find_smaller_supertype_from(Type,Type,0):-
-    not(xmg:fReachableType(Anything,Anyotherthing)),
+    not(xmg:fReachableType(_,_)),
     !.
 find_smaller_supertype_from(Vector,SVector,N):-
 	M is N +1,
@@ -268,9 +268,9 @@ find_smaller_supertype_from(Vector,_,_):-
 	xmg:send(info,Vector),false.
 
 
-typeExists(Type,Types):-
+typeExists(Type,_):-
     var(Type),!.
-typeExists(true,Types):-!.
+typeExists(true,_):-!.
 typeExists(Type,Types):-
     lists:member(Type,Types),!.
 %% Type is already a vector
@@ -309,7 +309,7 @@ fVectorToType(Vector,Type):-
     %%find_smaller_supertype_from(Vector,SVector,0),
 	xmg:send(debug,'Converting vector '),
 	xmg:send(debug,Vector),
-	xmg:send(debug,SVector),
+	%%xmg:send(debug,SVector),
 	xmg:ftypes(Types),
 	%%xmg:send(info,Types),
 	fVectorToType(Vector,Types,Type),!.
@@ -352,7 +352,7 @@ build_bool(0).
 build_bool(1).
 
 %% generate exclusion vectors from the constraints
-constraints_to_vectors([],Types,[]).
+constraints_to_vectors([],_,[]).
 constraints_to_vectors([H|T],Types,Vectors):-
 	constraint_to_vectors(H,Types,H1),
 	constraints_to_vectors(T,Types,T1),
@@ -386,7 +386,7 @@ init_vector([],[]).
 init_vector([_|T],[_|T1]):-
 	init_vector(T,T1),!.
 
-set_to_left([],Types,Vector).
+set_to_left([],_,_).
 set_to_left([Type1|Types1],Types,Vector):-
 	is_type(Type1),
 	set_to_left(Type1,Types,Vector),
@@ -394,7 +394,7 @@ set_to_left([Type1|Types1],Types,Vector):-
 
 
 %% for right side with multiple symbols, need to return a list of vectors (ToDo)
-set_to_right([],Types,Vector,[]).
+set_to_right([],_,_,[]).
 set_to_right([Type1|Types1],Types,Vector,[RVector|Vectors]):-
 	is_type(Type1),
 	set_to_right(Type1,Types,Vector,RVector),
@@ -415,8 +415,8 @@ is_type(T):-
 
 
 
-set_to_left(true,[Type|T],[_|T1]):-!.
-set_to_left(Type,[Type|T],[1|T1]):-!.
+set_to_left(true,[_|_],[_|_]):-!.
+set_to_left(Type,[Type|_],[1|_]):-!.
 
 set_to_left(Type,[_|T],[_|T1]):-
 	set_to_left(Type,T,T1),!.
@@ -427,11 +427,11 @@ set_to_left(Type,Types,Vector):-
 	xmg:send(info,Vector),
 	false.
 
-set_to_right(false,[Type|T],[V1|VT],[V1|VT]):-!.
-set_to_right(Type,[Type|T],[V1|VT],[0|VT]):-!.
+set_to_right(false,[_|_],[V1|VT],[V1|VT]):-!.
+set_to_right(Type,[Type|_],[_|VT],[0|VT]):-!.
 set_to_right(Type,[_|T],[V1|VT],[V1|VT1]):-
 	set_to_right(Type,T,VT,VT1),!.
-set_to_right(Type,Types,Vector,Vectors):-
+set_to_right(Type,Types,Vector,_):-
 	xmg:send(info,'\n\nCould not set on right to value '),
 	xmg:send(info,Type),
 	xmg:send(info,Types),
@@ -466,7 +466,7 @@ count_ones([0|T],N):-
 %% should succeed if Set matches one of the shapes in Constraints
 filter_set(Set,[Constraint|_]):-
 	not(not(Set=Constraint)).
-filter_set(Set,[Constraint|T]):-
+filter_set(Set,[_|T]):-
 	filter_set(Set,T).
 
 assert_valid_type(Set,Len):-
@@ -520,14 +520,14 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 
 	generate_vectors_attrs(VT,AttConstraints),!.
 
-generate_vector_attrs(Vector,[],[]):-!.
+generate_vector_attrs(_,[],[]):-!.
 %% path constraints
 generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],ACT2):-
 	not(not(Vector=AVector)),
 	generate_vector_attrs(Vector,ACT,ACT1),
 	insert(A1-(_,V),ACT1,ACTT),
 	insert(A2-(_,V),ACTT,ACT2),!.
-generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
+generate_vector_attrs(Vector,[(_,_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.	
 %% attribute constraints
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
@@ -539,7 +539,7 @@ generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	insert(Att-(Type,_),ACT1,ACT2),
 	xmg:send(debug,ACT2),
 	!.
-generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
+generate_vector_attrs(Vector,[(_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 
 insert(Feat,[],[Feat]).
@@ -582,7 +582,7 @@ build_matrix(Types,FSet,Matrix):-
 	asserta(xmg:ftypeIMap(IMap)).
 
 build_sets_mappings(_,[],[],[],[],_).
-build_sets_mappings(Types,[H|T],[Set|Sets],[Set-N|Maps],[N-Set|Imaps],N):-
+build_sets_mappings(Types,[H|T],[Set|Sets],[Set-N|Maps],[N-Set|IMaps],N):-
 	vector_to_set(Types,H,Set),
 	M is N+1,
 	build_sets_mappings(Types,T,Sets,Maps,IMaps,M),!.
@@ -591,7 +591,7 @@ vector_to_set([],[],[]).
 vector_to_set([Type|Types],[1|Vector],[Type|Set]):-
 	vector_to_set(Types,Vector,Set),
 	!.
-vector_to_set([Type|Types],[0|Vector],Set):-
+vector_to_set([_|Types],[0|Vector],Set):-
 	vector_to_set(Types,Vector,Set),
 	!.
 
@@ -608,7 +608,7 @@ build_vectors([Type|Types],[Vector|Vectors],Ts):-
 	%%xmg:send(info,Vector),
 	build_vectors(Types,Vectors,Ts).
 
-build_vector(Type,[],[]).
+build_vector(_,[],[]).
 build_vector(Type,[Val|Vals],[Type1|Types]):-
 	subsumes(Type,Type1,Val),
 	build_vector(Type,Vals,Types).
@@ -618,7 +618,7 @@ subsumes(Type,Type,1):-
 subsumes(Type,Type1,1):-
 	xmg:fconstraint(Type1,super,Type),
 	!.
-subsumes(Type,Type1,0).
+subsumes(_,_,0).
 
 compute_matrix(Vectors,Matrix):-
 	xmg_brick_hierarchy_boolMatrix:fixpoint(Vectors,Matrix).
@@ -672,7 +672,7 @@ assert_type(Type):-
 	xmg:send(debug,Type),
 	asserta(xmg:ftype(Type)).
 
-assert_constraints(Type,TConst,[]):-!.
+assert_constraints(_,_,[]):-!.
 assert_constraints(Type,TConst,[H|T]):-
 	assert_constraint(Type,TConst,H),
 	assert_constraints(Type,TConst,T),!.

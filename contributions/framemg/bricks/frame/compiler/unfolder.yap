@@ -34,7 +34,7 @@ xmg:unfold_dimstmt(Frame,frame:dom(V1,V2,Op)):--
 xmg:unfold_dimstmt(Frame,frame:frame(V,T,F)):--
 		  xmg:send(debug,'\nUnfolding this: '),
 		  xmg:send(debug,frame:frame(V,T,F)),
-	xmg:new_target_var(TFrame),
+	%%xmg:new_target_var(TFrame),
 	unfold_frame(frame:frame(V,T,F),UStmt),
 	constraints::enq((UStmt,frame:topframe,Frame)),
 	!.
@@ -55,7 +55,7 @@ unfold_frame(frame:frame(Var,Types,Feats),TFrame):--
 
 	!.
 
-create_frames(TFrame,[]):-- !.
+create_frames(_,[]):-- !.
 create_frames(TFrame,[H|T]):--
 	     xmg:send(debug,'\nUnfolded this: '),
 	     xmg:send(debug,(TFrame,frame:frame,H)),
@@ -65,7 +65,7 @@ create_frames(TFrame,[H|T]):--
 
 unfold_types(some(Types),UTypes):--
 	    unfold_types(Types,UTypes),!.
-unfold_types(none,None):--
+unfold_types(none,_):--
 	    !.
 
 unfold_types([Type],[UType]):--
