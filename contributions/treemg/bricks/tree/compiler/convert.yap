@@ -27,9 +27,14 @@
 
 xmg:xml_convert_term(tree:tree(Tree,Family,Number), elem(tree, features([id-Name]),children([Syn1]))):--
 	%%lists:remove_duplicates(Sem,SemD),!,
-	xmg:send(info,'\nConverting'),
-	xmg:send(info,Tree),
+	%%xmg:send(info,'\n\nConverting tree: '),
+	%%xmg:send(info,Tree),
+	%%xmg:send(info,Family),	
+	%%xmg:send(info,Number),	
  	xmg:xml_convert(Tree,Syn1),!,
+	%%xmg:send(info,'\nConverted'),	
+	%%xmg:send(info,Family),	
+	%%xmg:send(info,Number),	
 	%%xmg:send(info,Syn1),
 	%%xmg:send(info,Family),
 	%%xmg:send(info,Number),

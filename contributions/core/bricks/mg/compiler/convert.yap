@@ -34,8 +34,6 @@ xmg:convert_new_name(Prefixe, Name) :--
 	atomic_concat([Prefixe,N],Name).
 
 xmg:do_xml_convert(Term,Convert):--
-		  xmg:send(info,'Convert term:\n'),
-xmg:send(info,Term),
 	xmg:xml_convert(Term,Convert) with name(_).
 
 xmg:xml_convert(Term,Convert):--
@@ -63,15 +61,8 @@ xmg:xml_convert_free(Free,Convert):--
 xmg:xml_convert_term(mg:entry(Class,Trace,Dims,Number),Out):--
         xmg:convert_trace(Trace,Trace1),
 	xmg:convert_family(Class,Family1),
-	xmg:send(info,'\nNumber:'),
-	xmg:send(info,Number),
-	xmg:send(info,'\nClass:'),
-	xmg:send(info,Class),
-        atomic_concat([Class,'_',Number],Name),
-	xmg:send(info,'\nName:'),
-	xmg:send(info,Name),
-	xmg:send(info,'\nHere convert term'),
-	xmg:send(info,Dims),
+	xmg:currentclass(Class),
+	atomic_concat([Class,'_',Number],Name),
 	xmg:xml_convert_term(Dims,CDims),
 	lists:append(Family1,Trace1,FTrace),
 	lists:append(FTrace,CDims,TCDims),

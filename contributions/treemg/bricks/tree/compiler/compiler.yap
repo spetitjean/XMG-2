@@ -21,8 +21,8 @@
 
 %% TAG compiler
 eval(Syn,[tree],tree:tree(Tree,Class,Previous),Class):-
-	xmg:send(debug,' preparing '),
-
+	%% For some reason, Class seems to be lost:
+	xmg:currentclass(Class),
 	xmg_brick_tree_preparer:prepare(syn(Syn,[Class]),Prepared),
 	xmg:send(debug,' prepared '),
 	xmg_brick_tree_solver:solve(Prepared,solution(IsRoot,Eq, Children, Left, NodeList1)),

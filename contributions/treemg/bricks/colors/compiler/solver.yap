@@ -37,10 +37,10 @@ post(Plugin):--
 	colors(Space,NodeList,Plugin).
 
 colors(Space,NodeList,[Colors]):-
-    xmg:send(info,'\nPosting colors:'),
-	xmg:send(info,Colors),
+    xmg:send(debug,'\nPosting colors:'),
+	xmg:send(debug,Colors),
 	do_cposts(Space,NodeList,Colors,1),
-    xmg:send(info,'\nPosted colors:').
+    xmg:send(debug,'\nPosted colors:').
 
 
 
@@ -52,9 +52,7 @@ do_cposts(Space,[Node|T],[color(red)|TC],N):-
 	do_cposts(Space,T,TC,M),!.
 
 do_cposts(Space,[Node|T],[color(black)|TC],N):-
-      xmg:send(info,'\nPosting black'),  
 	post(Space,Node,isblack,N),
-    xmg:send(info,'\nPosted black'),
 	M is N+1,
 	do_cposts(Space,T,TC,M),!.
 

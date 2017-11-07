@@ -210,27 +210,32 @@ eval:-
 	%%xmg_brick_mg_generator:compute(Class,Computed),
 	xmg:value_all(Computed,AClass),
 	
-	xmg:send(info,'\nClass executed: '),
+	xmg:send(debug,'\nClass executed: '),
 	xmg:send(debug,Computed),
-	xmg:send(info,AClass),
+	%%xmg:send(info,AClass),
+
+	%% That should not happen, but does somehow
+	(var(AClass) -> fail;true),
 
 	%% xmg_dimensions:dims(Dims),
 	%% Computed=dims(Dims),
 
 	get_dim(trace,Computed,Trace),
-	xmg:send(info,'\nAfter get_dim'),
-	xmg:send(info,AClass),
+	%%xmg:send(info,'\nAfter get_dim'),
+	%%xmg:send(info,AClass),
 
 	%% xmg:send(info,'\ngot trace\n'),
-
+	retractall(xmg:currentclass/1),
+	asserta(xmg:currentclass(AClass)),
 	findall(Mutex,xmg:mutex(Mutex),Mutexes),
-	xmg:send(info,'\nAfter findall (seems to break the variable AClass)'),
-	xmg:send(info,AClass),
+	%%xmg:send(info,'\nAfter findall (seems to break the variable AClass)\n'),
+	xmg:currentclass(AClass),
+	%%xmg:send(info,AClass),
 
 	xmg:send(debug,'\nMutexes:'),
 	xmg:send(debug,Mutexes),
 	check_mutexes(Trace,Mutexes),
-	xmg:send(info,AClass),
+	%%xmg:send(info,AClass),
 
 	xmg:send_nl(info),xmg:send_nl(info),xmg:send(info,'                Computed '),xmg:send(info,AClass),xmg:send_nl(info),xmg:send_nl(info),
 
@@ -243,8 +248,8 @@ eval:-
 	Current is Previous + 1,
 	retract(current(Previous)),
 	asserta(current(Current)),	
-	xmg:send(info,'\nConverting\n'),
-	xmg:send(info,mg:entry(AClass,Trace,EDims,Previous)),
+	%%xmg:send(info,'\nConverting\n'),
+	%%xmg:send(info,mg:entry(AClass,Trace,EDims,Previous)),
 	
 	xmg:do_xml_convert(mg:entry(AClass,Trace,EDims,Previous),XML),
 	print_solution(XML),
