@@ -30,7 +30,8 @@ class BrickSpec:
         self.name = name
         self.brick_name = brick_name
         self.dim = dim
-        self.plugs = {k:[Plug(s) for s in v.split()] for k,v in plugs.items()}
+        # added the option to have none as value for a plug
+        self.plugs = {k:[Plug(s) for s in v.split()] for k,v in plugs.items() if v is not None}
 
     def deref_plugs(self, table):
         for plugs in self.plugs.values():

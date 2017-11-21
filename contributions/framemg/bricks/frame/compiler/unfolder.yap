@@ -32,7 +32,7 @@ xmg:unfold_dimstmt(Frame,frame:dom(V1,V2,Op)):--
 	!.
 
 xmg:unfold_dimstmt(Frame,frame:frame(V,T,F)):--
-		  xmg:send(debug,'\nUnfolding this: '),
+		  xmg:send(debug,'\nUnfolding frame: '),
 		  xmg:send(debug,frame:frame(V,T,F)),
 	xmg:new_target_var(TFrame),
 	unfold_frame(frame:frame(V,T,F),UStmt),
@@ -49,8 +49,10 @@ unfold_frame(frame:frame(Var,Types,Feats),TFrame):--
 	 (
 	     xmg:unfold_expr(Var,TFrame)
 	 )),
+	xmg:send(debug,'\nCreating frames'),
 	create_frames(TFrame,UTypes),
-
+	xmg:send(debug,'\nUnfolding features: '),
+	xmg:send(debug,Feats),
 	unfold_pairs(Feats,TFrame),
 
 	!.

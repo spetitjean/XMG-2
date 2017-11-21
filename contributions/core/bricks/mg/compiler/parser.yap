@@ -250,7 +250,7 @@ parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
 	%% xmg:send(info,StepE),
 
 	(
-	    StepE - Steps > 30 ->
+	    StepE - Steps > 60 ->
 	    throw_errors;true
 	),
 	fail.
@@ -287,7 +287,7 @@ throw_errors:--
 	lastError(Errors,_),
 	%%errors::top(Errors),
 	
-	xmg_brick_mg_compiler:send(debug,Errors),
+	%%xmg_brick_mg_compiler:send(debug,Errors),
 	throw_error(Errors,[],0,none),!.
 
 throw_error([],Expected,Coord,Token):-

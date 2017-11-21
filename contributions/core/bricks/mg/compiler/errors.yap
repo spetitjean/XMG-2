@@ -28,8 +28,8 @@ user:generate_message_hook(error(unhandled_exception,xmg(Exc)), In, Out) :--
 	xmg_message(Exc,Msg),
 	format_msg(Msg) with queue([]-Out, []-In).
 user:generate_message_hook(xmg(Exc), In, Out) :--
-	xmg_message(Exc,Msg),
-	format_msg(Msg) with queue([]-Out, []-In).
+        xmg_message(Exc,Msg),
+        format_msg(Msg) with queue([]-Out, []-In).
 
 format_msg(Msg) -->>
 	nonvar(Msg),
