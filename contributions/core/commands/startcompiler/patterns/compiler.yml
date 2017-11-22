@@ -1,0 +1,8 @@
+mg: 
+  _Stmt: control
+  _EDecls: decls
+decls:
+  _ODecl: feats
+control:
+  _Stmt: dim_#DIM#
+  _Expr: value
