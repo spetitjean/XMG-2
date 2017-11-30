@@ -9,12 +9,16 @@
 
 :-use_module(library(readutil)).
 
-:- multifile(user:generate_message_hook/3).
-% :- source.
+:- multifile user:message_hook/3.
+:- multifile prolog:message/1.
+:- multifile prolog:message/3.
+
+%:- source.
 
 
 
 :- edcg:thread(queue,edcg:queue).
+:- edcg:thread(queue1,edcg:queue).
 :- edcg:weave([queue],
 	       [format_msg/1,
 		format_title/2,
@@ -23,28 +27,53 @@
 		format_spec/1,
 		vs_to_string/1]).
 
+
 %% message: xmg(Message)
 
-user:generate_message_hook(error(unhandled_exception,xmg(Exc)), In, Out):--
+prolog:message(xmg(Exc),_,_):-- !.
+	%%xmg:send(info,'\nHere prolog message'),
+	%%xmg_message(Exc,Msg),
+	%%xmg:send(info,'\ngot message'),
+	%%format_msg(Msg) with queue([]-Out, []-In).
+
+user:message_hook(error(unhandled_exception,xmg(Exc)), In, Out):--
 	xmg_message(Exc,Msg),
-	format_msg(Msg) with queue([]-Out, []-In).
-user:generate_message_hook(xmg(Exc), In, Out) :--
+	format_msg(Msg) with queue([]-Out, []-[]).
+user:message_hook(xmg(Exc), In, [_|NOut]) :--
 	xmg_message(Exc,Msg),
-        format_msg(Msg) with queue([]-Out, []-In).
+	xmg:send(info,In),
+	xmg:send(info,NOut),
+        format_msg(Msg) with queue([]-NOut, []-[]),
+	xmg:send(info,NOut).
 
 format_msg(Msg) -->>
 	nonvar(Msg),
+	xmg:send(info,'\nHere format_msg'),
+	queue::value(L),
+	xmg:send(info,L),
 	Msg =.. [Label,Title,Specs],
+	xmg:send(info,'\nHere format_title'),
 	format_title(Title,Label),
+	xmg:send(info,'\nHere format_specs'),
 	format_specs(Specs),
 	format_footer,
 	!.
 
 format_title(Title, Label) -->>
+	xmg:send(info,'\nvs_to_string_1'),
 	vs_to_string(Title) with queue([]-STitle,[]-[]),
+	xmg:send(info,'\nvs_to_string_2'),
 	vs_to_string(Label) with queue([]-SLabel,[]-[]),
+	xmg:send(info,'\nEnqueing'),
+	xmg:send(info,[STitle,SLabel]),
+
 	queue::enq("-- ~s: ~s ~`-t~80+"-[STitle,SLabel]),
-	queue::enq(nl).
+	xmg:send(info,'\nEnqueing nl'),
+	%%queue::enq(nl),
+	queue::value(L),
+	xmg:send(info,L),
+	queue::enq_list("\n    "),
+ 	xmg:send(info,'\nDone').
 
 format_footer -->>
 	queue::enq("~`-t~80+"-[]),
@@ -53,6 +82,8 @@ format_footer -->>
 format_specs([]) -->> !.
 format_specs([H|T]) -->>
 	format_spec(H),
+	xmg:send(info,'\nHERE FORMAT SPECS'),
+	xmg:send(info,T),
 	format_specs(T).
 
 %% format a line spec
@@ -71,7 +102,9 @@ format_spec(hint(L,M,N)) -->> !,
 	vs_to_string(L) with queue([]-LL,[]-[]),
 	vs_to_string(M) with queue([]-MM,[]-[]),
 	vs_to_string(N) with queue([]-NN,[]-[]),
+	xmg:send(info,'\nHERE FORMAT SPEC'),
 	queue::enq("~t~s~12+: ~s, got ~s"-[LL,MM,NN]),
+	xmg:send(info,'\nHERE FORMAT SPEC'),
 	queue::enq(nl).
 format_spec(coord(F,L,C)) -->> !,
 	format_spec(hint(filename,F)),
@@ -87,6 +120,10 @@ format_spec(L) -->> throw(format_line(L)).
 
 %% virtual string to string
 
+%% should not happen
+vs_to_string(V) -->> 
+	var(V),
+        queue::enq("unknown"),!.
 vs_to_string(S1#S2) -->> !,
 	vs_to_string(S1),
 	vs_to_string(S2).
@@ -194,6 +231,7 @@ xmg_message(tokenizer_error(unrecognized(T,C)), Msg) :- !,
 
 %% errors in parser
 xmg_message(parser_error(expected(E,T,C)), Msg) :- !,
+	write('Here xmg_message'),
 	Msg=error(parser,[hint(expected,E,T),C]).
 xmg_message(parser_error(unsupported(T,C)), Msg) :- !,
 	Msg=error(parser,[hint(unsupported,T),C]).

@@ -348,7 +348,7 @@ do_branch(Space,[Node|T]):-
 	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 
-	Space += branch(IsRoot,'INT_VALUES_MIN'),
+	Space += branch(IsRoot,'BOOL_VAL_MIN'),
 	Space += branch(UpCard,'INT_VALUES_MIN'),
 
 	do_branch(Space,T).
