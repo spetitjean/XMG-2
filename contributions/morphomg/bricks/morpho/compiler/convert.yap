@@ -22,11 +22,12 @@
 :- xmg:edcg.
 
 
-xmg:xml_convert_term(morpho:solved(M), elem(morpho, features([lex-Morph]),children([elem(lemmaref,features([lemma-Lemma]))]))) :--
+xmg:xml_convert_term(morpho:solved(M), elem(morph, features([lex-Morph]),children([elem(lemmaref,features([cat-Cat, name-Lemma]))]))) :--
 	lists:member(feat(morph,string(SMorph)),M),
         atom_codes(Morph,SMorph),
         lists:member(feat(lemma,string(SLemma)),M),
         atom_codes(Lemma,SLemma),
+	lists:member(feat(cat,Cat),M),
 	xmg:xml_convert_term(morpho:feats(Morph),Feats),
 	!.
 
