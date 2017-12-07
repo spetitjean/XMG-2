@@ -1,0 +1,109 @@
+<!-- XML Document Type Definition 
+
+     Authors: 
+       Yannick Parmentier <Yannick.Parmentier@loria.fr>
+       Joseph Le Roux <Joseph.Leroux@loria.fr>
+ 
+     Description:
+       XML Encoding of semi-automatically generated Tree Adjoining Grammars
+
+     Acknowledgment:
+       This DTD derives from one written by Denys Duchier <Duchier@loria.fr>
+
+     Version: 1.1
+
+     Typical usage:  
+
+            <?xml version="1.0" encoding="iso-8859-1"?>
+            <!DOCTYPE grammar SYSTEM "xmg-tag.dtd,xml">
+	    <grammar>
+            ...
+            </grammar>
+
+     Notes:
+       A compiled Tree Adjoining Grammar consists of a list of entries, each 
+       representing a (not yet anchored) tree of the grammar.
+       More precisely, an entry contains the following data : 
+
+       - a family name determining to which tree-family it belongs,
+
+       - a trace containing the names of the meta-grammar classes that were 
+         combined,
+
+       - a syntactic description giving the structure of the tree,
+
+       - a semantic description expressed in flat semantics (set of literals),
+
+       - an interface consisting of an attributes-values matrix whose features 
+         are shared with features in the tree (used for anchoring).
+               
+-->
+
+<!-- Compiled grammar -->
+
+<!ELEMENT  grammar  (entry* | subgrammar*)>
+
+<!-- Eventual subgrammar (anchoring) -->
+
+<!ELEMENT  subgrammar  (entry*)>
+<!ATTLIST  subgrammar  id  CDATA #REQUIRED>
+
+<!-- Entries -->
+
+<!ELEMENT  entry  (family,trace,tree,semantics,interface)>
+<!ATTLIST  entry  name  ID  #REQUIRED>
+
+<!-- Values (tree families) -->
+
+<!ELEMENT  family  (#PCDATA)>
+
+<!-- Traces of compilation -->
+
+<!ELEMENT  trace  (class*)>
+
+<!ELEMENT  class  (#PCDATA)>
+
+<!-- syntactic descriptions (the templates) -->
+
+<!ELEMENT  tree  (node)>
+<!ATTLIST  tree  id  CDATA  #REQUIRED>
+
+<!ELEMENT  node  (narg? , node*)>
+<!ATTLIST  node  type ( nadj | std | subst | lex | anchor | coanchor | foot ) #REQUIRED>
+<!ATTLIST  node  name  CDATA #IMPLIED>
+
+<!ELEMENT  narg (fs)>
+
+<!ELEMENT  fs  (f*)>
+<!ATTLIST  fs  coref CDATA #IMPLIED>
+
+<!ELEMENT  f  (sym | vAlt | fs)>
+<!ATTLIST  f  name  CDATA #REQUIRED>
+
+<!ELEMENT  vAlt  (sym+)>
+<!ATTLIST  vAlt  coref CDATA "">
+
+<!ELEMENT  sym EMPTY>
+<!ATTLIST  sym 
+	   value   CDATA #IMPLIED
+	   varname CDATA #IMPLIED>
+
+<!-- semantic representations -->
+
+<!ELEMENT  semantics  (literal | sym | semdominance)*>
+
+<!ELEMENT  literal   (label? , predicate, arg*)>
+<!ATTLIST  literal   negated  CDATA  "no">
+
+<!ELEMENT  label  (sym)>
+
+<!ELEMENT  predicate  (sym)>
+
+<!ELEMENT  arg  (sym | fs)>
+
+<!ELEMENT  semdominance  (arg+)>
+<!ATTLIST  semdominance  op   CDATA   "ge">
+
+<!-- Interfaces -->
+
+<!ELEMENT interface  (fs?)>
