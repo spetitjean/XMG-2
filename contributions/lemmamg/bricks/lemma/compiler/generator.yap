@@ -51,5 +51,8 @@ xmg:generate_instr((lemma:equation(c(P1),c(P2),c(P3)),Dim)):--
         code::enq(Acc),!.
 xmg:generate_instr((lemma:coanchor(c(C),v(V),c(C1)),Dim)):--
 	decls::tget(V,VV),
-	Acc=..['::',xmg_acc:Dim,put(coanchor(C,V,V1))],
+	Acc=..['::',xmg_acc:Dim,put(coanchor(C,VV,C1))],
+	code::enq(Acc),!.
+xmg:generate_instr((lemma:coanchor(c(C),c(C2),c(C1)),Dim)):--
+	Acc=..['::',xmg_acc:Dim,put(coanchor(C,C2,C1))],
 	code::enq(Acc),!.

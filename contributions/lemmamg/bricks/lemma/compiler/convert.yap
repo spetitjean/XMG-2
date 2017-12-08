@@ -22,23 +22,35 @@
 :- xmg:edcg.
 
 
-xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-CAT]),children(Feats))) :--
+xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-CAT]),children([Tree]))) :--
 	lists:member(feat(entry,string(SEntry)),Lemma),
         atom_codes(Entry,SEntry),
         lists:member(feat(cat,CAT),Lemma),
 	xmg:send(info,Lemma),
+	lists:member(feat(fam,Fam),Lemma),
+	atom_concat(['family[@name=',Fam,']'],FamFeat),
+	%% ToDo: Filters
+	%%Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))])),
+	Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))|Feats])),
 	xmg:xml_convert_term(lemma:feats(Lemma),Feats),
 	!.
 
 xmg:xml_convert_term(lemma:feats(Lemma),Feats):--
-	feat_tree(Lemma,Tree),
-        %% What to do with the gloss? Doesn't it belong to morph?
-	Feats=[Tree],
+        convert_feats(Lemma,Feats),
 	!.
 
-feat_tree(Lemma,Tree):-
-    	lists:member(feat(fam,Fam),Lemma),
-	atom_concat(['family[@name=',Fam,']'],FamFeat),
-	%% ToDo: Filters
-	Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))])),!.
+convert_feats([],[]).
+convert_feats([feat(cat,_)|T],Feats):-
+    convert_feats(T,Feats).
+convert_feats([feat(entry,_)|T],Feats):-
+    convert_feats(T,Feats).
+convert_feats([feat(fam,Fam)|T],T1):-
+	convert_feats(T,T1),!.
+convert_feats([coanchor(Node,string(SLex),Cat)|T],[Coanchor|Feats]):-
+    atom_codes(Lex,SLex),
+    Coanchor=elem(coanchor,features([node_id-Node,cat-Cat]),children([elem(lex,data(Lex))])),
+    convert_feats(T,Feats).
+convert_feats([H|_],_):-
+    xmg:send(info,'\n\nError: unsupported instruction: '),
+    xmg:send(info,H),false.
 
