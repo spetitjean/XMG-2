@@ -1,13 +1,15 @@
 
 %%
 
-LemmaStmt : Feat {$$=$1} | Equation {$$=$1} | Coanchor {$$=$1};
+LemmaStmt : Feat {$$=$1} | Equation {$$=$1} | Coanchor {$$=$1} | Filter {$$=$1};
 
 Feat : id '<-' _Expr {$$=lemma:feat($1,$3)};
 
 Equation : 'equation' id '->' _Expr '=' _Expr {$$=lemma:equation($2,$4,$6)};
 
 Coanchor : 'coanchor' id '->' _Expr '/' id {$$=lemma:coanchor($2,$4,$6)};
+
+Filter : 'filter' id '=' _Expr {$$=lemma:filter($2,$4)};
 
 
 %%

@@ -29,15 +29,20 @@ xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-
 	xmg:send(info,Lemma),
 	lists:member(feat(fam,Fam),Lemma),
 	atom_concat(['family[@name=',Fam,']'],FamFeat),
-	%% ToDo: Filters
-	%%Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))])),
-	Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))|Feats])),
+	filter_or_not(Lemma,Filter),
+	%%Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))|Feats])),
+	Tree=elem(anchor, features([tree_id-FamFeat]),children(FFeats)),
 	xmg:xml_convert_term(lemma:feats(Lemma),Feats),
+	lists:append(Filter,Feats,FFeats),
 	!.
 
 xmg:xml_convert_term(lemma:feats(Lemma),Feats):--
         convert_feats(Lemma,Feats),
 	!.
+
+filter_or_not(Lemma,[]):-
+    lists:member(filter(_,_),Lemma),!.
+filter_or_not(_,[elem(filter,children([elem(fs)]))]):-!.
 
 convert_feats([],[]).
 convert_feats([feat(cat,_)|T],Feats):-
@@ -49,6 +54,13 @@ convert_feats([feat(fam,Fam)|T],T1):-
 convert_feats([coanchor(Node,string(SLex),Cat)|T],[Coanchor|Feats]):-
     atom_codes(Lex,SLex),
     Coanchor=elem(coanchor,features([node_id-Node,cat-Cat]),children([elem(lex,data(Lex))])),
+    convert_feats(T,Feats).
+convert_feats([filter(Att,Val)|T],[Filter|Feats]):-
+    Filter=elem(filter,children([elem(fs,children([elem(f,features([name-Att]),children([elem(sym,features([value-Val]))]))]))])),
+    convert_feats(T,Feats).
+convert_feats([equation(Node,Att,Val)|T],[Equation|Feats]):-
+    %% not sure what type=bot means
+    Equation=elem(equation,features([type-bot,node_id-Node]),children([elem(fs,children([elem(f,features([name-Att]),children([elem(sym,features([value-Val]))]))]))])),
     convert_feats(T,Feats).
 convert_feats([H|_],_):-
     xmg:send(info,'\n\nError: unsupported instruction: '),

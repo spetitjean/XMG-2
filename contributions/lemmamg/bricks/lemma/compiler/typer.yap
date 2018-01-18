@@ -39,6 +39,9 @@ xmg:type_stmt(lemma:equation(_,_,_),Lemma:lemma(FeatsType)):--
 xmg:type_stmt(lemma:coanchor(_,_,_),Lemma:lemma(FeatsType)):--
 	!.
 
+xmg:type_stmt(lemma:filter(_,_),Lemma:lemma(FeatsType)):--
+	!.
+
 
 
 

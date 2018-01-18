@@ -32,6 +32,10 @@ xmg:unfold_dimstmt(Dim,lemma:equation(E1,E2,E3)):--
         xmg:unfold_expr(E2,UE2),
         xmg:unfold_expr(E3,UE3),
 	constraints::enq((lemma:equation(UE1,UE2,UE3),Dim)),!.
+xmg:unfold_dimstmt(Dim,lemma:filter(E1,E2)):--
+	xmg:unfold_expr(E1,UE1),
+        xmg:unfold_expr(E2,UE2),
+	constraints::enq((lemma:filter(UE1,UE2),Dim)),!.
 xmg:unfold_dimstmt(Dim,lemma:coanchor(ID1,Expr,ID2)):--
 		  xmg:unfold_expr(ID1,UID1),
 		  xmg:unfold_expr(ID2,UID2),
