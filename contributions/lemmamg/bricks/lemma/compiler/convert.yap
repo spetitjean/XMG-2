@@ -26,19 +26,26 @@ xmg:xml_convert_term(lemma:solved(Lemma), elem(lemma, features([name-Entry, cat-
 	lists:member(feat(entry,string(SEntry)),Lemma),
         atom_codes(Entry,SEntry),
         lists:member(feat(cat,CAT),Lemma),
-	xmg:send(info,Lemma),
 	lists:member(feat(fam,Fam),Lemma),
 	atom_concat(['family[@name=',Fam,']'],FamFeat),
-	filter_or_not(Lemma,Filter),
+	%%filter_or_not(Lemma,Filter),
+	get_filters(Lemma,Filters),
+	FFilters=[elem(filter,children([elem(fs,children(Filters))]))],
 	%%Tree=elem(anchor, features([tree_id-FamFeat]),children([elem(filter,children([elem(fs)]))|Feats])),
 	Tree=elem(anchor, features([tree_id-FamFeat]),children(FFeats)),
 	xmg:xml_convert_term(lemma:feats(Lemma),Feats),
-	lists:append(Filter,Feats,FFeats),
+	lists:append(FFilters,Feats,FFeats),
 	!.
 
 xmg:xml_convert_term(lemma:feats(Lemma),Feats):--
         convert_feats(Lemma,Feats),
 	!.
+
+get_filters([],[]).
+get_filters([filter(A,B)|T],[elem(f,features([name-A]),children([elem(sym,features([value-B]))]))|TT]):-
+    get_filters(T,TT),!.
+get_filters([_|T],TT):-
+    get_filters(T,TT),!.
 
 filter_or_not(Lemma,[]):-
     lists:member(filter(_,_),Lemma),!.
@@ -55,8 +62,9 @@ convert_feats([coanchor(Node,string(SLex),Cat)|T],[Coanchor|Feats]):-
     atom_codes(Lex,SLex),
     Coanchor=elem(coanchor,features([node_id-Node,cat-Cat]),children([elem(lex,data(Lex))])),
     convert_feats(T,Feats).
-convert_feats([filter(Att,Val)|T],[Filter|Feats]):-
-    Filter=elem(filter,children([elem(fs,children([elem(f,features([name-Att]),children([elem(sym,features([value-Val]))]))]))])),
+convert_feats([filter(Att,Val)|T],Feats):-
+    %% Already taken care of
+    %%Filter=elem(filter,children([elem(fs,children([elem(f,features([name-Att]),children([elem(sym,features([value-Val]))]))]))])),
     convert_feats(T,Feats).
 convert_feats([equation(Node,Att,Val)|T],[Equation|Feats]):-
     %% not sure what type=bot means
