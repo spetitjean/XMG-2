@@ -166,6 +166,12 @@ order_params([H|T],ParamList,[H1|T1]):-
 get_param(value:var_or_const(token(_,id(P))),List,P-GP):-
     lists:member(P-GP,List),
     !.
+get_param(value:var(token(_,id(P))),List,P-GP):-
+    lists:member(P-GP,List),
+    !.
+get_param(value:const(token(_,id(P))),List,P-GP):-
+    lists:member(P-GP,List),
+    !.
 
 
 
