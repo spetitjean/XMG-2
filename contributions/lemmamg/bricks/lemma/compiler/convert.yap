@@ -57,6 +57,9 @@ convert_feats([feat(cat,_)|T],Feats):-
 convert_feats([feat(entry,_)|T],Feats):-
     convert_feats(T,Feats).
 convert_feats([feat(fam,Fam)|T],T1):-
+    convert_feats(T,T1),!.
+convert_feats([feat(sem,Sem)|T],[FSem|T1]):-
+        FSem=elem(sem,children([elem(semclass,features([name-Sem]))])),
 	convert_feats(T,T1),!.
 convert_feats([coanchor(Node,string(SLex),Cat)|T],[Coanchor|Feats]):-
     atom_codes(Lex,SLex),
