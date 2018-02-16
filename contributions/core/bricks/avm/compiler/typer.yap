@@ -98,13 +98,26 @@ xmg:type_stmt(avm:avm(Coord,Feats),Type):--
 	xmg:type_expr(avm:avm(Coord,Feats),Type),!.
 
 xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
-	types::tget(AVM,CAVM),
-	xmg:send(debug,'\n\nTyping dot expression:'),
-	xmg:send(debug,CAVM),
-	xmg:send(debug,' DOT '),
-	xmg:send(debug,Feat),
+    %% If AVM is a parameter of the class, everything is more
+    %% complicated (it can be a class instance coming from another
+    %% class)
+        
 
-	xmg_brick_avm_avm:dot(CAVM,Feat,Type),
+	types::tget(AVM,CAVM),
+        xmg:send(debug,'\n\nTyping dot expression [AVM] :'),
+	xmg:send(debug, CAVM),
+	xmg:send(debug,' DOT '),
+	xmg:send(debug,Feat),	
+	
+	(
+	    xmg_brick_avm_avm:dot(CAVM,Feat,Type);
+	    %% What to do when the thing is not an AVM, or not yet? (that includes parameters)
+	    %% We create a new empty cavm, it should be checked later
+	    (
+		not(attvar(CAVM)),
+		xmg_brick_avm_avm:avm(CAVM,[Feat-Type])
+	    )
+	),
 	!.
 
 xmg:type_expr(avm:dot(avm:dot(AVM1,V),token(_,id(Feat))),Type):--
@@ -118,7 +131,7 @@ xmg:type_expr(avm:dot(avm:dot(AVM1,V),token(_,id(Feat))),Type):--
 %% For dots in classes (should be consistent)
 xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--
 	types::tget(AVM,CAVM),
-	xmg:send(debug,'\n\nTyping dot expression:'),
+	xmg:send(debug,'\n\nTyping dot expression [CLASS] :'),
 	xmg:send(debug,CAVM),
 	xmg:send(debug,' DOT '),
 	xmg:send(debug,Feat),
