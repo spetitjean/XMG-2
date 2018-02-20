@@ -264,6 +264,15 @@ new_free([V-H|T],[V-F|T1]):--
 	xmg:send(debug,'\nCREATING NEW VAR'),
 	free::tput(H,F),
 	new_free(T,T1),!.
+%% This is for the case of classes given as parameters, it needs some more testing
+new_free([V-H|T],[V-F|T1]):--
+	var(H),
+        attvar(H),
+	xmg_brick_avm_avm:avm(H,Atts),
+	xmg:send(debug,'\nCREATING NEW ATTVAR'),
+	xmg_brick_avm_avm:avm(NewH,Atts),
+	free::tput(H,NewH),
+	new_free(T,T1),!.
 new_free([V-H|T],[V-H|T1]):--
 	new_free(T,T1),
 	!.
