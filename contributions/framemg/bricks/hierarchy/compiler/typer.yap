@@ -35,6 +35,9 @@
 :- edcg:using(xmg_brick_mg_typer:type_decls).
 %% Have to use threads here
 
+:- use_module(library(gecode)).
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Printing the hierarchy (as an appendix)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,16 +152,18 @@ get_fconstraints([]):-
 	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
 	xmg:send(debug,'\n\nType constraints:'),
 	xmg:send(debug,Constraints),
-	xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
+	%%xmg_brick_hierarchy_typer:constraints_to_vectors(Constraints,Types,CVectors),
 	
-	xmg:send(debug,'\n\nConstraint vectors:'),
-	xmg:send(debug,CVectors),
+	%%xmg:send(debug,'\n\nConstraint vectors:'),
+	%%xmg:send(debug,CVectors),
 
-	build_types(types(Types,FSets,CVectors)),
+	solve_types(Types, Constraints, FSets),
+	%%xmg:send(info,FSets),!,
+	%%build_types(types(Types,FSets,CVectors)),
 	
-	%%filter_sets(Sets,CVectors,FSets),
+	%% %%filter_sets(Sets,CVectors,FSets),
 	assert_sets(FSets),
-	xmg:send(debug,'\n\nFiltered types:'),
+	%% xmg:send(debug,'\n\nFiltered types:'),
 	xmg:send(debug,FSets),
 	
 	asserta(xmg:fReachableTypes(FSets)),
@@ -214,6 +219,98 @@ get_ftype(ftype(Type)):--
 	xmg_brick_hierarchy_typer:type_ftype(Type),!.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Getting the hierarchy from the constraints, using constraint programming
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+solve_types(Types, Constraints, List):-
+    findall(T,solve(Types,Constraints,T),List),!.
+
+solve(Types, Constraints, Sol):-
+    Space:=space,
+    create_vector(Space, Types, Vector),
+    apply_constraints(Space, Vector, Constraints),
+    branch(Space, Vector),
+    SolSpace := search(Space),
+    get_sol(SolSpace, Vector, Sol).
+
+create_vector(_, [], []).
+create_vector(Space, [H|T], [H-H1|T1]):-
+    H1 := boolvar(Space),
+    create_vector(Space, T, T1),!.
+
+apply_constraints(_, _, []).
+apply_constraints(Space, Vector, [H|T]):-
+    apply_constraint(Space, Vector, H),
+    apply_constraints(Space, Vector, T).
+
+
+%% Two types of constraints:
+%% fconstraint(implies,T1,T2), T1 and T2 lists
+%% fconstrains(is_equivalent,T1,T2), T1 and T2 lists
+%% fconstraint(implies,List,[false]) is incompatibility between members of List 
+apply_constraint(Space, Vector, fconstraint(implies,Ts1,[false])):-
+    %% The sum of all booleans must be smaller than the number of all booleans
+    gets(Ts1, Vector, Vs1),
+    lists:length(Vs1,Length),
+    Space += linear(Vs1,'IRT_LE',Length),
+    
+    !.
+apply_constraint(Space, Vector, fconstraint(implies,Ts1,Ts2)):-
+    %% Eq is a boolean variable which is true if the sum of all booleans in Ts1 is equal to the arity of Ts1
+    %% If Ts1 is true then Ts2 is true (We only support it with one type)
+    gets(Ts1, Vector, Vs1),
+    lists:length(Vs1,Length),
+    gets(Ts2, Vector, Vs2),
+    Vs2=[V2],
+    R := boolvar(Space),
+    Space += linear(Vs1,'IRT_EQ',Length,R),
+    Space += rel(V2,'IRT_GQ',R),
+    
+    
+    !.
+apply_constraint(Space, Vector, fconstraint(is_equivalent,Ts1,Ts2)):-
+    %% Eq1 is a boolean variable which is true if the sum of all booleans in Ts1 is equal to the arity of Ts1
+    %% Eq2 is a boolean variable which is true if the sum of all booleans in Ts2 is equal to the arity of Ts2
+    %% We must have Eq1=Eq2
+    gets(Ts1, Vector, Vs1),
+    lists:length(Vs1,Length),
+    gets(Ts2, Vector, Vs2),
+    Vs2=[V2],
+    R := boolvar(Space),
+    Space += linear(Vs1,'IRT_EQ',Length,R),
+    Space += rel(V2,'IRT_EQ',R),
+    
+    !.
+
+apply_constraint(Space, Vector, Constraint):-
+    write('Error: Unsupported constraint - '),
+    write(Constraint).
+
+
+gets([],_,[]).
+gets([H|T],Vector,[H1|T1]):-
+    get(H,Vector,H1),
+    gets(T,Vector,T1).
+    
+
+get(A, [A-H|_], H).
+get(A, [B-_|T], O):-
+    not(A=B),
+    get(A, T, O).
+get(A, [], _):-
+    write('Error: could not get type '),
+    write(A).
+
+branch(Space, []).
+branch(Space, [_-V|T]):-
+    Space += branch(V,'INT_VAL_MIN'),
+    branch(Space, T).
+
+get_sol(Space, [], []).
+get_sol(Space, [_-H|T], [H1|T1]):-
+    H1:=val(Space,H),
+    get_sol(Space, T, T1).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
