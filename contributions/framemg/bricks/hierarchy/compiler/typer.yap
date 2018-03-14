@@ -148,7 +148,8 @@ remove_ftypes([ftype(H)|T],[H|T1]):-
     remove_ftypes(T,T1),!.
 
 get_fconstraints([]):-
-	xmg:ftypes(Types),
+        xmg:ftypes(Types),
+	xmg:send(info,Types),
 	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
 	xmg:send(debug,'\n\nType constraints:'),
 	xmg:send(debug,Constraints),
@@ -608,7 +609,11 @@ attr_value(true,_):-!.
 attr_value(Value,Value).
 
 generate_vectors_attrs([],_):- !.
-generate_vectors_attrs([V1|VT],AttConstraints):- 
+generate_vectors_attrs([V1|VT],AttConstraints):-
+        %%xmg:send(info,'\nGenerating vectors attrs '),
+	%%xmg:send(info,V1),
+	%%xmg:send(info,AttConstraints),
+
 	generate_vector_attrs(V1,AttConstraints,Feats),
 	asserta(xmg:fattrconstraint(V1,Feats)),
 
@@ -630,17 +635,27 @@ generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	not(not(Vector=AVector)),!,
 	generate_vector_attrs(Vector,ACT,ACT1),
-	xmg:send(debug,'\n Adding '),
-	xmg:send(debug,Feat),
+	%%xmg:send(debug,'\n Adding '),
+	%%xmg:send(debug,Feat),
 	Feat=Att-Type,
+	%%xmg:send(info,'\nInserting: '),
+	%%xmg:send(info,Feat),
+	%%xmg:send(info,' in '),
+	%%xmg:send(info,ACT1),
 	insert(Att-(Type,_),ACT1,ACT2),
-	xmg:send(debug,ACT2),
+	%%xmg:send(info,'\n -> '),
+	%%xmg:send(info,ACT2),
+	%%xmg:send(debug,ACT2),
 	!.
 generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 
 insert(Feat,[],[Feat]).
 insert(A-V,[A-V1|T],[A-V1|T]):-
+    V=(VV,_),
+    V1=(VV1,_),
+        not(var(VV)),
+	not(var(VV1)),
 	V=V1,!.
 insert(A-V,[A-V1|T],[A-V,A-V1|T]):-
 	not(V=V1),!.
