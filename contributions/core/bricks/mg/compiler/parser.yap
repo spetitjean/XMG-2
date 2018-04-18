@@ -273,7 +273,11 @@ parse_sem([State|States],[token(Coord,Token)|Tokens]):--
        	(
        	    Step = StepE,
        	    retractall(lastError(_,_)),
-       	    Errors=[error(State,Token,Coord)|LastE],
+	    (
+	      lists:member(error(State,Token,Coord),LastE)-> Errors=LastE
+	      ;
+       	      Errors=[error(State,Token,Coord)|LastE]
+	    ),
 	    %%xmg_brick_mg_compiler:send(debug,assert_same),
 	    %%xmg_brick_mg_compiler:send(debug,Coord),
 	    
