@@ -56,7 +56,7 @@ xmg:prepare_plugin(Dim,Plugin,prepared(Out,ODim)):--
 	xmg:send(debug,Module),
 	Get=..[get_instances,I],
 	DoGet=..[':',Module,Get],
-	DoGet,
+	DoGet,!,
 	prepare_instances(Dim,I,Module,Out,NDim),
 	%% xmg:send(info,'\nDONE: '),
 	%% xmg:send(info,prepared(Out,NDim)),

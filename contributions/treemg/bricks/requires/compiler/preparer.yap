@@ -38,3 +38,8 @@ prepare((feat(F1,V1,_),feat(F2,V2,_)), (L1,L2)) :--
     (L1=[] -> true
      ; include(node_with_prop_or_featq(F2-V2), Nodes, [_|_])),
     !.
+
+prepare((_,_), (_,_)) :--
+    xmg:send(info,'\n  Solution discarded by principle requires\n'),
+    fail.
+    
