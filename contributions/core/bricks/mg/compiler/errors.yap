@@ -133,16 +133,18 @@ vs_to_string([H|T]) -->>
 	!.
 vs_to_string(L) -->>
 	queue::enq_list(L).
-vs_to_string(A) -->>
-	get_first_coord(A,C),
-	queue::enq_list("\n        "),
-	vs_to_string(C),
-	C=coord(File,Line,_),
-	get_lines(File,Line,Lines),
-	queue::enq_list("\n        "),
-	%%xmg:send(info,Lines),
-	queue::enq_list(Lines),
-	!.
+
+%% The get_lines needs to be repaired, this was nice
+%% vs_to_string(A) -->>
+%% 	get_first_coord(A,C),
+%% 	queue::enq_list("\n        "),
+%% 	vs_to_string(C),
+%% 	C=coord(File,Line,_),
+%% 	get_lines(File,Line,Lines),
+%% 	queue::enq_list("\n        "),
+%% 	%%xmg:send(info,Lines),
+%% 	queue::enq_list(Lines),
+%% 	!.
 vs_to_string(Term) -->>
 	term_to_atom(Term,Atom),
 	atom_codes(Atom,String),
