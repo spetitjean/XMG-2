@@ -88,16 +88,33 @@ type GENDER={m,f}
 type NUMBER={sg,pl}
 type MODE={ind,inf,subj,imp,ppart}
 type COLOR ={red,black,white}
-type WH={rel,+,-}
+%% type WH={rel,+,-}
+type WH={rel,wh_yes,wh_no}
 type LABEL !
 type FUNC={suj,obj,iobj,gen,loc,obl,cagent}
 
 type MARK  = {subst,nadj,foot,anchor,flex,none}
 type RANK  = [1..7]
-type AUX = {etre,avoir,-}
+%% type AUX = {etre,avoir,-}
+type AUX = {etre,avoir,aux_no}
 type TENSE = {present,past}
-type INVERSION = {+, n, -}
+%% type INVERSION = {+, n, -}
+type INVERSION = {inv_yes, inv_n, inv_no}
 type BARV = [0..3]
+
+type PP-GEN !
+type PP-NUM !
+type CONTROL-NUM !
+type CONTROL-GEN !
+type GEN !
+type DET !
+type PRINC !
+type NAME !
+type PREP !
+type LOC !
+type REFL !
+type DEF !
+type CASE !
 
 type ATOMIC=[
 	mode : MODE,
@@ -159,6 +176,42 @@ property rank : RANK{
 feature idx : LABEL
 feature top : ATOMIC
 feature bot : ATOMIC
+
+feature cat : CAT
+feature pp-gen : PP-GEN
+feature pp-num : PP-NUM
+feature control-num : NUMBER
+feature control-gen : GENDER
+feature control-pers : PERSON
+feature num : NUMBER
+feature gen : GEN
+feature pers : PERSON
+feature inv : INVERSION
+feature mode : MODE
+feature wh : WH
+feature det : DET
+feature neg-nom : bool
+feature neg-adv : bool
+feature func : FUNC
+feature princ : INVERSION
+feature name : NAME
+feature prep : PREP
+feature prep1 : PREP
+feature prep2 : PREP
+feature loc : LOC
+feature refl : REFL
+feature def : DEF
+feature bar : BARV
+feature case : CASE
+feature aux-pass : bool
+feature aux-refl : bool
+feature aux : AUX
+feature cop : bool
+feature tense : TENSE
+feature ctrl-gen : GEN
+feature ctrl-num : NUMBER
+feature ctrl-pers : PERSON
+
 %feature mode : LABEL
 %feature num : NUMBER
 %feature pers : PERSON

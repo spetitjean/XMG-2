@@ -12,7 +12,7 @@ declare
 {
 	<syn>{
 		node xTop(color=red,mark=nadj)[cat = v,bot=[mode=?fM,num=?fN,pers=?fP,aux-pass= +, inv = ?fO,neg-adv = ?fG, neg-nom = ?fK]]{
-			node xL(mark=anchor,color=red)[cat = v, top=[mode=?fM, num=?fN, pers=?fP,inv = ?fO,neg-adv = ?fG,neg-nom = ?fK],bot = [inv = -]]
+			node xL(mark=anchor,color=red)[cat = v, top=[mode=?fM, num=?fN, pers=?fP,inv = ?fO,neg-adv = ?fG,neg-nom = ?fK],bot = [inv = inv_no]]
 			node xR(mark=foot,color=red)[cat = v,top=[mode = ppart]]
 		}
 	}
@@ -52,7 +52,7 @@ declare
 	?xV
 {
 	<syn>{
-		node xV(color=red,mark=anchor)[cat = v,bot=[cop = +,inv = -]]
+		node xV(color=red,mark=anchor)[cat = v,bot=[cop = +,inv = inv_no]]
 	}
 }
 
@@ -69,7 +69,7 @@ declare
 {
 	<syn>{
 		node xTop(color=red)[cat = vn,bot=[mode=?fM,num=?fN,pers=?fP,inv = ?fO, gen = ?fK,neg-nom = ?fG, neg-adv = ?fH]]{
-			node xL(mark=anchor,color=red)[cat = v, top=[mode=?fM, num=?fN, pers=?fP,inv = ?fO],bot=[inv = -]]
+			node xL(mark=anchor,color=red)[cat = v, top=[mode=?fM, num=?fN, pers=?fP,inv = ?fO],bot=[inv = inv_no]]
 			node xR(mark=foot,color=red)[cat = vn,top=[mode = inf, num = ?fN,gen = ?fK,neg-adv = ?fH,neg-nom = ?fG]]
 		}
 	}
@@ -145,7 +145,7 @@ declare
 {
 	<syn>{
 		node xVN[top=[neg-nom = ?fG],bot=[mode=?fX, num = ?fY,gen = ?fZ,pers=?fW,pp-gen = ?fS,pp-num=?fT,inv = ?fO,neg-adv = ?fK]]{
-			node xV[top=[mode=?fX,num = ?fY,gen = ?fZ,pers=?fW,inv = ?fO,pp-gen= ?fS, pp-num = ?fT,neg-adv = ?fK,neg-nom = ?fG],bot=[inv = -, aux-refl= -]]
+			node xV[top=[mode=?fX,num = ?fY,gen = ?fZ,pers=?fW,inv = ?fO,pp-gen= ?fS, pp-num = ?fT,neg-adv = ?fK,neg-nom = ?fG],bot=[inv = inv_no, aux-refl= -]]
 		}			
 	}
 }
@@ -178,7 +178,7 @@ declare
         <syn>{
 	    node xVN[top=[neg-nom = ?fK],bot=[num = ?fX, pers = ?fY, gen=?fZ, mode = ?fW,inv = ?fU,neg-adv = ?fG]]{
                	node xClitic(color=red,rank=2)[cat = cl]
-               	,,,node xV(color=black)[cat = v,top=[num = ?fX, pers = ?fY, gen=?fZ,mode=?fW,inv = ?fU,neg-nom = ?fK,neg-adv = ?fG],bot=[aux = etre,aux-refl = +,inv = -]]
+               	,,,node xV(color=black)[cat = v,top=[num = ?fX, pers = ?fY, gen=?fZ,mode=?fW,inv = ?fU,neg-nom = ?fK,neg-adv = ?fG],bot=[aux = etre,aux-refl = +,inv = inv_no]]
 	    }		              
         }       
 }

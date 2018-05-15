@@ -50,8 +50,8 @@ declare
 	?xSubj
 {
 		<syn>{
-			node xS[bot = [wh = -,inv = n]]{
-				node xVN [top = [inv = -]]
+			node xS[bot = [wh = wh_no,inv = inv_n]]{
+				node xVN [top = [inv = inv_no]]
 				,,,node xSubj(color = red,mark=subst)[cat = n,top = [det = +]]
 			}			
 		};
@@ -101,8 +101,8 @@ import
        EmptySubject[]
 {
 	<syn>{
-		node xS[bot =[inv = +,mode = @{ind,subj}]]{
-		     node xVN[top = [inv = +]]
+		node xS[bot =[inv = inv_yes,mode = @{ind,subj}]]{
+		     node xVN[top = [inv = inv_yes]]
 		}
 	}
 }
@@ -132,7 +132,7 @@ declare
         ?xSubj ?fX ?fY ?fZ
 {
 	<syn>{
-		node xS[bot=[wh = -]]{
+		node xS[bot=[wh = wh_no]]{
 			node xSubj(color=red)[top=[det = +]]
 			node xVN(color=white)[cat = vn]
 		};
@@ -149,7 +149,7 @@ declare
 {
         <syn>{
 	     node xVN [top=[neg-nom = ?fG],bot=[neg-adv = ?fK]];
-             node xSubj(mark=subst)[cat = n,top=[neg-nom = ?fG,neg-adv = ?fK, wh = -,func=suj]]
+             node xSubj(mark=subst)[cat = n,top=[neg-nom = ?fG,neg-adv = ?fK, wh = wh_no,func=suj]]
 	 }
 }
 
@@ -188,7 +188,7 @@ declare
 				node xComp(color=red)[cat=c]{
 					node xQue(color=red,mark=flex)[cat=que]
 				}
-				node xSubj(color=red,mark=subst)[cat=s,top=[mode = subj, inv = -, wh = -, princ = -]]
+				node xSubj(color=red,mark=subst)[cat=s,top=[mode = subj, inv = inv_no, wh = wh_no, princ = inv_no]]
 			}
 			node xVN
 		}
@@ -204,7 +204,7 @@ declare
 {
 	<syn>{
 		node xS{
-			node xSubj(color=red,mark=subst)[cat=s, top=[mode = inf, princ = -, inv = -, wh = -]]
+			node xSubj(color=red,mark=subst)[cat=s, top=[mode = inf, princ = inv_no, inv = inv_no, wh = wh_no]]
 			node xVN
 		}
 	}
@@ -383,7 +383,7 @@ declare
 			node xX (color = red)[cat=c]{
 				node xComp(color=red,mark=flex)
 			}
-			node xArg(color = red)[cat = s,top=[wh = -,princ = -, inv = -]]
+			node xArg(color = red)[cat = s,top=[wh = wh_no,princ = inv_no, inv = inv_no]]
 		}		
 	}
 }
@@ -452,7 +452,7 @@ declare
 	?fX ?fY ?fZ
 {
 	<syn>{
-		node xtop[top=[mode=inf, princ = -]];
+		node xtop[top=[mode=inf, princ = inv_no]];
 		?xCtrollee = ?xtop;
 		?xVNCtroller = ?xVN
 	}
@@ -464,7 +464,7 @@ import
 	Subject-Control[]
 {
 	<syn>{
-		node xArg[top=[mode=inf,wh= -, princ = -]];
+		node xArg[top=[mode=inf,wh = wh_no, princ = inv_no]];
 		?xCtrollee = ?xArg;
 		?xVNCtroller = ?xVN			
 	}
@@ -497,7 +497,7 @@ import
 		node xComp(color=red)[cat=si]
 	};
 	<syn>{
-		node xArg(color = red)[cat = s,top=[wh = -,inv = -,princ = -]]
+		node xArg(color = red)[cat = s,top=[wh = wh_no,inv = inv_no,princ = inv_no]]
 	}
 }
 
@@ -507,7 +507,7 @@ import
 	Infinitive[]
 {
 	<syn>{
-		node xtop [top =[wh = +,mode = @{inf,ind},princ = -]];
+		node xtop [top =[wh = wh_yes,mode = @{inf,ind},princ = inv_no]];
 		?xtop = ?xCtrollee
 	}
 }
@@ -650,7 +650,7 @@ declare
 	<syn>{
 		node xSe(color=red,extracted= +)[cat = s]{
 			node xtop(color=red)
-			node xS[top=[wh = -,inv = @{+,n,-}]] %false -> ask yannick (should be + | n for questions, + | - | n for clefts and relatives (I can't say that)   
+			node xS[top=[wh = wh_no,inv = @{inv_yes,inv_n,inv_no}]] %false -> ask yannick (should be + | n for questions, + | - | n for clefts and relatives (I can't say that)   
 		}
 	}
 }
@@ -662,7 +662,7 @@ declare
 	?fX
 {
 	<syn>{
-		node xSe[top = [princ = +],bot=[wh = +,princ = ?fX, inv = ?fX]];
+		node xSe[top = [princ = inv_yes],bot=[wh = wh_yes,princ = ?fX, inv = ?fX]];
 		node xS[top=[inv = ?fX]]
 	}
 }
@@ -674,7 +674,7 @@ declare
 	?NCO
 {
 	<syn>{
-		node xtop(mark=subst)[cat = n,top=[wh = +]];		
+		node xtop(mark=subst)[cat = n,top=[wh = wh_yes]];		
 		NCO = NonCanonicalObject[];
 		xVN = NCO.xVNAgr;
 		xtop = NCO.xObjAgr
@@ -686,7 +686,7 @@ import
 	UnboundedQuestion[]
 {
 	<syn>{
-		node xtop(mark=subst)[cat = pp, top=[loc = +,wh = +]]		
+		node xtop(mark=subst)[cat = pp, top=[loc = +,wh = wh_yes]]		
 	}
 }
 
@@ -701,7 +701,7 @@ declare
 	<syn>{
 		node xtop[cat = pp]{
 			node xX(color=red)[cat = p]
-			node xArg(mark=subst,color=red)[cat = n,top=[wh = +, det = +]]
+			node xArg(mark=subst,color=red)[cat = n,top=[wh = wh_yes, det = +]]
 		}
 	}
 }
@@ -811,7 +811,7 @@ declare
 	<syn>{
 		node xtop[cat = pp]{
 			node xX(color=red)[cat = p]
-			node xArg(color=red,mark = subst)[cat = n,top=[det = +, wh = +]]
+			node xArg(color=red,mark = subst)[cat = n,top=[det = +, wh = wh_yes]]
 		}
 	}
 }
@@ -880,7 +880,7 @@ declare
 	?xCleft ?xVNCleft ?xClCleft ?xAuxCleft ?xClefttop
 {
 	<syn>{
-		node xCleft(color=red)[cat = s,bot=[wh = -]]{
+		node xCleft(color=red)[cat = s,bot=[wh = wh_no]]{
 			node xVNCleft(color=red)[cat=vn]{
 				node xClCleft(color=red,mark=subst)[cat=cl,top=[case = suj,pers=3]]
 				node xAuxCleft(color=red,mark=subst)[cat=v,top=[mode=@{ind,subj},pers=3]]
@@ -900,7 +900,7 @@ declare
 	?xComp
 {
 	<syn>{
-		node xClefttop(mark=subst)[cat = n,top=[det = +,wh = -, num = sg]];
+		node xClefttop(mark=subst)[cat = n,top=[det = +,wh = wh_no, num = sg]];
 		node xtop[cat = c]{
 			node xComp(color=red,mark=flex)
 		}	
@@ -941,7 +941,7 @@ declare
 	<syn>{
 		node xClefttop[cat = pp]{
 			node xX(color=red)[cat=p]
-			node xArg(color=red,mark=subst)[cat=n,top=[det = +,wh = -, num = sg]]		
+			node xArg(color=red,mark=subst)[cat=n,top=[det = +,wh = wh_no, num = sg]]		
 		} 		
 	};
 	<syn>{
@@ -1104,8 +1104,8 @@ import
 	BoundedExtraction[]
 {
 	<syn>{
-		node xS[bot=[wh = +,inv = -]]{ 
-			node xArg(color=red,extracted= +,mark=subst)[cat=n,top=[wh = +]]
+		node xS[bot=[wh = wh_yes,inv = inv_no]]{ 
+			node xArg(color=red,extracted= +,mark=subst)[cat=n,top=[wh = wh_yes]]
 			node xVN [top = [mode = @{subj,ind}]]
 		}		
 	}
@@ -1120,7 +1120,7 @@ declare
 	<syn>{
 		node xRel(color=red)[cat = n,bot=[det = ?fX, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU, wh = ?fW, bar = 3]]{
 			node xfoot(color=red,mark=foot)[cat=n,top=[det = ?fX, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU, wh = ?fW,bar = @{0,1,2,3}]]
-			node xS(mark=nadj)[bot=[mode=ind,wh = -]]{
+			node xS(mark=nadj)[bot=[mode=ind,wh = wh_no]]{
 				node xArg(color=red,extracted= +)[cat=c]{
 					node xQui(color=red,mark=flex)[cat=qui]
 				}
@@ -1138,13 +1138,13 @@ declare
 
 {
 	<syn>{
-		node xSe(color=red)[cat = s, bot=[wh = -]]{
+		node xSe(color=red)[cat = s, bot=[wh = wh_no]]{
 			node xVNCleft(color=red)[cat=vn]{
 				node xCl(color=red,mark=subst)[cat=cl,top=[func = suj, pers = 3]]
 				node xVcleft(color=red,mark=subst)[cat=v,top=[pers = 3,mode=ind]]
 			}
 			node xArg(color=red,mark=subst,extracted= +)[cat=n]
-			node xS[bot=[wh = -, mode = ind]]{
+			node xS[bot=[wh = wh_no, mode = ind]]{
 				node xComp(color=red)[cat=c]{
 					node xCompl(color=red,mark=flex)[cat=qui]
 				}

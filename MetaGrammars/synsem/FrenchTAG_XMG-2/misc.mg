@@ -8,7 +8,7 @@ declare
 	?xN
 {
 	<syn>{
-		node xN(color=red,mark=anchor)[cat = n,bot=[pers = 3, wh = -]]
+		node xN(color=red,mark=anchor)[cat = n,bot=[pers = 3, wh = wh_no]]
 	}
 }
 class pronoun
@@ -56,13 +56,13 @@ declare
  ?xR ?xAnc ?xPP ?xP ?xDe ?xFoot ?fX ?fW ?fT ?fY ?fZ ?fU ?fG ?fK
 {
 	<syn>{
-		node xR(color=red)[cat = n,bot = [det = +, wh = -, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU,neg-adv = ?fK,neg-nom = ?fG]]{
+		node xR(color=red)[cat = n,bot = [det = +, wh = wh_no, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU,neg-adv = ?fK,neg-nom = ?fG]]{
 			node xAnc(color=red,mark=anchor)
 			node xPP(color=red)[cat = pp]{
 				node xP(color=red)[cat = p]{
 					node xDe(color=red,mark = flex)
 				}
-				node xFoot(color=red,mark=foot)[cat = n,top=[det = -, wh = -, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU,neg-adv = ?fK, neg-nom = ?fG]]
+				node xFoot(color=red,mark=foot)[cat = n,top=[det = -, wh = wh_no, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU,neg-adv = ?fK, neg-nom = ?fG]]
 			}
 		}
 	}
@@ -143,7 +143,7 @@ declare
 	?fR
 {
 	<syn>{
-		node xR[bot = [wh = -]];
+		node xR[bot = [wh = wh_no]];
 		node xFoot
 	}
 }
@@ -154,8 +154,8 @@ import
 	pureDeterminer[]
 {
 	<syn>{
-		node xR[bot = [wh = +]];
-		node xFoot[top = [wh = -]]
+		node xR[bot = [wh = wh_yes]];
+		node xFoot[top = [wh = wh_no]]
 	}
 }
 
@@ -166,7 +166,7 @@ import
 	determiner[]
 {
 	<syn>{
-		node xR[bot = [det = +, wh = -]];
+		node xR[bot = [det = +, wh = wh_no]];
 		node xFoot[top = [det = @{+,-}]]
 	}
 }	
@@ -177,7 +177,7 @@ import
 	pureDeterminer[]
 {
 	<syn>{
-		node xR[bot=[neg-adv = -, neg-nom = +,wh = -]]
+		node xR[bot=[neg-adv = -, neg-nom = +,wh = wh_no]]
 	}
 }
 
@@ -213,8 +213,8 @@ declare
 	?xR ?xfoot ?xCl	?fX ?fY ?fZ ?fU ?fV ?fW ?fG ?fK
 {
 	<syn>{
-		node xR(color=red)[cat = v,bot = [inv = @{+,-},mode = @{ind,subj}, num = ?fY, pers= ?fZ, gen = ?fU,aux = ?fV ,aux-pass = ?fW,neg-adv = ?fG, neg-nom = ?fK]]{
-			node xfoot(color=red,mark=foot)[cat =v,top=[inv = -, mode = @{ind,subj}, num = ?fY, pers = ?fZ, gen = ?fU, aux = ?fV, aux-pass=?fW,neg-adv = ?fG,neg-nom = ?fK]]
+		node xR(color=red)[cat = v,bot = [inv = @{inv_yes,inv_no},mode = @{ind,subj}, num = ?fY, pers= ?fZ, gen = ?fU,aux = ?fV ,aux-pass = ?fW,neg-adv = ?fG, neg-nom = ?fK]]{
+			node xfoot(color=red,mark=foot)[cat =v,top=[inv = inv_no, mode = @{ind,subj}, num = ?fY, pers = ?fZ, gen = ?fU, aux = ?fV, aux-pass=?fW,neg-adv = ?fG,neg-nom = ?fK]]
 			node xCl(color=red,mark=anchor)[cat = cl]
 		}
 	}
@@ -229,7 +229,7 @@ declare
 			node xF(color=red,mark=foot)[cat = s]
 			node xSbar(color=red,mark=nadj)[cat = s]{
 				node xHead(color=red,mark=anchor)[cat = c]
-				node xArg(color=red,mark = subst)[cat = s, top=[inv = -, princ = -, wh = -, mode = @{subj,ind}]]
+				node xArg(color=red,mark = subst)[cat = s, top=[inv = inv_no, princ = inv_no, wh = wh_no, mode = @{subj,ind}]]
 			}
 		}
 	}
@@ -243,7 +243,7 @@ declare
 		node xR(color=red)[cat = s]{		
 			node xSbar(color=red,mark=nadj)[cat = s]{
 				node xHead(color=red,mark=anchor)[cat = c]
-				node xArg(color=red,mark = subst)[cat = s, top=[inv = -, princ = -, wh = -, mode = @{subj,ind}]]
+				node xArg(color=red,mark = subst)[cat = s, top=[inv = inv_no, princ = inv_no, wh = wh_no, mode = @{subj,ind}]]
 			}
 			node xF(color=red,mark=foot)[cat = s]
 		}
@@ -326,7 +326,7 @@ declare
 	?xH
 {
 	<syn>{
-		node xH(color=red,mark=anchor)[cat = n, bot = [det = +,wh = -,neg-nom = +,neg-adv = -]]
+		node xH(color=red,mark=anchor)[cat = n, bot = [det = +,wh = wh_no,neg-nom = +,neg-adv = -]]
 	}
 }
 
@@ -341,9 +341,9 @@ declare
 	?xR ?xHead ?xFoot
 {
 	<syn>{
-		node xR(color=red)[cat = s,bot = [princ = +] ]{
+		node xR(color=red)[cat = s,bot = [princ = inv_yes] ]{
 			node xHead(color=red,mark=anchor)[cat = c]
-			node xFoot(color=red,mark=foot)[cat = s, top = [inv = -, mode = subj, wh = -]]
+			node xFoot(color=red,mark=foot)[cat = s, top = [inv = inv_no, mode = subj, wh = wh_no]]
 		}
 	}
 }
@@ -395,7 +395,7 @@ import
 	ConstituentCoord[]
 {
 	<syn>{
-		node xCoordtop[cat = n, bot = [wh = -, det = +]];
+		node xCoordtop[cat = n, bot = [wh = wh_no, det = +]];
 		node xCoordFoot[cat = n,top=[det = +]];
 		node xCoordSubst[cat = n, top=[det = +]]		
 	}
@@ -440,7 +440,7 @@ import
 	ConstituentCoord[]
 {
 	<syn>{
-		node xCoordtop[cat = pp, bot = [wh = -, det = +]];
+		node xCoordtop[cat = pp, bot = [wh = wh_no, det = +]];
 		node xCoordFoot(color=red,mark=foot)[cat = pp];
 		node xCoord(color=red,mark=anchor)[cat = coord];
 		node xCoordSubst(color=red,mark =subst)[cat = n, top = [det = +]]
@@ -536,7 +536,7 @@ declare
 	?xR ?xVN ?xHead ?xCl ?xS ?xComp ?xQue ?xFoot
 {
 	<syn>{
-		node xR(color=red)[cat = s,bot=[inv = @{+,-},wh = -]]{
+		node xR(color=red)[cat = s,bot=[inv = @{inv_yes,inv_no},wh = wh_no]]{
 			node xVN(color=red)[cat=vn]{
 				node xHead(color=red,mark=anchor)[cat = v]
 				node xCl(color=red,mark=subst)[cat = cl,top=[case = suj]]
@@ -545,7 +545,7 @@ declare
 				node xComp(color=red)[cat=c]{
 					node xQue(color=red,mark=flex)[cat = que]
 				}
- 				node xFoot(color=red,mark=foot)[cat = s,top=[inv = -,wh = -]]
+ 				node xFoot(color=red,mark=foot)[cat = s,top=[inv = inv_no,wh = wh_no]]
 			}
 		}
 		
@@ -566,7 +566,7 @@ declare
 	?xtop ?xanc
 {
    <syn>{
-		node xtop(color = red, mark = anchor)[cat = s, bot = [wh = -, inv = -, princ = -]]{
+		node xtop(color = red, mark = anchor)[cat = s, bot = [wh = wh_no, inv = inv_no, princ = inv_no]]{
 			node xanc(color = red, mark = anchor)[cat = adv]
 		}  
    }
