@@ -148,8 +148,9 @@ remove_ftypes([ftype(H)|T],[H|T1]):-
     remove_ftypes(T,T1),!.
 
 get_fconstraints([]):-
+    	xmg:send(debug,'\n\nTypes:'),
         xmg:ftypes(Types),
-	xmg:send(info,Types),
+	xmg:send(debug,Types),
 	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
 	xmg:send(debug,'\n\nType constraints:'),
 	xmg:send(debug,Constraints),
