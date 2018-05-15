@@ -136,8 +136,8 @@ declare
 			node xSubj(color=red)[top=[det = +]]
 			node xVN(color=white)[cat = vn]
 		};
-		xSubj = xSubjAgr;
-		xVN = xVNAgr
+		?xSubj = ?xSubjAgr;
+		?xVN = ?xVNAgr
 	}
 }
 
@@ -393,7 +393,7 @@ import
 	CanonicalSententialXObjectWithComplementizer[]
 {
 	<syn>{ 
-		node xArg(xcomp)		
+		node xArg(xcomp= +)		
 	}
 }
 
@@ -440,7 +440,7 @@ import
 
 {
 	<syn>{
-		node xtop(color=red,xcomp)[cat=s]  
+		node xtop(color=red,xcomp= +)[cat=s]  
 	}
 }
 
@@ -453,8 +453,8 @@ declare
 {
 	<syn>{
 		node xtop[top=[mode=inf, princ = -]];
-		xCtrollee = xtop;
-		xVNCtroller = xVN
+		?xCtrollee = ?xtop;
+		?xVNCtroller = ?xVN
 	}
 }
 
@@ -465,8 +465,8 @@ import
 {
 	<syn>{
 		node xArg[top=[mode=inf,wh= -, princ = -]];
-		xCtrollee = xArg;
-		xVNCtroller = xVN			
+		?xCtrollee = ?xArg;
+		?xVNCtroller = ?xVN			
 	}
 }
 
@@ -508,7 +508,7 @@ import
 {
 	<syn>{
 		node xtop [top =[wh = +,mode = @{inf,ind},princ = -]];
-		xtop = xCtrollee
+		?xtop = ?xCtrollee
 	}
 }
 
@@ -648,7 +648,7 @@ declare
 	?xSe ?xtop ?fX
 {
 	<syn>{
-		node xSe(color=red,extracted)[cat = s]{
+		node xSe(color=red,extracted= +)[cat = s]{
 			node xtop(color=red)
 			node xS[top=[wh = -,inv = @{+,n,-}]] %false -> ask yannick (should be + | n for questions, + | - | n for clefts and relatives (I can't say that)   
 		}
@@ -1088,10 +1088,10 @@ declare
 	?xSubj ?xArg
 {
 	<syn>{
-		xArg = xSubj
+		?xArg = ?xSubj
 	};
-	xSubj = xSubjAgr;
-	xVN = xVNAgr
+	?xSubj = ?xSubjAgr;
+	?xVN = ?xVNAgr
 }
 
 %# extraction du sujet est bornée : 
@@ -1105,7 +1105,7 @@ import
 {
 	<syn>{
 		node xS[bot=[wh = +,inv = -]]{ 
-			node xArg(color=red,extracted,mark=subst)[cat=n,top=[wh = +]]
+			node xArg(color=red,extracted= +,mark=subst)[cat=n,top=[wh = +]]
 			node xVN [top = [mode = @{subj,ind}]]
 		}		
 	}
@@ -1121,7 +1121,7 @@ declare
 		node xRel(color=red)[cat = n,bot=[det = ?fX, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU, wh = ?fW, bar = 3]]{
 			node xfoot(color=red,mark=foot)[cat=n,top=[det = ?fX, def = ?fT, num = ?fY,gen = ?fZ,pers = ?fU, wh = ?fW,bar = @{0,1,2,3}]]
 			node xS(mark=nadj)[bot=[mode=ind,wh = -]]{
-				node xArg(color=red,extracted)[cat=c]{
+				node xArg(color=red,extracted= +)[cat=c]{
 					node xQui(color=red,mark=flex)[cat=qui]
 				}
 				node xVN[top = [mode = @{ind,subj}]]
@@ -1143,7 +1143,7 @@ declare
 				node xCl(color=red,mark=subst)[cat=cl,top=[func = suj, pers = 3]]
 				node xVcleft(color=red,mark=subst)[cat=v,top=[pers = 3,mode=ind]]
 			}
-			node xArg(color=red,mark=subst,extracted)[cat=n]
+			node xArg(color=red,mark=subst,extracted= +)[cat=n]
 			node xS[bot=[wh = -, mode = ind]]{
 				node xComp(color=red)[cat=c]{
 					node xCompl(color=red,mark=flex)[cat=qui]
