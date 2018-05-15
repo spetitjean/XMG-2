@@ -31,17 +31,16 @@ xmg:stmt_type_constr(morphtf,morph).
 
 
 xmg:type_stmt(morphtf:infield(token(_,id(Field)),Contrib),Morphtf:morph(FieldsType,FeatsType)):--
-	xmg:send(info,'\n\ntyping infield with type '),
-	xmg:send(info,FieldsType),
+	xmg:send(debug,'\n\ntyping infield with type '),
+	xmg:send(debug,FieldsType),
 	%xmg_brick_avm_avm:dot(FieldsType,Field,T1),
 	xmg:type_expr(F2,T1),	
 	!.
 
 xmg:type_stmt(morphtf:eq(token(_,id(F1)),F2),Morphtf:morph(FieldsType,FeatsType)):--
-	xmg:send(info,'\n\ntyping eq with type '),
-        xmg:send(info,FeatsType),
+	xmg:send(debug,'\n\ntyping eq with type '),
+        xmg:send(debug,FeatsType),
 	%xmg_brick_avm_avm:dot(FeatsType,F1,T1),
-	xmg:send(info,'\nHERE'),
 	xmg:type_expr(F2,T1),
 	!.
 
