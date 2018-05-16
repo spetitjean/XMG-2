@@ -389,7 +389,7 @@ declare
 	?xTop ?xVN ?xV ?xCl ?xArg ?xS ?xPied ?xFoot
 {
 	<syn>{
-		node xTop(color=red)[cat = s, bot = [wh = wh_no]]{
+		node xTop(color=red)[cat = s, bot = [wh = -]]{
 			node xVN(color=red)[cat = vn]{
 				node xV(color=red,mark=subst)[cat = v, top = [pers = 3,mode = @{ind,subj}]]
 				node xCl(color=red,mark=subst)[cat = cl,top=[func = suj]]
@@ -397,7 +397,7 @@ declare
 			node xArg(color=red)
 			node xS(color=red,mark=nadj)[cat = s]{
 				node xPied(color=red)
-				node xFoot(color=red,mark=foot)[cat = s,top=[wh = wh_no]]
+				node xFoot(color=red,mark=foot)[cat = s,top=[wh = -]]
 			}
 		}
 	}
@@ -430,7 +430,7 @@ declare
 		node xArg(color=red,mark=subst)[cat = n, top=[det = +, def = +]];
 		node xPied(color=red)[cat = pp]{
 			node xP(color=red,mark=anchor)[cat = p]
-			node xN(color=red,mark = subst)[cat = n, top=[wh = wh_yes]]
+			node xN(color=red,mark = subst)[cat = n, top=[wh = +]]
 		}	
 	}
 }	
@@ -442,12 +442,12 @@ declare
 	?xE ?xPP ?xP ?xN ?xS
 {
 	<syn>{
-		node xE(color=red)[cat = s,bot=[wh = wh_yes]]{
+		node xE(color=red)[cat = s,bot=[wh = +]]{
 			node xPP(color=red)[cat = pp]{
 				node xP(color=red,mark=anchor)[cat = p]
-				node xN(color=red,mark=subst)[cat = n,top=[det = +,wh = wh_yes]]
+				node xN(color=red,mark=subst)[cat = n,top=[det = +,wh = +]]
 			}
-			node xS(color=red)[cat = s,top = [wh = wh_no]]
+			node xS(color=red)[cat = s,top = [wh = -]]
 		}
 	}
 }
@@ -457,7 +457,7 @@ import
 	 ExtractedPPMod[]
 {
 	<syn>{
-		node xS[top = [inv = inv_yes,wh = wh_yes]]
+		node xS[top = [inv = pos,wh = +]]
 	}
 }
 class  RelPPMod
@@ -469,7 +469,7 @@ declare
 	<syn>{
 		node xTop(color=red)[cat = n,bot = [det = ?fX, def = ?fY, num = ?fZ, gen = ?fU, pers= ?fW]]{
 			node xFoot(color=red,mark=foot)[cat = n,top=[det = ?fX, def = ?fY, num =  ?fZ, gen = ?fU, pers= ?fW]]
-			node xE(color=red,mark=nadj)[cat = s,bot = [wh = wh_yes]]
+			node xE(color=red,mark=nadj)[cat = s,bot = [wh = +]]
 		}
 	}
 }

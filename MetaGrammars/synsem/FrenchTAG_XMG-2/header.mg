@@ -1,6 +1,12 @@
 % -------------------------------------------------------
 % A FRENCH METAGRAMMAR
 % -------------------------------------------------------
+
+% This work is licensed under the Creative Commons Attribution 4.0
+% International License. To view a copy of this license, visit
+% http://creativecommons.org/licenses/by/4.0/ or send a letter to
+% Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
 % author = Benoit Crabbe
 % date = May - December 2004
 % comments = mostly follows (Abeillé02)
@@ -89,7 +95,9 @@ type NUMBER={sg,pl}
 type MODE={ind,inf,subj,imp,ppart}
 type COLOR ={red,black,white}
 %% type WH={rel,+,-}
-type WH={rel,wh_yes,wh_no}
+%% + and - are already defined (boolean)
+%% type WH={rel,wh_yes,wh_no}
+%% Type WH replaced by bool (rel never used)
 type LABEL !
 type FUNC={suj,obj,iobj,gen,loc,obl,cagent}
 
@@ -99,7 +107,7 @@ type RANK  = [1..7]
 type AUX = {etre,avoir,aux_no}
 type TENSE = {present,past}
 %% type INVERSION = {+, n, -}
-type INVERSION = {inv_yes, inv_n, inv_no}
+type INVERSION = {pos, neu, neg}
 type BARV = [0..3]
 
 type PP-GEN !
@@ -123,7 +131,7 @@ type ATOMIC=[
  	pers : PERSON,
  	refl : bool,      
  	loc : bool,
- 	wh : WH,
+ 	wh : bool,
  	func : FUNC,	
 	pp-num: NUMBER,
 	pp-gen: GENDER,
@@ -188,7 +196,7 @@ feature gen : GEN
 feature pers : PERSON
 feature inv : INVERSION
 feature mode : MODE
-feature wh : WH
+feature wh : bool
 feature det : DET
 feature neg-nom : bool
 feature neg-adv : bool

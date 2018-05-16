@@ -26,7 +26,7 @@ declare
 	?xN
 {
 	<syn>{
-		node xN(color=red,mark=anchor)[cat = n,bot=[det = -,pers = 3,wh = wh_no,bar = 0]]
+		node xN(color=red,mark=anchor)[cat = n,bot=[det = -,pers = 3,wh = -,bar = 0]]
 	}
 }
 
