@@ -3,7 +3,7 @@
 :- module(xmg_brick_mg_errors, []).
 :- use_module(library(lists)).
 :- use_module(library(charsio)).
-%%:- use_module('xmg/brick/mg/edcg.yap').
+:- use_module('xmg/brick/mg/edcg.yap').
 :- use_module(library(rbtrees)).
 
 :-use_module(library(readutil)).
@@ -133,18 +133,16 @@ vs_to_string([H|T]) -->>
 	!.
 vs_to_string(L) -->>
 	queue::enq_list(L).
-
-%% The get_lines needs to be repaired, this was nice
-%% vs_to_string(A) -->>
-%% 	get_first_coord(A,C),
-%% 	queue::enq_list("\n        "),
-%% 	vs_to_string(C),
-%% 	C=coord(File,Line,_),
-%% 	get_lines(File,Line,Lines),
-%% 	queue::enq_list("\n        "),
-%% 	%%xmg:send(info,Lines),
-%% 	queue::enq_list(Lines),
-%% 	!.
+vs_to_string(A) -->>
+	get_first_coord(A,C),
+	queue::enq_list("\n        "),
+	vs_to_string(C),
+	C=coord(File,Line,_),
+	get_lines(File,Line,Lines),
+	queue::enq_list("\n        "),
+	%%xmg:send(info,Lines),
+	queue::enq_list(Lines),
+	!.
 vs_to_string(Term) -->>
 	term_to_atom(Term,Atom),
 	atom_codes(Atom,String),
@@ -277,5 +275,21 @@ get_lines1(File,1,Codes):-
 	read_line_to_codes(File,Codes),!.
 get_lines1(File,N,Codes):-
 	M is N - 1,
-	read_line_to_codes(File,_),
+	read_line_to_codes(File,Out),
 	get_lines1(File,M,Codes),!.
+
+
+%% We create our own read_line_to_codes
+read_line_to_codes(File,[]):-
+    peek_byte(File,-1),
+    get_byte(File,-1),!.
+read_line_to_codes(File,[]):-
+    atom_to_chars('\n',[EOL]),
+    peek_byte(File,Char),
+    Char==EOL,
+    get_byte(File,_),
+    !.    
+read_line_to_codes(File,[Byte|Codes]):-
+    get_byte(File,Byte),
+    read_line_to_codes(File,Codes),
+    !.
