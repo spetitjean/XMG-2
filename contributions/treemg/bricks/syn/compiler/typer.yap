@@ -91,6 +91,14 @@ xmg:type_stmt(syn:child(Op,Tree),Type):--
 	xmg:type_stmt(Tree,Type),
 	!.
 
+%% Maybe there should not be such a thing as syn:eq
+%% that should be covered by the control language
+xmg:type_stmt(syn:eq(N1,N2),Syn:tree(FType,PType)):--
+	xmg:type_expr(N1,T1),
+	T1=Syn:node(Syn:tree(FType,PType)),
+	xmg:type_expr(N2,T2),
+	T2=Syn:node(Syn:tree(FType,PType)),
+	!.
 
 %% xmg:type_stmt(syn:X,Type):--
 %% 	xmg:send(info,'\n\nDid not type syn statement:\n'),

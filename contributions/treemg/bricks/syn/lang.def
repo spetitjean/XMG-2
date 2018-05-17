@@ -5,7 +5,7 @@
 SynStmt : Node {$$=$1}
 	| Dom  {$$=$1}
 	| Prec {$$=$1}
-	| Eq   {$$=$1}
+/*	| Eq   {$$=$1} */
 	| Tree {$$=$1};
 
 Node : 'node' (Var)? MaybeProps Feats {$$=syn:node($2,$3,$4)};
@@ -67,10 +67,10 @@ TreeDomOp : '...' {$$=$1}
 	  | '...+'{$$=$1}
 	  | {$$=none};
 
-Eq : Expr '=' Expr {$$=syn:eq($1,$3)};
+/* Eq : Expr '=' Expr {$$=syn:eq($1,$3)}; */
 
-Expr : id {$$=$1} 
-     | string {$$=$1};
+/* Expr : id {$$=$1}  */
+/*     | string {$$=$1}; */
 
 Var : id {$$=$1} 
     | '?' id {$$=$2};

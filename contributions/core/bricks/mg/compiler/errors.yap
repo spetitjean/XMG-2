@@ -215,7 +215,7 @@ xmg_message(unfolder_error(cycle_detected_with_class(A,C)),Msg):- !,
 xmg_message(unfolder_error(no_class_value),Msg):- !,
 	Msg=error(unfolder,[hint('no class set to be valued',''),coord('',0,0)]).
 xmg_message(unfolder_error(no_unfolding(A)),Msg):- !,
-	Msg=error(unfolder,[hint('Rule can not be unfolded',A)]).
+	Msg=error(unfolder,[hint('Rule can not be unfolded (this should not happen)',A)]).
 
 %% errors in type checking
 xmg_message(type_error(property_not_declared(X,C)),Msg):- !,
@@ -231,7 +231,9 @@ xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,
 xmg_message(type_error(unknown_constant(X,C)),Msg):- !,
 	Msg=error(types,[hint('unknown constant',X),C]).
 xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
-	Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
+        Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
+xmg_message(type_error(cannot_type(S,T)),Msg):- !,
+	Msg=error(types,[hint('cannot type (this should not happen)',(S,T))]).
 xmg_message(type_error(incompatible_exprs(expr(E1,T1),expr(E2,T2))),Msg):- !,
 	 Msg=error(types,[hint('incompatible expressions',exprs_types(E1,T1,E2,T2))]).
 xmg_message(type_error(multiple_type(X)),Msg):- !,
@@ -246,7 +248,7 @@ xmg_message(type_error(no_frame_type),Msg):- !,
 
 %% generator errors
 xmg_message(generator_error(unknown_instruction(I)),Msg):- !,
-	Msg=error(generator,[hint('unknown instruction',I)]).
+	Msg=error(generator,[hint('unknown instruction (this should not happen)',I)]).
 xmg_message(generator_error(class_not_defined(I)),Msg):- !,
 	Msg=error(generator,[hint('undefined class used for valuation',I)]).
 xmg_message(generator_error(cannot_call(I)),Msg):- !,
