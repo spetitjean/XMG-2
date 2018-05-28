@@ -16,6 +16,7 @@ class ParserXMG(object):
         self.valt = None
         self.STAG = {
             "grammar": self.stag_grammar,
+            "mcgrammar": self.stag_grammar,
             "entry": self.stag_entry,
             "family": self.stag_family,
             "trace": self.stag_trace,
@@ -36,6 +37,7 @@ class ParserXMG(object):
         }
         self.ETAG = {
             "grammar": self.etag_grammar,
+            "mcgrammar": self.etag_grammar,
             "entry": self.etag_entry,
             "family": self.etag_family,
             "trace": self.etag_trace,
