@@ -31,14 +31,14 @@ post(Unicities):--
     	solver::tget(space,Space),
         solver::tget(nodes,NodeList),
         solver::tget(intvars,IntVars),
-
-	post_unicities(Space,NodeList,IntVars,Unicities),!.
+	post_unicities(Space,NodeList,IntVars,Unicities),
+	!.
 
 
 post_unicities(Space,Nodelist,IntVars,[]):- !.
 post_unicities(Space,NodeList,IntVars,[U1|UT]):-
-	%%xmg_compiler:send(info,' one unicity '),
-	%%xmg_compiler:send(info,U1),
+	xmg:send(debug,' one unicity '),
+	xmg:send(debug,U1),
 	post_unicities_first(Space,NodeList,IntVars,U1,1),
 	%%xmg_compiler:send(info,' one done '),
 	post_unicities(Space,NodeList,IntVars,UT),!.
@@ -63,7 +63,7 @@ post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
 	%% Space += rel(EqX,'SRT_EQ',EqY),
 
 	%% version 1: if two nodes share a property that has to be unique, they have to be the same, or to be in different subtrees
-    
+	%% This should be the version used by XMG-1
 
 	%% Parent   :=: parent(Node),   
 	%% ParentU   :=: parent(NodeU),   
@@ -84,6 +84,8 @@ post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
 
 	xmg_brick_tree_solver:get_rel(I1,I2,IntVars,IntVar),
 	Space += dom(IntVar,1),
+
+	%% end of version 2
     
 	I3 is I2+1,
 	%%xmg_compiler:send(info,' posted unicity'),

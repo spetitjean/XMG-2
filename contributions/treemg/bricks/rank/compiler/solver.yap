@@ -33,7 +33,6 @@ post([Ranks]):--
     	solver::tget(space,Space),
         solver::tget(nodes,NodeList),
         solver::tget(intvars,IntVars),
-
 	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-

@@ -62,8 +62,9 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	value_type(Value,TypeDef),
 	extend_type(Type,UAttr,TypeDef),
 	!.
-xmg:type_expr(avm:feat(Attr,Value),Type):--
-	throw(xmg(type_error(incompatible_types(Attr,Value)))).
+xmg:type_expr(avm:feat(token(C1,id(Attr)),token(C2,Value)),Type):--
+        Value=..[_,V],
+	throw(xmg(type_error(incompatible_types(Attr,V,C1)))).
 
 %% when typing a structured type
 extend_type(Type,UAttr,TypeAttr):--

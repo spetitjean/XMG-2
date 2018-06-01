@@ -62,7 +62,7 @@ format_spec(hint(L)) -->> !,
 	queue::enq("~t~s~12+"-[LL]),
 	queue::enq(nl).
 format_spec(hint(L,M)) -->> !,
-	vs_to_string(L) with queue([]-LL,[]-[]),
+        vs_to_string(L) with queue([]-LL,[]-[]),
 	vs_to_string(M) with queue([]-MM,[]-[]),
 	queue::enq("~t~s~12+: ~s"-[LL,MM]),
 	queue::enq(nl).
@@ -92,6 +92,8 @@ vs_to_string(S1#S2) -->> !,
 vs_to_string(A) -->> atomic(A), !,
 	name(A,S),
 	queue::enq_list(S).
+vs_to_string(bool(B)) -->> !,
+	queue::enq_list(B).
 vs_to_string(coord(F,L,C)) -->> !,
 	(F='' -> true;
 	 name(F,FF),
@@ -231,7 +233,12 @@ xmg_message(type_error(variable_not_declared(X,C)),Msg):- !,
 xmg_message(type_error(unknown_constant(X,C)),Msg):- !,
 	Msg=error(types,[hint('unknown constant',X),C]).
 xmg_message(type_error(incompatible_types(T1,T2,C)),Msg):- !,
-        Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
+    Msg=error(types,[hint('incompatible types',(T1,T2)),C]).
+xmg_message(type_error(incompatible_types(A,V)),Msg):- !,
+    get_first_coord(A,C),
+    Msg=error(types,[hint('incompatible types',(A,V)),C]).
+	
+
 xmg_message(type_error(cannot_type(S,T)),Msg):- !,
 	Msg=error(types,[hint('cannot type (this should not happen)',(S,T))]).
 xmg_message(type_error(incompatible_exprs(expr(E1,T1),expr(E2,T2))),Msg):- !,

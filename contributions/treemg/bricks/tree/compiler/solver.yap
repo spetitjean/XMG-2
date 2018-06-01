@@ -50,8 +50,11 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
+	xmg:send(debug,'\nNot unif: '),
+	xmg:send(debug,NotUnifs),
+
 	xmg_brick_mg_compiler:send(debug,' doing posts '),
-	%%xmg:send(info,Relations),
+	xmg:send(debug,Relations),
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
 	xmg_brick_mg_compiler:send(debug,' branching '),
