@@ -1,0 +1,2 @@
+This metagrammar is an update of the XMG-based XTAG (http://homepages.inf.ed.ac.uk/s0896251/XMG-basedXTAG/titlepage.html), developed in 2008 by Katya Saint-Amand.
+This new version (Simon Petitjean, 2018) provides full compatibility with XMG-2. Modifications are minor, as they include mostly type declarations and constant renaming, which are needed by the stricter type-checḱing of XMG-2. 

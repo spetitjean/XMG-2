@@ -1,0 +1,669 @@
+%=========
+% Verbs
+%=========
+
+asked		ask		[pos = v; mode=ind; tense=past;]
+asked		ask		[pos = v; mode=ppart;]
+ask		ask		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+asks		ask		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+ask		ask		[pos = v; mode=base;]
+asking		ask		[pos = v; mode=ger;]
+
+approved	approve		[pos = v; mode=ind; tense=past;]
+approved	approve		[pos = v; mode=ppart;]
+approves 	approve		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+approve		approve		[pos = v; mode=base;]
+approving	approve		[pos = v; mode=ger;]
+
+baked		bake		[pos = v; mode=ind; tense=past;]
+baked		bake		[pos = v; mode=ppart;]
+bake		bake		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+bakes 		bake		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+bake		bake		[pos = v; mode=base;]
+baking		bake		[pos = v; mode=ger;]
+
+beats		beat		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+beaten		beat		[pos = v; mode=ppart;]
+beating		beat		[pos = v; mode=ger;]
+beat		beat		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+beat		beat		[pos = v; mode=base;]
+beat		beat		[pos = v; mode=ind;tense=past]
+
+is		be		[pos = v; mode=ind; pers=3; num=sing; tense=pres; pass= + | -;]
+was		be		[pos = v; mode=ind; pers=3; num=sing; tense=past; pass= + | -;]
+are		be		[pos = v; mode=ind; pers=3; num=plur; tense=pres; pass= + | -;]
+were		be		[pos = v; mode=ind; pers=3; num=plur; tense=past; pass= + | -;]
+being		be		[pos = v; mode=ger; pass= + | -;]
+be		be		[pos = v; mode=base;]
+be		be		[pos = v; mode=base; rmode=ppart;]
+be		be		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+baked		bake		[pos = v; mode=ind; tense=past;]
+baked		bake		[pos = v; mode=ppart;]
+bake		bake		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+bakes 		bake		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+bake		bake		[pos = v; mode=base;]
+baking		bake		[pos = v; mode=ger;]
+
+bet		bet		[pos = v; mode=ind; tense=past;]
+bet		bet		[pos = v; mode=ppart;]
+bet		bet		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+bets		bet		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+bet		bet		[pos = v; mode=base;]
+betting		bet		[pos = v; mode=ger;]
+		
+bit		bite		[pos = v; mode=ind; tense=past;]
+bitten		bite		[pos = v; mode=ppart;]
+bite		bite		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+bites		bite		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+bite		bite		[pos = v; mode=base;]
+biting		bite		[pos = v; mode=ger;]
+
+broke		break		[pos = v; mode=ind; tense=past;]
+broken		break		[pos = v; mode=ppart;]
+break		break		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+breaks		break		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+break		break		[pos = v; mode=base;]
+breaking	break		[pos = v; mode=ger;]
+
+closed		close		[pos = v; mode=ind; tense=past;]
+closed		close		[pos = v; mode=ppart;]
+close		close		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+closes 		close		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+close		close		[pos = v; mode=base;]
+closing		close		[pos = v; mode=ger;]
+
+considered	consider	[pos = v; mode=ind; tense=past;]
+considers	consider	[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+consider	consider	[pos = v; mode=base;]
+
+cried		cry		[pos = v; mode=ppart;]
+cried		cry		[pos = v; mode=ind; tense=past;]
+cry		cry		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+cries		cry		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+cry		cry		[pos = v; mode=base;]
+crying		cry		[pos = v; mode=ger;]
+
+dancing		dance		[pos = v; mode=ger;]
+
+disappointed	disappoint	[pos = v; mode=ind; tense=past;]
+disappointed	disappoint	[pos = v; mode=ppart;]
+disappoints     disappoint	[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+disappoint	disappoint	[pos = v; mode=base;]
+
+disapproves	disapprove 	[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+disapprove	disapprove	[pos = v; mode=base;]
+
+drove		drive		[pos = v; mode=ind; tense=past;]
+driven		drive		[pos = v; mode=ppart;]
+drives		drive		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+drive		drive		[pos = v; mode=base;]
+driving		drive		[pos = v; mode=ger;]
+
+dreaded		dread		[pos = v; mode=ind;tense=past;]
+dread		dread		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+dreads		dread		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+dread		dread		[pos = v; mode=base;]
+dreading	dread		[pos = v; mode=ger;]
+
+ate		eat		[pos = v; mode=ind; tense=past;]
+eaten		eat		[pos = v; mode=ppart;]
+eats 		eat		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+eat		eat		[pos = v; mode=base;]
+eat		eat		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+expected	expect		[pos = v; mode=ind; tense=past;]
+expects		expect		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+expect		expect		[pos = v; mode=base;]
+expect		expect		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+expecting	expect		[pos = v; mode=ger;]
+
+exit		exit		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+fascinates	fascinate 	[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+fascinated	fascinate 	[pos = v; mode=ind; pers=3; num=sing | plur ; tense=past;]
+
+feared		fear		[pos = v; mode=ind; tense=past;]
+fears		fear		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+
+flew		fly		[pos = v; mode=ind; tense=past;]
+flies		fly		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+flown		fly		[pos = v; mode=ppart;]	    
+fly		fly		[pos = v; mode=base;]
+fly		fly		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+forced		force		[pos = v; mode=ind; tense=past;]
+forces		force		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+force		force		[pos = v; mode=base;]
+force		force		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+forced		force		[pos = v; mode=ppart;]
+forcing		force		[pos = v; mode=ger;]
+
+froze		freeze		[pos = v; mode=ind; tense=past;]
+freezes		freeze		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+freeze		freeze		[pos = v; mode=base;]
+freeze		freeze		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+frozen		freeze		[pos = v; mode=ppart;]
+freezing	freeze		[pos = v; mode=ger;]
+
+give		give		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+give		give		[pos = v; mode=base;]
+
+go		go		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+go		go		[pos = v; mode=base;]
+
+grew		grow		[pos = v; mode=ind; tense=past;]
+grows		grow		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+grow		grow		[pos = v; mode=base;]
+grow		grow		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+grown		grow		[pos = v; mode=ppart;]
+growing		grow		[pos = v; mode=ger;]
+
+impressed	impress		[pos = v; mode=ind; tense=past;]
+impresses 	impress		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+
+insists		insist		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+insist		insist		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+insisting	insist		[pos = v; mode=ger;]
+insist		insist		[pos = v; mode=base;]
+
+kill		kill		[pos = v; mode=base;]
+
+likes		like		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+like		like		[pos = v; mode=base;]
+
+load		load		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+load		load		[pos = v; mode=base;]
+
+lock		lock		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+lock		lock		[pos = v; mode=base;]
+
+looks		look		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+looked		look		[pos = v; mode=ind; tense=past;]
+looked		look		[pos = v; mode=ppart;]
+look		look		[pos = v; mode=base;]
+look		look		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+looking		look		[pos = v; mode=ger;]
+
+loves		love		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+love		love		[pos = v; mode=base;]
+loved		love		[pos = v; mode=ind; tense=past;]
+loved		love		[pos = v; mode=ppart;]
+
+made		make		[pos = v; mode=ind; tense=past;]
+made		make		[pos = v; mode=ppart;]
+make		make		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+makes 		make		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+make		make		[pos = v; mode=base;]
+making		make		[pos = v; mode=ger;]
+
+matters		matter		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+
+melts 		melt		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+melt		melt		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+melt		melt		[pos = v; mode=base;]
+melting		melt		[pos = v; mode=ger;]
+melted		melt		[pos = v; mode=ind; tense=past;]
+melted		melt		[pos = v; mode=ppart;]
+
+move		move		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+move		move		[pos = v; mode=base;]
+
+needed		need		[pos = v; mode=ind; tense=past;]
+needed		need		[pos = v; mode=ppart;]
+needs		need		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+need		need		[pos = v; mode=base;]
+
+occurred	occur		[pos = v; mode=ind; tense=past;]
+occurs		occur		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+
+opened		open		[pos = v; mode=ind; tense=past;]
+opened		open		[pos = v; mode=ppart;]
+opens		open		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+open		open		[pos = v; mode=base;]
+open		open		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+opening		open		[pos = v; mode=ger;]	
+
+planted		plant		[pos = v; mode=ind; tense=past;]
+planted		plant		[pos = v; mode=ppart;]
+plants 		plant		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+plant		plant		[pos = v; mode=base;]
+
+punished	punish		[pos = v; mode=ind; tense=past;]
+punished	punish		[pos = v; mode=ppart;]
+punishes 	punish		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+punish		punish		[pos = v; mode=base;]
+punishing	punish		[pos = v; mode=ger;]
+
+put		put		[pos = v; mode=ind; tense=past;]
+puts		put		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+put		put		[pos = v; mode=ppart;]
+put		put		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+put		put		[pos = v; mode=base;]
+putting		put		[pos = v; mode=ger;]
+
+reminds		remind		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+remind		remind		[pos = v; mode=base;]
+remind		remind		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+reminding	remind		[pos = v; mode=ger;]
+reminded	remind		[pos = v; mode=ppart;]
+
+
+ran		run		[pos = v; mode=ind; tense=past;]
+runs		run		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+running		run		[pos = v; mode=ger;]
+run		run		[pos = v; mode=ppart;]
+run		run		[pos = v; mode=base;]
+run		run		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+sells		sell		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+sold		sell		[pos = v; mode=ind; tense=past;]
+sell		sell		[pos = v; mode=base;]
+
+sung		sing		[pos = v; mode=ppart;]
+sing		sing		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+sings		sing		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+sing		sing		[pos = v; mode=base;]
+singing		sing		[pos = v; mode=ger;]
+sang		sing		[pos = v; mode=ind; tense=past;]
+
+sit		sit		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+sit		sit		[pos = v; mode=base;]
+
+sleeps		sleep		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+sleep		sleep		[pos = v; mode=base;]
+sleep   	sleep 		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+sleeping	sleep		[pos = v; mode=ger;]
+slept		sleep		[pos = v; mode=ind; tense=past;]
+
+smells		smell		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+smelled		smell		[pos = v; mode=ind; tense=past;]
+smell		smell		[pos = v; mode=base;]
+smell		smell		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+smelling	smell		[pos = v; mode=ger;]
+
+stand		stand		[pos = v; mode=imp; pers=2; num=sing | plur ; tense=pres;]
+stand		stand		[pos = v; mode=base;]
+
+thinks		think		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+think		think		[pos = v; mode=base;]
+thought		think		[pos = v; mode=ind; tense=past;]
+thought		think		[pos = v; mode=ppart;]
+thinking	think		[pos = v; mode=ger;]
+think		think		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+throw		throw		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+takes		take		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+took		take		[pos = v; mode=ind; tense=past;]
+take		take		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+take		take		[pos = v; mode=base;]
+taking		take		[pos = v; mode=ger;]
+taken		take		[pos = v; mode=ppart;]
+
+undo		undo		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+unlock		unlock		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+unlock		unlock		[pos = v; mode=base;]
+
+upset		upset		[pos = v; mode=ind; tense=past;]
+upset		upset		[pos = v; mode=ppart;]
+upsets 		upset		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+upset		upset		[pos = v; mode=base;]
+
+use		use		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+
+ventured	venture		[pos = v; mode=ind; tense=past;]
+ventured	venture		[pos = v; mode=ppart;]
+ventures	venture		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+venture		venture		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+venture		venture		[pos = v; mode=base;]
+venturing	venture		[pos = v; mode=ger;]
+
+wakes		wake		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+woke		wake		[pos = v; mode=ind; tense=past;]
+wake		wake		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+wake		wake		[pos = v; mode=base;]
+waking		wake		[pos = v; mode=ger;]
+
+wants		want		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+want		want		[pos = v; mode=base;]
+wanting		want		[pos = v; mode=ger;]
+want		want		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+wanted		want		[pos = v; mode=ind; tense=past;]
+
+writes		write		[pos = v; mode=ind; pers=3; num=sing; tense=pres;]
+write		write		[pos = v; mode=base;]
+write   	write 		[pos = v; mode=imp; pers=2; num=sing | plur; tense=pres;]
+writing		write		[pos = v; mode=ger;]
+
+%=========
+% Nouns
+%=========
+abortion	abortion	[pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+account		account		[pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+accounts	account		[pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+accusation	accusation	[pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+accusations	accusation	[pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+action		action		[pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+apple		apple		[pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+bank		bank		[pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+banks		bank		[pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+belief		belief		[pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Bill	  	Bill	    	[pos = n; wh = - ; definite = - ; pers=3; num=sing; case = nom | acc;]
+ 
+bombardier	    bombardier	 [pos = n; wh = - ; definite =  - ; pers=3; num=sing; case = nom | acc;]
+bombardiers	    bombardier	 [pos = n; wh = - ; definite =  - ; pers=3; num=plur; case = nom | acc;]
+
+Cathcart	    Cathcart	 [pos = n; wh = - ; definite = - ; pers=3; num=sing; case = nom | acc;]
+
+chaplain	    chaplain	 [pos = n; wh = - ; definite = - ; pers=3; num=sing; case = nom | acc;]
+chaplains	    chaplain	 [pos = n; wh = - ; definite = - ; pers=3; num=plur; case = nom | acc;]
+
+chest		    chest	 [pos = n; wh = - ; definite =  - ; pers=3; num=sing; case = nom | acc;]
+
+chestnut	    chestnut	 [pos = n; wh = - ; definite = - ; pers=3; num=sing; case = nom | acc;]
+chestnuts	    chestnut	 [pos = n; wh = - ; definite = - ; pers=3; num=plur; case = nom | acc;]
+
+me	  I	    [pos = n; wh = - ; definite = - ; pers=1; num=sing; case = acc;]
+
+cake	  cake	    [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+cannabis  cannabis  [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+cave	  cave	    [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+cherries  cherry    [pos = n; wh = - ; definite = -; pers=3; num=plur; case = nom | acc;]
+cherry	  cherry    [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+child	  child	    [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom  | acc;]
+children  child	    [pos = n; wh = - ; definite = -; pers=3; num=plur; case = nom | acc;]
+
+colonel	  colonel   [pos = n; wh = - ; definite = - ;pers=3; num=sing; case = nom | acc;]
+
+cotton	  cotton    [pos = n; wh = - ; definite = - ;pers=3; num=sing; case = nom | acc;]
+
+couch	  couch	    [pos = n; wh = - ; definite = - ;pers=3; num=sing; case = nom | acc;]
+
+countries country   [pos = n; wh = - ; definite = -; pers=3; num=plur; case = nom | acc;]
+country	  country   [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+day	  day	    [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+detective  detective [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+detectives detective [pos = n; wh = - ; definite = -; pers=3; num=plur; case = nom | acc;]
+
+insanity   insanity  [pos = n; wh = - ; definite = -; pers=3; num=sing; case = nom | acc;]
+
+documents document  [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+document  document  [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+doors  	  door	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+door	  door      [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+dragon	  dragon    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+everyone  everyone  [pos = n; wh = - ; definite = +; pers=3; num=sing; case = nom | acc;]
+
+exit	  exit	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+expectation	    expectation	   [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+expectations	    expectation	   [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+fish	  fish	    [pos = n; wh = - ; definite =  -; pers=3; num=sing | plur; case = nom | acc;]
+
+flower	  flower    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+flowers	  flower    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+foot	  foot	    [pos = n; wh = - ; definite =  - ; pers=3; num=sing; case = nom | acc;]
+feet	  foot	    [pos = n; wh = - ; definite =  - ; pers=3; num=plur; case = nom | acc;]
+
+frog	  frog	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+gun	  gun	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+hand	  hand	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+handles   handle    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+handle	  handle    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+him	  he	    [pos = n; wh = - ; definite = -; num=sing; case = acc;]
+he	  he	    [pos = n; wh = - ; definite = -; num=sing; case = nom;]
+
+help	  help	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Hindi	  Hindi	    [pos = n; wh = - ; definite = - ;	 pers=3; num=sing; case = nom | acc;]		
+
+hope	  hope	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+houses	  house	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+house	  house	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+how	  how	    [pos = a; wh = + ; definite = -;]
+
+innovations	    innovation	 [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+innovation	    innovation	 [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+intention	    intention	 [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+intentions	    intention	 [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+
+island	  island    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+it	  it	    [pos = n; wh = - ; definite = - ;    pers=3; num=sing; case = nom | acc;]
+
+Jaguar	  Jaguar    [pos = n; wh = - ; definite = - ;    pers=3; num=sing; case = nom | acc;]
+
+key	  key	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+keys	  key	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+knife	  knife	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Lisa	  Lisa	    [pos = n; wh = - ; definite = - ;	 pers=3; num=sing; case = nom | acc;]
+
+man	  man	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+men	  man	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+marathon  marathon  [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Mary	  Mary	    [pos = n; wh = - ; definite = - ;	 pers=3; num=sing; case = nom | acc;]
+
+Milo	  Milo	    [pos = n; wh = - ; definite = - ;	 pers=3; num=sing; case = nom | acc;]
+
+mission	  mission   [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+missions  mission   [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+mockingbird 	 mockingbird	 [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+mockingbirds	 mockingbird	 [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+Monday	  Monday    [pos = n; wh = - ; definite = -;  	 pers=3; num=sing; case = nom | acc;]
+
+Orr	  Orr	    [pos = n; wh = - ; definite = - ;	 pers=3; num=sing; case = nom | acc;]
+
+parent	  parent    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom  | acc;]
+parents	  parent    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+Pianosa	  Pianosa   [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+piece	  piece	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom  | acc;]
+pieces	  piece	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+pocket	  pocket    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+puddle	  puddle    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+puddles	  puddle    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+question  question  [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Raveesh	  Raveesh   [pos = n; wh = - ; definite = - ;	 pers=3; num=sing; case = nom | acc;]
+
+river	  river	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+rivers	  river	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+room	  room	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+sense	  sense	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+spirit	  spirit    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+her	  she	    [pos = n; wh = - ; definite = - ; num=sing; case = acc;]
+she	  she	    [pos = n; wh = - ; definite = - ; num=sing; case = nom;]
+
+shoe	  shoe	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom  | acc;]
+shoes	  shoe	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+snow	  snow	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+snow's	  snow	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = gen;]
+
+south	  south	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Syndicate Syndicate [pos = n; wh = - ; definite =  - ;pers=3; num=sing; case = nom | acc;]
+
+sword	  sword	    [pos = n; wh = - ; definite =  - ;pers=3; num=sing; case = nom | acc;]
+
+table	  table	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+this	  this	    [pos = n; wh = -;  definite = + ; 	 pers=3; num=sing; case = nom | acc;]
+these	  this	    [pos = n; wh = -;  definite = + ; 	 pers=3; num=plur; case = nom | acc;]
+
+treasury  treasury  [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+tree	  tree      [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+
+Tuesday	  Tuesday   [pos = n; wh = - ; definite = -;  	 pers=3; num=sing; case = nom | acc;]
+
+you	  you	    [pos = n; wh = - ; definite = -;  	 pers=3; num=sing; case = nom | acc;]
+
+what	  what	    [pos = n; wh = + ; definite = -; pers=3; case = nom | acc;]
+which	  which	    [pos = n; wh = + ; definite = -;]
+who	  who	    [pos = n; wh = + ; definite = -; pers=3; case = nom | acc;]
+whom	  who	    [pos = n; wh = + ; definite = -; case = acc;]
+
+wife	  wife	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+wives	  wife	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+woman	  woman	    [pos = n; wh = - ; definite =  -; pers=3; num=sing; case = nom | acc;]
+women	  woman	    [pos = n; wh = - ; definite =  -; pers=3; num=plur; case = nom | acc;]
+
+Yossarian Yossarian [pos = n; wh = - ; definite = - ; pers=3; num=sing; case = nom | acc;]
+
+%===========
+%Determiners
+%===========
+
+a	a 	[pos = det; wh = -; definite = -; num = sing;]
+an	an 	[pos = det; wh = -; definite = -; num = sing;]
+
+all	all	[pos = det; wh = -; definite = -; num = plur;]
+
+her	her	[pos = det; gen = fem; num = sing | plur ;]
+
+his	his	[pos = det; gen = masc; num = sing | plur ;]
+
+many	many	[pos = det; wh = -; definite = +; num = plur;]
+
+the	the	[pos = det; wh = -; definite = +;]
+
+these	these	[pos = det; wh = -; num = plur ; definite = +;]
+
+this 	this	[pos = det; wh = -; num = sing ; definite = +;]
+
+other	other	[pos = det; wh = -; definite = +;]
+
+your	your	[pos = det; wh = -; definite = +;]
+
+which	which	[pos = det; wh = +; definite = -;]
+whose 	whose 	[pos = det; wh = +; definite = -;]
+
+%===============
+%Complementizers
+%===============
+
+that	that	[pos = comp;]
+
+%============
+%Prepositions
+%============
+
+abroad	abroad	[pos = prep;]
+about	about	[pos = prep; assign-case = acc;]
+at	at	[pos = prep; assign-case = acc;]
+before	before	[pos = prep; assign-case = acc;]
+beyond	beyond	[pos = prep; assign-case = acc;]
+in	in	[pos = prep; assign-case = acc;]
+into	into	[pos = prep; assign-case = acc;]
+for	for	[pos = prep; assign-case = acc;]
+from	from	[pos = prep; assign-case = acc;]
+of	of	[pos = prep; assign-case = acc;]
+on	on	[pos = prep; assign-case = acc;]
+through	through	[pos = prep; assign-case = acc;]
+to	to	[pos = prep; assign-case = acc;]
+with	with	[pos = prep; assign-case = acc;]
+where	where	[pos = prep; wh = +]
+
+%================
+% Auxiliary verbs
+%================
+
+does	do	[pos = v; mode=ind; rmode=base; pers=3; num=sing; tense=pres; pass = -]
+did	do	[pos = v; mode=ind; tense=past; pass= -; rmode=base;]
+doing	do	[pos = v; mode=ger; pass= -;]
+do	do	[pos = v; mode=base; pass= -;]
+
+to	to	[pos = v; mode=inf; rmode=base;]
+
+might	might	[pos = v; mode=ind;]
+
+would	would	[pos = v; mode=ind; rmode=base;]
+
+%===========
+%Adjectives
+%===========
+
+able		able		[pos = a; wh = -;]
+annoying	annoying	[pos = a; wh = -;]
+blissful	blissful	[pos = a; wh = -;]
+blue		blue		[pos = a; wh = -;]
+enthralling	enthralling	[pos = a; wh = -;]
+forbidden	forbidden	[pos = a; wh = -;]
+frightening	frightening	[pos = a; wh = -;]
+happy		happy		[pos = a; wh = -;]
+how 		how		[pos = a; wh = +;]
+last		last		[pos = a; wh = -;]
+many		many		[pos = a; wh = -; num = plur;]
+necessary	necessary	[pos = a; wh = -;]
+right		right		[pos = a; wh = -;]
+silver		silver		[pos = a; wh = -;]
+sure		sure		[pos = a; wh = -;]
+uncertain	uncertain	[pos = a; wh = -;]
+wooden		wooden		[pos = a; wh = -;]
+
+
+%=========
+% Adverbs
+%=========
+
+around		around		[pos = adv;]
+away		away		[pos = adv;]
+carefully	carefully	[pos = adv;]
+considerably	considerably	[pos = adv;]
+even		even		[pos = adv;]
+regularly	regularly	[pos = adv;]
+reluctantly	reluctantly	[pos = adv;]
+south		south		[pos = adv;]
+totally		totally		[pos = adv;]
+how		how		[pos = adv;]
+
+
+%=============
+% Conjunctions
+%=============
+
+and	and	[pos = conj;]
+or	or	[pos = conj;]
