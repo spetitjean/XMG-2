@@ -112,7 +112,7 @@ To get the latest version of XMG-2, regardless of the installation option you ch
     git pull
 ##  Creating a first compiler
 
-The instructions detailed here is equivalent to using the script **reinstall.sh** (see section [Scripts](http://dokufarm.phil.hhu.de/xmg/doku.php?id=start#scripts)). This means that you can skip this section by only typing:
+The instructions detailed here is equivalent to using the script **reinstall.sh** (see section [Scripts](#scripts)). This means that you can skip this section by only typing:
 
     ./reinstall.sh
     (at the root of the XMG-2 installation directory)
@@ -195,35 +195,35 @@ The commands provided by XMG can be separated in two categories: some of them wi
 
 User commands:
 
-*  ''xmg bootstrap'': installs the basic features of XMG.
+*  `xmg bootstrap`: installs the basic features of XMG.
 
-*  ''xmg install path_to_contribution'': makes a contribution available.
+*  `xmg install path_to_contribution`: makes a contribution available.
 
-*  ''xmg build'': assembles a compiler according to a yaml description.
+*  `xmg build`: assembles a compiler according to a yaml description.
 
-*  ''xmg gui gui_name'': starts a GUI. The only GUI provided up to now is ''tag''.
+*  `xmg gui gui_name`: starts a GUI. The only GUI provided up to now is `tag`.
 
-*  ''xmg compile compiler_name path_to_metagrammar'': compiles a metagrammar with a given compiler. The options for this command are:  
-    * ''--force'' to generate the grammar even if an XML file already exists
-    * ''--latin'' to manipulate metagrammars written in latin encoding
-    * ''--debug'' to print some useful information about compilation
-    * ''--notype'' to disable the strong type checking (equivalent to XMG1)
-    * ''--more'' to generate additional files (type hierarchy, etc)
-    *  ''--output'' or ''-o'' allow to specify an output file (the default is the name of the metagrammar file with the xml or json extension)
+*  `xmg compile compiler_name path_to_metagrammar`: compiles a metagrammar with a given compiler. The options for this command are:  
+    * `--force` to generate the grammar even if an XML file already exists
+    * `--latin` to manipulate metagrammars written in latin encoding
+    * `--debug` to print some useful information about compilation
+    * `--notype` to disable the strong type checking (equivalent to XMG1)
+    * `--more` to generate additional files (type hierarchy, etc)
+    *  `--output` or `-o` allow to specify an output file (the default is the name of the metagrammar file with the xml or json extension)
 
 Developper commands:
 
-*  ''xmg startcommand''
+*  `xmg startcommand`
 
-*  ''xmg startyaplib''
+*  `xmg startyaplib`
 
-*  ''xmg startbrick''
+*  `xmg startbrick`
 
-*  ''xmg startcompiler''
+*  `xmg startcompiler`
 
-*  ''xmg startpylib''
+*  `xmg startpylib`
 
-*  ''xmg startcontrib''
+*  `xmg startcontrib`
 
 # Scripts
 
@@ -237,7 +237,7 @@ The synsem compiler will be built and installed (all the other contributions wil
 
     ./install_lex_mph.sh
     
-Other scripts are by convention named after the compiler(s) they install. All scripts starting with ''reinstall'' will first uninstall all existing compilers, all scripts starting with ''install'' will add compilers to the already installed set of compilers.
+Other scripts are by convention named after the compiler(s) they install. All scripts starting with `reinstall` will first uninstall all existing compilers, all scripts starting with `install` will add compilers to the already installed set of compilers.
 
     ./reinstall_all.sh
     
