@@ -19,7 +19,7 @@ Once we have described the grammar rules by specifying the way structure is shar
 ## What is XMG-2 ?
 
 A distinction has to be made between XMG and XMG-2 (sometimes called XMG-NG).
-[XMG](https///sourcesup.cru.fr/xmg/) is a metagrammar compiler dedicated to the generation of Tree Adjoining Grammars and Interaction Grammars. XMG-2 is a whole new project which has been developed at the [LIFO](http://www.univ-orleans.fr/lifo/?lang=en) (University of Orléans) and the [SFB 991](http://www.sfb991.uni-duesseldorf.de/) (University of Düsseldorf). XMG-2 makes it possible to create new compilers, adapted to other generation tasks. Its modularity allows to simply assemble Domain Specific Languages, and automatically generate the processing chain for these languages.
+[XMG](https://sourcesup.cru.fr/xmg/) is a metagrammar compiler dedicated to the generation of Tree Adjoining Grammars and Interaction Grammars. XMG-2 is a whole new project which has been developed at the [LIFO](http://www.univ-orleans.fr/lifo/?lang=en) (University of Orléans) and the [SFB 991](http://www.sfb991.uni-duesseldorf.de/) (University of Düsseldorf). XMG-2 makes it possible to create new compilers, adapted to other generation tasks. Its modularity allows to simply assemble Domain Specific Languages, and automatically generate the processing chain for these languages.
 
 In other words, XMG-2 is a tool which allows to generate compilers such as XMG: a metacompiler (or compiler compiler).
 
@@ -45,7 +45,7 @@ if you are using a Debian based distribution (like Ubuntu), open a terminal and 
 
 ![alt text](https://raw.githubusercontent.com/spetitjean/XMG-2/master/Doc/images/gecode.png)
 
-From here: http://www.gecode.org/download.html (recommended: http://www.gecode.org/download/gecode-3.7.3.tar.gz, also available here: [Gecode 3.7.3](https///drive.google.com/uc?export=download&id=0B2gwCa-ajJXmOUd0VHBZYnNTZ2c)).
+From here: http://www.gecode.org/download.html (recommended: http://www.gecode.org/download/gecode-3.7.3.tar.gz, also available here: [Gecode 3.7.3](https://drive.google.com/uc?export=download&id=0B2gwCa-ajJXmOUd0VHBZYnNTZ2c)).
 
     ./configure --disable-qt --disable-gist
     make 
@@ -82,7 +82,7 @@ For dependencies:
 #### Download XMG:
 
     git clone https://github.com/spetitjean/XMG-2.git    
-You can also get it as an archive here: [XMG-NG](https///drive.google.com/uc?export=download&id=0B2gwCa-ajJXmRmNfU1FvRFpwOGM) (this solution will not allow you to update XMG-2).
+You can also get it as an archive here: [XMG-NG](https://drive.google.com/uc?export=download&id=0B2gwCa-ajJXmRmNfU1FvRFpwOGM) (this solution will not allow you to update XMG-2).
 
 #### Add XMG-2 to your PATH
 
@@ -94,11 +94,11 @@ To edit the `bashrc` file, you can type:
 ### Option 2: using Virtualbox
 
 A VirtualBox image of XMG is available for an easier installation.
-Use [VirtualBox](https///www.virtualbox.org/) and download one of the XMG virtual images:
+Use [VirtualBox](https://www.virtualbox.org/) and download one of the XMG virtual images:
 
-*  [Ubuntu 18.04 virtual image](https///www.dropbox.com/s/nltmtbxram2yd73/XMG-Ubuntu-18.04.ova?dl=1): includes the parser TuLiPA-frames (default password is xmg) - last updated 06/06/2018.
+*  [Ubuntu 18.04 virtual image](https://www.dropbox.com/s/nltmtbxram2yd73/XMG-Ubuntu-18.04.ova?dl=1): includes the parser TuLiPA-frames (default password is xmg) - last updated 06/06/2018.
 
-*  [Xubuntu 18.04 virtual image](https///www.dropbox.com/s/knkg4qtfld3ir4g/XMG-Xubuntu-18.04.ova?dl=1): lighter version, includes the parser TuLiPA-frames (default password is xmg) - last updated 30/05/2018.
+*  [Xubuntu 18.04 virtual image](https://www.dropbox.com/s/knkg4qtfld3ir4g/XMG-Xubuntu-18.04.ova?dl=1): lighter version, includes the parser TuLiPA-frames (default password is xmg) - last updated 30/05/2018.
 
 ###  Using XMG without installing anything
 
@@ -189,7 +189,7 @@ Compilers are usually named after the dimensions they feature (**synframe** prov
 
 **tfcompiler**: for morphological descriptions specified using topological fields.
 
-To learn more about how these compilers were assembled, and how to assemble customized compilers for specific description tasks, see [[Petitjean et al., 2016](https///link.springer.com/chapter/10.1007/978-3-662-53826-5_16)].
+To learn more about how these compilers were assembled, and how to assemble customized compilers for specific description tasks, see [[Petitjean et al., 2016](https://link.springer.com/chapter/10.1007/978-3-662-53826-5_16)].
 
 The commands provided by XMG can be separated in two categories: some of them will be used by any user writing a linguistic resource, the others will be reserved to developers of XMG extensions. 
 
