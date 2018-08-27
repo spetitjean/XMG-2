@@ -79,8 +79,10 @@ xmlMark([mark-Prop|T],Prop):-!.
 xmlMark([_-_|T],Props):-
 	xmlMark(T,Props),!.
 
-xmlName([],Name,N):-
-	xmg_brick_syn_nodename:nodename(N,Name),
+xmlName([],NName,N):-
+    xmg_brick_syn_nodename:nodename(N,Name),
+    Prefix='XMGVAR_',
+    atom_concat(Prefix,Name,NName),
 	!.
 
 xmlName([name-Prop|T],Prop,_):-!.
