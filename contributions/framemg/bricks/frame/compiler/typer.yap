@@ -46,6 +46,11 @@ xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
 	     xmg:type_expr(F2,Dim:frame),
 	     !.
 
+xmg:type_stmt(frame:relation(Rel,Params),Dim:frame(FType)):--
+	     %%xmg:type_expr(Rel,Dim:frame),
+	     %%xmg:type_expr(Params,Dim:frame),
+	     !.
+
 xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
 	     xmg:type_expr(L,Dim:frame),
              %%xmg:type_expr(T,_),

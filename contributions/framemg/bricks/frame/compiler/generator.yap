@@ -25,7 +25,7 @@
 :-edcg:using(xmg_brick_mg_generator:name).
 :-edcg:using(xmg_brick_mg_generator:code).
 
-:-edcg:weave([decls,name], [new_name/2,var_Stmt/2,var_or_const/2,generate_Stmt/4]).
+:-edcg:weave([decls,name], [new_name/2,var_Stmt/2,var_or_const/2,generate_Stmt/4,generate_params/2]).
 
 xmg:generate_instr((v(TFrame),frame:topframe,Frame)):--
 	decls::tget(TFrame,VFrame),
@@ -58,6 +58,18 @@ xmg:generate_instr((frame:dom(v(N1),Op,v(N2)),Frame)):--
 	AccDom=..['::',xmg_acc:Frame,put(dom(V1,Op,V2))],
 	code::enq(AccDom),	
 	!.
+
+xmg:generate_instr((frame:relation(c(Rel),Params),Frame)):--
+        generate_params(Params,GParams),
+        AccDom=..['::',xmg_acc:Frame,put(relation(Rel,GParams))],
+	code::enq(AccDom),	
+	!.
+
+generate_params([],[]):--!.
+generate_params([v(H)|T],[H1|T1]):--
+        decls::tget(H,H1),
+        generate_params(T,T1),!.
+        
 
 
 %% some older try:

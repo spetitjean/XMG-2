@@ -57,6 +57,12 @@ unfold_frame(frame:frame(Var,Types,Feats),TFrame):--
 
 	!.
 
+xmg:unfold_dimstmt(Frame,frame:relation(Rel,Params)):--
+	xmg:unfold_expr(Rel,URel),
+	xmg:unfold_exprs(Params,UParams),	
+	constraints::enq((frame:relation(URel,UParams),Frame)),
+	!.
+
 create_frames(TFrame,[]):-- !.
 create_frames(TFrame,[H|T]):--
 	     xmg:send(debug,'\nUnfolded this: '),

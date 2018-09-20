@@ -34,7 +34,7 @@ xmg:type_stmt(sem:pred(L,P,Args),S):--
 	     xmg:type_expr(sem:args(Args),TArgs),
 	     !.
 
-xmg:type_stmt(sem:scopeOver,S):--
+xmg:type_stmt(sem:scopeOver(_,_),S):--
 	     !.
 
 xmg:type_expr(sem:args([]),[]):--!.

@@ -24,19 +24,27 @@
 %%:- edcg:using(xmg_convert_avm:name).
 :- edcg:using(xmg_brick_mg_convert:name).
 
-:- edcg:weave([name],[framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2]).
+:- edcg:weave([name],[framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2, paramsToXML/2]).
 
 
 listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
 xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFeats))) :--
-        xmg:send(debug,'\nConverting frames (duplicates removed):'),
+        xmg:send(info,'\nConverting frames (duplicates removed):'),
         lists:remove_duplicates(Frames,DFrames),
-        xmg:send(debug,DFrames),
-	framesToXML(DFrames,UFeats),
+	reorder(DFrames,RFrames),
+        %%xmg:send(info,DFrames),
+	framesToXML(RFrames,UFeats),
 	!.
 
+%% put the relations at the end (so frame ids are already created)
+reorder([],[]).
+reorder([relation(R,P)|T],New):-
+    reorder(T,T1),
+    lists:append(T1,[relation(R,P)],New),!.
+reorder([H|T],[H|T1]):-
+    reorder(T,T1),!.
 
 framesToXML([],[]):-- !.
 framesToXML([H|T],[H1|T1]):--
@@ -50,6 +58,12 @@ frameToXML(dom(V1,Op,V2),XML ):--
 	  xmg_brick_havm_havm:const_h_avm(V2,C2),
 	  
 	  XML=elem(dominance, features([type-large, from-C1, to-C2])),
+	  !.
+
+frameToXML(relation(Rel,Params),XML ):--
+          not(var(Rel)),
+          paramsToXML(Params,XMLParams),
+	  XML=elem(relation, features([name-Rel]) ,children(XMLParams)),
 		   !.
 
 frameToXML(Frame,Frame1 ):--
@@ -96,6 +110,30 @@ featToXML(Attr-Value,elem(f,features([name-Attr]),children([XMLValue]))):--
 	valToXML(Value,XMLValue),
 	!.
 
+paramsToXML([],[]):--!.
+%% Case where the param is a variable
+paramsToXML([H|T],[elem(sym,features([varname-H]))|T1]):--
+	var(H),
+	xmg:convert_new_name('@V',H),
+        paramsToXML(T,T1),!.
+%% Case where the param is a frame (possible?)
+paramsToXML([H|T],[elem(sym,features([varname-Const]))|T1]):--
+        var(H),
+        xmg_brick_havm_havm:const_h_avm(H,Const),
+	%% (
+	%%     (
+	%% 	var(Const),!,
+	%% 	xmg:convert_new_name('@Frame',New),
+	%% 	New=Const	
+	%%     )
+	%% ;
+	%%     (
+	%% 	true
+	%% 	)
+	%% ),
+        paramsToXML(T,T1),!.
+paramsToXML([H|T],[elem(sym,features([varname-H]))|T1]):--
+        paramsToXML(T,T1),!.
 
 valToXML(Frame,XMLFrame):--
 	frameToXML(Frame,XMLFrame),!.

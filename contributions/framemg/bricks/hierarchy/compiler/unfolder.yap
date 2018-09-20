@@ -43,9 +43,18 @@ xmg:unfold(hierarchy:fconstraint(Op,Ts1,Ts2),fconstraint(UOp,UTs1,UTs2)):-
 	unfold_idsOrAttr(Ts2,UTs2),
 	!.
 
+xmg:unfold(hierarchy:frelation(Rel,Params),frelation(URel,UParams)):-
+    unfold_id(Rel,URel),
+    unfold_list(Params,UParams),
+    !.
+
 xmg:unfold(hierarchy:fconstraints(Cs),fconstraints(UCs)):-
 	xmg:unfold(Cs,UCs),
 	!.
+
+xmg:unfold(hierarchy:frelations(Cs),frelations(UCs)):-
+    xmg:unfold(Cs,UCs),
+    !.
 
 unfold_op(token(_,'->'),implies).
 unfold_op(token(_,'<->'),is_equivalent).

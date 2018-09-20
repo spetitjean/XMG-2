@@ -387,6 +387,8 @@ type_decl(ftypes-[ftypes(Decls)]):--
 type_decl(fconstraints-[fconstraints(Decls)]):--
 	 xmg_brick_hierarchy_typer:get_fconstraints(Decls),
          asserta(xmg:hierarchy(built)),!.
+type_decl(frelations-[frelations(Decls)]):--
+         !.
 type_decl(property-Decls):--
 	type_properties(Decls),!.
 type_decl(feat-Decls):--
