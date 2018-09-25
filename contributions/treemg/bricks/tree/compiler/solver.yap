@@ -34,7 +34,7 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	xmg:send(info,'\nHere in solver'),
 	xmg_brick_tree_dominance:new_nodes(NodeList,Space,Nodes),!,
 	xmg:send(info,'\nDone new nodes'),
-	global_constraints(Space,NodeList,IntVars,IntPVars),!,
+	xmg_brick_tree_dominance:global_constraints(Space,NodeList,IntVars,IntPVars),!,
 	xmg:send(info,'\nFurther in solver'),
 	%% Here are the threads used by the plugins:
 	%% space
@@ -46,28 +46,37 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	xmg_table:table_put(TS,nodes,NodeList,TSN),
 	xmg_table:table_put(TSN,intvars,IntVars,TSNI),
 	xmg_table:table_put(TSNI,onodes,NodeList1,TSNO),
-	xmg:post_plugins(Plugins) with solver(TSNO,_),
+	
 
-	xmg_brick_mg_compiler:send(debug,' doing nposts '),
+	xmg:send(info,'\nPosting plugins'),	
+	%%xmg:post_plugins(Plugins) with solver(TSNO,_),
+
+	xmg:send(info,'\nPosted plugins'),	
+	
+	xmg_brick_mg_compiler:send(info,'\nDoing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
-	xmg_brick_mg_compiler:send(debug,' doing posts '),
+	xmg_brick_mg_compiler:send(info,'\nDoing posts '),
 	%%xmg:send(info,Relations),
-	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
+	%%do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
+	xmg_brick_mg_compiler:send(info,'\nIgnored posts '),
 
-	xmg_brick_mg_compiler:send(debug,' branching '),
+	
+	xmg_brick_mg_compiler:send(info,'\nBranching '),
 
 
-	global_branch(Space,IntVars),!,
-	global_pbranch(Space,IntPVars),!,
+	xmg_brick_tree_dominance:global_branch(Space,IntVars),!,
+	xmg_brick_mg_compiler:send(info,'\nGlobal branched '),
+	xmg_brick_tree_dominance:global_pbranch(Space,IntPVars),!,
+	xmg_brick_mg_compiler:send(info,'\nPBranched '),
 	do_branch(Space,NodeList),!,	
 
-	xmg_brick_mg_compiler:send(debug,' branched '),
+	xmg_brick_mg_compiler:send(info,'\nBranched '),
 
 	SolSpace := search(Space),
 
-	xmg_brick_mg_compiler:send(debug,' searched '),
+	xmg_brick_mg_compiler:send(info,'\nSearched '),
 	flush_output,
 
 	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
@@ -335,7 +344,9 @@ color_branch(Space,[Node|T]):-
 do_branch(_,[]):- !.
 
 do_branch(Space,[Node|T]):-
-	Eq       :=: eq(Node),
+        xmg_brick_mg_compiler:send(info,'\nStarting branching '),
+        Eq       :=: eq(Node),
+	xmg_brick_mg_compiler:send(info,'\nOne done '),
 	Up       :=: up(Node) ,     
 	Down     :=: down(Node),    
 	Left     :=: left(Node),    
@@ -348,6 +359,7 @@ do_branch(Space,[Node|T]):-
 	UpCard   :=: upcard(Node),   
 	IsRoot   :=: isroot(Node),
 	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
+	xmg_brick_mg_compiler:send(info,'\nBefore first branching'),
 	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 
 	Space += branch(IsRoot,'BOOL_VAL_MIN'),

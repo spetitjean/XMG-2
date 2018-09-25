@@ -30,23 +30,36 @@ init_node(Node,Space,N,I) :-
 	EmptyVar := setvar(Space,Empty,Empty),
 	[Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,RB] := setvars(Space,11,Empty,Full),
 	M is N-1,
+        xmg:send(info,'\nInit node 2'),
 	UpCard := intvar(Space,0,M),
 	IsRoot := boolvar(Space),
-	Space += cardinality(Parent,0,M), 
-	Space += cardinality(Up,UpCard),
+	xmg:send(info,'\nInit node 2.1'),
+	Space += cardinality(Parent,0,M),
+	xmg:send(info,'\nInit node 2.15'),
+	%%Space += cardinality(Up,UpCard),
+	Space += cardinality(Up,0,M),
+
+	xmg:send(info,'\nInit node 2.2'),
 	Space += reify(IsRoot,'RM_EQV',IsRootR),
 	Space += rel(UpCard,'IRT_EQ',0,IsRootR),
 	%%Space += rel(Side,'SRT_EQ',EmptyVar,IsRoot),
+	xmg:send(info,'\nInit node 2.5'),
 	Space += rel(FullVar,'SRT_EQ',EqDown,IsRootR),
-	Space += rel(Eq,'SOT_DUNION',Down,'SRT_EQ',EqDown),
-	Space += rel(Eq,'SOT_DUNION',Up,'SRT_EQ',EqUp),
-	Space += rel(Left,'SOT_DUNION',Right,'SRT_EQ',Side),
-	Space += rel('SOT_DUNION',[EqUp,Down,Left,Right],FullVar),
-	Space += rel('SOT_DUNION',[Up,EqDown,Left,Right],FullVar),
+	xmg:send(info,'\nInit node 2.55'),
+	%%Space += rel(Eq,'SOT_DUNION',Down,'SRT_EQ',EqDown),
+	xmg:send(info,'\nInit node 2.6'),
+	%%Space += rel(Eq,'SOT_DUNION',Up,'SRT_EQ',EqUp),
+        xmg:send(info,'\nInit node 2.7'),
+	%%Space += rel(Left,'SOT_DUNION',Right,'SRT_EQ',Side),
+        xmg:send(info,'\nInit node 2.8'),	
+	%%Space += rel('SOT_DUNION',[EqUp,Down,Left,Right],FullVar),
+	%%Space += rel('SOT_DUNION',[Up,EqDown,Left,Right],FullVar),
+        xmg:send(info,'\nInit node 3'),
     	Space += dom(Eq,'SRT_SUP',I),
 	Space += rel(Parent, 'SRT_SUB', Up),
 	Space += rel(Children, 'SRT_SUB', Down),
 	Space += rel(RB, 'SRT_SUB', Eq),
+        xmg:send(info,'\nInit node 4'),
 	Space += cardinality(RB,1,1),!.
 
 is_node(Node) :- functor(Node,node,13).
@@ -77,7 +90,7 @@ map_fun([Val|Vals],[Node|Nodes],Fun) :-
 	map_fun(Vals,Nodes,Fun).
 
 
-
+%% test: Here I just removed the cardinalities, the rest seems to be ok 
 node_rel(Space,X,Y,Rel):-
 	assert_node(X),
 	assert_node(Y),
@@ -88,7 +101,9 @@ node_rel(Space,X,Y,Rel):-
 	Rel2 := boolvar(Space),
 	Rel3 := boolvar(Space),
 	Rel4 := boolvar(Space),
-	Rel5 := boolvar(Space),	
+	Rel5 := boolvar(Space),
+
+	xmg:send(info,'\nDone boolvars'),
 
 	Space += reify(Rel1,'RM_EQV',Rel1R),
 	Space += reify(Rel2,'RM_EQV',Rel2R),
@@ -96,6 +111,8 @@ node_rel(Space,X,Y,Rel):-
 	Space += reify(Rel4,'RM_EQV',Rel4R),
 	Space += reify(Rel5,'RM_EQV',Rel5R),
 
+        xmg:send(info,'\nDone reify'),
+	
 	EqX       :=: eq(X),      
 	UpX       :=: up(X) ,     
 	DownX     :=: down(X),    
@@ -109,7 +126,7 @@ node_rel(Space,X,Y,Rel):-
 	UpCardX   :=: upcard(X),   
 	IsRootX   :=: isroot(X),
 	RbX       :=: rb(X),
-
+	
 	EqY       :=: eq(Y),      
 	UpY       :=: up(Y) ,     
 	DownY     :=: down(Y),    
@@ -124,18 +141,22 @@ node_rel(Space,X,Y,Rel):-
 	IsRootY   :=: isroot(Y),
 	RbY       :=: rb(Y),
 
+	
 	nbNodes(NBNodes),
 	Card1:= intvar(Space,1,NBNodes),
 	CXCard:= intvar(Space,0,NBNodes),
-	Space += cardinality(ChildrenX,CXCard),
+	%%Space += cardinality(ChildrenX,CXCard),
 	CYCard:= intvar(Space,0,NBNodes),
-	Space += cardinality(ChildrenY,CYCard),	
+	
+        xmg:send(info,'\nDone before 1'),
+
+	%%Space += cardinality(ChildrenY,CYCard),	
 	PXCard:= intvar(Space,0,NBNodes),
-	Space += cardinality(ParentX,PXCard),	
+	%%Space += cardinality(ParentX,PXCard),	
 	PYCard:= intvar(Space,0,NBNodes),
-	Space += cardinality(ParentY,PYCard),
+	%%Space += cardinality(ParentY,PYCard),
 
-
+        xmg:send(info,'\nDone before 1'),
 
 	%% 1 : =
 	Space += rel(Rel,'IRT_EQ',1,Rel1R),
@@ -500,6 +521,7 @@ node_parent_rel(Space,X,Y,ParentorNot,IParentorNot):-
 	!.
 
 global_constraints(Space,Nodes,IntVars1,IntVars2):-
+    xmg:send(info,'\nDoing global constraints'),
 	global_rels(Space,Nodes,IntVars1,IntVars2),
 	%%one_root(Space,Nodes,[]),
 	!.
@@ -514,7 +536,9 @@ node_rels(Space,[H],_,[],[]):-!.
 node_rels(Space,[_,H|T],[],I,J):-
 	node_rels(Space,[H|T],T,I,J).
 node_rels(Space,[Node1|T1],[Node2|T2],[H|T],[HH,HHH|TP]):-
-	node_rel(Space,Node1,Node2,H),
+    xmg:send(info,'\nNode rels'),
+    node_rel(Space,Node1,Node2,H),
+    xmg:send(info,'\nDone node rel'),
 	node_parent_rel(Space,Node1,Node2,HH,HHH),
 	Space +=linear([HH,HHH],'IRT_GR',2),
 	node_rels(Space,[Node1|T1],T2,T,TP),
