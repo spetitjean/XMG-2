@@ -18,14 +18,21 @@
 %% ========================================================================
 
 :- module(xmg_brick_unicity_solver, []).
+:- xmg:edcg.
 
-:- xmg:gecode.
-:- use_module('xmg/brick/tree/compiler/dominance').
+:-print(user_error,'\nHere in unicity solver 0').
+
+%%:- xmg:gecode.
+%%:- use_module('xmg/brick/tree/compiler/dominance').
+
+:-print(user_error,'\nHere in unicity solver after gecode').
 
 :- op(500, xfx, ':=:').
 
 :-edcg:using(xmg_brick_mg_solver:solver).
 :-edcg:weave([solver],[post/1]).
+
+:-print(user_error,'\nHere in unicity solver').
 
 post(Unicities):--
     	solver::tget(space,Space),

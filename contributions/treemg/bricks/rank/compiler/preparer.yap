@@ -19,8 +19,11 @@
 
 :- module(xmg_brick_rank_preparer, []).
 :- use_module(library(apply), [maplist/3]).
-:- use_module('xmg/brick/avm/avm', [avm/2]).
-:- use_module('xmg/brick/tree/utils', [node_with_prop/2]).
+
+:- xmg:edcg.
+
+%%:- xmg:import('xmg/brick/avm/avm').
+%%:- xmg:import('xmg/brick/tree/utils').
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).

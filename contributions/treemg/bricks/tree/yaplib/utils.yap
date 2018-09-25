@@ -27,8 +27,8 @@
 	  ]).
 
 :- use_module(library(lists), [member/2]).
-:- use_module('xmg/utils', [memberq/2]).
-:- use_module('xmg/brick/avm/avm', [avm/2]).
+%%:- xmg:import('xmg/utils', [memberq/2]).
+%%:- xmg:import('xmg/brick/avm/avm', [avm/2]).
 
 
 %==============================================================================

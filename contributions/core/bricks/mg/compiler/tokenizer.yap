@@ -26,6 +26,7 @@
 :- xmg:edcg.
 
 :- multifile(xmg:punctuation/1).
+:- multifile(xmg:punctuation_to_token/2).
 :- multifile(xmg:keyword/1).
 
 :- edcg:thread(macros  ,edcg:table  ). % table of macros
@@ -125,15 +126,19 @@ to_eol  -->> [].
 %% we might want to make these atoms configurable...
 %%=============================================================================
 
-tokens -->> spaces, more_tokens.
+tokens -->>     print(user_error,'\nStarting tokens'),
+spaces,
+    print(user_error,'\nGot spaces'),
+more_tokens.
 
 coord(coord(F,L,C)) -->>
     line::get(L), col::get(C), file::top(F).
 
 more_tokens -->>
+    print(user_error,'\nStarting more tokens'),
     token(T,C), !,
-	%% xmg:send(info,T),
-	%% xmg:send(info,'\n'),
+	xmg:send(info,T),
+	xmg:send(info,'\n'),
     (T=id(include) -> more_tokens_include ;
      T=id(macro)   -> more_tokens_macro ;
      (toks::put(C), toks::put(T))),
@@ -219,16 +224,22 @@ macro_more_tokens -->> [].
 token(T,C) -->>     dimtype(T,C), !.
 token(T,C) -->>    inserted(T,C), !.
 token(T,C) -->> punctuation(T,C), !.
-token(T,C) -->>  identifier(T,C), !.
-token(T,C) -->>      number(T,C), !.
-token(T,C) -->>      string(T,C), !.
+token(T,C) -->>      print(user_error,'\ntoken identifier'),
+identifier(T,C), !.
+token(T,C) -->>      print(user_error,'\ntoken number'),
+number(T,C), !.
+token(T,C) -->>      print(user_error,'\ntoken string'),
+string(T,C), !.
 
 inserted(T,C) -->> tokbuf::get((T,C)). % was actually contributed by macro expansion
 
 identifier(T,C) -->>
-    coord(C1),
+coord(C1),
+    print(user_error,'\nGot coord'),
     word with buf([]-L,[]-[]),
+    print(user_error,'\nGot word'),
     atom_codes(A,L),
+    print(user_error,'\nGot codes'),
     ( macros::tget(A,Ts)
       -> (add_coord(Ts,Ps,C1), tokbuf::enq_list(Ps), token(T,C))
       ; identifier_to_token(A,T), C=C1 ).
@@ -236,12 +247,22 @@ identifier(T,C) -->>
 add_coord([],[],_).
 add_coord([H|T],[(H,C)|L],C) :- add_coord(T,L,C).
 
-word      -->> input_getc(C), {is_word_ini(C)},    buf::put(C), more_word.
+word      -->>     print(user_error,'\nstarting word'),
+input_getc(C),     print(user_error,'\nGot c'),
+print(user_error,C),
+is_word_ini(C),
+    print(user_error,'\nIs word ini done'),
+buf::put(C), more_word.
 more_word -->> input_getc(C), {is_word_mid(C)}, !, buf::put(C), more_word.
 more_word -->> [].
 
-is_word_ini(C) :- ( code_type(C, alpha); C=0'_ ), !. %'
-is_word_mid(C) :- ( code_type(C, alnum); C=0'_ ; C=0'- ), !. %'
+
+is_word_ini(C) :-     print(user_error,'\nIs word ini'),
+    ( code_type(C, alpha); C=0'_ ), !. %'
+		
+is_word_mid(C) :-
+    print(user_error,'Is word mid'),
+    ( code_type(C, alnum); C=0'_ ; C=0'- ), !. %'
 
 %% converting an identifier into a token:
 %% if xmg:keyword(A) then A is used as the token
@@ -346,7 +367,9 @@ more_dimtype2 -->>
 %    xmg_tokenizer_punct:punctuation(P),
 punctuation(T,C) :--
     coord(C),
+    xmg:send(info,'\nPunctuation'),
     xmg:punctuation(A),
+    xmg:send(info,A),
     atom_codes(A,S),
     input_gets(S), !,
     punctuation_to_token(A,T).
@@ -388,7 +411,8 @@ stream_read_all(IStream, String) :--
 %%=============================================================================
 
 tokenize_string(Name, Text, Tokens, Encoding) :--
-    xmg_table:table_new(DIn),
+xmg_table:table_new(DIn),
+print(user_error,'\nTable created'),
     tokens with (chars(Text,[]),
 		 file([Name],_),
 		 line(1,R),
@@ -400,6 +424,7 @@ tokenize_string(Name, Text, Tokens, Encoding) :--
 
 tokenize_file(Path, Tokens, Encoding) :--
     file_to_string(Path, String, Encoding),
+print(user_error,'\nFile to string done'),
     tokenize_string(Path, String, Tokens, Encoding).
 
 %%=============================================================================

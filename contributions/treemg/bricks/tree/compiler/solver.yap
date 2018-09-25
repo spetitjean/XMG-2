@@ -20,20 +20,22 @@
 :- module(xmg_brick_tree_solver, []).
 
 :- use_module(library(gecode)).
-:- use_module('xmg/brick/tree/compiler/dominance').
+%%:- xmg:import('xmg/brick/tree/compiler/dominance').
+:- xmg:edcg.
 
 :- edcg:using(xmg_brick_mg_solver:solver).
 
 :- op(500, xfx, ':=:').
 
 
-solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(Plugins),Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
-	!,		
-	Space:=space,!,
-	
-	new_nodes(NodeList,Space,Nodes),!,
+solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
+!,
+        Space:=space,!,
+	xmg:send(info,'\nHere in solver'),
+	xmg_brick_tree_dominance:new_nodes(NodeList,Space,Nodes),!,
+	xmg:send(info,'\nDone new nodes'),
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
-
+	xmg:send(info,'\nFurther in solver'),
 	%% Here are the threads used by the plugins:
 	%% space
 	%% nodes - the list of nodes used by the solver
@@ -50,11 +52,8 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
-	xmg:send(debug,'\nNot unif: '),
-	xmg:send(debug,NotUnifs),
-
 	xmg_brick_mg_compiler:send(debug,' doing posts '),
-	xmg:send(debug,Relations),
+	%%xmg:send(info,Relations),
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 
 	xmg_brick_mg_compiler:send(debug,' branching '),
@@ -76,7 +75,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 
 
 
-do_posts(_,IntVars,IntPVars,NodeList,[]):- !.
+do_posts(_,_,_,_,[]):- !.
 
 do_posts(Space,IntVars,IntPVars,NodeList,[H|T]):-
 	do_post(Space,IntVars,IntPVars,NodeList,H),
@@ -84,7 +83,7 @@ do_posts(Space,IntVars,IntPVars,NodeList,[H|T]):-
 
 
 
-do_post(Space,IntVars,IntPVars,NodeList,vstep(one,A,B)):-
+do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 	B>A,!,
 	get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
@@ -92,7 +91,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(one,A,B)):-
 	Space += dom(IntPVar,1),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,vstep(one,A,B)):-
+do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 	A>B,!,
 	get_rel(B,A,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
@@ -100,21 +99,21 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(one,A,B)):-
 	Space += dom(IntPVar,1),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,vstep(more,A,B)):-
+do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 	B>A,!,
 	get_rel(A,B,IntVars,IntVar),
 	
 	Space += dom(IntVar,3),
   	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,vstep(more,A,B)):-
+do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 	A>B,!,
 	get_rel(B,A,IntVars,IntVar),
 	
 	Space += dom(IntVar,2),
   	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,vstep(any,A,B)):-
+do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 	B>A,!,
 	get_rel(A,B,IntVars,IntVar),
 	
@@ -122,7 +121,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(any,A,B)):-
 	Space += dom(IntVar,IntSet),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,vstep(any,A,B)):-
+do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 	A>B,!,
 	get_rel(B,A,IntVars,IntVar),
 	
@@ -186,7 +185,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
 %% HSTEPS
 
 
-do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
+do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
 	B>A,!,
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
@@ -199,7 +198,7 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
 	Space += dom(IntVar,4),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
+do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
 	A>B,!,
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
@@ -212,7 +211,7 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(one,A,B)):-
 	Space += dom(IntVar,5),  
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
+do_post(Space,IntVars,_,NodeList,not(hstep(one,A,B))):-
         B>A,!,
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
@@ -240,7 +239,7 @@ do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
 	Space += rel(EmptyInter,'IRT_GQ',IsLeft),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
+do_post(Space,IntVars,_,NodeList,not(hstep(one,A,B))):-
         A>B,!,
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
@@ -269,21 +268,21 @@ do_post(Space,IntVars,IntPVars,NodeList,not(hstep(one,A,B))):-
 	!.
 
 
-do_post(Space,IntVars,IntPVars,NodeList,hstep(more,A,B)):-
+do_post(Space,IntVars,_,_,hstep(more,A,B)):-
 	B>A,!,
 	get_rel(A,B,IntVars,IntVar),
 	
 	Space += dom(IntVar,4),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,hstep(more,A,B)):-
+do_post(Space,IntVars,_,_,hstep(more,A,B)):-
 	A>B,!,
 	get_rel(B,A,IntVars,IntVar),
 	
 	Space += dom(IntVar,5)  ,
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,hstep(any,A,B)):-
+do_post(Space,IntVars,_,_,hstep(any,A,B)):-
 	B>A,!,
 	get_rel(A,B,IntVars,IntVar),
 	
@@ -291,7 +290,7 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(any,A,B)):-
 	Space += dom(IntVar,IntSet),
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,hstep(any,A,B)):-
+do_post(Space,IntVars,_,_,hstep(any,A,B)):-
 	A>B,!,
 	get_rel(B,A,IntVars,IntVar),
 	
@@ -299,7 +298,7 @@ do_post(Space,IntVars,IntPVars,NodeList,hstep(any,A,B)):-
 	Space += dom(IntVar,IntSet),  
 	!.
 
-do_post(Space,IntVars,IntPVars,NodeList,Const):-
+do_post(_,_,_,_,Const):-
     xmg:send(info,'\nConstraint not supported: '),
     xmg:send(info,Const),
     false,
@@ -351,17 +350,17 @@ do_branch(Space,[Node|T]):-
 	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 
-	Space += branch(IsRoot,'INT_VALUES_MIN'),
+	Space += branch(IsRoot,'BOOL_VAL_MIN'),
 	Space += branch(UpCard,'INT_VALUES_MIN'),
 
 	do_branch(Space,T).
 
-get_node([H|T],1,H):- !.
-get_node([H|T],N,S):-
+get_node([H|_],1,H):- !.
+get_node([_|T],N,S):-
 	M is N - 1,
 	get_node(T,M,S),!.
 
-get_number([H|T],H1,1):-
+get_number([H|_],H1,1):-
     H==H1,!.
 get_number([H|T],H1,N):-
     not(H==H1),

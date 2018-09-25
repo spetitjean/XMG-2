@@ -21,8 +21,9 @@
 %% if there is a node X with p1=v1 and a node Y with p2=v2, X must precede Y
 
 :- module(xmg_brick_precedes_preparer, []).
+:-xmg:edcg.
 :- use_module(library(apply), [include/3]).
-:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
+%%:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).

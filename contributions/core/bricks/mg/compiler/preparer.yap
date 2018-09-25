@@ -50,8 +50,8 @@ xmg:prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):--
 xmg:prepare_plugin(Dim,Plugin,prepared(Out,ODim)):--
         atomic_list_concat(['xmg/brick/', Plugin, '/compiler/preparer'], File1),
         atomic_list_concat(['xmg/brick/', Plugin, '/compiler/solver'  ], File2),
-	use_module(File1, []),
-	use_module(File2, []),
+	%%use_module(File1, []),
+	%%use_module(File2, []),
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
 	xmg:send(debug,Module),
 	Get=..[get_instances,I],

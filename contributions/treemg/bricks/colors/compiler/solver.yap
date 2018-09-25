@@ -19,8 +19,10 @@
 
 :- module(xmg_brick_colors_solver, []).
 
+:-xmg:edcg.
+
 :- use_module(library(gecode)).
-:- use_module('xmg/brick/tree/compiler/dominance').
+%%:- xmg:import('xmg/brick/tree/compiler/dominance').
 
 
 :- op(500, xfx, ':=:').

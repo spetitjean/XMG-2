@@ -149,7 +149,7 @@ compile_file(File,Eval):-
 	xmg:send(info,'\n\n\nInitializing threads'),
 	xmg_compiler_conf:init_threads,
 
-	xmg:send(info,' loaded '),
+	xmg:send(info,'\nloaded '),
 
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	xmg:send(info,' parsed '),
@@ -235,8 +235,8 @@ eval:-
 	%% xmg:send(info,'\ngot trace\n'),
 
 	findall(Mutex,xmg:mutex(Mutex),Mutexes),
-	xmg:send(debug,'\nMutexes:'),
-	xmg:send(debug,Mutexes),
+	xmg:send(info,'\nMutexes:'),
+	xmg:send(info,Mutexes),
 	check_mutexes(Trace,Mutexes),
 
 	xmg:send_nl(info),xmg:send_nl(info),xmg:send(info,'                Computed '),xmg:send(info,Class),xmg:send_nl(info),xmg:send_nl(info),
@@ -311,11 +311,11 @@ eval_dims([trace-Acc|T],T1,Class):-!,
 eval_dims([skolem-Acc|T],T1,Class):-
 	eval_dims(T,T1,Class).
 eval_dims([Dim-Acc|T],[XML|T1],Class):-
-	xmg:send(debug,Dim),
+	xmg:send(info,Dim),
 	xmg:dimbrick(Dim,DimBrick),
 	findall(Solver,xmg:solver(Dim,Solver),Solvers),
 	xmg:eval(DimBrick,Solvers,Acc,XML,Class),
-	xmg:send(debug,'\nDone '),
+	xmg:send(info,'\nDone '),
 	xmg:send(debug,Dim),
 	xmg:send(debug,XML),
 	

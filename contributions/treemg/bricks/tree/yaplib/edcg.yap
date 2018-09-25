@@ -1,6 +1,6 @@
 :- module(xmg_brick_tree_edcg, []).
 :- use_module(library(gecode)).
-:- use_module('xmg/brick/tree/compiler/dominance').
+%%:- xmg:import('xmg/brick/tree/compiler/dominance').
 
 :- edcg:method(preparer_get_nodes(Nodes), Old, New,
 	       (xmg_table:table_get(Old, nodes, Nodes), Old=New)).

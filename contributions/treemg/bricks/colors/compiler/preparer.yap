@@ -19,6 +19,7 @@
 
 :- module(xmg_brick_colors_preparer, []).
 :- use_module(library(apply), [maplist/3]).
+:- xmg:edcg.
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).

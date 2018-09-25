@@ -21,7 +21,9 @@
 %% if there is a node with p1=v1, then there must a node with p2=v2
 
 :- module(xmg_brick_requires_preparer, []).
-:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
+
+:-xmg:edcg.
+%%:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
 :- use_module(library(apply), [include/3]).
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).

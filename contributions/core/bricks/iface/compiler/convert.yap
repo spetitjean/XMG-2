@@ -19,7 +19,7 @@
 
 
 :- module(xmg_brick_iface_convert, []).
-:- use_module('xmg/brick/syn/most').
+:- xmg:import('xmg/brick/syn/most').
 
 :- xmg:edcg.
 

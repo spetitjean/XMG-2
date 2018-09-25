@@ -59,14 +59,16 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	
 	xmg:get_plugins(tree,Plugins,OutPlugins),
 	
-	xmg:send(debug,'\nPlugins: '),
-	xmg:send(debug,Plugins),
+	xmg:send(info,'\nPlugins: '),
+	xmg:send(info,Plugins),
 
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
 
-	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,FNodes),
+	%%xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,FNodes),
 
+	xmg:send(info,'\nPlugins ignored'),
+	
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
 	%% xmg_brick_tag_preparer:prepare(SynNC,prepared(TagOps,SynNC)),

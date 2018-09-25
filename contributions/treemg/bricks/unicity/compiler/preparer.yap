@@ -17,12 +17,14 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_unicity_preparer, []).
+:- module(xmg_brick_unicity_preparer).
 :- use_module(library(apply), [include/3]).
 :- use_module(library(apply), [maplist/3]).
-:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
 
-:-edcg:using(xmg_brick_mg_preparer:preparer).
+:- xmg:edcg.
+%%:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
+
+:-edcg:using([xmg_brick_mg_preparer:preparer]).
 :-edcg:weave([preparer],[prepare/2]).
 
 get_instances(I):-
