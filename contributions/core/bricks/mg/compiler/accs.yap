@@ -19,7 +19,15 @@
 
 
 :-module(xmg_brick_mg_accs).
-:- use_module(edcg, 'xmg/brick/mg/edcg.yap', all).
+
+:-print(user_error,'\nStarting accs').
+
+%%:- xmg:import('xmg/brick/mg/edcg.yap').
+:- use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap').
+
+
+:-print(user_error,'\nIn accs').
+
 :-edcg:thread(constraints,edcg:queue).
 :-edcg:thread(vars,edcg:table).
 :-edcg:thread(consts,edcg:table).
@@ -86,3 +94,4 @@ term_expansion((:- xmg:generator_accs), R) :-
 
 user:term_expansion(X,Y) :- xmg_brick_mg_accs:term_expansion(X,Y).
 
+:-print(user_error,'\nFinishing accs').

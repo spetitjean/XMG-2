@@ -11,13 +11,17 @@ class YAP(subprocess.Popen):
         import xmg.command
         #if xmg.modular_program.YAPDIR is not None:
         print(xmg.command.YAPDIR)
-        if xmg.command.YAPDIR is not None:
+        if xmg.command.YAPDIR is not None:            
+            pregoals.append("add_to_path('.install/yap')")
             pregoals.append("add_to_path('%s')" % xmg.command.YAPDIR)
-        pregoals.append("use_module(\'%s/xmg/brick/mg/compiler/compiler.yap\')" % xmg.command.YAPDIR)
+        #pregoals.append("use_module(\'%s/xmg/brick/mg/compiler/compiler.yap\')" % xmg.command.YAPDIR)
+        pregoals.append("use_module('xmg/brick/mg/compiler/compiler.yap\')")
+    
         if pregoals:
-            call.extend(['-g',",".join(pregoals)])
+            call.extend(['-g',",".join(pregoals)+","+goal])
         if goal is not None:
             call.extend(['-z',goal])
+        print(call)
         super(YAP, self).__init__(call, **kargs)
      
 

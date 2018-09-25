@@ -3,7 +3,7 @@
 :- module(xmg_brick_mg_errors, []).
 :- use_module(library(lists)).
 :- use_module(library(charsio)).
-:- use_module('xmg/brick/mg/edcg.yap').
+:-xmg:edcg.
 :- use_module(library(rbtrees)).
 
 :-use_module(library(readutil)).

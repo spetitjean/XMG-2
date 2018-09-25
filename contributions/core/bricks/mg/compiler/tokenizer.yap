@@ -23,6 +23,8 @@
 %%:- use_module('xmg/brick/mg/edcg.yap').
 %%:- use_module(library(lists)).
 
+:- xmg:edcg.
+
 :- multifile(xmg:punctuation/1).
 :- multifile(xmg:keyword/1).
 

@@ -19,12 +19,15 @@
 
 :-module(xmg_brick_mg_prelude).
 
-:-use_module('xmg/brick/mg/edcg.yap').
+%%:-add_to_path('/home/simon/XMG-2/.install/yap/xmg/brick/compiler').
+:-add_to_path('').
+
+:-use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap').
 
 :-multifile(user:term_expansion/2).
 
 term_expansion((:- xmg:edcg), R) :-
-    !, R=(:- use_module(edcg, 'xmg/brick/mg/edcg.yap', all)).
+    !, R=(:- use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap')).
 
 term_expansion((:- xmg:gecode), R) :-
     !, R=(:- use_module(gecode, library(gecode), all)).

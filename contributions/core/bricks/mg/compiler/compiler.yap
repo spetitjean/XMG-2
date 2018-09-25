@@ -17,10 +17,17 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-module(xmg_brick_mg_compiler,[send/2]).
+:-module(xmg_brick_mg_compiler).
 
-:-load_files(['xmg/brick/mg/compiler/prelude.yap'],[silent(true)]).
+xmg:path('/home/simon/XMG-2/.install/yap/').
 
+xmg:import(File):-
+    xmg:path(XMG),
+    atom_concat([XMG,File],Concat),
+    load_files([Concat],[silent(true)]).
+ 
+
+:-xmg:import('xmg/brick/mg/compiler/prelude.yap').
 
 
 :-dynamic(principle/1).
@@ -89,6 +96,7 @@ send(O,M):-!, xmg:send(O,M),!.
 
 
 compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
+    print(user_error,'\n\nHERE'),
 	asserta(encoding(Encoding)),
 	(
 	    Debug='on'
@@ -118,7 +126,8 @@ compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
 	     ( more_mode_on, xmg:send(info,'\n\nPrinting of additional files activated.\n\n\n'))
              ;
 	     (true)
-	 ),!,
+	),!,
+	xmg:send(info,'\n\n\nhere'),
 	 catch(compile_file(File,Eval),Exception,true),
 	 (
 	     not(var(Exception))->
@@ -130,10 +139,14 @@ compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
 
 
 compile_file(File,Eval):-
+	xmg:send(info,'\n\n\nInitializing'),
+
 	xmg_compiler_conf:init,
 	%%findall(Module,xmg_modules_def:module_def(_,Module),Modules),
 	%%xmg:xmg:send(info,Modules),
 	%%xmg_brick_mg_modules:load_modules(Modules),
+
+	xmg:send(info,'\n\n\nInitializing threads'),
 	xmg_compiler_conf:init_threads,
 
 	xmg:send(info,' loaded '),

@@ -16,6 +16,8 @@
 %% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %%=============================================================================
 
+:-print(user_error,'\nStarting EDCG').
+
 :- module(edcg, [op(1200, xfx, '-->>'),
 		 op(1200, xfx, ':--' ),
 		 op( 850, xfx, '::'  ),
@@ -23,6 +25,9 @@
 		 op( 500, xfy, '=>'  ),
 		 op( 500, xfy, ':='  )]).
 :- load_files([library(lists), 'table.yap'],[silent(true)]).
+
+:-print(user_error,'\nStarting EDCG').
+
 
 :- dynamic edcg_info/2.
 

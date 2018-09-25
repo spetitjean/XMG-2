@@ -18,7 +18,7 @@
 %% ========================================================================
 
 :- module(xmg_brick_mg_preparer, []).
-:- use_module('xmg/plugins').
+:- xmg:import('xmg/plugins').
 
 
 :- xmg:edcg.

@@ -19,9 +19,13 @@
 
 :- module(xmg_brick_mg_convert, []).
 
+:-print(user_error,'\nIn convert, before edcg').
+
 :- xmg:edcg.
 :- edcg:thread(name,edcg:counter).
 %% :- edcg:using(xmg_accs:name).
+
+:-print(user_error,'\nIn convert, after edcg').
 
 :- edcg:weave([name],[xmg:convert_new_name/2, xmg:xml_convert/2, xmg:xml_convert_free/2, xmg:xml_convert_attributed/2, xmg:xml_convert_term/2]).
 
@@ -109,3 +113,4 @@ xmg:xml_convert_term([H|T],[H1|T1]):--
 xmlTrace([A],[elem(class, data(A))]) :-- !.
 xmlTrace([H|T],[H1|T1]):--
 	xmlTrace([H],[H1]),!, xmlTrace(T,T1),!.
+
