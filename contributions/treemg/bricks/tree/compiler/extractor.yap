@@ -20,10 +20,12 @@
 :- module(xmg_brick_tree_extractor, []).
 
 extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
-	make_tree(IsRoot,Eq,Children,Left,Tree),
-	xmg_brick_mg_compiler:send(debug,' tree made '),
-	unify_in_tree(Tree,UTree,NodeList1),
-	xmg_brick_mg_compiler:send(debug,' tree unified ').
+    xmg:send(info,'\nStarting extraction'),
+    make_tree(IsRoot,Eq,Children,Left,Tree),
+    xmg_brick_mg_compiler:send(info,'\nTree made '),
+    xmg:send(info,NodeList1),
+    unify_in_tree(Tree,UTree,NodeList1),
+    xmg_brick_mg_compiler:send(info,'\nTree unified ').
 
 
 
@@ -134,15 +136,25 @@ unify_in_trees([H|T],[H1|T1], NodeList):-
 	unify_in_trees(T,T1,NodeList),!.
 
 unify_in_tree(tree:tree(T,Trees), tree:tree(T1,Trees1), NodeList):-
-	unify_node(T,T1,NodeList),!,
+    unify_node(T,T1,NodeList),!,
+    xmg:send(info,'\nOne node unified'),
 	unify_in_trees(Trees,Trees1,NodeList),!.
 unify_in_tree(A,A1,NodeList):-
 	unify_node(A,A1,NodeList),!.
 
 unify_node([NNode],node(P,F,N),NodeList):-
-	xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),
+    xmg:send(info,'\nLooking for a node'),
+    xmg:send(info,NNode),
+    xmg:send(info,NodeList),
+    xmg_brick_tree_solver:get_node(NNode,NodeList,node(P1,F1,N1)),
+    xmg:send(info,'\nFound a node'),
+    P=P1,
+    F=F1,
+    N=N1,
+        xmg:send(info,'\nUnified a node'),
 	!.
 unify_node([N1],node(P2,F2,NN2),NodeList):-
+    xmg:send(info,'\nFailing unify node'),
 	%% get_node(N1,NodeList,node(P1,F1,NN1)),!,
 	%% xmg_nodename:nodename(NN1,Name1),
 	%% xmg_nodename:nodename(NN2,Name2),
@@ -170,7 +182,8 @@ unify_node([N1],node(P2,F2,NN2),NodeList):-
 	false,
 	!.
 unify_node([NNode|T],node(P,F,N),NodeList):-
-	xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),!,
+    xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),!,
+			  xmg:send(info,'\nUnified a node'),
 	unify_node(T,node(P,F,N),NodeList),
 	!.
 unify_node([N1|T],node(P2,F2,NN2),NodeList):-

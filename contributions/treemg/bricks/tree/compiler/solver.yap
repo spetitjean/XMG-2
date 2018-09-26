@@ -103,7 +103,8 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	%%flush_output,
 
 	xmg_brick_tree_dominance:eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot),
-	xmg:send(info,'\nEq vals done').
+	xmg:send(info,'\nEq vals done'),
+	xmg:send(info,NodeList1).
 
 
 

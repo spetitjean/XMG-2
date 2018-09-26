@@ -28,6 +28,7 @@
 :- edcg:weave([name],[xmlFeats/2,xmlFeat/2]).
 
 xmg:xml_convert_term(avm:avm(Feats),Convert):--
+    xmg:send(info,'\nHere in AVM convert'),
 	xmlFeats(Feats,Convert),!.
 
 xmlFeats([],[]):-- !.
@@ -36,8 +37,10 @@ xmlFeats([H|T],[H1|T1]):--
 	xmlFeats(T,T1),!.
 
 xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]))):--
-	var(V),
-	xmg:convert_new_name('@V',V),
+         var(V),
+         xmg:send(info,'\nHere in AVM convert with var'),
+         xmg:convert_new_name('@V',V),
+	 xmg:send(info,'\nConverted the name'),
 	!.
 %% xmlFeat(A-V,elem(f,features([name-A,varname-V]))):--
 %% 	atom(V),
