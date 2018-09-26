@@ -27,11 +27,34 @@
 
 :- op(500, xfx, ':=:').
 
+%% Duplicate until Yap's import system is fixed
+Eq       :=: eq(Node)       :- !, assert_node(Node), arg( 1,Node,Eq).
+Up       :=: up(Node)       :- !, assert_node(Node), arg( 2,Node,Up).
+Down     :=: down(Node)     :- !, assert_node(Node), arg( 3,Node,Down).
+Left     :=: left(Node)     :- !, assert_node(Node), arg( 4,Node,Left).
+Right    :=: right(Node)    :- !, assert_node(Node), arg( 5,Node,Right).
+EqDown   :=: eqdown(Node)   :- !, assert_node(Node), arg( 6,Node,EqDown).
+EqUp     :=: equp(Node)     :- !, assert_node(Node), arg( 7,Node,EqUp).
+Side     :=: side(Node)     :- !, assert_node(Node), arg( 8,Node,Side).
+Children :=: children(Node) :- !, assert_node(Node), arg( 9,Node,Children).
+Parent   :=: parent(Node)   :- !, assert_node(Node), arg(10,Node,Parent).
+UpCard   :=: upcard(Node)   :- !, assert_node(Node), arg(11,Node,UpCard).
+IsRoot   :=: isroot(Node)   :- !, assert_node(Node), arg(12,Node,IsRoot).
+RB       :=: rb(Node)       :- !, assert_node(Node), arg(13,Node,RB).
+Values   :=: map(Fun,Nodes) :- !, map_fun(Values,Nodes,Fun).
+X        :=: Y              :- throw(unrecognized(X :=: Y)).
+
+is_node(Node) :- functor(Node,node,13).
+assert_node(Node) :-
+	is_node(Node) -> true ;
+	throw(expected(node,Node)).
 
 solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
 !,
         Space:=space,!,
 	xmg:send(info,'\nHere in solver'),
+	xmg:send(info,Relations),
+	
 	xmg_brick_tree_dominance:new_nodes(NodeList,Space,Nodes),!,
 	xmg:send(info,'\nDone new nodes'),
 	xmg_brick_tree_dominance:global_constraints(Space,NodeList,IntVars,IntPVars),!,
@@ -59,7 +82,7 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 
 	xmg_brick_mg_compiler:send(info,'\nDoing posts '),
 	%%xmg:send(info,Relations),
-	%%do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
+	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
 	xmg_brick_mg_compiler:send(info,'\nIgnored posts '),
 
 	
@@ -70,16 +93,17 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	xmg_brick_mg_compiler:send(info,'\nGlobal branched '),
 	xmg_brick_tree_dominance:global_pbranch(Space,IntPVars),!,
 	xmg_brick_mg_compiler:send(info,'\nPBranched '),
-	do_branch(Space,NodeList),!,	
+	xmg_brick_tree_dominance:do_branch(Space,NodeList),!,	
 
-	xmg_brick_mg_compiler:send(info,'\nBranched '),
+	xmg_brick_mg_compiler:send(info,'\nBranched'),
 
 	SolSpace := search(Space),
 
 	xmg_brick_mg_compiler:send(info,'\nSearched '),
-	flush_output,
+	%%flush_output,
 
-	eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
+	xmg_brick_tree_dominance:eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot),
+	xmg:send(info,'\nEq vals done').
 
 
 
@@ -87,14 +111,18 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 do_posts(_,_,_,_,[]):- !.
 
 do_posts(Space,IntVars,IntPVars,NodeList,[H|T]):-
-	do_post(Space,IntVars,IntPVars,NodeList,H),
+    xmg:send(info,'\nPosting one'),
+    xmg:send(info,H),
+    do_post(Space,IntVars,IntPVars,NodeList,H),
+    xmg:send(info,'\nPosted one'),
 	do_posts(Space,IntVars,IntPVars,NodeList,T),!.
 
 
 
 do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 	B>A,!,
-	get_rel(A,B,IntVars,IntVar),
+	  xmg:send(info,'\nPost 1'),
+	  get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,3),
 	Space += dom(IntPVar,1),
@@ -102,21 +130,27 @@ do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 
 do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 	A>B,!,
-	get_rel(B,A,IntVars,IntVar),
+	  xmg:send(info,'\nPost 2'),
+	  get_rel(B,A,IntVars,IntVar),
+	  xmg:send(info,'\nPost 2.3'),
 	get_prel(A,B,IntPVars,IntPVar),
+	xmg:send(info,'\nPost 2.5'),
 	Space += dom(IntVar,2),
 	Space += dom(IntPVar,1),
 	!.
 
 do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 	B>A,!,
+	  xmg:send(info,'\nPost 3'),
 	get_rel(A,B,IntVars,IntVar),
 	
 	Space += dom(IntVar,3),
   	!.
 
 do_post(Space,IntVars,_,_,vstep(more,A,B)):-
-	A>B,!,
+    A>B,!,
+      	  xmg:send(info,'\nPost 4'),
+
 	get_rel(B,A,IntVars,IntVar),
 	
 	Space += dom(IntVar,2),
@@ -124,6 +158,7 @@ do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 
 do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 	B>A,!,
+	  xmg:send(info,'\nPost 5'),
 	get_rel(A,B,IntVars,IntVar),
 	
 	IntSet := intset([1,3]),
@@ -131,7 +166,9 @@ do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 	!.
 
 do_post(Space,IntVars,_,_,vstep(any,A,B)):-
-	A>B,!,
+    A>B,!,
+      	  xmg:send(info,'\nPost 6'),
+
 	get_rel(B,A,IntVars,IntVar),
 	
 	IntSet := intset([1,2]),
@@ -140,7 +177,8 @@ do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
-	B>A,!,
+    B>A,!,
+      	  xmg:send(info,'\nPost 7'),
 	get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,3),
@@ -153,7 +191,8 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
-	A>B,!,
+    A>B,!,
+      	  xmg:send(info,'\nPost 8'),
 	get_rel(B,A,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,2),
@@ -166,7 +205,9 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
-	B>A,!,
+    B>A,!,
+      	  xmg:send(info,'\nPost 9'),
+
 	get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,3),
@@ -179,7 +220,9 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
 	!.
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
-	A>B,!,
+    A>B,!,
+      	  xmg:send(info,'\nPost 10'),
+
 	get_rel(B,A,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,2),
@@ -196,6 +239,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
 
 do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
 	B>A,!,
+      	  xmg:send(info,'\nPost 11'),
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
 	Left:=:left(NB),
@@ -208,15 +252,18 @@ do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
 	!.
 
 do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
-	A>B,!,
+    A>B,!,
+      xmg:send(info,'\nPost 12'),
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
+	xmg:send(info,'\nPost 12.1'),
 	Left:=:left(NB),
 	Right:=:right(NA),
+	xmg:send(info,'\nPost 12.5'),
 	Empty := intset([]),
 	Space += rel(Left,'SOT_INTER',Right,'SRT_EQ',Empty),
 	get_rel(B,A,IntVars,IntVar),
-	
+	xmg:send(info,'\nPost 12.9'),
 	Space += dom(IntVar,5),  
 	!.
 
@@ -334,38 +381,8 @@ do_nposts(Space,Rels,[H|T]):-
 
 
 
-color_branch(_,[]):- !.
-color_branch(Space,[Node|T]):-
-	RB :=: rb(Node),
-	Space += branch(RB,'SET_VAL_MIN_INC'),
 
-	color_branch(Space,T).
 
-do_branch(_,[]):- !.
-
-do_branch(Space,[Node|T]):-
-        xmg_brick_mg_compiler:send(info,'\nStarting branching '),
-        Eq       :=: eq(Node),
-	xmg_brick_mg_compiler:send(info,'\nOne done '),
-	Up       :=: up(Node) ,     
-	Down     :=: down(Node),    
-	Left     :=: left(Node),    
-	Right    :=: right(Node),   
-	EqDown   :=: eqdown(Node),   
-	EqUp     :=: equp(Node),    
-	Side     :=: side(Node),    
-	Children :=: children(Node), 
-	Parent   :=: parent(Node),   
-	UpCard   :=: upcard(Node),   
-	IsRoot   :=: isroot(Node),
-	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
-	xmg_brick_mg_compiler:send(info,'\nBefore first branching'),
-	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
-
-	Space += branch(IsRoot,'BOOL_VAL_MIN'),
-	Space += branch(UpCard,'INT_VALUES_MIN'),
-
-	do_branch(Space,T).
 
 get_node([H|_],1,H):- !.
 get_node([_|T],N,S):-
@@ -379,34 +396,7 @@ get_number([H|T],H1,N):-
     get_number(T,H1,M),
     N is M+1,!.
 
-eq_vals(_,[],[],[],[],[]):- !.
 
-eq_vals(Space,
-	[Node|T],
-	[VEq|T1],
-	%%[VRb|T2],
-	[VLeft|T3],
-	[VChildren|T4],
-	[VIsRoot|T5]
-	%%[VParent|T6]
-    )  :-
-	
-	Eq:=:eq(Node),
-	%%Rb:=:rb(Node),
-	Left:=:left(Node),
-	Children:=:children(Node),
-	IsRoot:=:isroot(Node),
-	%%Parent:=:parent(Node),
-
-	[VEq,VLeft,VChildren]:=lub_values(Space,[Eq,Left,Children]),
-	%% VEq:=lub_values(Space,Eq),
-	%% %%VRb:=lub_values(Space,Rb),
-	%% VLeft:=lub_values(Space,Left),
-	%% VChildren:=lub_values(Space,Children),
-	VIsRoot:=val(Space,IsRoot),
-	%% %%VParent:=lub_values(Space,Parent),
-	eq_vals(Space,T,T1,T3,T4,T5),
-	!.
 
 
 
@@ -421,8 +411,10 @@ get_node(N,[M-_|T],Node):-
 
 get_rel(A,B,Rels,Rel):- 
 	B>A,!,
-	A1 is A - 1,
-	xmg_brick_tree_solver:nbNodes(NNodes),
+	  A1 is A - 1,
+	  xmg:send(info,'\nGet Rel'),
+	  xmg_brick_tree_dominance:nbNodes(NNodes),
+	  xmg:send(info,'\nGot nbNodes'),
 	I is (A1*NNodes)-(A1*A//2)+B-A,
 	lists:nth(I,Rels,Rel),
 	!.
@@ -436,7 +428,7 @@ get_rel(A,B,Rels,Rel):-
 get_prel(A,B,Rels,Rel):- 
 	B>A,!,
 	A1 is A - 1,
-	xmg_brick_tree_solver:nbNodes(NNodes),
+	xmg_brick_tree_dominance:nbNodes(NNodes),
 	I is 2*((A1*NNodes)-(A1*A//2)+B-A)-1,
 	lists:nth(I,Rels,Rel),
 	!.
@@ -444,7 +436,7 @@ get_prel(A,B,Rels,Rel):-
 get_prel(A,B,Rels,Rel):-
 	A>B,!,
 	B1 is B - 1,
-	xmg_brick_tree_solver:nbNodes(NNodes),
+	xmg_brick_tree_dominance:nbNodes(NNodes),
 	I is 2*((B1*NNodes)-(B1*B//2)+A-B),
 	lists:nth(I,Rels,Rel),
 	!.
