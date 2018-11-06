@@ -43,7 +43,7 @@ xmlSem([H|T],[H1|T1]):--
 	xmlPred(H,H1),
 	xmlSem(T,T1),!.
 
-xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([value-XL]))])),elem(predicate,children([elem(sym,features(FXPred))]))|Args1]))):--
+xmlPred(LP,elem(literal,features([negated-'no']),children([elem(label,children([elem(sym,features([varname-XL]))])),elem(predicate,children([elem(sym,features(FXPred))]))|Args1]))):--
        LP=..[':',L,P],
 
        P=..['@',Pred,Args],
