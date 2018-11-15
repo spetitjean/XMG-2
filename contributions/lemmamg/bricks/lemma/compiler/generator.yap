@@ -23,18 +23,23 @@
 :-xmg:generator_accs.
 
 :-edcg:using(xmg_brick_mg_generator:decls).
+:-edcg:weave([decls],[generate_params/2,generate_param/2]).
 
+xmg:generate_instr((lemma:feat(c(F),v(V),Params),Dim)):--
+        decls::tget(V,VV),
+        generate_params(Params,GParams),
+	Acc=..['::',xmg_acc:Dim,put(feat(F,VV,GParams))],
+	code::enq(Acc),
+	!.
 xmg:generate_instr((lemma:feat(c(F),v(V)),Dim)):--
 	decls::tget(V,VV),
-		  
-	%%Set=..['::',xmg_acc:Dim,get(VAVM)],
-        %%code::enq(Set),
-
-	
-	
 	Acc=..['::',xmg_acc:Dim,put(feat(F,VV))],
 	code::enq(Acc),
 	!.
+xmg:generate_instr((lemma:feat(c(F),c(C),Params),Dim)):--
+        generate_params(Params,GParams),
+	Acc=..['::',xmg_acc:Dim,put(feat(F,C,GParams))],
+	code::enq(Acc),!.
 xmg:generate_instr((lemma:feat(c(F),c(C)),Dim)):--
 	Acc=..['::',xmg_acc:Dim,put(feat(F,C))],
 	code::enq(Acc),!.
@@ -63,3 +68,15 @@ xmg:generate_instr((lemma:coanchor(c(C),v(V),c(C1)),Dim)):--
 xmg:generate_instr((lemma:coanchor(c(C),c(C2),c(C1)),Dim)):--
 	Acc=..['::',xmg_acc:Dim,put(coanchor(C,C2,C1))],
 	code::enq(Acc),!.
+
+
+generate_params([],[]):--!.
+generate_params([H|T],[H1|T1]):--
+    generate_param(H,H1),
+    generate_params(T,T1),!.
+
+generate_param(lemma:eq(c(A),c(C)),eq(A,C)):--!.
+generate_param(lemma:eq(c(A),v(V)),eq(VV)):--
+    decls::tget(V,VV),!.
+
+    

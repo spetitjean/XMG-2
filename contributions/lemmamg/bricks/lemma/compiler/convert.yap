@@ -61,6 +61,10 @@ convert_feats([feat(fam,Fam)|T],T1):-
 convert_feats([feat(sem,Sem)|T],[FSem|T1]):-
         FSem=elem(sem,children([elem(semclass,features([name-Sem]))])),
 	convert_feats(T,T1),!.
+convert_feats([feat(sem,Sem,Params)|T],[FSem|T1]):-
+        convert_params(Params,CParams),
+        FSem=elem(sem,children([elem(semclass,features([name-Sem]),children([elem(args,children(CParams))]))])),
+	convert_feats(T,T1),!.
 convert_feats([coanchor(Node,string(SLex),Cat)|T],[Coanchor|Feats]):-
     atom_codes(Lex,SLex),
     Coanchor=elem(coanchor,features([node_id-Node,cat-Cat]),children([elem(lex,data(Lex))])),
@@ -76,4 +80,13 @@ convert_feats([equation(Node,Att,Val)|T],[Equation|Feats]):-
 convert_feats([H|_],_):-
     xmg:send(info,'\n\nError: unsupported instruction: '),
     xmg:send(info,H),false.
+
+convert_params([],[]).
+convert_params([eq(A,V)|T],[elem(f,features([name-A]),children([C]))|T1]):-
+    convert_param_val(V,C),
+    convert_params(T,T1),!.
+
+convert_param_val(string(S),elem(sym,features([value-CS]))):-
+    atom_codes(CS,S),!.
+convert_param_val(V,elem(sym,features([value-V]))).
 

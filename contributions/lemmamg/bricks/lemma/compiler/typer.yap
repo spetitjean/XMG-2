@@ -31,7 +31,10 @@ xmg:stmt_type_constr(lemma,lemma).
 
 
 xmg:type_stmt(lemma:feat(Att,Val),Lemma:lemma(FeatsType)):--
-	!.
+    !.
+
+xmg:type_stmt(lemma:feat(Att,Val,Params),Lemma:lemma(FeatsType)):--
+    !.
 
 xmg:type_stmt(lemma:equation(_,_,_),Lemma:lemma(FeatsType)):--
 	     !.

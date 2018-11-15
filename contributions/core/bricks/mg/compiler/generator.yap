@@ -109,7 +109,6 @@ generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 	%%xmg:send(info,'\n\n'),
 
 	generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List) with (decls(Vars,_),name(0,_)),!,
-	%%xmg:send(info,TableOut),
 	generate_classes(T).
 
 generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--

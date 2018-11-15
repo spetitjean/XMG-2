@@ -3,7 +3,13 @@
 
 LemmaStmt : Feat {$$=$1} | Equation {$$=$1} | Coanchor {$$=$1} | Filter {$$=$1};
 
-Feat : id '<-' _Expr {$$=lemma:feat($1,$3)};
+Feat : id '<-' _Expr {$$=lemma:feat($1,$3)}
+
+      | id '<-' _Expr Params {$$=lemma:feat($1,$3,$4)};
+
+Params : '[' (Eq // ',')+ ']' {$$=$2};
+
+Eq : id '=' _Expr {$$=lemma:eq($1,$3)};
 
 Equation : 'equation' id '->' _Expr '=' _Expr {$$=lemma:equation($2,$4,$6)};
 

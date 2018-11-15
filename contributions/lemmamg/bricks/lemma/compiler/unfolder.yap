@@ -22,7 +22,11 @@
 :-xmg:edcg.
 :-xmg:unfolder_accs.
 
-
+xmg:unfold_dimstmt(Dim,lemma:feat(Att,Class,Params)):--
+	xmg:unfold_expr(Att,UAtt),
+        xmg:unfold_expr(Class,UClass),
+        xmg:unfold_exprs(Params,UParams),
+        constraints::enq((lemma:feat(UAtt,UClass,UParams),Dim)),!.
 xmg:unfold_dimstmt(Dim,lemma:feat(Att,Val)):--
 	xmg:unfold_expr(Att,UAtt),
 	xmg:unfold_expr(Val,UVal),
@@ -43,6 +47,10 @@ xmg:unfold_dimstmt(Dim,lemma:coanchor(ID1,Expr,ID2)):--
 		  constraints::enq((lemma:coanchor(UID1,UExpr,UID2),Dim)),
 		  !.
 xmg:unfold_expr(lemma:dot(ID1,ID2),lemma:dot(UID1,UID2)):--
+		  xmg:unfold_expr(ID1,UID1),
+		  xmg:unfold_expr(ID2,UID2),
+		  !.
+xmg:unfold_expr(lemma:eq(ID1,ID2),lemma:eq(UID1,UID2)):--
 		  xmg:unfold_expr(ID1,UID1),
 		  xmg:unfold_expr(ID2,UID2),
 		  !.
