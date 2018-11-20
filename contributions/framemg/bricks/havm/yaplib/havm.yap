@@ -75,10 +75,20 @@ unify_entries(T1,[K-V0|L],T3) :-
 
 
 h_avm(X, Type, L) :- var(L), !,
+	xmg:send(debug,'\nGetting atts for havm '),
+	xmg:send(debug,X),
+	xmg:send(debug,' with given type '),
+	xmg:send(debug,Type),
 	get_atts(X, avmfeats(Type,T,_)),
-	rb_visit(T,L).
+	rb_visit(T,L),
+	xmg:send(debug,'\nType is now '),
+        xmg:send(debug,Type).
 
 h_avm(X, Type, L) :-
+	xmg:send(debug,'\nCreating havm '),
+	xmg:send(debug,X),
+	xmg:send(debug,' with given type '),
+	xmg:send(debug,Type),
 	xmg:send(debug,'\nConverting '),
 	xmg:send(debug,Type),
 	
@@ -269,6 +279,17 @@ check_type(Vector):-
 	xmg:send(info,'\nInvalid type vector:'),
 	xmg:send(info,Vector),false.
 
+unify_types(T1,T2,T3,CT3):-
+    xmg:send(debug,'Unify types: '),
+    xmg:send(debug,T1),
+    xmg:send(debug,' and '),
+    xmg:send(debug,T2),
+    xmg:send(debug,'\n'),
+
+    var(T1),
+    var(T2),
+    T1=T2,
+    T3=T1,!.
 unify_types(T1,T2,T3,CT3):-
 	T1=T2,
 	

@@ -24,14 +24,15 @@
 %%:- edcg:using(xmg_convert_avm:name).
 :- edcg:using(xmg_brick_mg_convert:name).
 
-:- edcg:weave([name],[framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2, paramsToXML/2]).
+:- edcg:weave([name],[framesToXML/2, frameToXML/2, featsToXML/2, featToXML/2, valToXML/2, xmlSyn/2, xmlSynList/2, xmlSem/2, xmlIface/2, xmlPred/2, xmlArgs/2, xmlArg/2, paramsToXML/2, typeToXML/2]).
+:-multifile(typeToXML/2).
 
 
 listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
 xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFeats))) :--
-        xmg:send(info,'\nConverting frames (duplicates removed):'),
+        xmg:send(debug,'\nConverting frames (duplicates removed):'),
         lists:remove_duplicates(Frames,DFrames),
 	reorder(DFrames,RFrames),
         %%xmg:send(info,DFrames),
@@ -67,10 +68,13 @@ frameToXML(relation(Rel,Params),XML ):--
 		   !.
 
 frameToXML(Frame,Frame1 ):--
+	  %%xmg_brick_havm_havm:print_h_avm(Frame,0),
 	  xmg_brick_havm_havm:h_avm(Frame,VType,Feats),
-
-          %%(var(VType)-> xmg:send(info,'Found a non instantiated type variable');true),
-          xmg_brick_hierarchy_typer:fVectorToType(VType,Type),
+          %%xmg:send(info,'\nType: '),
+          %%xmg:send(info,VType),
+          (var(VType)-> (xmg:send(debug,'\nFound a non instantiated type variable'),Type=VType)
+	    ;
+            ((atom(VType) -> (xmg:send(debug,'\nFound a constant as type'),Type=VType));xmg_brick_hierarchy_typer:fVectorToType(VType,Type))),
 	  %%xmg:send(info,Type),  
 	  xmg_brick_havm_havm:const_h_avm(Frame,Const),
 	  typeToXML(Type,XMLType),
@@ -92,7 +96,14 @@ frameToXML(Frame,Frame1 ):--
 	),
 	!.
 
-typeToXML(Type,elem(ctype,children(AtomicTypes))):-
+typeToXML(Type,elem(ctypevar,features([varname-Type]))):--
+        var(Type),
+        xmg:convert_new_name('@Type',Type).
+
+typeToXML(Type,elem(ctypevar,features([varname-Type]))):--
+        atom(Type).
+
+typeToXML(Type,elem(ctype,children(AtomicTypes))):--
     atomicTypesToXML(Type,AtomicTypes).
 
 atomicTypesToXML([],[]).

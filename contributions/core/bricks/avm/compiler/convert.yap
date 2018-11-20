@@ -32,6 +32,8 @@ xmg:xml_convert_term(avm:avm(Feats),Convert):--
 
 xmlFeats([],[]):-- !.
 xmlFeats([H|T],[H1|T1]):--
+        xmg:send(debug,'\nConverting feat: '),
+        xmg:send(debug,H),
 	xmlFeat(H,H1),
 	xmlFeats(T,T1),!.
 
@@ -75,7 +77,13 @@ xmlFeat(A-AVM,H1):--
 	)),
 	!.
 
-
+%% When a frame type is given as the value of a feature (in iface for example)
+%% xmlFeat(A-VType,H1):--
+%%     is_list(VType),
+%%     xmg_brick_hierarchy_typer:fVectorToType(VType,Type),
+%%     xmg_brick_frame_convert:typeToXML(Type,XMLType),
+%%     H1=elem(f, features([name-A]),children([XMLType])),
+%% 	!.
 
 %%%%%%%%%%%%%%%
 
