@@ -53,7 +53,7 @@ xmg:type_stmt(frame:relation(Rel,Params),Dim:frame(FType)):--
 
 xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
 	     xmg:type_expr(L,Dim:frame),
-             xmg:type_expr(T,Dim:frame_type),
+             xmg:type_expr(T,hierarchy:ftype),
              xmg:type_expr(F,FType),
 	     !.
 
