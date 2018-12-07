@@ -34,6 +34,10 @@ xmg:stmt_type_constr(frame,frame).
 
 
 xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
+             xmg:send(debug,'\nTyping frame '),
+             xmg:send(debug,L),
+             xmg:send(debug,T),
+             xmg:send(debug,F),
 	     xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)),
              xmg:send(debug,'\nDim '),
              xmg:send(debug,Dim),
@@ -52,7 +56,10 @@ xmg:type_stmt(frame:relation(Rel,Params),Dim:frame(FType)):--
 	     !.
 
 xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
-	     xmg:type_expr(L,Dim:frame),
+             xmg:send(debug,'\nTyping frame expr'),
+             xmg:send(debug,L),
+             xmg:type_expr(L,FType),
+             xmg:send(debug,'\nTyped Label'),
              xmg:type_expr(T,hierarchy:ftype),
              xmg:type_expr(F,FType),
 	     !.

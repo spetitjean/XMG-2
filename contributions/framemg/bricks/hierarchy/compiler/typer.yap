@@ -50,19 +50,23 @@ xmg:print_appendix:-
     not(xmg:more_mode),!.
 
 init_print_hierarchy:-
-        xmg:fReachableTypes(FVectors),
-    	fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-
-	xmg:send(info,'init print hierarchy\n'),
-	open('.more',write,S,[alias(hierarchy)]),
-	write(hierarchy,'<type_info>\n'),
-	write(hierarchy,'  <hierarchy>\n'),
-	print_hierarchy(FTypes,FAttrs),
-	findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
-	write(hierarchy,'  <type_constraints>\n'),
-	print_type_constraints(Constraints),
-	write(hierarchy,'</type_info>\n'),
-	close(hierarchy),!.
+    xmg:send(info,'\n\nInit print hierarchy\n'),
+    xmg:fReachableTypes(FVectors),
+    xmg:send(debug,'\nGot reacheable types'),
+    fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
+    xmg:send(debug,'\nConverted vectors'),
+    
+    open('.more',write,S,[alias(hierarchy)]),
+    write(hierarchy,'<type_info>\n'),
+    write(hierarchy,'  <hierarchy>\n'),
+    print_hierarchy(FTypes,FAttrs),
+    findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+    write(hierarchy,'  <type_constraints>\n'),
+    print_type_constraints(Constraints),
+    write(hierarchy,'</type_info>\n'),
+    close(hierarchy),!.
+init_print_hierarchy:-
+    xmg:send(info,'\nType hierarchy could not be printed').
 
 print_hierarchy([],[]):-
         write(hierarchy,'  </hierarchy>\n'),!.

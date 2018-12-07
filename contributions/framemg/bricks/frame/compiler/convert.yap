@@ -96,7 +96,7 @@ frameToXML(Frame,Frame1 ):--
 	),
 	!.
 
-typeToXML(Type,elem(ctypevar,features([varname-Type]))):--
+typeToXML(Type,elem(ctype,features([coref-Type]))):--
         var(Type),
         xmg:convert_new_name('@Type',Type).
 
