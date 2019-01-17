@@ -1,4 +1,4 @@
-frame-types = {eventuality, initial_eventuality, event, entity, lexeme, derived-lexeme, ment-lexeme, state, activity, experiencer, stimulus, initial_state, result_state, change_of_possession, change_of_state, animate, inanimate, animacy, causation}
+frame-types = {eventuality, initial_eventuality, event, entity, lexeme, derived-lexeme, ment-lexeme, state, activity, experiencer, stimulus, initial_state, result_state, change_of_possession, change_of_state, animate, inanimate, animacy, causation, al-lexeme}
 
 frame-constraints = {
     event -> eventuality,

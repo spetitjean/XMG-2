@@ -377,8 +377,8 @@ find_smaller_supertype_from(Vector,SVector,N):-
 	M =< L,
 	find_smaller_supertype_from(Vector,SVector,M),!.
 find_smaller_supertype_from(Vector,_,_):-
-	xmg:send(info,'\nDid not find supertype for vector '),
-	xmg:send(info,Vector),false.
+	xmg:send(debug,'\nDid not find supertype for vector '),
+	xmg:send(debug,Vector),false.
 
 
 typeExists(Type,Types):-

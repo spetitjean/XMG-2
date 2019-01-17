@@ -46,8 +46,10 @@ xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
              xmg:send(debug,HAVM),
 	     !.
 xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
-	     xmg:type_expr(F1,Dim:frame),
-	     xmg:type_expr(F2,Dim:frame),
+xmg:send(info,'\nHERE'),
+    xmg:type_expr(F1,T1),
+xmg:send(info,'\nHERE'),
+	     xmg:type_expr(F2,T1),
 	     !.
 
 xmg:type_stmt(frame:relation(Rel,Params),Dim:frame(FType)):--
