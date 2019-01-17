@@ -96,32 +96,42 @@ print_constraints(C):-
 	write(hierarchy,'      </constraints>\n'),!.
 
 print_constraints([],_).
-print_constraints([A-V],N):-
-	write(hierarchy,'        <constraint>'),
-	write(hierarchy,A),
-	write(hierarchy,'-'),
-	set_constraint_value(V,N,_),
-	write(hierarchy,V),
-	write(hierarchy,'        </constraint>\n'),
-	!.
-print_constraints([A-V|T],N):-
-    	write(hierarchy,'        <constraint>'),
-	write(hierarchy,A),
-	write(hierarchy,'-'),
+print_constraints([A-(Type,V)|T],N):-
+    	write(hierarchy,'        <constraint>\n'),
+	print_attribute(A),
 	set_constraint_value(V,N,M),
+	set_constraint_value(Type,M,O),
+	write(hierarchy,'          <type val="'),
+	write(hierarchy,Type),
+	write(hierarchy,'"/>\n'),
+	write(hierarchy,'          <val val="'),
 	write(hierarchy,V),
-	write(hierarchy,', '),
-	print_constraints(T,M),
+	write(hierarchy,'"/>\n'),	
 	write(hierarchy,'        </constraint>\n'),
+	print_constraints(T,O),
 	!.
 
+print_attribute(path(A1,A2)):-
+    write(hierarchy,'          <path>\n'),
+    write(hierarchy,'            <attr val="'),
+    write(hierarchy,A1),
+    write(hierarchy,'"/>\n'),
+    write(hierarchy,'            <attr val="'),
+    write(hierarchy,A2),
+    write(hierarchy,'"/>\n'),
+    write(hierarchy,'          </path>\n'),!.
+print_attribute(A):-
+	write(hierarchy,'          <attr val="'),
+	write(hierarchy,A),
+	write(hierarchy,'"/>\n'),!.
+	
 set_constraint_value(A,N,M):-
-	var(A),
+    var(A),
 	%%A=N,
 	atomic_concat(['@',N],A),
 	M is N+1,!.
 set_constraint_value(A,N,M):-
-	not(var(A)),
+    not(var(A)),
 	M is N,!.
 
 print_type_constraints([]):-
