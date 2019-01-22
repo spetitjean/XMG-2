@@ -51,10 +51,12 @@ xmg:print_appendix:-
 
 init_print_hierarchy:-
     xmg:send(info,'\n\nInit print hierarchy\n'),
-    xmg:fReachableTypes(FVectors),
-    xmg:send(debug,'\nGot reacheable types'),
+    %%xmg:fReachableTypes(FVectors),
+    findall(FReachable,xmg:fReachableType(FReachable,_),FVectors),
+
+    xmg:send(debug,'\nGot reacheable types\n'),
+    
     fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-    xmg:send(debug,'\nConverted vectors'),
     
     open('.more',write,S,[alias(hierarchy)]),
     write(hierarchy,'<type_info>\n'),
@@ -182,7 +184,9 @@ get_fconstraints([]):-
 	%% xmg:send(debug,'\n\nFiltered types:'),
 	xmg:send(debug,FSets),
 	
-	asserta(xmg:fReachableTypes(FSets)),
+	%%asserta(xmg:fReachableTypes(FSets)),
+	%%xmg:fReachableTypes(TEST),
+	%%xmg:send(info,TEST),false,
 
 	findall(attrconstraint(TAC,TAs,TAT,TATT),xmg:fAttrConstraint(TAC,TAs,TAT,TATT),AttConstraints),
 
@@ -422,7 +426,7 @@ fVectorToType(Vector,Type):-
     %%find_smaller_supertype_from(Vector,SVector,0),
 	xmg:send(debug,'Converting vector '),
 	xmg:send(debug,Vector),
-	xmg:send(debug,SVector),
+	%%xmg:send(debug,SVector),
 	xmg:ftypes(Types),
 	%%xmg:send(info,Types),
 	fVectorToType(Vector,Types,Type),!.
