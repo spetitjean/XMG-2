@@ -38,7 +38,7 @@ xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
              xmg:send(debug,L),
              xmg:send(debug,T),
              xmg:send(debug,F),
-	     xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)),
+	     xmg:type_expr(frame:frame(L,T,F),FType),
              xmg:send(debug,'\nDim '),
              xmg:send(debug,Dim),
              xmg:send(debug,' has now type '),
@@ -46,9 +46,9 @@ xmg:type_stmt(frame:frame(L,T,F),Dim:frame(FType)):--
              xmg:send(debug,HAVM),
 	     !.
 xmg:type_stmt(frame:dom(F1,F2,_),Dim:frame(FType)):--
-xmg:send(info,'\nHERE'),
+%%xmg:send(info,'\nHERE'),
     xmg:type_expr(F1,T1),
-xmg:send(info,'\nHERE'),
+%%xmg:send(info,'\nHERE'),
 	     xmg:type_expr(F2,T1),
 	     !.
 
@@ -57,7 +57,7 @@ xmg:type_stmt(frame:relation(Rel,Params),Dim:frame(FType)):--
 	     %%xmg:type_expr(Params,Dim:frame),
 	     !.
 
-xmg:type_expr(frame:frame(L,T,F),Dim:frame(FType)):--
+xmg:type_expr(frame:frame(L,T,F),FType):--
              xmg:send(debug,'\nTyping frame expr'),
              xmg:send(debug,L),
              xmg:type_expr(L,FType),

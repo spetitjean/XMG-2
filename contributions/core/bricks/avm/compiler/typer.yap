@@ -59,8 +59,12 @@ xmg:type_expr(avm:feat(Attr,Value),Type):--
 	xmg:send(debug,UAttr),
 	xmg:send(debug,')'),
 	type_def(TypeAttr,TypeDef),
+	xmg:send(debug,'\nTypeDef: '),
+	xmg:send(debug,TypeDef),
 	value_type(Value,TypeDef),
+	xmg:send(debug,'\nType valued'),
 	extend_type(Type,UAttr,TypeDef),
+	xmg:send(debug,'\nType extended'),
 	!.
 xmg:type_expr(avm:feat(token(C1,id(Attr)),token(C2,Value)),Type):--
         Value=..[_,V],
@@ -174,5 +178,9 @@ type_def(TypeAttr,_):--
 	!.
 
 value_type(Value,Type):--
+xmg:send(debug,'\nValue type: '),
+xmg:send(debug,Value),
+xmg:send(debug,Type),
+
 	xmg:type_expr(Value,Type),
 	!.

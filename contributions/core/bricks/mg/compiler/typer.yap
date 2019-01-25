@@ -56,7 +56,9 @@
 :-edcg:weave([free],[new_free/2]).
 
 xmg:check_types(T1,T2,Coord):-
-    xmg:send(debug,'Checking types'),
+    xmg:send(debug,'\nChecking types'),
+    xmg:send(debug,T1),
+    xmg:send(debug,T2),
     T1=T2,!.
 xmg:check_types(T1,T2,Coord):- 
 	not(T1=T2),
