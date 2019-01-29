@@ -19,12 +19,17 @@
 
 :-module(xmg_brick_mg_compiler).
 
-xmg:path('/home/simon/XMG-2/.install/yap/').
-
 xmg:import(File):-
+    %%xmg:send(info,'\nGetting path'),
     xmg:path(XMG),
+    %%xmg:send(info,'\nPath:'),
+    %%xmg:send(info,XMG),
     atom_concat([XMG,File],Concat),
     load_files([Concat],[silent(true)]).
+xmg:import(File,Import):-
+    xmg:path(XMG),
+    atom_concat([XMG,File],Concat),
+    use_module(Concat,Import).
  
 
 :-xmg:import('xmg/brick/mg/compiler/prelude.yap').
@@ -150,6 +155,7 @@ compile_file(File,Eval):-
 	xmg_compiler_conf:init_threads,
 
 	xmg:send(info,'\nloaded '),
+	xmg:send(info,'\nparsing '),
 
 	xmg_brick_mg_parser:parse_file(File,[Parse]),!,
 	xmg:send(info,' parsed '),
@@ -169,9 +175,9 @@ compile_file(File,Eval):-
 	%% xmg:send_nl(info),
 
 	xmg_brick_mg_unfolder:unfold(Ordered,Unfolded),!,
-	xmg:send(info,' unfolded '),
-	xmg:send(debug,'\n'),
-	xmg:send(debug,Unfolded),
+	xmg:send(info,'\nUnfolded '),
+	xmg:send(info,'\n'),
+	xmg:send(info,Unfolded),
 	xmg:send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
 	xmg:send(debug,' principles done '),
@@ -190,7 +196,10 @@ compile_file(File,Eval):-
 	print_header,
 	xmg:send(debug,'\nEval starting'),
 	eval,
-    	maybe_print_appendices.	
+	xmg:send(info,'\nPrinting appendices'),
+    	maybe_print_appendices,
+	xmg:send(info,'\nEnd').
+
 
 
 print_header:-
@@ -220,7 +229,8 @@ maybe_print_appendices.
 
 
 eval:-
-	%%xmg_brick_mg_generator:compute(Class,Computed),
+    xmg:send(info,'\nEvaluating class '),
+    %%xmg_brick_mg_generator:compute(Class,Computed),
 	xmg:value_all(Computed,Class),
 	
 	xmg:send(info,'\nClass executed: '),

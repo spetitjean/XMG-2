@@ -27,8 +27,8 @@
 	  ]).
 
 :- use_module(library(lists), [member/2]).
-%%:- xmg:import('xmg/utils', [memberq/2]).
-%%:- xmg:import('xmg/brick/avm/avm', [avm/2]).
+:- xmg:import('xmg/utils', [memberq/2]).
+:- xmg:import('xmg/brick/avm/avm', [avm/2]).
 
 
 %==============================================================================
@@ -48,6 +48,7 @@ node_with_featq(FV, node(_, F, _)) :-
     !.
 
 node_with_prop_or_featq(FV, Node) :-
+    xmg:send(info,'\nIn node_with_prop_or_featq'),
     (node_with_propq(FV, Node); node_with_featq(FV, Node)),
     !.
 

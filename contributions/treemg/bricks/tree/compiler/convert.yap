@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(xmg_brick_tree_convert, []).
+:- module(xmg_brick_tree_convert).
 
 :- xmg:edcg.
 

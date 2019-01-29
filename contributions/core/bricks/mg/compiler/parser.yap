@@ -23,6 +23,9 @@
 
 :- dynamic(lastError/2).
 :- xmg:edcg.
+%%:- use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap').
+%%:-use_module('/home/simon/XMG-2/contributions/core/bricks/mg/yaplib/edcg.yap').
+
 :- edcg:thread(stack,edcg:stack).
 :- edcg:thread(stack2,edcg:stack).
 :- edcg:thread(steps,edcg:counter).
@@ -320,6 +323,8 @@ parse_sem(States,Tokens,Sem):--
 	throw_errors,!.
 
 parse_file(File,Sem):--
+xmg:send(info,'HERE'),
+        print(user_error,'\nParsing file'),
 	xmg_brick_mg_compiler:encoding(Encoding),
 	xmg_brick_mg_compiler:send(info,'\ntokenizing\n'),
 	xmg_brick_mg_tokenizer:tokenize_file(File,Tokens,Encoding),

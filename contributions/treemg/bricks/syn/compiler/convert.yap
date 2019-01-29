@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(xmg_brick_syn_convert, []).
+:- module(xmg_brick_syn_convert).
 
 :- xmg:edcg.
 

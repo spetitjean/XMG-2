@@ -33,6 +33,7 @@ xmg:xml_convert_term(avm:avm(Feats),Convert):--
 
 xmlFeats([],[]):-- !.
 xmlFeats([H|T],[H1|T1]):--
+xmg:send(info,'\nDoing xmlFeat'),
 	xmlFeat(H,H1),
 	xmlFeats(T,T1),!.
 
@@ -52,21 +53,29 @@ xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([varname-V]))]
 	!.
 
 xmlFeat(A-string(V),elem(f,features([name-A]),children([elem(sym,features([value-V1]))]))):--
+xmg:send(info,'\nHere atom_codes'),
 	atom_codes(V1,V),!.
 xmlFeat(A-V,elem(f,features([name-A]),children([elem(sym,features([value-V]))]))):--
+xmg:send(info,'\nHere atom'),
+xmg:send(info,V),
+
 	(atom(V)
         ;
 	integer(V)
         ),
+	xmg:send(info,'\nDone'),
 	!.
 
 
 xmlFeat(A-AVM,H1):--
+xmg:send(info,'\nHere before AVM'),
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	xmg_brick_avm_avm:const_avm(AVM,CAVM),
+	xmg:send(info,'\nHere AVM'),
 
 	((
-	    var(CAVM),!,
+		var(CAVM),!,
+		xmg:send(info,'\nConverting new name'),
 	    xmg:convert_new_name('@AVM',CAVM),
 	    xmlFeats(LAVM,LAVM1),
 	    H1=elem(f, features([name-A]),children([elem(fs,features([coref-CAVM]),children(LAVM1))]))
@@ -78,12 +87,15 @@ xmlFeat(A-AVM,H1):--
 	)),
 	!.
 
-
+xmlFeat(A-AVM,H1):--
+xmg:send(info,'\nHere failing AVM'),
+fail.
 
 %%%%%%%%%%%%%%%
 
 
 xmlFeat(A-AD,H1):--
+xmg:send(info,'\nHere adisj'),
 	xmg_brick_adisj_adisj:adisj(AD,LAD),
 	xmg_brick_adisj_adisj:const_adisj(AD,CLAD),!,
 	((

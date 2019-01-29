@@ -18,16 +18,21 @@
 %% ========================================================================
 
 
-:- module(xmg_brick_mg_tokenizer,[tokenize/2, tokenize/3]).
+%%:- module(xmg_brick_mg_tokenizer,[tokenize/2, tokenize/3]).
+:- module(xmg_brick_mg_tokenizer).
 
 %%:- use_module('xmg/brick/mg/edcg.yap').
 %%:- use_module(library(lists)).
 
+:- print(user_error,'\nLoading Tokenizer').
 :- xmg:edcg.
+:- print(user_error,'\nLoaded edcg').
 
-:- multifile(xmg:punctuation/1).
-:- multifile(xmg:punctuation_to_token/2).
-:- multifile(xmg:keyword/1).
+%%:- multifile(xmg:punctuation/1).
+%%:- multifile(xmg:punctuation_to_token/2).
+%%:- multifile(xmg:keyword/1).
+
+:- print(user_error,'\nDeclaring threads').
 
 :- edcg:thread(macros  ,edcg:table  ). % table of macros
 :- edcg:thread(toks    ,edcg:queue  ). % accumulated tokens
@@ -38,6 +43,8 @@
 :- edcg:thread(col     ,edcg:counter). % current col number
 :- edcg:thread(encoding,edcg:value  ). % current encoding (default utf-8)
 :- edcg:thread(tokbuf  ,edcg:queue  ). % buffer of tokens inserted by macros
+
+:- print(user_error,'\nDeclared threads').
 
 :- edcg:weave([chars, line, col],
 	      [input_getc/1, input_gets/1, input_getline/1,
@@ -145,7 +152,8 @@ more_tokens -->>
     tokens.
 more_tokens -->> [].
 more_tokens -->>
-	    line::get(L), col::get(C), file::top(F), Coord=coord(F,L,C), input_getline(S),
+xmg:send(info,'\nUnrecognized token'),
+line::get(L), col::get(C), file::top(F), Coord=coord(F,L,C), input_getline(S),
             throw(xmg(tokenizer_error(unrecognized(S,Coord)))).
 
 %%=============================================================================
@@ -153,11 +161,17 @@ more_tokens -->>
 %%=============================================================================
 
 more_tokens_include -->>
+    print(user_error,'\nStarting more tokens include'),
     spaces,
     fileName(File),
+    print(user_error,'\ngot Filename: '),
     atom_codes(AFile,File),
+    print(user_error,AFile),
     resolve_file(AFile, File, Path),
+    print(user_error,'\nPath: '),
+    print(user_error,Path),
     divert_to_file(Path),
+    print(user_error,'\nDiverted to file'),
     tokens.
 
 resolve_file(AFile, File, Path) -->>
@@ -169,7 +183,9 @@ resolve_file(AFile, File, Path) -->>
 
 divert_to_file(AFile) -->>
     encoding::get(Encoding),
+    print(user_error,'\nGot encoding'),
     file_to_string(AFile, Text, Encoding),
+    print(user_error,'\nDid file to string'),
     chars::value(Chars), line::get(Line), col::get(Col),
     file::push((Chars, Line, Col)),
     file::push(AFile),
@@ -221,20 +237,20 @@ macro_more_tokens -->> [].
 %% read and return the next token.
 %%=============================================================================
 
-token(T,C) -->>     dimtype(T,C), !.
-token(T,C) -->>    inserted(T,C), !.
-token(T,C) -->> punctuation(T,C), !.
+token(T,C) -->>      dimtype(T,C), !.
+token(T,C) -->>      inserted(T,C), !.
+token(T,C) -->>      punctuation(T,C), !.
 token(T,C) -->>      print(user_error,'\ntoken identifier'),
-identifier(T,C), !.
+                     identifier(T,C), !.
 token(T,C) -->>      print(user_error,'\ntoken number'),
-number(T,C), !.
+                     number(T,C), !.
 token(T,C) -->>      print(user_error,'\ntoken string'),
-string(T,C), !.
+                     string(T,C), !.
 
 inserted(T,C) -->> tokbuf::get((T,C)). % was actually contributed by macro expansion
 
 identifier(T,C) -->>
-coord(C1),
+    coord(C1),
     print(user_error,'\nGot coord'),
     word with buf([]-L,[]-[]),
     print(user_error,'\nGot word'),
@@ -248,12 +264,21 @@ add_coord([],[],_).
 add_coord([H|T],[(H,C)|L],C) :- add_coord(T,L,C).
 
 word      -->>     print(user_error,'\nstarting word'),
-input_getc(C),     print(user_error,'\nGot c'),
-print(user_error,C),
-is_word_ini(C),
-    print(user_error,'\nIs word ini done'),
-buf::put(C), more_word.
-more_word -->> input_getc(C), {is_word_mid(C)}, !, buf::put(C), more_word.
+                   input_getc(C),
+                   print(user_error,'\nGot c'),
+                   print(user_error,C),
+                   is_word_ini(C),
+                   print(user_error,'\nIs word ini done'),
+                   buf::put(C), more_word.
+more_word -->>
+                  print(user_error,'\nstarting more word'),
+                  input_getc(C),
+                  print(user_error,'\nGot c'),
+		  atom_codes(A,[C]),
+                   print(user_error,A),		  
+		  {is_word_mid(C)}, !,
+                  buf::put(C),
+                  more_word.
 more_word -->> [].
 
 
@@ -262,7 +287,9 @@ is_word_ini(C) :-     print(user_error,'\nIs word ini'),
 		
 is_word_mid(C) :-
     print(user_error,'Is word mid'),
-    ( code_type(C, alnum); C=0'_ ; C=0'- ), !. %'
+    ( code_type(C, alnum); C=0'_ ; C=0'- ),
+    xmg:send(info,'\nDone is word mid').
+    !. 
 
 %% converting an identifier into a token:
 %% if xmg:keyword(A) then A is used as the token
@@ -395,7 +422,11 @@ xmg:punctuation_to_token('-', bool('-')).
 %%=============================================================================
 
 file_to_string(Path, String, Encoding) :-
+    print(user_error,'\nIn file_to_string, trying to open file: '),
+    %% This fails because of this Yap import problem at the moment (only with includes)
+    print(user_error,Path),    
     open(Path, read, IStream,[encoding(Encoding)]),
+    print(user_error,'\nOpened'),
     stream_read_all(IStream, String),
     close(IStream), !.
 	
@@ -423,6 +454,7 @@ print(user_error,'\nTable created'),
 		 macros(DIn,_)).
 
 tokenize_file(Path, Tokens, Encoding) :--
+print(user_error,'\nStarting tokenize_file'),
     file_to_string(Path, String, Encoding),
 print(user_error,'\nFile to string done'),
     tokenize_string(Path, String, Tokens, Encoding).

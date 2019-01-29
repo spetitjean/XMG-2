@@ -19,17 +19,24 @@
 
 :-module(xmg_brick_mg_prelude).
 
-%%:-add_to_path('/home/simon/XMG-2/.install/yap/xmg/brick/compiler').
-:-add_to_path('').
-
-:-use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap').
-
 :-multifile(user:term_expansion/2).
 
 term_expansion((:- xmg:edcg), R) :-
-    !, R=(:- use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap')).
+    xmg:path(XMG),
+    atom_concat([XMG,'xmg/brick/mg/edcg'],Module),
+    !, R=(:-
+	      %% for some weird memory problem, the next line does not work yet
+	      %%use_module(Module)
+	      %%use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap')
+	      %% This is needed for the moment, the symboloc links seem to be a problem
+	      use_module('/home/simon/XMG-2/contributions/core/bricks/mg/yaplib/edcg.yap')
+	 ).
 
 term_expansion((:- xmg:gecode), R) :-
     !, R=(:- use_module(gecode, library(gecode), all)).
 
 user:term_expansion(X,Y) :- xmg_brick_mg_prelude:term_expansion(X,Y).
+
+:- multifile(xmg:punctuation/1).
+:- multifile(xmg:punctuation_to_token/2).
+:- multifile(xmg:keyword/1).

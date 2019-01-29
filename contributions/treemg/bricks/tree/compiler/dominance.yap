@@ -1,5 +1,5 @@
 %% -*- prolog -*-
-:- module(xmg_brick_tree_dominance, []).
+:- module(xmg_brick_tree_dominance).
 
 :- use_module(library(gecode)).
 

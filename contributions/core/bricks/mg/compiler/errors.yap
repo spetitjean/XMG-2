@@ -8,7 +8,10 @@
 
 :-use_module(library(readutil)).
 
-:- multifile user:generate_message_hook/3.
+%:- multifile user:generate_message_hook/3.
+:- multifile user:message_hook/3.
+:- multifile prolog:message/1.
+:- multifile prolog:message/3.
 % :- source.
 
 
@@ -24,10 +27,18 @@
 
 %% message: xmg(Message)
 
-user:generate_message_hook(error(unhandled_exception,xmg(Exc)), In, Out) :--
+prolog:message(xmg(Exc),_,_):--
+	xmg:send(info,'\nHere prolog message'),
+	xmg_message(Exc,Msg),
+	xmg:send(info,'\ngot message'),
+        format_msg(Msg) with queue([]-Out, []-In).
+
+user:message_hook(error(unhandled_exception,xmg(Exc)), In, Out) :--
+        xmg:send(info,'\nGenerating hook'),
 	xmg_message(Exc,Msg),
 	format_msg(Msg) with queue([]-Out, []-In).
-user:generate_message_hook(xmg(Exc), In, Out) :--
+user:message_hook(xmg(Exc), In, Out) :--
+        xmg:send(info,'\nGenerating hook'),
         xmg_message(Exc,Msg),
         format_msg(Msg) with queue([]-Out, []-In).
 

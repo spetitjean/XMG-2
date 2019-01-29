@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_tree_extractor, []).
+:- module(xmg_brick_tree_extractor).
 
 extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
     xmg:send(info,'\nStarting extraction'),
@@ -33,10 +33,15 @@ extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
 %% Converting sets to a tree
 
 make_tree(IsRoot,Eq,Children,Left,tree:tree(Root,Trees)):-  %% Trees : list of children trees
+    xmg:send(info,'\nSearching for the root'),
 	search_root(IsRoot,Eq,Root),!,
-	search_children(Root,Children,NChildren),!,
-	children_eqs(NChildren,NChildrenEqs,Eq),!,
-	search_lefts(NChildrenEqs,Left,ChildrenLefts),!,
+    xmg:send(info,'\nSearching for children'),
+    search_children(Root,Children,NChildren),!,
+    xmg:send(info,'\nChildren eqs'),
+    children_eqs(NChildren,NChildrenEqs,Eq),!,
+    xmg:send(info,'\nSearching for lefts'),
+    search_lefts(NChildrenEqs,Left,ChildrenLefts),!,
+        xmg:send(info,'\nSorting children'),
 	sort_children(NChildrenEqs,ChildrenLefts,NChildrenSorted),!,
 	make_subtrees(NChildrenSorted,Eq,Children,Left,Trees),!.
 
@@ -88,8 +93,10 @@ search_children([N|_],Children,L):-
 
 children_eqs([],[],_):-	!.
 children_eqs([C|T],[Leqs|L],Eqs):-
+        xmg:send(info,'\nSearching in eqs'),
 	search_in_eqs(C,Eqs,Leqs),
 	%%print(user_output,Leqs),
+	xmg:send(info,'\nRemoving children'),
 	remove_children(Leqs,T,T1),
 	children_eqs(T1,L,Eqs),!.
 
@@ -104,7 +111,10 @@ remove_children([H|T],L,LR):-
 	remove_children(T,L1,LR),!.
 
 remove_child(C,L,LR):-
-	lists:delete(L,C,LR), !.
+    xmg:send(info,'\nRemoving a child'),
+    %%lists:delete(L,C,LR),
+    lists:subtract(L,[C],LR),
+    xmg:send(info,'\nRemoved'),!.
 
 
 

@@ -22,7 +22,7 @@
 :- use_module(library(apply), [maplist/3]).
 
 :- xmg:edcg.
-%%:- use_module('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
+:- xmg:import('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
 
 :-edcg:using([xmg_brick_mg_preparer:preparer]).
 :-edcg:weave([preparer],[prepare/2]).
@@ -31,9 +31,12 @@ get_instances(I):-
     xmg:unicity(I).
 
 prepare(feat(A,V,_), Out) :--
+    xmg:send(info,'\nHere in prepare unicity'),
     preparer::tget(nodes,Nodes),
+    xmg:send(info,'\nGot nodes'),
     maplist(prepare_one(A-V), Nodes, Out).
 
 prepare_one(FV, Node, Result) :-
-    node_with_prop_or_featq(FV, Node)
-    -> Result=true ; Result=false.
+    xmg:send(info,'\nIn prepare_one'),
+    (node_with_prop_or_featq(FV, Node)
+    -> Result=true ; Result=false).

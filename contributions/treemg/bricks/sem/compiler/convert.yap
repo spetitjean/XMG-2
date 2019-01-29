@@ -18,7 +18,7 @@
 %% ========================================================================
 
 
-:- module(xmg_brick_sem_convert, []).
+:- module(xmg_brick_sem_convert).
 
 :- xmg:edcg.
 
@@ -33,7 +33,9 @@ new_name(Prefixe, Name) :--
 
 
 xmg:xml_convert_term(sem:sem(Sem), elem(semantics,children(Sem1))) :--
-	lists:remove_duplicates(Sem,SemD),!,
+    xmg:send(info,'\nHere before sem'),
+      %%lists:remove_duplicates(Sem,SemD),!,
+      xmg:send(info,'\nHere before xmlsem'),
 	xmlSem(Sem,Sem1),
 	!.
 

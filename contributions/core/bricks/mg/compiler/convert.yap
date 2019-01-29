@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_mg_convert, []).
+:- module(xmg_brick_mg_convert).
 
 :-print(user_error,'\nIn convert, before edcg').
 

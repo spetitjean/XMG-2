@@ -19,14 +19,7 @@
 
 
 :-module(xmg_brick_mg_accs).
-
-:-print(user_error,'\nStarting accs').
-
-%%:- xmg:import('xmg/brick/mg/edcg.yap').
-:- use_module('/home/simon/XMG-2/.install/yap/xmg/brick/mg/edcg.yap').
-
-
-:-print(user_error,'\nIn accs').
+:- xmg:edcg.
 
 :-edcg:thread(constraints,edcg:queue).
 :-edcg:thread(vars,edcg:table).
