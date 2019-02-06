@@ -29,6 +29,9 @@ class ParserXMG(object):
             "sym": self.stag_sym,
             "vAlt": self.stag_vAlt,
             "semantics": self.stag_semantics,
+            "frame": self.stag_frame,
+            "ctype": self.stag_ctype,
+            "type": self.stag_type,
             "literal": self.stag_literal,
             "label": self.stag_label,
             "predicate": self.stag_predicate,
@@ -50,6 +53,9 @@ class ParserXMG(object):
             "sym": self.etag_sym,
             "vAlt": self.etag_vAlt,
             "semantics": self.etag_semantics,
+            "frame": self.etag_frame,
+            "ctype": self.etag_ctype,
+            "type": self.etag_type,
             "literal": self.etag_literal,
             "label": self.etag_label,
             "predicate": self.etag_predicate,
@@ -172,7 +178,25 @@ class ParserXMG(object):
     def stag_semantics(self, attribs):
         pass
 
+    def stag_frame(self, attribs):
+        pass
+
+    def stag_ctype(self, attribs):
+        pass
+
+    def stag_type(self, attribs):
+        pass
+
     def etag_semantics(self):
+        pass
+
+    def etag_frame(self):
+        pass
+
+    def etag_ctype(self):
+        pass
+
+    def etag_type(self):
         pass
 
     def stag_literal(self, attribs):
