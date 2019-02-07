@@ -14,6 +14,8 @@ class ParserXMG(object):
         self.parser.CharacterDataHandler = self.char_data
         self.data = []
         self.valt = None
+        self.tree = None
+        self.sem = None
         self.STAG = {
             "grammar": self.stag_grammar,
             "mcgrammar": self.stag_grammar,
@@ -32,6 +34,7 @@ class ParserXMG(object):
             "frame": self.stag_frame,
             "ctype": self.stag_ctype,
             "type": self.stag_type,
+            "relation": self.stag_relation,
             "literal": self.stag_literal,
             "label": self.stag_label,
             "predicate": self.stag_predicate,
@@ -56,6 +59,7 @@ class ParserXMG(object):
             "frame": self.etag_frame,
             "ctype": self.etag_ctype,
             "type": self.etag_type,
+            "relation": self.etag_relation,
             "literal": self.etag_literal,
             "label": self.etag_label,
             "predicate": self.etag_predicate,
@@ -110,11 +114,13 @@ class ParserXMG(object):
 
     def stag_tree(self, attribs):
         self.tree = Tree()
-        self.tree.id = attribs["id"]
+        if "id" in attribs:
+            self.tree.id = attribs["id"]
         self.node_stack = []
 
     def etag_tree(self):
-        self.tree.node = self.node
+        if hasattr(self,'node'):
+            self.tree.node = self.node
         self.entry.tree = self.tree
         self.tree = None
         self.node = None
@@ -141,6 +147,8 @@ class ParserXMG(object):
     def stag_fs(self, attribs):
         fs = FS()
         fs.coref = attribs.get("coref", None)
+        if fs.coref:
+            fs.coref=Var(fs.coref)
         self.fs_stack.append(fs)
 
     def etag_fs(self):
@@ -179,9 +187,15 @@ class ParserXMG(object):
         pass
 
     def stag_frame(self, attribs):
-        pass
+        self.sem = Frame()
+        self.fs_stack = []
+        self.f_stack = []
+        self.fs = None
 
     def stag_ctype(self, attribs):
+        pass
+
+    def stag_relation(self, attribs):
         pass
 
     def stag_type(self, attribs):
@@ -191,9 +205,13 @@ class ParserXMG(object):
         pass
 
     def etag_frame(self):
-        pass
+        self.sem.fs = self.fs
+        self.entry.sem = self.sem
 
     def etag_ctype(self):
+        pass
+
+    def etag_relation(self):
         pass
 
     def etag_type(self):
@@ -250,9 +268,13 @@ class Renaming(dict):
         return ren
 
 class Entry(object):
+        
     def normalize_vars(self):
         d = Renaming()
-        self.tree.normalize_vars(d)
+        if self.tree:
+            self.tree.normalize_vars(d)
+        if self.sem:
+            self.sem.normalize_vars(d)
         self.interface.normalize_vars(d)
     def pprint(self, fd=sys.stdout):
         if not isinstance(fd, IndentableStream):
@@ -265,12 +287,20 @@ class Entry(object):
                 for x in self.trace:
                     fd.writeln(x)
             self.tree.pprint(fd)
+            if hasattr(self,'sem'):
+                fd.writeln("sem")
+                self.sem.pprint(fd)
 
 class Tree(object):
+    def __init__(self):
+        self.node = None
+        
     def normalize_vars(self, d):
-        self.node.normalize_vars(d)
+        if self.node:
+            self.node.normalize_vars(d)
     def pprint(self, fd):
-        self.node.pprint(fd)
+        if self.node:
+            self.node.pprint(fd)
 
 class Node(object):
     def normalize_vars(self, d):
@@ -288,6 +318,8 @@ class Node(object):
 
 class FS(dict):
     def normalize_vars(self, d):
+        if self.coref:
+            self.coref.normalize_vars(d)
         items = list(self.items())
         items.sort()
         for x,y in items:
@@ -295,6 +327,8 @@ class FS(dict):
     def pprint(self, fd):
         items = list(self.items())
         items.sort()
+        if self.coref:
+            self.coref.pprint(fd)
         if items:
             fd.write("[")
             first = True
@@ -338,6 +372,14 @@ class VAlt(object):
                 fd.write("|")
             x.pprint(fd)
 
+class Frame(object):
+    def normalize_vars(self, d):
+        if self.fs:
+            self.fs.normalize_vars(d)
+    def pprint(self, fd):
+        if self.fs:
+            self.fs.pprint(fd)
+            
 class XMG(object):
 
     @classmethod
