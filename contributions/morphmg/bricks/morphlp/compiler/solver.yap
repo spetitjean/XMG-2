@@ -40,7 +40,7 @@ eval(Morph,morphlp:solved(Atom,MEqs)):-
 	!.
 
 get_all([],[],[],[],[]):- !.
-get_all([field(Stem)|T],[field(Stem)|T1],T2,T3,T4):-
+get_all([field(Stem,Feats)|T],[field(Stem,Feats)|T1],T2,T3,T4):-
 	get_all(T,T1,T2,T3,T4),!.
 get_all([fieldprec(S1,S2)|T],T1,[fieldprec(S1,S2)|T2],T3,T4):-
 	get_all(T,T1,T2,T3,T4),!.
@@ -55,9 +55,14 @@ order_stems(Stems,Precs,OFields):-
 	find_first(Stems,Precs,First),
 	order_stems(Stems,Precs,First,OFields),!.
 
-order_stems([field(Stem)],_,_,[field(Stem)]):- !.
-order_stems(Stems,Precs,First,[field(First)|OStems]):-
-	lists:delete(Stems,field(First),NStems),
+order_stems([field(Stem,Feats)],_,_,[field(Stem,Feats)]):- !.
+order_stems(Stems,Precs,First,[field(First,Feats)|OStems]):-
+    	xmg:send(info,'\nDeleting '),
+    	xmg:send(info,First),
+	xmg:send(info,'\nProceding with '),
+    	xmg:send(info,Stems),
+	
+	delete_and_unify(Stems,field(First,Feats),NStems),
 	lists:member(fieldprec(First,Next),Precs),!,
 	order_stems(NStems,Precs,Next,OStems),!.
 order_stems(Stems,Precs,First,[Stem|OStems]):- !,
@@ -65,14 +70,23 @@ order_stems(Stems,Precs,First,[Stem|OStems]):- !,
 	xmg:send(info,First),
 	false,!.
 
+delete_and_unify([],_,[]).
+delete_and_unify([field(F,Feats)|T],field(F,Feats1),T1):-
+    Feats=Feats1,
+    xmg:send(info,'\nUnified '),
+    xmg:send(info,Feats),
+    delete_and_unify(T,field(F,Feats1),T1).
+delete_and_unify([H|T],field(F,Feats),[H|T1]):-
+    delete_and_unify(T,field(F,Feats),T1),!.
+
 
 
 find_first([],_,_):- !,
 	xmg:send(info,' Could not find a first field, there might be a cycle'),false,!.
-find_first([field(F1)|T],Precs,F2):-
+find_first([field(F1,Feats1)|T],Precs,F2):-
 	lists:member(fieldprec(_,F1),Precs),!,
 	find_first(T,Precs,F2),!.
-find_first([field(F1)|T],_,F1):- !.
+find_first([field(F1,Feats1)|T],_,F1):- !.
 
 
 type_fields([],_).
@@ -91,7 +105,7 @@ put_in_fields([H|T],Fields,IFields):-
 	put_in_field(H,Fields,Fields1),
 	put_in_fields(T,Fields1,IFields),!.
 
-put_in_field(infield(F,S),[field(F)|T],[S|T]):- !.
+put_in_field(infield(F,S),[field(F,Feats)|T],[S|T]):- !.
 put_in_field(infield(F,S),[H|T],[H|T1]):- 
 	put_in_field(infield(F,S),T,T1),
 	!.

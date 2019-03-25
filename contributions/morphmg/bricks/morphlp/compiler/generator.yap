@@ -25,9 +25,17 @@
 :-edcg:using(xmg_brick_mg_generator:decls).
 
 
-xmg:generate_instr((morphlp:field(c(F)),Dim)):--
-	Acc=..['::',xmg_acc:Dim,put(field(F))],
-	code::enq(Acc),!.
+xmg:generate_instr((v(TF),morphlp:field(c(F)),Dim)):--
+	decls::tget(TF,TV),
+	code::enq(xmg_brick_morphlp_engine:ifield(TV,F)),
+	Acc=..['::',xmg_acc:Dim,put(TV)],
+        code::enq(Acc),!.
+
+xmg:generate_instr((v(Field),morphlp:feats(v(Feats)))):--
+	decls::tget(Field,VField),
+	decls::tget(Feats,VFeats),
+	code::enq(xmg_brick_morphlp_engine:ifieldfeats(VField,VFeats)),
+	!.
 
 xmg:generate_instr((morphlp:eq(c(F),c(V)),Dim)):--
 	Acc=..['::',xmg_acc:Dim,put(eq(F,V))],

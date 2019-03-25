@@ -3,7 +3,10 @@
 
 MorphStmt : Field {$$=$1} | InField {$$=$1} | FieldRel {$$=$1} | Eq {$$=$1};
 
-Field : 'field' id {$$=morphlp:field($2)};
+Field : 'field' id Feats {$$=morphlp:field($2,$3)};
+
+Feats : 'feats' Var {$$=$2} |
+        (_AVM)? {$$=$1};
 
 InField : id '<-' Expr {$$=morphlp:infield($1,$3)};
 

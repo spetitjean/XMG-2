@@ -20,6 +20,8 @@ dim_lp:
   tag: "morph"
   Stmt: morphlp
   Expr: value
+morphlp:
+  _AVM: avm
 dim_iface:
   tag: "iface"
   Stmt: iface

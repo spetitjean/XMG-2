@@ -23,10 +23,19 @@
 :-xmg:unfolder_accs.
 
 
-xmg:unfold_dimstmt(Dim,morphlp:field(Var)):--
+xmg:unfold_dimstmt(Dim,morphlp:field(Var,Feats)):--
 	xmg:send(debug,'here'),
-	xmg:unfold_expr(Var,UVar),
-	constraints::enq((morphlp:field(UVar),Dim)),!.
+        xmg:unfold_expr(Var,UVar),
+	xmg:unfold_expr(Feats,UFeats),
+        xmg:new_target_var(TF),
+	
+	constraints::enq((TF,morphlp:field(UVar),Dim)),
+
+	(var(UFeats)->xmg:new_target_var(UFeats);true),
+	
+
+	constraints::enq((TF,morphlp:feats(UFeats))),	
+	!.
 xmg:unfold_dimstmt(Dim,morphlp:infield(Field,E)):--
 	xmg:unfold_expr(Field,UField),
 	xmg:unfold_expr(E,UE),

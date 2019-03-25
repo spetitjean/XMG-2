@@ -37,7 +37,8 @@ xmg:type_stmt(morphlp:infield(token(_,id(Field)),Contrib),Morphlp:morph(FieldsTy
 	xmg:type_expr(F2,T1),	
 	!.
 
-xmg:type_stmt(morphlp:field(token(_,id(Field))),_):--
+xmg:type_stmt(morphlp:field(token(_,id(Field)),Feats),_):--
+        xmg:type_expr(Feats,TFeats),
 	!.
 
 xmg:type_stmt(morphlp:fieldprec(token(_,id(Field1)),token(_,id(Field2))),_):--
