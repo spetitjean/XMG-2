@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<mcgrammar>
+<morphs>
+  <morph lex="steht">
+    <lemmaref cat="v" name="stehen">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="vor">
+    <lemmaref cat="p" name="vor">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Gemeinde">
+    <lemmaref cat="n" name="Gemeinde">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Umgehungsstraße">
+    <lemmaref cat="n" name="Umgehungsstraße">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Fertigstellung">
+    <lemmaref cat="n" name="Fertigstellung">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Explosion">
+    <lemmaref cat="n" name="Explosion">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Hans">
+    <lemmaref cat="n" name="Hans">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Kessel">
+    <lemmaref cat="n" name="Kessel">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="Haus">
+    <lemmaref cat="n" name="Haus">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="die">
+    <lemmaref cat="det" name="der">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="dem">
+    <lemmaref cat="det" name="der">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+  <morph lex="der">
+    <lemmaref cat="det" name="der">
+      <fs>
+      </fs>
+    </lemmaref>
+  </morph>
+</morphs>
+</mcgrammar>

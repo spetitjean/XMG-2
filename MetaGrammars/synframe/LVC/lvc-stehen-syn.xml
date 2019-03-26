@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<grammar>
+  <entry name="det_0">
+    <family>det</family>
+    <trace>
+      <class>det</class>
+    </trace>
+    <frame >
+    </frame>
+    <tree id="det_0">
+      <node type="std" name="XMGVAR_XMG_VAR_1">
+        <narg>
+          <fs coref="@AVM1">
+            <f name="cat">
+              <sym value="np"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="anchor" name="XMGVAR_XMG_VAR_5">
+          <narg>
+            <fs coref="@AVM2">
+              <f name="cat">
+                <sym value="det"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="foot" name="XMGVAR_XMG_VAR_10">
+          <narg>
+            <fs coref="@AVM3">
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="np-accomplishment_1">
+    <family>np-accomplishment</family>
+    <trace>
+      <class>np</class>
+      <class>np-pp</class>
+      <class>np-accomplishment</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="accomplishment"/>
+        </ctype>
+        <f name="actor">
+          <sym varname="@V2"/>
+        </f>
+        <f name="preregion">
+          <fs coref="@Frame3">
+            <ctype>
+              <type val="region"/>
+              <type val="state"/>
+            </ctype>
+            <f name="theme">
+              <sym varname="@V4"/>
+            </f>
+          </fs>
+        </f>
+        <f name="prestate">
+          <fs coref="@Frame3"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V4"/>
+        </f>
+      </fs>
+    </frame>
+    <tree id="np-accomplishment_1">
+      <node type="std" name="XMGVAR_N1N1">
+        <narg>
+          <fs coref="@AVM5">
+            <f name="cat">
+              <sym value="np"/>
+            </f>
+            <f name="i">
+              <fs coref="@Frame1"/>
+            </f>
+            <f name="theme">
+              <sym varname="@V4"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="anchor" name="XMGVAR_N2">
+          <narg>
+            <fs coref="@AVM6">
+              <f name="cat">
+                <sym value="n"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="subst" name="XMGVAR_N3">
+          <narg>
+            <fs coref="@AVM7">
+              <f name="cat">
+                <sym value="pp"/>
+              </f>
+            </fs>
+          </narg>
+          <node type="coanchor" name="PPNode">
+            <narg>
+              <fs coref="@AVM8">
+                <f name="cat">
+                  <sym value="p"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="subst" name="XMGVAR_XMG_VAR_14">
+            <narg>
+              <fs coref="@AVM9">
+                <f name="cat">
+                  <sym value="np"/>
+                </f>
+                <f name="i">
+                  <sym varname="@V2"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V4"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="np-accomplishment_2">
+    <family>np-accomplishment</family>
+    <trace>
+      <class>np</class>
+      <class>np-np</class>
+      <class>np-accomplishment</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="accomplishment"/>
+        </ctype>
+        <f name="actor">
+          <sym varname="@V2"/>
+        </f>
+        <f name="preregion">
+          <fs coref="@Frame3">
+            <ctype>
+              <type val="region"/>
+              <type val="state"/>
+            </ctype>
+            <f name="theme">
+              <sym varname="@V2"/>
+            </f>
+          </fs>
+        </f>
+        <f name="prestate">
+          <fs coref="@Frame3"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V4"/>
+        </f>
+      </fs>
+    </frame>
+    <tree id="np-accomplishment_2">
+      <node type="std" name="XMGVAR_N1N1">
+        <narg>
+          <fs coref="@AVM5">
+            <f name="cat">
+              <sym value="np"/>
+            </f>
+            <f name="i">
+              <fs coref="@Frame1"/>
+            </f>
+            <f name="theme">
+              <sym varname="@V2"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="anchor" name="XMGVAR_N2">
+          <narg>
+            <fs coref="@AVM6">
+              <f name="cat">
+                <sym value="n"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="subst" name="XMGVAR_N3">
+          <narg>
+            <fs coref="@AVM7">
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="@V4"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V2"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="np-event_3">
+    <family>np-event</family>
+    <trace>
+      <class>np</class>
+      <class>np-event</class>
+    </trace>
+    <frame >
+    </frame>
+    <tree id="np-event_3">
+      <node type="std" name="XMGVAR_N1N1">
+        <narg>
+          <fs coref="@AVM1">
+            <f name="cat">
+              <sym value="np"/>
+            </f>
+            <f name="i">
+              <sym varname="@V2"/>
+            </f>
+            <f name="theme">
+              <sym varname="@V3"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="anchor" name="XMGVAR_N2">
+          <narg>
+            <fs coref="@AVM4">
+              <f name="cat">
+                <sym value="n"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="i">
+          <sym varname="@V2"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="np_4">
+    <family>np</family>
+    <trace>
+      <class>np</class>
+    </trace>
+    <frame >
+    </frame>
+    <tree id="np_4">
+      <node type="std" name="XMGVAR_N1">
+        <narg>
+          <fs coref="@AVM1">
+            <f name="cat">
+              <sym value="np"/>
+            </f>
+            <f name="i">
+              <sym varname="@V2"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="anchor" name="XMGVAR_N2">
+          <narg>
+            <fs coref="@AVM3">
+              <f name="cat">
+                <sym value="n"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="i">
+          <sym varname="@V2"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="pp_5">
+    <family>pp</family>
+    <trace>
+      <class>pp</class>
+    </trace>
+    <frame >
+    </frame>
+    <tree id="pp_5">
+      <node type="std" name="XMGVAR_PP">
+        <narg>
+          <fs coref="@AVM1">
+            <f name="cat">
+              <sym value="pp"/>
+            </f>
+            <f name="e">
+              <sym varname="@V2"/>
+            </f>
+            <f name="i">
+              <sym varname="@V3"/>
+            </f>
+            <f name="theme">
+              <sym varname="@V4"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="anchor" name="XMGVAR_XMG_VAR_7">
+          <narg>
+            <fs coref="@AVM5">
+              <f name="cat">
+                <sym value="p"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="subst" name="XMGVAR_N1">
+          <narg>
+            <fs coref="@AVM6">
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="@V7"/>
+              </f>
+              <f name="theme">
+                <sym varname="@V4"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="e">
+          <sym varname="@V2"/>
+        </f>
+        <f name="i">
+          <sym varname="@V3"/>
+        </f>
+        <f name="inp">
+          <sym varname="@V7"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V4"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="n0-pp-lvc_6">
+    <family>n0-pp-lvc</family>
+    <trace>
+      <class>n0-pp</class>
+      <class>n0-pp-lvc</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="non_loc_state"/>
+          <type val="region"/>
+          <type val="state"/>
+        </ctype>
+        <f name="theme">
+          <sym varname="@V2"/>
+        </f>
+      </fs>
+    </frame>
+    <tree id="n0-pp-lvc_6">
+      <node type="std" name="XMGVAR_XMG_VAR_1">
+        <narg>
+          <fs coref="@AVM3">
+            <f name="cat">
+              <sym value="s"/>
+            </f>
+            <f name="e">
+              <fs coref="@Frame1"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="subst" name="XMGVAR_N0">
+          <narg>
+            <fs coref="@AVM4">
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="@V5"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="XMGVAR_XMG_VAR_11">
+          <narg>
+            <fs coref="@AVM6">
+              <f name="cat">
+                <sym value="vp"/>
+              </f>
+              <f name="e">
+                <fs coref="@Frame1"/>
+              </f>
+            </fs>
+          </narg>
+          <node type="anchor" name="XMGVAR_V">
+            <narg>
+              <fs coref="@AVM7">
+                <f name="cat">
+                  <sym value="v"/>
+                </f>
+                <f name="e">
+                  <fs coref="@Frame1"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="subst" name="XMGVAR_PPPP">
+            <narg>
+              <fs coref="@AVM8">
+                <f name="cat">
+                  <sym value="pp"/>
+                </f>
+                <f name="e">
+                  <fs coref="@Frame1"/>
+                </f>
+                <f name="i">
+                  <fs coref="@Frame1"/>
+                </f>
+                <f name="theme">
+                  <sym varname="@V5"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="e">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="i">
+          <sym varname="@V5"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="n0-pp-loc_7">
+    <family>n0-pp-loc</family>
+    <trace>
+      <class>n0-pp</class>
+      <class>n0-pp-loc</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="loc_state"/>
+          <type val="region"/>
+          <type val="state"/>
+        </ctype>
+        <f name="location">
+          <fs coref="@Frame2">
+            <ctype>
+              <type val="location"/>
+              <type val="region"/>
+              <type val="spatial_region"/>
+            </ctype>
+          </fs>
+        </f>
+        <f name="theme">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </frame>
+    <tree id="n0-pp-loc_7">
+      <node type="std" name="XMGVAR_XMG_VAR_1">
+        <narg>
+          <fs coref="@AVM4">
+            <f name="cat">
+              <sym value="s"/>
+            </f>
+            <f name="e">
+              <fs coref="@Frame1"/>
+            </f>
+          </fs>
+        </narg>
+        <node type="subst" name="XMGVAR_N0">
+          <narg>
+            <fs coref="@AVM5">
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="@V6"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std" name="XMGVAR_XMG_VAR_11">
+          <narg>
+            <fs coref="@AVM7">
+              <f name="cat">
+                <sym value="vp"/>
+              </f>
+              <f name="e">
+                <fs coref="@Frame1"/>
+              </f>
+            </fs>
+          </narg>
+          <node type="anchor" name="XMGVAR_V">
+            <narg>
+              <fs coref="@AVM8">
+                <f name="cat">
+                  <sym value="v"/>
+                </f>
+                <f name="e">
+                  <fs coref="@Frame1"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="subst" name="XMGVAR_PPPP">
+            <narg>
+              <fs coref="@AVM9">
+                <f name="cat">
+                  <sym value="pp"/>
+                </f>
+                <f name="e">
+                  <fs coref="@Frame1"/>
+                </f>
+                <f name="i">
+                  <fs coref="@Frame2"/>
+                </f>
+                <f name="theme">
+                  <sym varname="@V6"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+        </node>
+      </node>
+    </tree>
+    <interface>
+      <fs>
+        <f name="e">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="i">
+          <sym varname="@V6"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+</grammar>

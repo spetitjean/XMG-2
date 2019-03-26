@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<grammar>
+  <entry name="Umgehungsstraße_0">
+    <family>Umgehungsstraße</family>
+    <trace>
+      <class>Umgehungsstraße</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="object"/>
+          <type val="street"/>
+        </ctype>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="Gemeinde_1">
+    <family>Gemeinde</family>
+    <trace>
+      <class>Gemeinde</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="local_authority"/>
+          <type val="object"/>
+        </ctype>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="Fertigstellung_2">
+    <family>Fertigstellung</family>
+    <trace>
+      <class>Fertigstellung</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="completion"/>
+        </ctype>
+        <f name="actor">
+          <sym varname="@V2"/>
+        </f>
+        <f name="result_state">
+          <fs coref="@Frame3">
+            <ctype>
+              <type val="completed"/>
+              <type val="region"/>
+              <type val="state"/>
+            </ctype>
+            <f name="theme">
+              <sym varname="@V4"/>
+            </f>
+          </fs>
+        </f>
+        <f name="theme">
+          <sym varname="@V4"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V5"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="Kessel_3">
+    <family>Kessel</family>
+    <trace>
+      <class>Kessel</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="boiler"/>
+          <type val="object"/>
+        </ctype>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="der_4">
+    <family>der</family>
+    <trace>
+      <class>der</class>
+    </trace>
+    <frame >
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="Hans_5">
+    <family>Hans</family>
+    <trace>
+      <class>Hans</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="person"/>
+        </ctype>
+        <f name="name">
+          <sym value="hans"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="stehen_6">
+    <family>stehen</family>
+    <trace>
+      <class>stehen</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="non_loc_state"/>
+          <type val="region"/>
+          <type val="state"/>
+        </ctype>
+        <f name="theme">
+          <sym varname="@V2"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="e">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="i">
+          <sym varname="@V2"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="stehen_7">
+    <family>stehen</family>
+    <trace>
+      <class>stehen</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="loc_state"/>
+          <type val="region"/>
+          <type val="state"/>
+        </ctype>
+        <f name="location">
+          <fs coref="@Frame2">
+            <ctype>
+              <type val="location"/>
+              <type val="region"/>
+              <type val="spatial_region"/>
+            </ctype>
+          </fs>
+        </f>
+        <f name="theme">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="e">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="i">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="stehen_8">
+    <family>stehen</family>
+    <trace>
+      <class>stehen</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="loc_state"/>
+          <type val="posture_state"/>
+          <type val="region"/>
+          <type val="state"/>
+        </ctype>
+        <f name="location">
+          <fs coref="@Frame2">
+            <ctype>
+              <type val="location"/>
+              <type val="region"/>
+              <type val="spatial_region"/>
+            </ctype>
+          </fs>
+        </f>
+        <f name="posture">
+          <sym value="upright"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="e">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="i">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="vor_9">
+    <family>vor</family>
+    <trace>
+      <class>vor</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame2">
+        <ctype coref="@Type1"/>
+        <f name="ground">
+          <fs coref="@Frame4">
+            <ctype coref="@Type3"/>
+            <f name="preregion">
+              <sym varname="@V5"/>
+            </f>
+          </fs>
+        </f>
+      </fs>
+      <relation name="part-of">
+        <sym varname="@V6"/>
+        <sym varname="@V5"/>
+      </relation>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="e">
+          <fs coref="@Frame2"/>
+        </f>
+        <f name="i">
+          <sym varname="@V6"/>
+        </f>
+        <f name="inp">
+          <fs coref="@Frame4"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V7"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="Haus_10">
+    <family>Haus</family>
+    <trace>
+      <class>Haus</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="haus"/>
+          <type val="object"/>
+        </ctype>
+        <f name="atregion">
+          <sym varname="@V2"/>
+        </f>
+        <f name="inregion">
+          <sym varname="@V3"/>
+        </f>
+        <f name="preregion">
+          <sym varname="@V4"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+  <entry name="Explosion_11">
+    <family>Explosion</family>
+    <trace>
+      <class>Explosion</class>
+    </trace>
+    <frame >
+      <fs coref="@Frame1">
+        <ctype>
+          <type val="change_of_state"/>
+        </ctype>
+        <f name="initial_state">
+          <fs coref="@Frame2">
+            <ctype>
+              <type val="region"/>
+              <type val="state"/>
+            </ctype>
+            <f name="theme">
+              <sym varname="@V3"/>
+            </f>
+          </fs>
+        </f>
+        <f name="preregion">
+          <fs coref="@Frame5">
+            <ctype coref="@Type4"/>
+            <f name="theme">
+              <sym varname="@V3"/>
+            </f>
+          </fs>
+        </f>
+        <f name="prestate">
+          <fs coref="@Frame5"/>
+        </f>
+        <f name="result_state">
+          <fs coref="@Frame6">
+            <ctype>
+              <type val="broken"/>
+              <type val="region"/>
+              <type val="state"/>
+            </ctype>
+            <f name="theme">
+              <sym varname="@V3"/>
+            </f>
+          </fs>
+        </f>
+        <f name="theme">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </frame>
+    <tree />
+    <interface>
+      <fs>
+        <f name="i">
+          <fs coref="@Frame1"/>
+        </f>
+        <f name="theme">
+          <sym varname="@V3"/>
+        </f>
+      </fs>
+    </interface>
+  </entry>
+</grammar>

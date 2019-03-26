@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<mcgrammar>
+<lemmas>
+  <lemma name="stehen" cat="v">
+    <anchor tree_id="family[@name=n0-pp-lvc]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="stehen"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="stehen" cat="v">
+    <anchor tree_id="family[@name=n0-pp-loc]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="stehen"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="vor" cat="p">
+    <anchor tree_id="family[@name=pp]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="vor"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Hans" cat="n">
+    <anchor tree_id="family[@name=np]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Hans"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Kessel" cat="n">
+    <anchor tree_id="family[@name=np]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Kessel"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Haus" cat="n">
+    <anchor tree_id="family[@name=np]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Haus"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Fertigstellung" cat="n">
+    <anchor tree_id="family[@name=np-accomplishment]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Fertigstellung"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Fertigstellung" cat="n">
+    <anchor tree_id="family[@name=np-accomplishment]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <coanchor node_id="PPNode" cat="p">
+        <lex>durch</lex>
+      </coanchor>
+      <sem>
+        <semclass name="Fertigstellung"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Gemeinde" cat="n">
+    <anchor tree_id="family[@name=np]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Gemeinde"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Umgehungsstraße" cat="n">
+    <anchor tree_id="family[@name=np]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Umgehungsstraße"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="Explosion" cat="n">
+    <anchor tree_id="family[@name=np-event]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="Explosion"/>
+      </sem>
+    </anchor>
+  </lemma>
+  <lemma name="der" cat="det">
+    <anchor tree_id="family[@name=det]">
+      <filter>
+        <fs>
+        </fs>
+      </filter>
+      <sem>
+        <semclass name="der"/>
+      </sem>
+    </anchor>
+  </lemma>
+</lemmas>
+</mcgrammar>
