@@ -1,0 +1,277 @@
+\documentclass{article}
+
+
+\usepackage{avm}
+\usepackage{tikz,tikz-qtree}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{pdflscape}
+
+
+\newcommand{\qtxt}[1]{`#1'}
+\newcommand{\ind}{I}
+\newcommand{\nvar}[1]{{\boldmath${#1}$}}
+\newcommand{\RTf}[1]{\RT{\textbf{#1}}}
+\newcommand{\RT}[1]{\textcolor{darkred}{#1}}
+\newcommand{\GTf}[1]{\GT{\textbf{#1}}}
+\newcommand{\GT}[1]{\textcolor{black!10!darkgreen}{#1}}
+\newcommand{\BTf}[1]{\BT{\textbf{#1}}}
+\newcommand{\BT}[1]{\textcolor{black!10!darkblue}{#1}}
+\newcommand{\OTf}[1]{\OT{\textbf{#1}}}
+\newcommand{\OT}[1]{\textcolor{black!10!orange}{#1}}
+\newcommand{\GRT}[1]{\textcolor{black!10!gray}{#1}}
+
+\newcommand{\tbf}[1]{\textbf{#1}}
+\newcommand{\valeq}{\triangleq}
+
+
+
+
+
+\definecolor{darkred}{rgb}{.7, 0, 0}
+\definecolor{darkgreen}{rgb}{.0, .5, 0}
+\definecolor{darkblue}{rgb}{0, 0, .7}
+\definecolor{orange}{rgb}{1,0.5,0}
+
+
+
+
+\title{Documentation}
+
+\begin{document}
+
+\maketitle
+
+\section{How to read this documentation}
+\begin{itemize}
+\item TAG derivations for 2 sentences are shown: ``Hans steht vor dem Haus'' and ``Der Kessel steht vor der Explosion''.
+\item For each sentence, the combination of elementary trees is given, followed by the derived tree
+\item For each tree, the associated semantic frames are given. A frame under the lexical anchor comes from the lexical item, while a frame above the tree comes from the syntactic construction.
+\item Colors show which variables will be unified during the derivation.
+\end{itemize}
+
+\begin{landscape}
+\begin{center}
+\begin{tikzpicture}[line cap=round, >=stealth]
+
+\Tree 
+[.\node(npj){NP$_{\text{\scalebox{1.2}{[\ind=\GTf{\nvar{u}}]}}}$}; [ .\node{N}; \qtxt{Hans} ] ]
+
+\begin{scope}[shift={(0in,-1.2in)}]
+\draw (0,0) node {
+  \begin{avm}
+         \GT{\nvar{u}}~\[\asort{\it person} name & {\normalfont `Hans'}\]
+\end{avm}
+};
+\end{scope}
+
+
+\begin{scope}[shift={(1.5in,2in)}]
+\Tree 
+[.S$_{\text{\scalebox{1.2}{[e=\tbf{\nvar{a}}]}}}$  \node(np1){NP$\downarrow_{\text{\scalebox{1.2}{[\ind=\GTf{\nvar{b}}]}}}$}; [.VP$_{\text{\scalebox{1.2}{[e=\tbf{\nvar{a}}]}}}$ [.V$_{\text{\scalebox{1.2}{[e=\nvar{a}]}}}$ \qtxt{steht} ] \node(np2){PP$\downarrow_{\text{\scalebox{1.2}{[e=\nvar{a},\ind=\BTf{\nvar{c}},theme=\GT{\nvar{b}}]}}}$}; ] ]
+\end{scope}
+
+\begin{scope}[shift={(2in,2.5in)}]
+\draw (0,0) node {
+\begin{avm}
+        \nvar{a}~\[{\it loc\_state}\\
+            theme & \GT{\nvar{b}}\\ location & \BT{\nvar{c}}
+        \]
+\end{avm}};
+\end{scope}
+
+\begin{scope}[shift={(1.6in,0.3in)}]
+\draw (0,0) node {
+\begin{avm}
+        \nvar{a}~\[{posture\_state}\\
+            theme & \GT{\nvar{b}}\\ posture & upright
+        \]
+\end{avm}};
+\end{scope}
+
+
+\begin{scope}[shift={(4.5in,0in)}]
+\Tree 
+         [.\node(npp){PP$_{\text{\scalebox{1.2}{[e=\nvar{x},\ind=\BT{\nvar{w}},theme=\GT{\nvar{y}}]}}}$}; [ .\node{P}; \qtxt{vor} ]
+                                    [ .\node(np){NP$\downarrow_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{d}},theme=\GT{\nvar{y}}]}}}$};  ] ]
+\end{scope}
+
+\begin{scope}[shift={(4.2in,-1.2in)}]
+\draw (0,0) node {
+  \begin{avm}
+                 \RT{\nvar{d}}~\[preregion & \OT{\nvar{t}}\]
+\end{avm}
+\begin{avm}
+                 \nvar{x}~\[ground & \RT{\nvar{d}}\]
+\end{avm}
+};
+\end{scope}
+\begin{scope}[shift={(4.2in,-1.6in)}]
+\draw (0,0) node {part\_of(\BT{\nvar{w}},\OT{\nvar{t}})};
+\end{scope}
+
+\begin{scope}[shift={(6.5in,2in)}]
+\Tree 
+                                    [ .\node(nobj){NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{s}}]}}}$}; [ .\node{Det}; \qtxt{dem} ]
+                                                  [ .\node{NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{s}}]}}}$}; [ .\node{N}; \qtxt{Haus} ] ] ]
+\end{scope}
+
+\begin{scope}[shift={(6.8in,0.2in)}]
+\draw (0,0) node {
+  \begin{avm}
+                 \RT{\nvar{s}}~\[\asort{\it haus} preregion & \OT{\nvar{f}}\\ inregion & \GRT{\nvar{g}}\\ atregion & \GRT{\nvar{h}} \]
+\end{avm}
+};
+\end{scope}
+
+\draw[->,dashed,gray,thick,out=70,in=-100] (npj) edge node[black,above, anchor=120]{\GT{\nvar{b}}\,$\valeq$\,\GT{\nvar{u}}}(np1);
+
+\path[->,dashed,gray, thick,out=120,in=-70] (npp) edge node[black,above, anchor=60]{\nvar{a}\,$\valeq$\,\nvar{x},\BT{\nvar{c}}\,$\valeq$\,\BT{\nvar{w}},\GT{\nvar{b}}\,$\valeq$\,\GT{\nvar{y}}}(np2);
+
+\path[->,dashed,gray, thick,out=160,in=-20] (nobj) edge node[black,above, anchor=160]{\RT{\nvar{d}}\,$\valeq$\,\RT{\nvar{s}}}(np);
+\end{tikzpicture}
+\end{center}
+\end{landscape}
+\begin{center}
+\begin{tikzpicture}
+\Tree 
+[.S$_{\text{\scalebox{1.2}{[e=\nvar{a}]}}}$ [.\node{NP$_{\text{\scalebox{1.2}{[\ind=\GT{\nvar{b}}]}}}$}; [ .\node{N}; \qtxt{Hans} ] ] 
+    [.VP$_{\text{\scalebox{1.2}{[e=\tbf{\nvar{a}}]}}}$ [.V$_{\text{\scalebox{1.2}{[e=\nvar{a}]}}}$ \qtxt{steht} ] 
+         [.\node{PP$_{\text{\scalebox{1.2}{[e=\nvar{a},\ind=\BT{\nvar{c}},theme=\GT{\nvar{b}}]}}}$}; [ .\node{P}; \qtxt{vor} ]
+                                    [ .\node{NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{d}},theme=\GT{\nvar{b}}]}}}$}; [ .\node{Det}; \qtxt{dem} ]
+                                                  [ .\node{NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{d}}]}}}$}; [ .\node{N}; \qtxt{Haus} ] ] ] ] ] ]
+
+\begin{scope}[shift={(3in,-0.8in)}]
+\draw (0,0) node {
+\begin{avm}
+        {\nvar{a}}~\[\asort{\it loc\_state$\wedge$\it posture\_state\\}
+            ground & \RT{\nvar{d}}~\[\asort{\it haus} preregion & \OT{\nvar{f}}\\ inregion & \GRT{\nvar{g}}\\ atregion & \GRT{\nvar{h}} \]\\
+            theme & \GT{\nvar{b}}~\[\asort{\it person} name & {\normalfont `Hans'}\]\\
+            location & \BT{\nvar{c}}~\[\asort{\it spatial\_region}\]\\
+            posture & upright
+        \]
+\end{avm}
+};
+\end{scope}
+\begin{scope}[shift={(3in,-2in)}]
+\draw (0,0) node {part\_of(\BT{\nvar{c}},\OT{\nvar{f}})};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+
+\begin{landscape}
+\begin{center}
+\begin{tikzpicture}[line cap=round, >=stealth]
+
+\Tree 
+[.\node(npj){NP$_{\text{\scalebox{1.2}{[\ind=\GTf{\nvar{u}}]}}}$}; [ .\node{Det}; \qtxt{der} ] [ .\node{NP}; [ .\node{N}; \qtxt{Kessel} ] ] ]
+
+\begin{scope}[shift={(0in,-1.5in)}]
+\draw (0,0) node {
+  \begin{avm}
+         \GT{\nvar{u}}~\[\asort{\it boiler} \]
+\end{avm}
+};
+\end{scope}
+
+
+\begin{scope}[shift={(1.5in,2in)}]
+\Tree 
+[.S$_{\text{\scalebox{1.2}{[e=\tbf{\nvar{a}}]}}}$ \node(np1){NP$\downarrow_{\text{\scalebox{1.2}{[\ind=\GTf{\nvar{b}}]}}}$}; [.VP$_{\text{\scalebox{1.2}{[e=\tbf{\nvar{a}}]}}}$ [.V$_{\text{\scalebox{1.2}{[e=\nvar{a}]}}}$ \qtxt{steht} ] \node(np2){PP$\downarrow_{\text{\scalebox{1.2}{[e=\nvar{a},\ind=\nvar{a},theme=\GT{\nvar{b}}]}}}$}; ] ]
+\end{scope}
+
+\begin{scope}[shift={(2in,2.5in)}]
+\draw (0,0) node {
+\begin{avm}
+        \nvar{a}~\[{\it non\_loc\_state}\\
+            theme & \GT{\nvar{b}}
+        \]
+\end{avm}};
+\end{scope}
+
+\begin{scope}[shift={(1.6in,0.4in)}]
+\draw (0,0) node {
+\begin{avm}
+        \nvar{a}~\[{\it non\_loc\_state}\\
+            theme & \GT{\nvar{b}}
+        \]
+\end{avm}};
+\end{scope}
+
+
+\begin{scope}[shift={(4.5in,0in)}]
+\Tree 
+         [.\node(npp){PP$_{\text{\scalebox{1.2}{[e=\nvar{x},\ind=\nvar{w},theme=\GT{\nvar{y}}]}}}$}; [ .\node{P}; \qtxt{vor} ]
+                                    [ .\node(np){NP$\downarrow_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{d}},theme=\GT{\nvar{y}}]}}}$};  ] ]
+\end{scope}
+
+\begin{scope}[shift={(4.2in,-1.2in)}]
+\draw (0,0) node {
+  \begin{avm}
+                 \RT{\nvar{d}}~\[preregion & \OT{\nvar{t}}\]
+\end{avm}
+\begin{avm}
+                 \nvar{x}~\[ground & \RT{\nvar{d}}\]
+\end{avm}
+};
+\end{scope}
+\begin{scope}[shift={(4.2in,-1.6in)}]
+\draw (0,0) node {part\_of(\nvar{w},\OT{\nvar{t}})};
+\end{scope}
+
+\begin{scope}[shift={(6.5in,2in)}]
+\Tree 
+                                    [ .\node(nobj){NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{s}}, theme=\GT{\nvar{g}}]}}}$}; [ .\node{Det}; \qtxt{der} ]
+                                                  [ .\node{NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{s}}, theme=\GT{\nvar{g}}]}}}$}; [ .\node{N}; \qtxt{Explosion} ] ] ]
+\end{scope}
+
+\begin{scope}[shift={(6.8in,0.2in)}]
+\draw (0,0) node {
+  \begin{avm}
+                 \RT{\nvar{s}}~\[\asort{\it change\_of\_state} result\_state & \[ broken\_state \] \\ theme & \GT{\nvar{g}} \]
+\end{avm}
+};
+\end{scope}
+
+\draw[->,dashed,gray,thick,out=70,in=-100] (npj) edge node[black,above, anchor=120]{\GT{\nvar{b}}\,$\valeq$\,\GT{\nvar{u}}}(np1);
+
+\path[->,dashed,gray, thick,out=120,in=-70] (npp) edge node[black,above, anchor=60]{\nvar{a}\,$\valeq$\,\nvar{x},\nvar{a}\,$\valeq$\,\nvar{w},\GT{\nvar{b}}\,$\valeq$\,\GT{\nvar{y}}}(np2);
+
+\path[->,dashed,gray, thick,out=160,in=-20] (nobj) edge node[black,above, anchor=0]{\RT{\nvar{d}}\,$\valeq$\,\RT{\nvar{s}},\GT{\nvar{y}}\,$\valeq$\,\GT{\nvar{g}}}(np);
+\end{tikzpicture}
+\end{center}
+\end{landscape}
+\begin{center}
+\begin{tikzpicture}
+\Tree 
+[.S$_{\text{\scalebox{1.2}{[e=\nvar{a}]}}}$ [.\node{NP$_{\text{\scalebox{1.2}{[\ind=\GT{\nvar{b}}]}}}$}; [ .\node{Det}; \qtxt{der} ] [ .\node{NP}; [ .\node{N}; \qtxt{Kessel} ] ] ]
+    [.VP$_{\text{\scalebox{1.2}{[e=\tbf{\nvar{a}}]}}}$ [.V$_{\text{\scalebox{1.2}{[e=\nvar{a}]}}}$ \qtxt{steht} ] 
+         [.\node{PP$_{\text{\scalebox{1.2}{[e=\nvar{a},\ind=\nvar{a},theme=\GT{\nvar{b}}]}}}$}; [ .\node{P}; \qtxt{vor} ]
+                                    [ .\node{NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{d}},theme=\GT{\nvar{b}}]}}}$}; [ .\node{Det}; \qtxt{der} ]
+                                                  [ .\node{NP$_{\text{\scalebox{1.2}{[\ind=\RT{\nvar{d}},theme=\GT{\nvar{b}}]}}}$}; [ .\node{N}; \qtxt{Explosion} ] ] ] ] ] ]
+
+\begin{scope}[shift={(4in,-0.8in)}]
+\draw (0,0) node {
+\begin{avm}
+        {\nvar{a}}~\[\asort{\it non\_loc\_state}
+            ground & \RT{\nvar{d}}~\[\asort{\it change\_of\_state} initial\_state & \[\asort{\it{state}} theme & \GT{\nvar{b}} \] \\ preregion & \OT{\nvar{f}}~\[ theme & \GT{\nvar{b}}\]\\ prestate & \OT{\nvar{f}}\\ result\_state & \[\asort{\it{broken\_state}} theme & \GT{\nvar{b}} \] \\ theme & \GT{\nvar{b}}\]\\
+            theme & \GT{\nvar{b}}~\[\asort{\it boiler}\]
+            \]
+\end{avm}
+};
+\end{scope}
+\begin{scope}[shift={(4in,-2.2in)}]
+\draw (0,0) node {part\_of(\nvar{a},\OT{\nvar{f}})};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+\item The entire initial state is created by a type constraint (its theme is equal to theme)
+\item The theme of the result state is created by a type constraint (equal to theme)
+\item The prestate is created by a type constraint (equal to preregion)
+\end{itemize}
+
+
+\end{document}
