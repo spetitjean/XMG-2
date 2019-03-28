@@ -36,7 +36,7 @@
 %% Have to use threads here
 
 :- use_module(library(gecode)).
-
+:- use_module(library(assoc)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Printing the hierarchy (as an appendix)
@@ -61,7 +61,8 @@ init_print_hierarchy:-
     open('.more',write,S,[alias(hierarchy)]),
     write(hierarchy,'<type_info>\n'),
     write(hierarchy,'  <hierarchy>\n'),
-    print_hierarchy(FTypes,FAttrs),
+    clean_all_attrs(FAttrs,CFAttrs),
+    print_hierarchy(FTypes,CFAttrs),
     findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
     write(hierarchy,'  <type_constraints>\n'),
     print_type_constraints(Constraints),
@@ -69,6 +70,31 @@ init_print_hierarchy:-
     close(hierarchy),!.
 init_print_hierarchy:-
     xmg:send(info,'\nType hierarchy could not be printed').
+
+clean_all_attrs([],[]).
+clean_all_attrs([H|T],[H1|T1]):-
+    xmg:send(info,'\nConstraints:'),
+    xmg:send(info,H),
+    empty_assoc(Assoc),
+    clean_attrs(H,[],Assoc,H1),
+    clean_all_attrs(T,T1).
+
+clean_attrs([],_,_,[]):-!.
+clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+    %%xmg:send(info,'\nClean attrs[0]: '),
+    %%xmg:send(info,SeenVars),
+    
+    lists:member(H,Seen),
+    get_assoc(H,SeenVars,V1),!,
+    V=V1,
+    clean_attrs(T,Seen,SeenVars,T1),!.
+clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+    %%xmg:send(info,'\nClean attrs[1]: '),
+    %%xmg:send(info,SeenVars),
+    put_assoc(H,SeenVars,V,NewSeenVars),
+    clean_attrs(T,[H|Seen],NewSeenVars,T1),!.
+
+    
 
 print_hierarchy([],[]):-
         write(hierarchy,'  </hierarchy>\n'),!.

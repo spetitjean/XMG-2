@@ -360,7 +360,7 @@
         <f name="result_state">
           <fs coref="@Frame6">
             <ctype>
-              <type val="broken"/>
+              <type val="broken_state"/>
               <type val="region"/>
               <type val="state"/>
             </ctype>

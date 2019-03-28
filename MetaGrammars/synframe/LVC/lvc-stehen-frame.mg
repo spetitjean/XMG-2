@@ -5,7 +5,7 @@ declare ?X1 ?X3
 {
   <frame>{
     ?X1[change_of_state,
-	result_state:[broken],
+	result_state:[broken_state],
 	theme:?X3
 	]
   };

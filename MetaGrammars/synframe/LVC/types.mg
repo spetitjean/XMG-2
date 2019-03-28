@@ -1,4 +1,4 @@
-frame-types = {region, spatial_region, location, temporal_region, state, ruined_state, broken, completed, loc_state, non_loc_state, posture_state, object, haus, change_of_state, person, hans, boiler, street, local_authority, upright, completion, accomplishment}
+frame-types = {region, spatial_region, location, temporal_region, state, ruined_state, broken_state, completed, loc_state, non_loc_state, posture_state, object, haus, change_of_state, person, hans, boiler, street, local_authority, upright, completion, accomplishment}
 
 frame-relations = { part-of(region, region) }
 
@@ -13,7 +13,7 @@ frame-constraints = {
 		     temporal_region -> region,
 		     state -> region,
 		     ruined_state -> state,
-		     broken -> state,
+		     broken_state -> state,
 		     completed -> state,
 		     loc_state -> state,
 		     non_loc_state -> state,
@@ -55,8 +55,8 @@ frame-constraints = {
 
                      change_of_state -> theme=initial_state.theme,
                      change_of_state -> result_state.theme=theme,
-                     change_of_state -> prestate.theme=theme,
-                     change_of_state -> prestate=preregion
+                     change_of_state -> prestate=preregion,
+                     change_of_state -> prestate.theme=theme
 }
 
 type MARK = {subst, subst, nadj, foot, anchor, coanchor, flex}
