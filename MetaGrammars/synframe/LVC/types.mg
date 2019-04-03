@@ -44,7 +44,7 @@ frame-constraints = {
                      change_of_state -> theme:+,
                      change_of_state -> initial_state:state,
                      change_of_state -> result_state:state,
-                     change_of_state -> prestate:+,
+                     %%change_of_state -> prestate:+,
                      change_of_state -> preregion:+,
                      loc_state -> location:location,
                      
@@ -57,6 +57,7 @@ frame-constraints = {
                      change_of_state -> result_state.theme=theme,
                      change_of_state -> prestate=preregion,
                      change_of_state -> prestate.theme=theme
+
 }
 
 type MARK = {subst, subst, nadj, foot, anchor, coanchor, flex}

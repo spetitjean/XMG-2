@@ -27,3 +27,8 @@
 * .xml files: the generated grammars/lexicons
 
 * more.mac: the generated type hierarchy
+
+# Use:
+
+* the generated syntactic and semantics grammars are viewable online (by uploading lvc-stehen-syn.xml or lvc-stehen-frame.xml in the [WebGUI](http://xmg.phil.hhu.de/))
+
