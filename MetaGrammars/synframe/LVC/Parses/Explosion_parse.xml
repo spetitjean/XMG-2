@@ -1,0 +1,863 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE grammar SYSTEM "tulipa-parses.dtd,xml">
+<grammar>
+  <entry name="der Kessel steht vor der Explosion_0_derivedTree">
+    <family/>
+    <tree>
+      <node type="std">
+        <node type="std">
+          <node type="std">
+            <node type="lex" value="der">
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="der"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="det"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="std">
+            <node type="std">
+              <node type="lex" value="Kessel">
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="Kessel"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="n"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="np"/>
+                </f>
+                <f name="i">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <narg>
+            <fs>
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="A0"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std">
+          <node type="std">
+            <node type="lex" value="steht">
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="steht"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="v"/>
+                </f>
+                <f name="e">
+                  <sym varname="F0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="std">
+            <node type="std">
+              <node type="lex" value="vor">
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="vor"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="p"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <node type="std">
+              <node type="std">
+                <node type="lex" value="der">
+                  <narg>
+                    <fs>
+                      <f name="cat">
+                        <sym value="der"/>
+                      </f>
+                    </fs>
+                  </narg>
+                </node>
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="det"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <node type="std">
+                <node type="std">
+                  <node type="lex" value="Explosion">
+                    <narg>
+                      <fs>
+                        <f name="cat">
+                          <sym value="Explosion"/>
+                        </f>
+                      </fs>
+                    </narg>
+                  </node>
+                  <narg>
+                    <fs>
+                      <f name="cat">
+                        <sym value="n"/>
+                      </f>
+                    </fs>
+                  </narg>
+                </node>
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="np"/>
+                    </f>
+                    <f name="i">
+                      <sym varname="C0"/>
+                    </f>
+                    <f name="theme">
+                      <sym varname="A0"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="np"/>
+                  </f>
+                  <f name="i">
+                    <sym varname="C0"/>
+                  </f>
+                  <f name="theme">
+                    <sym varname="A0"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="pp"/>
+                </f>
+                <f name="e">
+                  <sym varname="F0"/>
+                </f>
+                <f name="i">
+                  <sym varname="F0"/>
+                </f>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <narg>
+            <fs>
+              <f name="cat">
+                <sym value="vp"/>
+              </f>
+              <f name="e">
+                <sym varname="F0"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <narg>
+          <fs>
+            <f name="cat">
+              <sym value="s"/>
+            </f>
+            <f name="e">
+              <sym varname="F0"/>
+            </f>
+          </fs>
+        </narg>
+      </node>
+    </tree>
+    <semantics/>
+    <specified_semantics/>
+    <frame>
+      <fs coref="F0">
+        <ctype>
+          <type val="non_loc_state"/>
+          <type val="state"/>
+          <type val="region"/>
+        </ctype>
+        <f name="ground">
+          <fs coref="C0">
+            <ctype>
+              <type val="change_of_state"/>
+            </ctype>
+            <f name="prestate">
+              <fs coref="D0">
+                <ctype/>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </f>
+            <f name="theme">
+              <sym varname="A0"/>
+            </f>
+            <f name="preregion">
+              <sym varname="D0"/>
+            </f>
+            <f name="result_state">
+              <fs coref="G0">
+                <ctype>
+                  <type val="broken_state"/>
+                  <type val="state"/>
+                  <type val="region"/>
+                </ctype>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </f>
+            <f name="initial_state">
+              <fs coref="H0">
+                <ctype>
+                  <type val="state"/>
+                  <type val="region"/>
+                </ctype>
+                <f name="theme">
+                  <fs coref="A0">
+                    <ctype>
+                      <type val="boiler"/>
+                      <type val="object"/>
+                    </ctype>
+                  </fs>
+                </f>
+              </fs>
+            </f>
+          </fs>
+        </f>
+        <f name="theme">
+          <sym varname="A0"/>
+        </f>
+      </fs>
+      <relation name="part-of">
+        <sym value="F0"/>
+        <sym value="D0"/>
+      </relation>
+    </frame>
+  </entry>
+  <entry name="der Kessel steht vor der Explosion_1_derivedTree">
+    <family/>
+    <tree>
+      <node type="std">
+        <node type="std">
+          <node type="std">
+            <node type="lex" value="der">
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="der"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="det"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="std">
+            <node type="std">
+              <node type="lex" value="Kessel">
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="Kessel"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="n"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="np"/>
+                </f>
+                <f name="i">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <narg>
+            <fs>
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="A0"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std">
+          <node type="std">
+            <node type="lex" value="steht">
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="steht"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="v"/>
+                </f>
+                <f name="e">
+                  <sym varname="F0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="std">
+            <node type="std">
+              <node type="lex" value="vor">
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="vor"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="p"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <node type="std">
+              <node type="std">
+                <node type="lex" value="der">
+                  <narg>
+                    <fs>
+                      <f name="cat">
+                        <sym value="der"/>
+                      </f>
+                    </fs>
+                  </narg>
+                </node>
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="det"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <node type="std">
+                <node type="std">
+                  <node type="lex" value="Explosion">
+                    <narg>
+                      <fs>
+                        <f name="cat">
+                          <sym value="Explosion"/>
+                        </f>
+                      </fs>
+                    </narg>
+                  </node>
+                  <narg>
+                    <fs>
+                      <f name="cat">
+                        <sym value="n"/>
+                      </f>
+                    </fs>
+                  </narg>
+                </node>
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="np"/>
+                    </f>
+                    <f name="i">
+                      <sym varname="C0"/>
+                    </f>
+                    <f name="theme">
+                      <sym varname="A0"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="np"/>
+                  </f>
+                  <f name="i">
+                    <sym varname="C0"/>
+                  </f>
+                  <f name="theme">
+                    <sym varname="A0"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="pp"/>
+                </f>
+                <f name="e">
+                  <sym varname="F0"/>
+                </f>
+                <f name="i">
+                  <sym varname="D0"/>
+                </f>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <narg>
+            <fs>
+              <f name="cat">
+                <sym value="vp"/>
+              </f>
+              <f name="e">
+                <sym varname="F0"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <narg>
+          <fs>
+            <f name="cat">
+              <sym value="s"/>
+            </f>
+            <f name="e">
+              <sym varname="F0"/>
+            </f>
+          </fs>
+        </narg>
+      </node>
+    </tree>
+    <semantics/>
+    <specified_semantics/>
+    <frame>
+      <fs coref="F0">
+        <ctype>
+          <type val="loc_state"/>
+          <type val="state"/>
+          <type val="region"/>
+        </ctype>
+        <f name="theme">
+          <sym varname="A0"/>
+        </f>
+        <f name="location">
+          <fs coref="D0">
+            <ctype>
+              <type val="spatial_region"/>
+              <type val="location"/>
+              <type val="region"/>
+            </ctype>
+          </fs>
+        </f>
+        <f name="ground">
+          <fs coref="C0">
+            <ctype>
+              <type val="change_of_state"/>
+            </ctype>
+            <f name="prestate">
+              <fs coref="E0">
+                <ctype/>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </f>
+            <f name="theme">
+              <sym varname="A0"/>
+            </f>
+            <f name="preregion">
+              <sym varname="E0"/>
+            </f>
+            <f name="result_state">
+              <fs coref="I0">
+                <ctype>
+                  <type val="broken_state"/>
+                  <type val="state"/>
+                  <type val="region"/>
+                </ctype>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </f>
+            <f name="initial_state">
+              <fs coref="H0">
+                <ctype>
+                  <type val="state"/>
+                  <type val="region"/>
+                </ctype>
+                <f name="theme">
+                  <fs coref="A0">
+                    <ctype>
+                      <type val="boiler"/>
+                      <type val="object"/>
+                    </ctype>
+                  </fs>
+                </f>
+              </fs>
+            </f>
+          </fs>
+        </f>
+      </fs>
+      <relation name="part-of">
+        <sym value="D0"/>
+        <sym value="E0"/>
+      </relation>
+    </frame>
+  </entry>
+  <entry name="der Kessel steht vor der Explosion_2_derivedTree">
+    <family/>
+    <tree>
+      <node type="std">
+        <node type="std">
+          <node type="std">
+            <node type="lex" value="der">
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="der"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="det"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="std">
+            <node type="std">
+              <node type="lex" value="Kessel">
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="Kessel"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="n"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="np"/>
+                </f>
+                <f name="i">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <narg>
+            <fs>
+              <f name="cat">
+                <sym value="np"/>
+              </f>
+              <f name="i">
+                <sym varname="A0"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <node type="std">
+          <node type="std">
+            <node type="lex" value="steht">
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="steht"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="v"/>
+                </f>
+                <f name="e">
+                  <sym varname="E0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <node type="std">
+            <node type="std">
+              <node type="lex" value="vor">
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="vor"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="p"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <node type="std">
+              <node type="std">
+                <node type="lex" value="der">
+                  <narg>
+                    <fs>
+                      <f name="cat">
+                        <sym value="der"/>
+                      </f>
+                    </fs>
+                  </narg>
+                </node>
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="det"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <node type="std">
+                <node type="std">
+                  <node type="lex" value="Explosion">
+                    <narg>
+                      <fs>
+                        <f name="cat">
+                          <sym value="Explosion"/>
+                        </f>
+                      </fs>
+                    </narg>
+                  </node>
+                  <narg>
+                    <fs>
+                      <f name="cat">
+                        <sym value="n"/>
+                      </f>
+                    </fs>
+                  </narg>
+                </node>
+                <narg>
+                  <fs>
+                    <f name="cat">
+                      <sym value="np"/>
+                    </f>
+                    <f name="i">
+                      <sym varname="D0"/>
+                    </f>
+                    <f name="theme">
+                      <sym varname="A0"/>
+                    </f>
+                  </fs>
+                </narg>
+              </node>
+              <narg>
+                <fs>
+                  <f name="cat">
+                    <sym value="np"/>
+                  </f>
+                  <f name="i">
+                    <sym varname="D0"/>
+                  </f>
+                  <f name="theme">
+                    <sym varname="A0"/>
+                  </f>
+                </fs>
+              </narg>
+            </node>
+            <narg>
+              <fs>
+                <f name="cat">
+                  <sym value="pp"/>
+                </f>
+                <f name="e">
+                  <sym varname="E0"/>
+                </f>
+                <f name="i">
+                  <sym varname="G0"/>
+                </f>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </narg>
+          </node>
+          <narg>
+            <fs>
+              <f name="cat">
+                <sym value="vp"/>
+              </f>
+              <f name="e">
+                <sym varname="E0"/>
+              </f>
+            </fs>
+          </narg>
+        </node>
+        <narg>
+          <fs>
+            <f name="cat">
+              <sym value="s"/>
+            </f>
+            <f name="e">
+              <sym varname="E0"/>
+            </f>
+          </fs>
+        </narg>
+      </node>
+    </tree>
+    <semantics/>
+    <specified_semantics/>
+    <frame>
+      <fs coref="E0">
+        <ctype>
+          <type val="loc_state"/>
+          <type val="state"/>
+          <type val="posture_state"/>
+          <type val="region"/>
+        </ctype>
+        <f name="ground">
+          <fs coref="D0">
+            <ctype>
+              <type val="change_of_state"/>
+            </ctype>
+            <f name="prestate">
+              <fs coref="B0">
+                <ctype/>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </f>
+            <f name="theme">
+              <sym varname="A0"/>
+            </f>
+            <f name="preregion">
+              <sym varname="B0"/>
+            </f>
+            <f name="result_state">
+              <fs coref="C0">
+                <ctype>
+                  <type val="broken_state"/>
+                  <type val="state"/>
+                  <type val="region"/>
+                </ctype>
+                <f name="theme">
+                  <sym varname="A0"/>
+                </f>
+              </fs>
+            </f>
+            <f name="initial_state">
+              <fs coref="I0">
+                <ctype>
+                  <type val="state"/>
+                  <type val="region"/>
+                </ctype>
+                <f name="theme">
+                  <fs coref="A0">
+                    <ctype>
+                      <type val="boiler"/>
+                      <type val="object"/>
+                    </ctype>
+                  </fs>
+                </f>
+              </fs>
+            </f>
+          </fs>
+        </f>
+        <f name="location">
+          <fs coref="G0">
+            <ctype>
+              <type val="spatial_region"/>
+              <type val="location"/>
+              <type val="region"/>
+            </ctype>
+          </fs>
+        </f>
+        <f name="theme">
+          <sym varname="A0"/>
+        </f>
+        <f name="posture">
+          <sym value="upright"/>
+        </f>
+      </fs>
+      <relation name="part-of">
+        <sym value="G0"/>
+        <sym value="B0"/>
+      </relation>
+    </frame>
+  </entry>
+</grammar>
