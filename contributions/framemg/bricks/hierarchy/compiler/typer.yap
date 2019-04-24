@@ -330,8 +330,8 @@ apply_constraint(Space, Vector, fconstraint(is_equivalent,Ts1,Ts2)):-
     !.
 
 apply_constraint(Space, Vector, Constraint):-
-    write('Error: Unsupported constraint - '),
-    write(Constraint).
+    xmg:send(info,'Error: Unsupported constraint - '),
+    xmg:send(info,Constraint).
 
 
 gets([],_,[]).

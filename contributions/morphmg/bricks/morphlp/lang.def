@@ -3,14 +3,14 @@
 
 MorphStmt : Field {$$=$1} | InField {$$=$1} | FieldRel {$$=$1} | Eq {$$=$1};
 
-Field : 'field' id Feats {$$=morphlp:field($2,$3)};
+Field : 'field' Var Feats {$$=morphlp:field($2,$3)};
 
 Feats : 'feats' Var {$$=$2} |
         (_AVM)? {$$=$1};
 
-InField : id '<-' Expr {$$=morphlp:infield($1,$3)};
+InField : Var '<-' Expr {$$=morphlp:infield($1,$3)};
 
-FieldRel : id '>>' id {$$=morphlp:fieldprec($1,$3)};
+FieldRel : Var '>>' Var {$$=morphlp:fieldprec($1,$3)};
 
 Eq : Expr ':' Expr {$$=morphlp:meq($1,$3)};
 

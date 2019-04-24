@@ -30,17 +30,12 @@ gensym(Name) :--
 	atomic_concat(['XMGC',N],Name).
 
 ifield(X,N) :-
-        xmg:send(info,'In ifield'),
 	xmg_brick_avm_avm:avm(F,[]),
-	xmg:send(info,X),
-	xmg:send(info,N),
 	X = field(N,F),
-        xmg:send(info,'\nFinished'),
 	!. 
 
 
 ifieldfeats(X,F) :-
-    xmg:send(info,'In ifieldfeats'),
 	X=field(_,F),!.
 
 

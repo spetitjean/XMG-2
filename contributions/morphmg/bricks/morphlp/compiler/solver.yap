@@ -21,7 +21,7 @@
 
 :- use_module(library(assoc)).
 
-eval(Morph,morphlp:solved(Atom,MEqs)):-
+eval(Morph,morphlp:solved(FFields,Atom,MEqs)):-
 	xmg:send(debug,'\nSolving lp: '),
 	xmg:send(debug,Morph),
 	get_all(Morph,Stems,Precs,InF,Eqs),
@@ -31,12 +31,15 @@ eval(Morph,morphlp:solved(Atom,MEqs)):-
 	xmg:send(debug,Eqs),
 	order_stems(Stems,Precs,OStems),
 	xmg:send(debug,'\nFields ordered'),
-	put_in_fields(InF,OStems,Strings),
+	put_in_fields(InF,OStems,FFields),
 	merge_eqs(Eqs,MEqs),
 	xmg:send(debug,'\nStrings in fields: '),
-	concat_stems(Strings,Form),
+	xmg:send(debug,FFields),
+	xmg:send(debug,'\n'),
+	concat_fields(FFields,Form),
 	atom_codes(Atom,Form),
 	xmg:send(debug,Atom),
+	xmg:send(info,'\n'),
 	!.
 
 get_all([],[],[],[],[]):- !.
@@ -52,29 +55,24 @@ get_all([eq(H,H1)|T],T1,T2,T3,[H-H1|T4]):-
 
 order_stems([],_,[]):-!.
 order_stems(Stems,Precs,OFields):-
-	find_first(Stems,Precs,First),
+	find_first(Stems,Precs,First),!,
 	order_stems(Stems,Precs,First,OFields),!.
 
-order_stems([field(Stem,Feats)],_,_,[field(Stem,Feats)]):- !.
+order_stems([field(Stem,Feats)],_,_,[field(Stem,Feats)]):-!.
 order_stems(Stems,Precs,First,[field(First,Feats)|OStems]):-
-    	xmg:send(info,'\nDeleting '),
-    	xmg:send(info,First),
-	xmg:send(info,'\nProceding with '),
-    	xmg:send(info,Stems),
-	
 	delete_and_unify(Stems,field(First,Feats),NStems),
-	lists:member(fieldprec(First,Next),Precs),!,
+	lists:member(fieldprec(First2,Next),Precs),
+	First2==First,!,
 	order_stems(NStems,Precs,Next,OStems),!.
 order_stems(Stems,Precs,First,[Stem|OStems]):- !,
-	xmg:send(info,' Could not order fields, nothing seems to follow '),
+	xmg:send(info,'\nCould not order fields, nothing seems to follow '),
 	xmg:send(info,First),
 	false,!.
 
 delete_and_unify([],_,[]).
-delete_and_unify([field(F,Feats)|T],field(F,Feats1),T1):-
+delete_and_unify([field(F,Feats)|T],field(F1,Feats1),T1):-
+    F==F1,
     Feats=Feats1,
-    xmg:send(info,'\nUnified '),
-    xmg:send(info,Feats),
     delete_and_unify(T,field(F,Feats1),T1).
 delete_and_unify([H|T],field(F,Feats),[H|T1]):-
     delete_and_unify(T,field(F,Feats),T1),!.
@@ -82,11 +80,18 @@ delete_and_unify([H|T],field(F,Feats),[H|T1]):-
 
 
 find_first([],_,_):- !,
-	xmg:send(info,' Could not find a first field, there might be a cycle'),false,!.
+	xmg:send(info,'\nCould not find a first field, there might be a cycle'),false,!.
 find_first([field(F1,Feats1)|T],Precs,F2):-
-	lists:member(fieldprec(_,F1),Precs),!,
+    lists:member(fieldprec(_,F3),Precs),
+    xmg:send(debug,'\nFound a precedence '),
+    xmg:send(debug,fieldprec(_,F3)),
+    F3==F1,!,
+	xmg:send(info,'\nIdentified'),
 	find_first(T,Precs,F2),!.
-find_first([field(F1,Feats1)|T],_,F1):- !.
+find_first([field(F1,Feats1)|T],_,F1):-
+    xmg:send(debug,'\nFound first: '),
+    xmg:send(debug,F1),
+    !.
 
 
 type_fields([],_).
@@ -105,15 +110,16 @@ put_in_fields([H|T],Fields,IFields):-
 	put_in_field(H,Fields,Fields1),
 	put_in_fields(T,Fields1,IFields),!.
 
-put_in_field(infield(F,S),[field(F,Feats)|T],[S|T]):- !.
+put_in_field(infield(F,S),[field(F1,Feats)|T],[(S,Feats)|T]):-
+    F==F1,!.
 put_in_field(infield(F,S),[H|T],[H|T1]):- 
 	put_in_field(infield(F,S),T,T1),
 	!.
 	
 
-concat_stems([string(A)],A):- !.
-concat_stems([string(A)|T],Concat):-
-	concat_stems(T,Next),!,
+concat_fields([(string(A),_)],A):- !.
+concat_fields([(string(A),_)|T],Concat):-
+	concat_fields(T,Next),!,
 	lists:append(A,Next,Concat),!.
 
 merge_eqs([],[]):- !.

@@ -168,7 +168,6 @@ compile_file(File,Eval):-
 	xmg:send_nl(info),	
 	xmg:send(info,' generated '),
 	xmg:send_nl(info),	
-
 	retractall(xmg_brick_mg_exporter:declared(_,_)),
 	retractall(xmg_brick_mg_exporter:exports(_,_)),
 	

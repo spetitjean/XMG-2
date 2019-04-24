@@ -21,7 +21,7 @@
 
 
 xmg:eval(morphlp,_,Morph,Value,_):-
-	%%xmg:send(info,Morph),
+    %%xmg:send(info,Morph),
 	xmg_brick_morphlp_solver:eval(Morph,Value),
 	%%xmg:send_nl(info,2),
 	xmg:send(debug,' Value : '),
