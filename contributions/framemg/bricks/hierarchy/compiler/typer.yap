@@ -330,7 +330,7 @@ apply_constraint(Space, Vector, fconstraint(is_equivalent,Ts1,Ts2)):-
     !.
 
 apply_constraint(Space, Vector, Constraint):-
-    xmg:send(info,'Error: Unsupported constraint - '),
+    xmg:send(info,'\nError: Unsupported constraint - '),
     xmg:send(info,Constraint).
 
 
@@ -345,7 +345,7 @@ get(A, [B-_|T], O):-
     not(A=B),
     get(A, T, O).
 get(A, [], _):-
-    write('Error: could not get type '),
+    write('\nError: could not get type '),
     write(A).
 
 branch(Space, []).
