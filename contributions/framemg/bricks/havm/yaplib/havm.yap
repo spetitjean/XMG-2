@@ -61,7 +61,7 @@ verify_attributes(Var, Other, Goals) :-
 	    unify_types(TypeC,Type3,FinalType,_),
 	    
 
-	    put_atts(Other, avmfeats(FinalType,FinalT3,UU)),
+	    put_atts(Other, avmfeats(FinalType,FinalT3,U)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
@@ -487,7 +487,8 @@ print_h_avm(AVM,Indent):-
 	h_avm(AVM,Type,Feats),
 	xmg:send(info,'\n'),
 	indent(Indent),
-	xmg:send(info,'[\n'),
+	xmg:send(info,AVM),
+	xmg:send(info,':[\n'),
 	indent(Indent),
 	xmg:send(info,Type),
 	xmg:send(info,',\n'),

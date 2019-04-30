@@ -32,12 +32,20 @@ listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
 xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFeats))) :--
-        xmg:send(debug,'\nConverting frames (duplicates removed):'),
+    xmg:send(debug,'\nConverting frames (duplicates removed):'),
+        %%print_frames(Frames),
         lists:remove_duplicates(Frames,DFrames),
 	reorder(DFrames,RFrames),
         %%xmg:send(info,DFrames),
+	%%print_frames(RFrames),
 	framesToXML(RFrames,UFeats),
 	!.
+
+print_frames([]).
+print_frames([FS|T]):-
+    xmg:send(info,FS),
+    xmg_brick_havm_havm:print_h_avm(FS,0),
+    print_frames(T).
 
 %% put the relations at the end (so frame ids are already created)
 reorder([],[]).
@@ -49,8 +57,10 @@ reorder([H|T],[H|T1]):-
 
 framesToXML([],[]):-- !.
 framesToXML([H|T],[H1|T1]):--
-	   xmg:send(debug,'\nChecking havm for the last time'),
+           %%xmg:send(info,'\nChecking'),
+           %%xmg:send(debug,'\nChecking havm for the last time'),
 	   xmg_brick_havm_havm:verify_attributes(H,H,_),
+	   %%xmg:send(info,H),
 	   frameToXML(H,H1),
 	   framesToXML(T,T1).
 
@@ -68,6 +78,8 @@ frameToXML(relation(Rel,Params),XML ):--
 		   !.
 
 frameToXML(Frame,Frame1 ):--
+          %%xmg:send(info,'\nIn frameToXLM: '),
+          %%xmg:send(info,Frame),
 	  %%xmg_brick_havm_havm:print_h_avm(Frame,0),
 	  xmg_brick_havm_havm:h_avm(Frame,VType,Feats),
           %%xmg:send(info,'\nType: '),
@@ -82,6 +94,7 @@ frameToXML(Frame,Frame1 ):--
 	    (
 		var(Const),!,
 		xmg:convert_new_name('@Frame',New),
+		%%xmg:send(info,'\nNew coref constant: '),
 		%%xmg:send(info,New),
 		New=Const,
 		featsToXML(Feats,XMLFeats),
@@ -147,6 +160,8 @@ paramsToXML([H|T],[elem(sym,features([varname-H]))|T1]):--
         paramsToXML(T,T1),!.
 
 valToXML(Frame,XMLFrame):--
+        %%xmg:send(info,'\nHere is valToXML: '),
+        %%xmg:send(info,Frame),
 	frameToXML(Frame,XMLFrame),!.
 valToXML(Var,elem(sym,features([varname-Var]))):--
 	var(Var),
