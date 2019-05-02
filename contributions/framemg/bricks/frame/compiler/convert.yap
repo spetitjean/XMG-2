@@ -35,11 +35,64 @@ xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFe
     xmg:send(debug,'\nConverting frames (duplicates removed):'),
         %%print_frames(Frames),
         lists:remove_duplicates(Frames,DFrames),
-	reorder(DFrames,RFrames),
+	remove_subframes(DFrames,DSFrames),
+	%% ToDO: remove not only duplicates but FS which are included in others
+	%% { A1:[ f1 = A2:[] ], A2 } -> remove A2 
+	
+	reorder(DSFrames,RFrames),
         %%xmg:send(info,DFrames),
 	%%print_frames(RFrames),
 	framesToXML(RFrames,UFeats),
 	!.
+
+remove_subframes(Frames,SFrames):-
+    build_subframes_sets(Frames,Sets),!,
+    %%xmg:send(info,'\nSubframes sets:\n'),
+    %%xmg:send(info,Sets),
+    do_remove_subframes(Frames,Sets,SFrames).
+
+build_subframes_sets([],[]).
+build_subframes_sets([H|T],[Set|Sets]):-
+    build_subframes_set(H,Set),!,
+    build_subframes_sets(T,Sets),!.
+
+build_subframes_set(Frame,Set):-
+    %%xmg:send(info,'\nBuild_subframes_set for '),
+    %%xmg:send(info,Frame),
+    xmg_brick_havm_havm:h_avm(Frame,Type,Feats),
+    %%xmg:send(info,'\n  -> is h_avm'),    
+    build_subframes_set_from_feats(Feats,Set),!.
+build_subframes_set(Frame,[]).
+
+build_subframes_set_from_feats([],[]).
+build_subframes_set_from_feats([_-H|T],Set):-
+    build_subframes_set_from_feat(H,Set1),
+    build_subframes_set_from_feats(T,Set2),
+    lists:append(Set1,Set2,Set).
+
+build_subframes_set_from_feat(Feat,[Feat|Set]):-
+    %%xmg:send(info,'\nBuild subframes set from feat '),
+    %%xmg:send(info,Feat),
+    xmg_brick_havm_havm:h_avm(Feat,Type,NewFeats),
+    build_subframes_set_from_feats(NewFeats,Set),!.
+build_subframes_set_from_feat(_,[]).
+    
+do_remove_subframes([],_,[]):-!.
+do_remove_subframes([H|T],Sets,T1):-
+    is_in_one_set(H,Sets),
+    do_remove_subframes(T,Sets,T1),!.
+do_remove_subframes([H|T],Sets,[H|T1]):-
+    do_remove_subframes(T,Sets,T1).
+
+is_in_one_set(Frame,[Set|_]):-
+    is_in_set(Frame,Set),!.
+is_in_one_set(Frame,[_|T]):-
+    is_in_one_set(Frame,T),!.
+
+is_in_set(Frame,[Frame1|_]):-
+    Frame==Frame1,!.
+is_in_set(Frame,[_|T]):-
+    is_in_set(Frame,T),!.
 
 print_frames([]).
 print_frames([FS|T]):-
