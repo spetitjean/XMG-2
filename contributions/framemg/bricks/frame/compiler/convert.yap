@@ -32,13 +32,13 @@ listToXML([],[]).
 listToXML([H|T], [H1|T1]) :-- toXML(H,H1), listToXML(T,T1).
 
 xmg:xml_convert_term(frame:frame(Frames), elem(frame, features([]), children(UFeats))) :--
-    xmg:send(debug,'\nConverting frames (duplicates removed):'),
+        %%xmg:send(info,'\nConverting frames (duplicates removed):'),
         %%print_frames(Frames),
         lists:remove_duplicates(Frames,DFrames),
 	remove_subframes(DFrames,DSFrames),
 	%% ToDO: remove not only duplicates but FS which are included in others
 	%% { A1:[ f1 = A2:[] ], A2 } -> remove A2 
-	
+	%%xmg:send(info,'\nRemoved subframes'),
 	reorder(DSFrames,RFrames),
         %%xmg:send(info,DFrames),
 	%%print_frames(RFrames),
@@ -53,29 +53,34 @@ remove_subframes(Frames,SFrames):-
 
 build_subframes_sets([],[]).
 build_subframes_sets([H|T],[Set|Sets]):-
-    build_subframes_set(H,Set),!,
+    build_subframes_set(H,Set,[]),!,
     build_subframes_sets(T,Sets),!.
 
-build_subframes_set(Frame,Set):-
+build_subframes_set(Frame,Set,Seen):-
     %%xmg:send(info,'\nBuild_subframes_set for '),
     %%xmg:send(info,Frame),
+    not(lists:member(Frame,Seen)),
     xmg_brick_havm_havm:h_avm(Frame,Type,Feats),
     %%xmg:send(info,'\n  -> is h_avm'),    
-    build_subframes_set_from_feats(Feats,Set),!.
-build_subframes_set(Frame,[]).
+    build_subframes_set_from_feats(Feats,Set,[Frame|Seen]),!.
+build_subframes_set(Frame,[],_).
 
-build_subframes_set_from_feats([],[]).
-build_subframes_set_from_feats([_-H|T],Set):-
-    build_subframes_set_from_feat(H,Set1),
-    build_subframes_set_from_feats(T,Set2),
+build_subframes_set_from_feats([],[],_).
+build_subframes_set_from_feats([_-H|T],Set,Seen):-
+    build_subframes_set_from_feat(H,Set1,Seen),
+    build_subframes_set_from_feats(T,Set2,Seen),
     lists:append(Set1,Set2,Set).
 
-build_subframes_set_from_feat(Feat,[Feat|Set]):-
+build_subframes_set_from_feat(Feat,[Feat|Set],Seen):-
     %%xmg:send(info,'\nBuild subframes set from feat '),
     %%xmg:send(info,Feat),
+    %%xmg:send(info,' with seen:\n '),
+    %%xmg:send(info,Seen),
+    not(is_in_set(Feat,Seen)),
+    %%xmg:send(info,'\nNot in the list!'),
     xmg_brick_havm_havm:h_avm(Feat,Type,NewFeats),
-    build_subframes_set_from_feats(NewFeats,Set),!.
-build_subframes_set_from_feat(_,[]).
+    build_subframes_set_from_feats(NewFeats,Set,[Feat|Seen]),!.
+build_subframes_set_from_feat(_,[],_).
     
 do_remove_subframes([],_,[]):-!.
 do_remove_subframes([H|T],Sets,T1):-
