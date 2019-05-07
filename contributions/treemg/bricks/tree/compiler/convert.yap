@@ -42,7 +42,7 @@ xmg:xml_convert_term(tree:tree(H,Trees), Root):--
 
 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
 	%%xmg_brick_nodename_nodename:nodename(N,Name),
-	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark)),
+	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark,More)),
 	(
 	    var(CAVM)->
 	    
@@ -50,12 +50,12 @@ xmg:xml_convert_term(tree:tree(H,Trees), Root):--
 		xmg:convert_new_name('@AVM',CAVM),
 		xmg:xml_convert(avm:avm(Feats),XMLFeats),!,
 		%%Elem=elem(fs,features([coref-CAVM]),children(XMLFeats))
-	    	Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))|Trees1]))
+	    	Root=elem(node, features([type-XMLMark, name-Name|More]), children([elem(narg,children([elem(fs,features([coref-CAVM]),children(XMLFeats))]))|Trees1]))
 		)
 	;
 	(
 	    %%Elem=elem(fs,features([coref-CAVM]))
-	!,Root=elem(node, features([type-XMLMark, name-Name]), children([elem(narg,children([elem(fs,features([coref-CAVM]))]))|Trees1]))
+	!,Root=elem(node, features([type-XMLMark, name-Name|More]), children([elem(narg,children([elem(fs,features([coref-CAVM]))]))|Trees1]))
 	)
     ),
 	xmg:xml_convert(Trees,Trees1),!.

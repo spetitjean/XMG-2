@@ -42,7 +42,7 @@ xmg:xml_convert_term(tree:tree(H,Trees), Root):--
 
 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
 	%%xmg_brick_nodename_nodename:nodename(N,Name),
-	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark)),
+	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark,More)),
 	(
 	    var(CAVM)->
 	    

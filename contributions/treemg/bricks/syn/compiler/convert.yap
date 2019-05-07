@@ -42,7 +42,7 @@ xmg:xml_convert_term(Node,Root):--
 	xmg_brick_avm_avm:const_avm(FeatAVM,CAVM),
 	%%xmg_brick_nodename_nodename:nodename(N,Name),
 	
-	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark)),
+	xmg:xml_convert(syn:props(Props),props(Name,N,XMLMark,More)),
 
 	(
 	    var(CAVM)->
@@ -61,15 +61,38 @@ xmg:xml_convert_term(Node,Root):--
     ),!.
 
 
-xmg:xml_convert_term(syn:props(Props),props(NName,N,XMLMark)):--
-	%% xmg:send(info,'\n\nWe are here:'),
-	%% xmg:send(info,Props),
+xmg:xml_convert_term(syn:props(Props),props(NName,N,XMLMark,More)):--
+	%%xmg:send(info,'\n\nWe are here:'),
+	%%xmg:send(info,Props),
 	xmlName(Props,Name,N),
 	%% xmg:send(info,Name),
 	%% xmg:send(info,N),
 	
 	Name=NName,
-	xmlMark(Props,XMLMark),!.
+	xmlMark(Props,XMLMark),
+	xmlMore(Props,More),
+	%%xmg:send(info,'\n\nMore:'),
+	%%xmg:send(info,More),
+	!.
+
+
+%% This should be listed somewhere else (in the compiler construction)
+xmlMore(Props,More):-
+    ToConvert=['op-bound'],
+    xmlMore1(ToConvert,Props,More),
+    !.
+
+xmlMore1([],_,[]).
+xmlMore1([H|T],Props,L):-
+    doXmlMore(H,Props,L1),
+    xmlMore1(T,Props,L2),
+    lists:append(L1,L2,L),!.
+
+doXmlMore(_,[],[]).
+doXmlMore('op-bound',['op-bound'-'+'|_],['op-bound'-'true']).
+doXmlMore(P,[_|T],T1):-
+    doXmlMore(P,T,T1).
+
 
 xmlMark([],'std'):-!.
 xmlMark([mark-'flex'|T],'lex'):-!.
