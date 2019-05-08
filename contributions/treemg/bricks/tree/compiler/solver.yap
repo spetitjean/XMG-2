@@ -50,6 +50,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
+
 	xmg:send(debug,'\nNot unif: '),
 	xmg:send(debug,NotUnifs),
 
@@ -61,8 +62,10 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 
 
 	global_branch(Space,IntVars),!,
+	
 	global_pbranch(Space,IntPVars),!,
-	do_branch(Space,NodeList),!,	
+	
+	do_branch(Space,NodeList),!,
 
 	xmg_brick_mg_compiler:send(debug,' branched '),
 
@@ -351,7 +354,7 @@ do_branch(Space,[Node|T]):-
 	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
 
-	Space += branch(IsRoot,'INT_VALUES_MIN'),
+	Space += branch(IsRoot,'BOOL_VAL_MIN'),
 	Space += branch(UpCard,'INT_VALUES_MIN'),
 
 	do_branch(Space,T).
