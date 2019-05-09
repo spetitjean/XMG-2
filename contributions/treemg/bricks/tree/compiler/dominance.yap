@@ -517,9 +517,11 @@ node_rels(Space,[Node1|T1],[Node2|T2],[H|T],[HH,HHH|TP]):-
 	!.
 
 
+global_branch(_,[]):-!.
 global_branch(Space,List):-
 	Space += branch(List,'INT_VAR_NONE','INT_VAL_MIN').
 
+global_pbranch(_,[]):-!.
 global_pbranch(Space,List):-
 	Space += branch(List,'INT_VAR_NONE','INT_VAL_MIN').
 

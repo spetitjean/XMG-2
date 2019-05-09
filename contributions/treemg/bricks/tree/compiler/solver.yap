@@ -44,12 +44,12 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	xmg_table:table_put(TS,nodes,NodeList,TSN),
 	xmg_table:table_put(TSN,intvars,IntVars,TSNI),
 	xmg_table:table_put(TSNI,onodes,NodeList1,TSNO),
+	
 	xmg:post_plugins(Plugins) with solver(TSNO,_),
 
 	xmg_brick_mg_compiler:send(debug,' doing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
-
 
 	xmg:send(debug,'\nNot unif: '),
 	xmg:send(debug,NotUnifs),
@@ -57,9 +57,8 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	xmg_brick_mg_compiler:send(debug,' doing posts '),
 	xmg:send(debug,Relations),
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
-
+	
 	xmg_brick_mg_compiler:send(debug,' branching '),
-
 
 	global_branch(Space,IntVars),!,
 	
@@ -67,6 +66,7 @@ solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugi
 	
 	do_branch(Space,NodeList),!,
 
+	
 	xmg_brick_mg_compiler:send(debug,' branched '),
 
 	SolSpace := search(Space),

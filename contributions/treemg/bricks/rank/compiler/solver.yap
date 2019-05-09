@@ -33,12 +33,13 @@ post([Ranks]):--
     	solver::tget(space,Space),
         solver::tget(nodes,NodeList),
         solver::tget(intvars,IntVars),
-	ranks(Space,NodeList,IntVars,Ranks,RankRels),!.
+	ranks(Space,NodeList,IntVars,Ranks,RankRels),
+	!.
 
 ranks(Space,NodeList,IntVars,Ranks,RankRels):-
     rposts(Space,NodeList,Ranks,1,RankList),!,
-	lists:keysort(RankList,SRankList),!,
-	(
+    lists:keysort(RankList,SRankList),!,
+	  (
 	    SRankList=[]
 	->
 	RankRels=[]
@@ -100,11 +101,13 @@ do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
 
 	Rel1 := boolvar(Space),
 	Rel2 := boolvar(Space),
-
+	Space += reify(Rel1,'RM_EQV',RRel1),
+	Space += reify(Rel2,'RM_EQV',RRel2),
 
 	Space += rel(Rel1,'IRT_NQ',Rel2),
 	
-	Space += rel(ParentX,'SRT_DISJ',ParentY,Rel1),
+	Space += rel(ParentX,'SRT_DISJ',ParentY,RRel1),
+		
 	
 	%%	post(Space,H,'<<+',H1),
 
@@ -115,21 +118,24 @@ do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
 	Rel2P=[RL1,RL2],
 
 	Space += rel(Rel2P, 'IRT_GQ', Rel2),
+	Space += reify(RL1,'RM_EQV',RRL1),
+	Space += rel(ParentX,'SRT_EQ',ParentY,RRL1),
 
-	Space += rel(ParentX,'SRT_EQ',ParentY,RL1),
-
+	
 	(
 	    N2>N1
 	->
 	(
 	    xmg_brick_tree_solver:get_rel(N1,N2,IntVars,IntVar),
-	    Space += dom(IntVar,4,RL2)
+	    Space += reify(RL2,'RM_EQV',RRL2),
+	    Space += dom(IntVar,4,RRL2)
 	
 	)
     ;
 	(
 	    xmg_brick_tree_solver:get_rel(N2,N1,IntVars,IntVar),
-	    Space += dom(IntVar,5,RL2)
+	    Space += reify(RL2,'RM_EQV',RRL2),
+	    Space += dom(IntVar,5,RRL2)
 	)
     ),
 
