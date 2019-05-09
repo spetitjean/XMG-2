@@ -310,10 +310,9 @@ apply_constraint(Space, Vector, fconstraint(implies,Ts1,Ts2)):-
     gets(Ts2, Vector, Vs2),
     Vs2=[V2],
     R := boolvar(Space),
-    Space += linear(Vs1,'IRT_EQ',Length,R),
-    Space += rel(V2,'IRT_GQ',R),
-    
-    
+    Space += reify(R,'RM_EQV',RR),
+    Space += linear(Vs1,'IRT_EQ',Length,RR),
+    Space += rel(V2,'IRT_GQ',R),    
     !.
 apply_constraint(Space, Vector, fconstraint(is_equivalent,Ts1,Ts2)):-
     %% Eq1 is a boolean variable which is true if the sum of all booleans in Ts1 is equal to the arity of Ts1
@@ -324,9 +323,9 @@ apply_constraint(Space, Vector, fconstraint(is_equivalent,Ts1,Ts2)):-
     gets(Ts2, Vector, Vs2),
     Vs2=[V2],
     R := boolvar(Space),
-    Space += linear(Vs1,'IRT_EQ',Length,R),
+    Space += reify(R,'RM_EQV',RR),   
+    Space += linear(Vs1,'IRT_EQ',Length,RR),
     Space += rel(V2,'IRT_EQ',R),
-    
     !.
 
 apply_constraint(Space, Vector, Constraint):-
@@ -350,7 +349,7 @@ get(A, [], _):-
 
 branch(Space, []).
 branch(Space, [_-V|T]):-
-    Space += branch(V,'INT_VAL_MIN'),
+    Space += branch(V,'BOOL_VAL_MIN'),
     branch(Space, T).
 
 get_sol(Space, [], []).
