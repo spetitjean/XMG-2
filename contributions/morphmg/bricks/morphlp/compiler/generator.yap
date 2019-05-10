@@ -65,6 +65,11 @@ xmg:generate_instr((morphlp:fieldprec(v(F1),c(F2)),Dim)):--
         decls::tget(F1,FF1),
 	Acc=..['::',xmg_acc:Dim,put(fieldprec(FF1,F2))],
         code::enq(Acc),!.
+xmg:generate_instr((morphlp:fieldprec(v(F1),v(F2)),Dim)):--
+        decls::tget(F1,FF1),
+        decls::tget(F2,FF2),
+	Acc=..['::',xmg_acc:Dim,put(fieldprec(FF1,FF2))],
+        code::enq(Acc),!.
 
 xmg:generate_instr((morphlp:infield(c(F),v(V)),Dim)):--
 	decls::tget(V,VV),

@@ -310,6 +310,7 @@ unify_types(T1,T2,_,_):-
 	xmg:send(info,'\nCould not unify frame types '),
 	xmg:send(info, T1),
 	xmg:send(info, T2),
+	xmg:send(info, '\n'),
 	false.
 
 

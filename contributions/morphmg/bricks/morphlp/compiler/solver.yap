@@ -33,13 +33,12 @@ eval(Morph,morphlp:solved(FFields,Atom,MEqs)):-
 	xmg:send(debug,'\nFields ordered'),
 	put_in_fields(InF,OStems,FFields),
 	merge_eqs(Eqs,MEqs),
-	xmg:send(debug,'\nStrings in fields: '),
-	xmg:send(debug,FFields),
-	xmg:send(debug,'\n'),
+	%%xmg:send(info,MEqs),
+
 	concat_fields(FFields,Form),
+
 	atom_codes(Atom,Form),
 	xmg:send(debug,Atom),
-	xmg:send(info,'\n'),
 	!.
 
 get_all([],[],[],[],[]):- !.
@@ -86,7 +85,6 @@ find_first([field(F1,Feats1)|T],Precs,F2):-
     xmg:send(debug,'\nFound a precedence '),
     xmg:send(debug,fieldprec(_,F3)),
     F3==F1,!,
-	xmg:send(info,'\nIdentified'),
 	find_first(T,Precs,F2),!.
 find_first([field(F1,Feats1)|T],_,F1):-
     xmg:send(debug,'\nFound first: '),
@@ -121,15 +119,18 @@ concat_fields([(string(A),_)],A):- !.
 concat_fields([(string(A),_)|T],Concat):-
 	concat_fields(T,Next),!,
 	lists:append(A,Next,Concat),!.
+%% This should be the case where the field remained empty
+concat_fields([field(_,_)|T],Concat):-
+    concat_fields(T,Concat).
+
 
 merge_eqs([],[]):- !.
 merge_eqs([H|T],[H|Eqs]):-
-	merge_eq(H,T,Eqs1),
+    merge_eq(H,T,Eqs1),
 	merge_eqs(Eqs1,Eqs),!.
 
 merge_eq(A-V,Eqs,MMEqs):-
 	lists:member(A-V,Eqs),
-	xmg:send(debug,'\nwas in eqs'),
 	lists:delete(Eqs,A-V,MEqs),
 	merge_eq(A-V,MEqs,MMEqs),!.
 merge_eq(A-V,Eqs,Eqs):-
