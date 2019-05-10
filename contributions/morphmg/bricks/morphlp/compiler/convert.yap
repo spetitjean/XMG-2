@@ -24,8 +24,12 @@
 
 xmg:xml_convert_term(morphlp:solved(Fields,Atom,Form), elem(morph, children([elem(features,children(CForm)),elem(string,features([value-Atom])),elem(fields,children(CFields))]))) :--
     %%print_fields(Fields),
+
     xmg:xml_convert_term(avm:avm(Form),CForm),
-        xmg:xml_convert_term(morphlp:fields(Fields),CFields),
+    %%xmg:send(info,Fields),
+    
+    xmg:xml_convert_term(morphlp:fields(Fields),CFields),
+
 	%% xmg_convert_avm:xmlFeats(L1,Feats) with name(0,N1),
 	%% xmlMorph(List,Stems),
 	!.
@@ -33,7 +37,9 @@ xmg:xml_convert_term(morphlp:solved(Fields,Atom,Form), elem(morph, children([ele
 print_fields([]).
 print_fields([(_,FS)|T]):-
     xmg_brick_avm_avm:avm(FS,AVM),
-    xmg:send(info,AVM),
+    xmg:send(info,AVM),!,
+    print_fields(T).
+print_fields([H|T]):-
     print_fields(T).
 
 xmg:xml_convert_term(morphlp:fields([]),[]):--!.
@@ -43,10 +49,18 @@ xmg:xml_convert_term(morphlp:fields([H|T]),[H1|T1]):--
 
 xmg:xml_convert_term(morphlp:field((string(String),Feats)),H1):--
     atom_codes(Atom,String),
-XMLString=elem(string,features([value-Atom])),
-xmg_brick_avm_avm:avm(Feats,AVMFeats),
-xmg:xml_convert_term(avm:avm(AVMFeats),CFeats),
-H1=elem(field,children([XMLString,elem(feats,children([elem(fs,children(CFeats))]))])),
+    XMLString=elem(string,features([value-Atom])),
+    xmg_brick_avm_avm:avm(Feats,AVMFeats),
+    xmg:xml_convert_term(avm:avm(AVMFeats),CFeats),
+    H1=elem(field,children([XMLString,elem(feats,children([elem(fs,children(CFeats))]))])),
+    !.
+xmg:xml_convert_term(morphlp:field(field(_,_)),H1):--
+    XMLString=elem(string,features([value-''])),
+    H1=elem(field,children([XMLString,elem(feats,children([]))])),
+    !.
+xmg:xml_convert_term(morphlp:field(H,Feats),H1):--
+    xmg:send(info,'\nUnexpected value: '),
+    xmg:send(info,H),
     !.
 
 
