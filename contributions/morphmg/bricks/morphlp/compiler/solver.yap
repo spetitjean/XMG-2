@@ -32,11 +32,14 @@ eval(Morph,morphlp:solved(FFields,Atom,MEqs)):-
 	order_stems(Stems,Precs,OStems),
 	xmg:send(debug,'\nFields ordered'),
 	put_in_fields(InF,OStems,FFields),
+	%%xmg:send(info,'\nMerging eqs'),	
 	merge_eqs(Eqs,MEqs),
+	xmg:send(debug,'\nMerged eqs'),	
 	%%xmg:send(info,MEqs),
 
 	concat_fields(FFields,Form),
-
+	xmg:send(debug,'\nConcatenated fields:'),	
+	xmg:send(debug,Form),
 	atom_codes(Atom,Form),
 	xmg:send(debug,Atom),
 	!.
@@ -59,13 +62,17 @@ order_stems(Stems,Precs,OFields):-
 
 order_stems([field(Stem,Feats)],_,_,[field(Stem,Feats)]):-!.
 order_stems(Stems,Precs,First,[field(First,Feats)|OStems]):-
+	delete_and_unify(Stems,field(First,Feats),[]),!.
+
+order_stems(Stems,Precs,First,[field(First,Feats)|OStems]):-
 	delete_and_unify(Stems,field(First,Feats),NStems),
 	lists:member(fieldprec(First2,Next),Precs),
 	First2==First,!,
-	order_stems(NStems,Precs,Next,OStems),!.
+		order_stems(NStems,Precs,Next,OStems),!.
 order_stems(Stems,Precs,First,[Stem|OStems]):- !,
 	xmg:send(info,'\nCould not order fields, nothing seems to follow '),
 	xmg:send(info,First),
+	xmg:send(info,Stems),
 	false,!.
 
 delete_and_unify([],_,[]).
@@ -114,12 +121,13 @@ put_in_field(infield(F,S),[H|T],[H|T1]):-
 	put_in_field(infield(F,S),T,T1),
 	!.
 	
-
 concat_fields([(string(A),_)],A):- !.
 concat_fields([(string(A),_)|T],Concat):-
 	concat_fields(T,Next),!,
 	lists:append(A,Next,Concat),!.
-%% This should be the case where the field remained empty
+
+%% These should be the cases where some fields remained empty
+concat_fields([],[]).
 concat_fields([field(_,_)|T],Concat):-
     concat_fields(T,Concat).
 
@@ -136,5 +144,10 @@ merge_eq(A-V,Eqs,MMEqs):-
 merge_eq(A-V,Eqs,Eqs):-
 	not(lists:member(A-_,Eqs)),
 	xmg:send(debug,'\nwas not in eqs'),!.
+%% merge_eq(A-V,Eqs,Eqs):-
+%%     lists:member(A-VV,Eqs),
+%%     not(V==VV),
+%%     xmg:send(info,'\nFailed for incompatible features'),
+%%     false,!.
 
 	
