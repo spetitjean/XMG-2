@@ -325,7 +325,6 @@ parse_sem(States,Tokens,Sem):--
 	throw_errors,!.
 
 parse_file(File,Sem):--
-xmg:send(info,'HERE'),
         %%print(user_error,'\nParsing file'),
 	xmg_brick_mg_compiler:encoding(Encoding),
 	xmg_brick_mg_compiler:send(info,'\ntokenizing\n'),

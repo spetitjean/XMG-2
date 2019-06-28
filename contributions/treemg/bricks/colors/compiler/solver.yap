@@ -56,8 +56,8 @@ post(Plugin):--
 	colors(Space,NodeList,Plugin).
 
 colors(Space,NodeList,[Colors]):-
-    xmg:send(info,'\nPosting colors:'),
-    xmg:send(info,Colors),
+    %%xmg:send(info,'\nPosting colors:'),
+    %%xmg:send(info,Colors),
     do_cposts(Space,NodeList,Colors,1).
 
 
@@ -87,7 +87,7 @@ do_cposts(Space,[Node|T],[color(none)|TC],N):-
 
 
 post(Space,X,isred,XN):-
-    xmg:send(info,'\nPosting red'),
+    %%xmg:send(info,'\nPosting red'),
     IntVar:=intvar(Space,XN,XN),
 	RB :=: rb(X),
 	Space += rel(RB,'SRT_EQ', IntVar),
@@ -96,14 +96,14 @@ post(Space,X,isred,XN):-
 	!.
 
 post(Space,X,isblack,XN):-
-    xmg:send(info,'\nPosting black'),
+    %%xmg:send(info,'\nPosting black'),
 	IntVar:=intvar(Space,XN,XN),
 	RB :=: rb(X),
 	Space += rel(RB,'SRT_EQ', IntVar),
 	!.
 
 post(Space,X,iswhite,XN):-
-    xmg:send(info,'\nPosting white'),
+    %%xmg:send(info,'\nPosting white'),
 	IntVar:=intvar(Space,XN,XN),
 	RB :=: rb(X),
 	Space += rel(RB,'SRT_DISJ', IntVar),
@@ -113,7 +113,7 @@ post(Space,X,iswhite,XN):-
 	!.
 
 post(Space,X,isnone,XN):-
-        xmg:send(info,'\nPosting none'),
+        %%xmg:send(info,'\nPosting none'),
 	Eq :=: eq(X),
 	xmg_brick_tree_dominance:nbNodes(Nodes),
 	Space += cardinality(Eq,2,Nodes),

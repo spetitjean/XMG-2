@@ -31,12 +31,12 @@ get_instances(I):-
     xmg:unicity(I).
 
 prepare(feat(A,V,_), Out) :--
-    xmg:send(info,'\nHere in prepare unicity'),
+    %%xmg:send(info,'\nHere in prepare unicity'),
     preparer::tget(nodes,Nodes),
-    xmg:send(info,'\nGot nodes'),
+    %%xmg:send(info,'\nGot nodes'),
     maplist(prepare_one(A-V), Nodes, Out).
 
 prepare_one(FV, Node, Result) :-
-    xmg:send(info,'\nIn prepare_one'),
+    %%xmg:send(info,'\nIn prepare_one'),
     (xmg_brick_tree_utils:node_with_prop_or_featq(FV, Node)
     -> Result=true ; Result=false).

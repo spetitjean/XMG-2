@@ -97,14 +97,14 @@ type_metagrammar(MG):-
 
 do_type_classes(Classes,Type_Decls):--
 	xmg_table:table_new(TableIn),
-	xmg_table:table_new(TableDimIn),
+        xmg_table:table_new(TableDimIn),
 	type_classes(Classes) with (global_context(TableIn,TableOut),dim_types(TableDimIn,TableDimOut),type_decls(Type_Decls,_)).
 
 
 type_classes([]):--
 	!.
 type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
-	!,
+!,
 	xmg:send(debug,N),
 	global_context::get(GContext),
 	xmg_brick_mg_exporter:declared(N,List),
@@ -336,9 +336,12 @@ gather_one(Decls,gather(One,Two,New),[New-NDecl|Decls2]):-
 	xmg_brick_mg_compiler:send(debug,' gathering '),
 	xmg_brick_mg_compiler:send(debug,New),
 	lists:member(One-DOne,Decls),
-	lists:delete(Decls,One-DOne,Decls1),
+	%%lists:delete(Decls,One-DOne,Decls1),
+	%% delete is now deprecated
+	lists:subtract(Decls,[One-DOne],Decls1),
 	lists:member(Two-DTwo,Decls1),
-	lists:delete(Decls1,Two-DTwo,Decls2),
+	%%lists:delete(Decls1,Two-DTwo,Decls2),
+	lists:subtract(Decls1,[Two-DTwo],Decls2),
 	NDecl=..[New,One-DOne,Two-DTwo],
 	!.
 gather_one(Decls,_,Decls):-!.
@@ -565,7 +568,8 @@ order_fields(Fields,OFields):-
 
 order_fields([Field],_,[Field]):- !.
 order_fields(Fields,First,[First|OFields]):-
-	lists:delete(Fields,First,NFields),
+	%%lists:delete(Fields,First,NFields),
+	lists:subtract(Fields,[First],NFields),
 	fieldprec(First,Next),!,
 	order_fields(NFields,Next,OFields),!.
 order_fields(Fields,First,[First|OFields]):- !,

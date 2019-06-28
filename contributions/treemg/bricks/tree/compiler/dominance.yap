@@ -5,14 +5,14 @@
 
 :- op(500, xfx, ':=:').
 
-:- xmg:send(info,'\nLoading dominance').
+%%:- xmg:send(info,'\nLoading dominance').
 
 new_nodes(Nodes,Space,N) :-
-    xmg:send(info,'\nNew nodes'),
+    %%xmg:send(info,'\nNew nodes'),
 	length(Nodes,N),
 	retractall(nbNodes(_)),
 	asserta(nbNodes(N)),
-	xmg:send(info,'\nInit nodes'),
+	%%xmg:send(info,'\nInit nodes'),
 	init_nodes(Nodes,Space,N,1).
 
 init_nodes([],_,_,_).
@@ -22,7 +22,7 @@ init_nodes([Node|Nodes],Space,N,I) :-
 	init_nodes(Nodes,Space,N,J).
 
 init_node(Node,Space,N,I) :-
-        xmg:send(info,'\nInit node'),
+        %%xmg:send(info,'\nInit node'),
 	Node=node(Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,UpCard,IsRoot,RB),
 	Empty := intset([]),
 	Full := intset(1,N),
@@ -30,36 +30,36 @@ init_node(Node,Space,N,I) :-
 	EmptyVar := setvar(Space,Empty,Empty),
 	[Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,RB] := setvars(Space,11,Empty,Full),
 	M is N-1,
-        xmg:send(info,'\nInit node 2'),
+        %%xmg:send(info,'\nInit node 2'),
 	UpCard := intvar(Space,0,M),
 	IsRoot := boolvar(Space),
-	xmg:send(info,'\nInit node 2.1'),
+	%%xmg:send(info,'\nInit node 2.1'),
 	Space += cardinality(Parent,0,M),
-	xmg:send(info,'\nInit node 2.15'),
+	%%xmg:send(info,'\nInit node 2.15'),
 	Space += cardinality(Up,UpCard),
 	Space += cardinality(Up,0,M),
 
-	xmg:send(info,'\nInit node 2.2'),
+	%%xmg:send(info,'\nInit node 2.2'),
 	Space += reify(IsRoot,'RM_EQV',IsRootR),
 	Space += rel(UpCard,'IRT_EQ',0,IsRootR),
 	Space += rel(Side,'SRT_EQ',EmptyVar,IsRootR),
-	xmg:send(info,'\nInit node 2.5'),
+	%%xmg:send(info,'\nInit node 2.5'),
 	Space += rel(FullVar,'SRT_EQ',EqDown,IsRootR),
-	xmg:send(info,'\nInit node 2.55'),
+	%%xmg:send(info,'\nInit node 2.55'),
 	Space += rel(Eq,'SOT_DUNION',Down,'SRT_EQ',EqDown),
-	xmg:send(info,'\nInit node 2.6'),
+	%%xmg:send(info,'\nInit node 2.6'),
 	Space += rel(Eq,'SOT_DUNION',Up,'SRT_EQ',EqUp),
-        xmg:send(info,'\nInit node 2.7'),
+        %%xmg:send(info,'\nInit node 2.7'),
 	Space += rel(Left,'SOT_DUNION',Right,'SRT_EQ',Side),
-        xmg:send(info,'\nInit node 2.8'),	
+        %%xmg:send(info,'\nInit node 2.8'),	
 	Space += rel('SOT_DUNION',[EqUp,Down,Left,Right],FullVar),
 	Space += rel('SOT_DUNION',[Up,EqDown,Left,Right],FullVar),
-        xmg:send(info,'\nInit node 3'),
+        %%xmg:send(info,'\nInit node 3'),
     	Space += dom(Eq,'SRT_SUP',I),
 	Space += rel(Parent, 'SRT_SUB', Up),
 	Space += rel(Children, 'SRT_SUB', Down),
 	Space += rel(RB, 'SRT_SUB', Eq),
-        xmg:send(info,'\nInit node 4'),
+        %%xmg:send(info,'\nInit node 4'),
 	Space += cardinality(RB,1,1),!.
 
 is_node(Node) :- functor(Node,node,13).
@@ -103,7 +103,7 @@ node_rel(Space,X,Y,Rel):-
 	Rel4 := boolvar(Space),
 	Rel5 := boolvar(Space),
 
-	xmg:send(info,'\nDone boolvars'),
+	%%xmg:send(info,'\nDone boolvars'),
 
 	Space += reify(Rel1,'RM_EQV',Rel1R),
 	Space += reify(Rel2,'RM_EQV',Rel2R),
@@ -111,7 +111,7 @@ node_rel(Space,X,Y,Rel):-
 	Space += reify(Rel4,'RM_EQV',Rel4R),
 	Space += reify(Rel5,'RM_EQV',Rel5R),
 
-        xmg:send(info,'\nDone reify'),
+        %%xmg:send(info,'\nDone reify'),
 	
 	EqX       :=: eq(X),      
 	UpX       :=: up(X) ,     
@@ -148,7 +148,7 @@ node_rel(Space,X,Y,Rel):-
 	Space += cardinality(ChildrenX,CXCard),
 	CYCard:= intvar(Space,0,NBNodes),
 	
-        xmg:send(info,'\nDone before 1'),
+        %%xmg:send(info,'\nDone before 1'),
 
 	Space += cardinality(ChildrenY,CYCard),	
 	PXCard:= intvar(Space,0,NBNodes),
@@ -521,7 +521,7 @@ node_parent_rel(Space,X,Y,ParentorNot,IParentorNot):-
 	!.
 
 global_constraints(Space,Nodes,IntVars1,IntVars2):-
-    xmg:send(info,'\nDoing global constraints'),
+    %%xmg:send(info,'\nDoing global constraints'),
 	global_rels(Space,Nodes,IntVars1,IntVars2),
 	%%one_root(Space,Nodes,[]),
 	!.
@@ -536,9 +536,9 @@ node_rels(Space,[H],_,[],[]):-!.
 node_rels(Space,[_,H|T],[],I,J):-
 	node_rels(Space,[H|T],T,I,J).
 node_rels(Space,[Node1|T1],[Node2|T2],[H|T],[HH,HHH|TP]):-
-    xmg:send(info,'\nNode rels'),
+    %%xmg:send(info,'\nNode rels'),
     node_rel(Space,Node1,Node2,H),
-    xmg:send(info,'\nDone node rel'),
+    %%xmg:send(info,'\nDone node rel'),
 	node_parent_rel(Space,Node1,Node2,HH,HHH),
 	Space +=linear([HH,HHH],'IRT_GR',2),
 	node_rels(Space,[Node1|T1],T2,T,TP),
@@ -563,9 +563,9 @@ one_root(Space,[Node|T],BoolVars):-
 do_branch(_,[]):- !.
 
 do_branch(Space,[Node|T]):-
-        xmg_brick_mg_compiler:send(info,'\nStarting branching '),
+        %%xmg_brick_mg_compiler:send(info,'\nStarting branching '),
         Eq       :=: eq(Node),
-	xmg_brick_mg_compiler:send(info,'\nOne done '),
+	%%xmg_brick_mg_compiler:send(info,'\nOne done '),
 	Up       :=: up(Node) ,     
 	Down     :=: down(Node),    
 	Left     :=: left(Node),    
@@ -578,13 +578,13 @@ do_branch(Space,[Node|T]):-
 	UpCard   :=: upcard(Node),   
 	IsRoot   :=: isroot(Node),
 	%%Space += branch([Eq,Children],'SET_VAR_NONE','SET_VAL_MIN_INC'),
-	xmg_brick_mg_compiler:send(info,'\nBefore first branching'),
+	%%xmg_brick_mg_compiler:send(info,'\nBefore first branching'),
 	Space += branch([Eq,Up,Down,Left,Right,EqUp,EqDown,Side,Children,Parent],'SET_VAR_NONE','SET_VAL_MIN_INC'),
-	xmg_brick_mg_compiler:send(info,'\nAfter first branching'),
+	%%xmg_brick_mg_compiler:send(info,'\nAfter first branching'),
 	Space += branch(IsRoot,'BOOL_VAL_MIN'),
-	xmg_brick_mg_compiler:send(info,'\nAfter bool branching'),
+	%%xmg_brick_mg_compiler:send(info,'\nAfter bool branching'),
 	Space += branch(UpCard,'INT_VALUES_MIN'),
-	xmg_brick_mg_compiler:send(info,'\nAfter int branching'),
+	%%xmg_brick_mg_compiler:send(info,'\nAfter int branching'),
 	do_branch(Space,T).
 
 color_branch(_,[]):- !.
@@ -595,7 +595,8 @@ color_branch(Space,[Node|T]):-
 	color_branch(Space,T).
 
 eq_vals(_,[],[],[],[],[]):-
-    xmg:send(info,'Eq Vals empty\n'),!.
+    %%xmg:send(info,'Eq Vals empty\n'),
+    !.
 
 eq_vals(Space,
 	[Node|T],
@@ -607,7 +608,7 @@ eq_vals(Space,
 	%%[VParent|T6]
     )  :-
 	
-    xmg:send(info,'Eq Vals\n'),
+    %%xmg:send(info,'Eq Vals\n'),
     Eq:=:eq(Node),
 	%%Rb:=:rb(Node),
 	Left:=:left(Node),
@@ -623,8 +624,8 @@ eq_vals(Space,
 	VIsRoot:=val(Space,IsRoot),
 	%% %%VParent:=lub_values(Space,Parent),
 	eq_vals(Space,T,T1,T3,T4,T5),
-	xmg:send(info,'Eq Vals over\n'),
-	xmg:send(info,(T,T1,T3,T4,T5)),
+	%%xmg:send(info,'Eq Vals over\n'),
+	%%xmg:send(info,(T,T1,T3,T4,T5)),
 	!.
 
 

@@ -20,7 +20,7 @@
 :- module(xmg_brick_unicity_solver).
 :- xmg:edcg.
 
-:-print(user_error,'\nHere in unicity solver 0').
+%%:-print(user_error,'\nHere in unicity solver 0').
 
 %%:- xmg:gecode.
 %%:- use_module('xmg/brick/tree/compiler/dominance').

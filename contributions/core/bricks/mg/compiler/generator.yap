@@ -36,8 +36,8 @@
 
 xmg:value_all(Value,Class):-
 	xmg:value(Class),
-	xmg:send(info,'\nValue class '),
-	xmg:send(info,Class),
+	%%xmg:send(info,'\nValue class '),
+	%%xmg:send(info,Class),
 	xmg:start_value_class(Class,Value).
 
 new_name(Name,Prefix):--
@@ -153,9 +153,9 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	%%xmg:send(info,IGenerated),
 
-	edcg:edcg_clause(xmg:Head, GenDebugEnd, Clause),
-	xmg:send(info,'\nAsserting clause: '),
-	xmg:send(info,Clause),
+	edcg:edcg_clause(xmg:Head, Gen, Clause),
+	%%xmg:send(info,'\nAsserting clause: '),
+	%%xmg:send(info,Clause),
 	asserta(Clause),
 	xmg_brick_mg_compiler:send(debug,'generated '),
 	xmg_brick_mg_compiler:send(debug,Class),

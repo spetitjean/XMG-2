@@ -42,9 +42,9 @@ filter_plugins(Solver,[H|T],Mem,T1,T2):-
 
 xmg:prepare_plugins(Syn,[],prepared([],Syn)):-- !.
 xmg:prepare_plugins(Syn,[Plugin|T],prepared([Plugin-Out|TOut],NNSyn)):--
-        xmg:send(info,'\nStarting prepare_plugins'),
+        %%xmg:send(info,'\nStarting prepare_plugins'),
         xmg:prepare_plugin(Syn,Plugin,prepared(Out,NSyn)),
-        xmg:send(info,'\nOne done'),
+        %%xmg:send(info,'\nOne done'),
 	xmg:prepare_plugins(NSyn,T,prepared(TOut,NNSyn)),!.
 
 
@@ -55,12 +55,12 @@ xmg:prepare_plugin(Dim,Plugin,prepared(Out,ODim)):--
 	%%use_module(File1, []),
 	%%use_module(File2, []),
 	atom_concat(['xmg_brick_',Plugin,'_preparer'],Module),
-	xmg:send(info,'\nGot module: '),
-	xmg:send(info,Module),
+	%%xmg:send(info,'\nGot module: '),
+	%%xmg:send(info,Module),
 	Get=..[get_instances,I],
 	DoGet=..[':',Module,Get],
 	DoGet,!,
-	xmg:send(info,'\nGot module'),
+	%%xmg:send(info,'\nGot module'),
 	prepare_instances(Dim,I,Module,Out,NDim),
 	%% xmg:send(info,'\nDONE: '),
 	%% xmg:send(info,prepared(Out,NDim)),
@@ -75,15 +75,15 @@ xmg:prepare_plugin(Syn,Plugin,Out):--
 
 prepare_instances(Dim,[],_,[],Dim):--!.
 prepare_instances(Dim,[I|T],Module,[P|TP],NDim):--
-        xmg:send(info,'\nPreparing instance'),
+        %%xmg:send(info,'\nPreparing instance'),
 	preparer::get(In),
         %% cannot use the threads properly here, so give them explicitely
         Prepare=..[prepare,I,P,In,Out],
 	DoPrepare=..[':',Module,Prepare],!,
-		    xmg:send(info,'\nDoing prepare: '),
-		    	xmg:send(info,DoPrepare),
+	%%	    xmg:send(info,'\nDoing prepare: '),
+	%%	    	xmg:send(info,DoPrepare),
 			DoPrepare,
-			xmg:send(info,'\nDone'),
+	%%		xmg:send(info,'\nDone'),
 	preparer::set(Out),
 	
 	prepare_instances(IDim,T,Module,TP,NDim),!.

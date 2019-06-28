@@ -57,9 +57,11 @@ order_stems(Stems,Precs,OFields):-
 
 order_stems([field(Stem)],_,_,[field(Stem)]):- !.
 order_stems(Stems,Precs,First,[field(First)|OStems]):-
-	lists:delete(Stems,field(First),NStems),
-	lists:member(fieldprec(First,Next),Precs),!,
-	order_stems(NStems,Precs,Next,OStems),!.
+    %%lists:delete(Stems,field(First),NStems),
+    %% delete is deprecated
+    lists:subtract(Stems,[field(First)],NStems),
+    lists:member(fieldprec(First,Next),Precs),!,
+	  order_stems(NStems,Precs,Next,OStems),!.
 order_stems(Stems,Precs,First,[Stem|OStems]):- !,
 	xmg:send(info,' Could not order fields, nothing seems to follow '),
 	xmg:send(info,First),
@@ -110,7 +112,8 @@ merge_eqs([H|T],[H|Eqs]):-
 merge_eq(A-V,Eqs,MMEqs):-
 	lists:member(A-V,Eqs),
 	xmg:send(debug,'\nwas in eqs'),
-	lists:delete(Eqs,A-V,MEqs),
+	%%lists:delete(Eqs,A-V,MEqs),
+	lists:subtract(Eqs,[A-V],MEqs),
 	merge_eq(A-V,MEqs,MMEqs),!.
 merge_eq(A-V,Eqs,Eqs):-
 	not(lists:member(A-_,Eqs)),

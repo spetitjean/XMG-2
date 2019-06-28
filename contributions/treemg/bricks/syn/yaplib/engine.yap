@@ -20,11 +20,11 @@ gensym(Name) :--
 %% 	xmg_brick_syn_nodename:nodename(I,N1),
 %% 	X = node(P,T,I),!. 
 inode(X,N) :-
-	xmg:send(info,'\nCreating a node'),
+	%%xmg:send(info,'\nCreating a node'),
 	xmg_brick_avm_avm:avm(P,[]),
 	xmg_brick_avm_avm:avm(F,[]),
 	xmg_brick_syn_nodename:nodename(I,N),
-	xmg:send(info,'\nAlmost done'),
+	%%xmg:send(info,'\nAlmost done'),
 	X = node(P,F,I),!. 
 
 inodeprops(X,P) :-

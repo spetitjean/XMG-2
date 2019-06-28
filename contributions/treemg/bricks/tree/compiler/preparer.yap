@@ -60,8 +60,8 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	
 	xmg:get_plugins(tree,Plugins,OutPlugins),
 	
-	xmg:send(info,'\nPlugins: '),
-	xmg:send(info,Plugins),
+	%%xmg:send(info,'\nPlugins: '),
+	%%xmg:send(info,Plugins),
 
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
@@ -70,7 +70,7 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	%% To be removed when plugins are back (when YAP imports are cleaned):
 	%% SynNC=GetNodes,
 
-	xmg:send(info,'\nPlugins ignored'),
+	%%xmg:send(info,'\nPlugins ignored'),
 	
 	%% xmg_brick_colors_preparer:prepare(SynD,prepared(Colors,SynNC)),
 	%% xmg_brick_rank_preparer:prepare(SynNC,prepared(Ranks,SynNC)),
@@ -330,7 +330,9 @@ inverse_table([H-H1|T],Table,Table2):-
 no_color(AVM,NCAVM):-
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	lists:member(color-C,LAVM),!,
-	lists:delete(LAVM,color-C,NCLAVM),
+	%%lists:delete(LAVM,color-C,NCLAVM),
+	%% delete is deprecated
+	lists:subtract(LAVM,[color-C],NCLAVM),
 	xmg_brick_avm_avm:avm(NCAVM,NCLAVM),!.
 
 no_color(AVM,AVM):-

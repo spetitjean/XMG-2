@@ -33,9 +33,9 @@ new_name(Prefixe, Name) :--
 
 
 xmg:xml_convert_term(sem:sem(Sem), elem(semantics,children(Sem1))) :--
-    xmg:send(info,'\nHere before sem'),
+    %%xmg:send(info,'\nHere before sem'),
       %%lists:remove_duplicates(Sem,SemD),!,
-      xmg:send(info,'\nHere before xmlsem'),
+      %%xmg:send(info,'\nHere before xmlsem'),
 	xmlSem(Sem,Sem1),
 	!.
 

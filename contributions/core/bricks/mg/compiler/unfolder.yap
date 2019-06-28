@@ -50,9 +50,7 @@ unfold(mg:mg(Decls,Classes,Values),mg(OUDecls,UClasses,UValues)):--
 		 check_types(OUDecls,Classes,Type_Decls) )
 	),
 	
-
-
-	xmg:send(info,' unfolding classes '),
+	xmg:send(info,'\n unfolding classes '),
 	%%xmg:send(info,Classes),
 	xmg:unfold(Classes,UClasses),
 	%%xmg_brick_mg_compiler:send(info,UClasses),
@@ -110,7 +108,7 @@ check_types(OUDecls,Classes,Type_Decls):-
 
 	xmg:send(debug,'\n typing classes'),
 	xmg_brick_mg_typer:do_type_classes(Classes,Type_Decls),!,
-	xmg:send(info,'\n typed\n'),
+	xmg:send(info,'\n typed'),
 	!.
 
 unfold_vars(none,[]):-!.

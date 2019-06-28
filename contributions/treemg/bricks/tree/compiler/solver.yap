@@ -52,13 +52,13 @@ assert_node(Node) :-
 solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
 !,
         Space:=space,!,
-	xmg:send(info,'\nHere in solver'),
-	xmg:send(info,Relations),
+	%%xmg:send(info,'\nHere in solver'),
+	%%xmg:send(info,Relations),
 	
 	xmg_brick_tree_dominance:new_nodes(NodeList,Space,Nodes),!,
-	xmg:send(info,'\nDone new nodes'),
+	%%xmg:send(info,'\nDone new nodes'),
 	xmg_brick_tree_dominance:global_constraints(Space,NodeList,IntVars,IntPVars),!,
-	xmg:send(info,'\nFurther in solver'),
+	%%xmg:send(info,'\nFurther in solver'),
 	%% Here are the threads used by the plugins:
 	%% space
 	%% nodes - the list of nodes used by the solver
@@ -71,40 +71,40 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	xmg_table:table_put(TSNI,onodes,NodeList1,TSNO),
 	
 
-	xmg:send(info,'\nPosting plugins'),	
+	%%xmg:send(info,'\nPosting plugins'),	
 	xmg:post_plugins(Plugins) with solver(TSNO,_),
 
-	xmg:send(info,'\nPosted plugins'),	
+	%%xmg:send(info,'\nPosted plugins'),	
 	
-	xmg_brick_mg_compiler:send(info,'\nDoing nposts '),
+	%%xmg_brick_mg_compiler:send(info,'\nDoing nposts '),
 
 	do_nposts(Space,IntVars,NotUnifs),!,
 
-	xmg_brick_mg_compiler:send(info,'\nDoing posts '),
+	%%xmg_brick_mg_compiler:send(info,'\nDoing posts '),
 	%%xmg:send(info,Relations),
 	do_posts(Space,IntVars,IntPVars,NodeList,Relations),!,
-	xmg_brick_mg_compiler:send(info,'\nIgnored posts '),
+	%%xmg_brick_mg_compiler:send(info,'\nIgnored posts '),
 
 	
-	xmg_brick_mg_compiler:send(info,'\nBranching '),
+	%%xmg_brick_mg_compiler:send(info,'\nBranching '),
 
 
 	xmg_brick_tree_dominance:global_branch(Space,IntVars),!,
-	xmg_brick_mg_compiler:send(info,'\nGlobal branched '),
+	%%xmg_brick_mg_compiler:send(info,'\nGlobal branched '),
 	xmg_brick_tree_dominance:global_pbranch(Space,IntPVars),!,
-	xmg_brick_mg_compiler:send(info,'\nPBranched '),
+	%%xmg_brick_mg_compiler:send(info,'\nPBranched '),
 	xmg_brick_tree_dominance:do_branch(Space,NodeList),!,	
 
-	xmg_brick_mg_compiler:send(info,'\nBranched'),
+	%%xmg_brick_mg_compiler:send(info,'\nBranched'),
 
 	SolSpace := search(Space),
 
-	xmg_brick_mg_compiler:send(info,'\nSearched '),
+	%%xmg_brick_mg_compiler:send(info,'\nSearched '),
 	%%flush_output,
 
-	xmg_brick_tree_dominance:eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot),
-	xmg:send(info,'\nEq vals done'),
-	xmg:send(info,NodeList1).
+	xmg_brick_tree_dominance:eq_vals(SolSpace,NodeList,Eq,Left,Children,IsRoot).
+	%%xmg:send(info,'\nEq vals done'),
+	%%xmg:send(info,NodeList1).
 
 
 
@@ -112,17 +112,17 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 do_posts(_,_,_,_,[]):- !.
 
 do_posts(Space,IntVars,IntPVars,NodeList,[H|T]):-
-    xmg:send(info,'\nPosting one'),
-    xmg:send(info,H),
+    %%xmg:send(info,'\nPosting one'),
+    %%xmg:send(info,H),
     do_post(Space,IntVars,IntPVars,NodeList,H),
-    xmg:send(info,'\nPosted one'),
+    %%xmg:send(info,'\nPosted one'),
 	do_posts(Space,IntVars,IntPVars,NodeList,T),!.
 
 
 
 do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 	B>A,!,
-	  xmg:send(info,'\nPost 1'),
+	  %%xmg:send(info,'\nPost 1'),
 	  get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,3),
@@ -131,18 +131,18 @@ do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 
 do_post(Space,IntVars,IntPVars,_,vstep(one,A,B)):-
 	A>B,!,
-	  xmg:send(info,'\nPost 2'),
+	  %%xmg:send(info,'\nPost 2'),
 	  get_rel(B,A,IntVars,IntVar),
-	  xmg:send(info,'\nPost 2.3'),
+	  %%xmg:send(info,'\nPost 2.3'),
 	get_prel(A,B,IntPVars,IntPVar),
-	xmg:send(info,'\nPost 2.5'),
+	%%xmg:send(info,'\nPost 2.5'),
 	Space += dom(IntVar,2),
 	Space += dom(IntPVar,1),
 	!.
 
 do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 	B>A,!,
-	  xmg:send(info,'\nPost 3'),
+	  %%xmg:send(info,'\nPost 3'),
 	get_rel(A,B,IntVars,IntVar),
 	
 	Space += dom(IntVar,3),
@@ -150,7 +150,7 @@ do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 
 do_post(Space,IntVars,_,_,vstep(more,A,B)):-
     A>B,!,
-      	  xmg:send(info,'\nPost 4'),
+      	  %%xmg:send(info,'\nPost 4'),
 
 	get_rel(B,A,IntVars,IntVar),
 	
@@ -159,7 +159,7 @@ do_post(Space,IntVars,_,_,vstep(more,A,B)):-
 
 do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 	B>A,!,
-	  xmg:send(info,'\nPost 5'),
+	  %%xmg:send(info,'\nPost 5'),
 	get_rel(A,B,IntVars,IntVar),
 	
 	IntSet := intset([1,3]),
@@ -168,7 +168,7 @@ do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 
 do_post(Space,IntVars,_,_,vstep(any,A,B)):-
     A>B,!,
-      	  xmg:send(info,'\nPost 6'),
+      	  %%xmg:send(info,'\nPost 6'),
 
 	get_rel(B,A,IntVars,IntVar),
 	
@@ -179,7 +179,7 @@ do_post(Space,IntVars,_,_,vstep(any,A,B)):-
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
     B>A,!,
-      	  xmg:send(info,'\nPost 7'),
+      	  %%xmg:send(info,'\nPost 7'),
 	get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,3),
@@ -193,7 +193,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
     A>B,!,
-      	  xmg:send(info,'\nPost 8'),
+      	  %%xmg:send(info,'\nPost 8'),
 	get_rel(B,A,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
 	Space += dom(IntVar,2),
@@ -207,7 +207,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneleft,A,B)):-
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
     B>A,!,
-      	  xmg:send(info,'\nPost 9'),
+      	  %%xmg:send(info,'\nPost 9'),
 
 	get_rel(A,B,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
@@ -222,7 +222,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
 
 do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
     A>B,!,
-      	  xmg:send(info,'\nPost 10'),
+      	  %%xmg:send(info,'\nPost 10'),
 
 	get_rel(B,A,IntVars,IntVar),
 	get_prel(A,B,IntPVars,IntPVar),
@@ -240,7 +240,7 @@ do_post(Space,IntVars,IntPVars,NodeList,vstep(oneright,A,B)):-
 
 do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
 	B>A,!,
-      	  xmg:send(info,'\nPost 11'),
+      	  %%xmg:send(info,'\nPost 11'),
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
 	Left:=:left(NB),
@@ -254,17 +254,17 @@ do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
 
 do_post(Space,IntVars,_,NodeList,hstep(one,A,B)):-
     A>B,!,
-      xmg:send(info,'\nPost 12'),
+      %%xmg:send(info,'\nPost 12'),
 	get_node(NodeList,A,NA),
 	get_node(NodeList,B,NB),
-	xmg:send(info,'\nPost 12.1'),
+	%%xmg:send(info,'\nPost 12.1'),
 	Left:=:left(NB),
 	Right:=:right(NA),
-	xmg:send(info,'\nPost 12.5'),
+	%%xmg:send(info,'\nPost 12.5'),
 	Empty := intset([]),
 	Space += rel(Left,'SOT_INTER',Right,'SRT_EQ',Empty),
 	get_rel(B,A,IntVars,IntVar),
-	xmg:send(info,'\nPost 12.9'),
+	%%xmg:send(info,'\nPost 12.9'),
 	Space += dom(IntVar,5),  
 	!.
 
@@ -413,9 +413,9 @@ get_node(N,[M-_|T],Node):-
 get_rel(A,B,Rels,Rel):- 
 	B>A,!,
 	  A1 is A - 1,
-	  xmg:send(info,'\nGet Rel'),
+	  %%xmg:send(info,'\nGet Rel'),
 	  xmg_brick_tree_dominance:nbNodes(NNodes),
-	  xmg:send(info,'\nGot nbNodes'),
+	  %%xmg:send(info,'\nGot nbNodes'),
 	I is (A1*NNodes)-(A1*A//2)+B-A,
 	lists:nth(I,Rels,Rel),
 	!.

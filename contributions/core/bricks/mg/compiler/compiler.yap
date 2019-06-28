@@ -179,8 +179,8 @@ compile_file(File,Eval):-
 
 	xmg_brick_mg_unfolder:unfold(Ordered,Unfolded),!,
 	xmg:send(info,'\nUnfolded '),
-	xmg:send(info,'\n'),
-	xmg:send(info,Unfolded),
+	%%xmg:send(info,'\n'),
+	%%xmg:send(info,Unfolded),
 	xmg:send_nl(info),	
 	xmg_brick_decls_principles:principles(Unfolded),!,
 	xmg:send(debug,' principles done '),
@@ -245,7 +245,7 @@ eval:-
 
 	get_dim(trace,Computed,Trace),
 
-	%% xmg:send(info,'\ngot trace\n'),
+	%%xmg:send(info,'\ngot trace\n'),
 
 	findall(Mutex,xmg:mutex(Mutex),Mutexes),
 	xmg:send(info,'\nMutexes:'),

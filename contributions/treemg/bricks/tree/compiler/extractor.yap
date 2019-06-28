@@ -20,12 +20,12 @@
 :- module(xmg_brick_tree_extractor).
 
 extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
-    xmg:send(info,'\nStarting extraction'),
+    %%xmg:send(info,'\nStarting extraction'),
     make_tree(IsRoot,Eq,Children,Left,Tree),
-    xmg_brick_mg_compiler:send(info,'\nTree made '),
-    xmg:send(info,NodeList1),
-    unify_in_tree(Tree,UTree,NodeList1),
-    xmg_brick_mg_compiler:send(info,'\nTree unified ').
+    %%xmg_brick_mg_compiler:send(info,'\nTree made '),
+    %%xmg:send(info,NodeList1),
+    unify_in_tree(Tree,UTree,NodeList1).
+
 
 
 
@@ -33,15 +33,15 @@ extract(IsRoot,Eq, Children, Left, NodeList1, UTree):-
 %% Converting sets to a tree
 
 make_tree(IsRoot,Eq,Children,Left,tree:tree(Root,Trees)):-  %% Trees : list of children trees
-    xmg:send(info,'\nSearching for the root'),
+    %%xmg:send(info,'\nSearching for the root'),
 	search_root(IsRoot,Eq,Root),!,
-    xmg:send(info,'\nSearching for children'),
+    %%xmg:send(info,'\nSearching for children'),
     search_children(Root,Children,NChildren),!,
-    xmg:send(info,'\nChildren eqs'),
+    %%xmg:send(info,'\nChildren eqs'),
     children_eqs(NChildren,NChildrenEqs,Eq),!,
-    xmg:send(info,'\nSearching for lefts'),
+    %%xmg:send(info,'\nSearching for lefts'),
     search_lefts(NChildrenEqs,Left,ChildrenLefts),!,
-        xmg:send(info,'\nSorting children'),
+        %%xmg:send(info,'\nSorting children'),
 	sort_children(NChildrenEqs,ChildrenLefts,NChildrenSorted),!,
 	make_subtrees(NChildrenSorted,Eq,Children,Left,Trees),!.
 
@@ -93,10 +93,10 @@ search_children([N|_],Children,L):-
 
 children_eqs([],[],_):-	!.
 children_eqs([C|T],[Leqs|L],Eqs):-
-        xmg:send(info,'\nSearching in eqs'),
+        %%xmg:send(info,'\nSearching in eqs'),
 	search_in_eqs(C,Eqs,Leqs),
 	%%print(user_output,Leqs),
-	xmg:send(info,'\nRemoving children'),
+	%%xmg:send(info,'\nRemoving children'),
 	remove_children(Leqs,T,T1),
 	children_eqs(T1,L,Eqs),!.
 
@@ -111,10 +111,11 @@ remove_children([H|T],L,LR):-
 	remove_children(T,L1,LR),!.
 
 remove_child(C,L,LR):-
-    xmg:send(info,'\nRemoving a child'),
+    %%xmg:send(info,'\nRemoving a child'),
     %%lists:delete(L,C,LR),
     lists:subtract(L,[C],LR),
-    xmg:send(info,'\nRemoved'),!.
+    %%xmg:send(info,'\nRemoved'),
+    !.
 
 
 
@@ -147,24 +148,24 @@ unify_in_trees([H|T],[H1|T1], NodeList):-
 
 unify_in_tree(tree:tree(T,Trees), tree:tree(T1,Trees1), NodeList):-
     unify_node(T,T1,NodeList),!,
-    xmg:send(info,'\nOne node unified'),
+    %%xmg:send(info,'\nOne node unified'),
 	unify_in_trees(Trees,Trees1,NodeList),!.
 unify_in_tree(A,A1,NodeList):-
 	unify_node(A,A1,NodeList),!.
 
 unify_node([NNode],node(P,F,N),NodeList):-
-    xmg:send(info,'\nLooking for a node'),
-    xmg:send(info,NNode),
-    xmg:send(info,NodeList),
+    %%xmg:send(info,'\nLooking for a node'),
+    %%xmg:send(info,NNode),
+    %%xmg:send(info,NodeList),
     xmg_brick_tree_solver:get_node(NNode,NodeList,node(P1,F1,N1)),
-    xmg:send(info,'\nFound a node'),
+    %%xmg:send(info,'\nFound a node'),
     P=P1,
     F=F1,
     N=N1,
-        xmg:send(info,'\nUnified a node'),
+        %%xmg:send(info,'\nUnified a node'),
 	!.
 unify_node([N1],node(P2,F2,NN2),NodeList):-
-    xmg:send(info,'\nFailing unify node'),
+    %%xmg:send(info,'\nFailing unify node'),
 	%% get_node(N1,NodeList,node(P1,F1,NN1)),!,
 	%% xmg_nodename:nodename(NN1,Name1),
 	%% xmg_nodename:nodename(NN2,Name2),
@@ -193,7 +194,7 @@ unify_node([N1],node(P2,F2,NN2),NodeList):-
 	!.
 unify_node([NNode|T],node(P,F,N),NodeList):-
     xmg_brick_tree_solver:get_node(NNode,NodeList,node(P,F,N)),!,
-			  xmg:send(info,'\nUnified a node'),
+	%%		  xmg:send(info,'\nUnified a node'),
 	unify_node(T,node(P,F,N),NodeList),
 	!.
 unify_node([N1|T],node(P2,F2,NN2),NodeList):-
