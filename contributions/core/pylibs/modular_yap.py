@@ -13,7 +13,7 @@ class YAP(subprocess.Popen):
         print(xmg.command.YAPDIR)
         if xmg.command.YAPDIR is not None:            
             pregoals.append("add_to_path('.install/yap')")
-            pregoals.append("asserta(xmg:path(\'/home/simon/XMG-2/.install/yap/\'))")
+            pregoals.append("asserta(xmg:path(\'/home/simon/XMG-2-DEV/XMG-2/.install/yap/\'))")
             pregoals.append("add_to_path('%s')" % xmg.command.YAPDIR)
         #pregoals.append("use_module(\'%s/xmg/brick/mg/compiler/compiler.yap\')" % xmg.command.YAPDIR)
         pregoals.append("use_module('xmg/brick/mg/compiler/compiler.yap\')")

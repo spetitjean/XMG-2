@@ -24,15 +24,15 @@
 %%:- use_module('xmg/brick/mg/edcg.yap').
 %%:- use_module(library(lists)).
 
-:- print(user_error,'\nLoading Tokenizer').
+%%:- print(user_error,'\nLoading Tokenizer').
 :- xmg:edcg.
-:- print(user_error,'\nLoaded edcg').
+%%:- print(user_error,'\nLoaded edcg').
 
 %%:- multifile(xmg:punctuation/1).
 %%:- multifile(xmg:punctuation_to_token/2).
 %%:- multifile(xmg:keyword/1).
 
-:- print(user_error,'\nDeclaring threads').
+%%:- print(user_error,'\nDeclaring threads').
 
 :- edcg:thread(macros  ,edcg:table  ). % table of macros
 :- edcg:thread(toks    ,edcg:queue  ). % accumulated tokens
@@ -44,7 +44,7 @@
 :- edcg:thread(encoding,edcg:value  ). % current encoding (default utf-8)
 :- edcg:thread(tokbuf  ,edcg:queue  ). % buffer of tokens inserted by macros
 
-:- print(user_error,'\nDeclared threads').
+%%:- print(user_error,'\nDeclared threads').
 
 :- edcg:weave([chars, line, col],
 	      [input_getc/1, input_gets/1, input_getline/1,
@@ -133,26 +133,27 @@ to_eol  -->> [].
 %% we might want to make these atoms configurable...
 %%=============================================================================
 
-tokens -->>     print(user_error,'\nStarting tokens'),
-spaces,
-    print(user_error,'\nGot spaces'),
-more_tokens.
+tokens -->>
+  %%print(user_error,'\nStarting tokens'),
+  spaces,
+  %%print(user_error,'\nGot spaces'),
+  more_tokens.
 
 coord(coord(F,L,C)) -->>
     line::get(L), col::get(C), file::top(F).
 
 more_tokens -->>
-    print(user_error,'\nStarting more tokens'),
+    %%print(user_error,'\nStarting more tokens'),
     token(T,C), !,
-	xmg:send(info,T),
-	xmg:send(info,'\n'),
+	%%xmg:send(info,T),
+	%%xmg:send(info,'\n'),
     (T=id(include) -> more_tokens_include ;
      T=id(macro)   -> more_tokens_macro ;
      (toks::put(C), toks::put(T))),
     tokens.
 more_tokens -->> [].
 more_tokens -->>
-xmg:send(info,'\nUnrecognized token'),
+%%xmg:send(info,'\nUnrecognized token'),
 line::get(L), col::get(C), file::top(F), Coord=coord(F,L,C), input_getline(S),
             throw(xmg(tokenizer_error(unrecognized(S,Coord)))).
 
@@ -161,17 +162,17 @@ line::get(L), col::get(C), file::top(F), Coord=coord(F,L,C), input_getline(S),
 %%=============================================================================
 
 more_tokens_include -->>
-    print(user_error,'\nStarting more tokens include'),
+    %%print(user_error,'\nStarting more tokens include'),
     spaces,
     fileName(File),
-    print(user_error,'\ngot Filename: '),
+    %%print(user_error,'\ngot Filename: '),
     atom_codes(AFile,File),
-    print(user_error,AFile),
+    %%print(user_error,AFile),
     resolve_file(AFile, File, Path),
-    print(user_error,'\nPath: '),
-    print(user_error,Path),
+    %%print(user_error,'\nPath: '),
+    %%print(user_error,Path),
     divert_to_file(Path),
-    print(user_error,'\nDiverted to file'),
+    %%print(user_error,'\nDiverted to file'),
     tokens.
 
 resolve_file(AFile, File, Path) -->>
@@ -183,9 +184,9 @@ resolve_file(AFile, File, Path) -->>
 
 divert_to_file(AFile) -->>
     encoding::get(Encoding),
-    print(user_error,'\nGot encoding'),
+    %%print(user_error,'\nGot encoding'),
     file_to_string(AFile, Text, Encoding),
-    print(user_error,'\nDid file to string'),
+    %%print(user_error,'\nDid file to string'),
     chars::value(Chars), line::get(Line), col::get(Col),
     file::push((Chars, Line, Col)),
     file::push(AFile),
@@ -240,22 +241,22 @@ macro_more_tokens -->> [].
 token(T,C) -->>      dimtype(T,C), !.
 token(T,C) -->>      inserted(T,C), !.
 token(T,C) -->>      punctuation(T,C), !.
-token(T,C) -->>      print(user_error,'\ntoken identifier'),
+token(T,C) -->>      %%print(user_error,'\ntoken identifier'),
                      identifier(T,C), !.
-token(T,C) -->>      print(user_error,'\ntoken number'),
+token(T,C) -->>      %%print(user_error,'\ntoken number'),
                      number(T,C), !.
-token(T,C) -->>      print(user_error,'\ntoken string'),
+token(T,C) -->>      %%print(user_error,'\ntoken string'),
                      string(T,C), !.
 
 inserted(T,C) -->> tokbuf::get((T,C)). % was actually contributed by macro expansion
 
 identifier(T,C) -->>
     coord(C1),
-    print(user_error,'\nGot coord'),
+    %%print(user_error,'\nGot coord'),
     word with buf([]-L,[]-[]),
-    print(user_error,'\nGot word'),
+    %%print(user_error,'\nGot word'),
     atom_codes(A,L),
-    print(user_error,'\nGot codes'),
+    %%print(user_error,'\nGot codes'),
     ( macros::tget(A,Ts)
       -> (add_coord(Ts,Ps,C1), tokbuf::enq_list(Ps), token(T,C))
       ; identifier_to_token(A,T), C=C1 ).
@@ -263,32 +264,32 @@ identifier(T,C) -->>
 add_coord([],[],_).
 add_coord([H|T],[(H,C)|L],C) :- add_coord(T,L,C).
 
-word      -->>     print(user_error,'\nstarting word'),
+word      -->>     %%print(user_error,'\nstarting word'),
                    input_getc(C),
-                   print(user_error,'\nGot c'),
-                   print(user_error,C),
+                   %%print(user_error,'\nGot c'),
+                   %%print(user_error,C),
                    is_word_ini(C),
-                   print(user_error,'\nIs word ini done'),
+                   %%print(user_error,'\nIs word ini done'),
                    buf::put(C), more_word.
 more_word -->>
-                  print(user_error,'\nstarting more word'),
+                  %%print(user_error,'\nstarting more word'),
                   input_getc(C),
-                  print(user_error,'\nGot c'),
+                  %%print(user_error,'\nGot c'),
 		  atom_codes(A,[C]),
-                   print(user_error,A),		  
+                  %%print(user_error,A),		  
 		  {is_word_mid(C)}, !,
                   buf::put(C),
                   more_word.
 more_word -->> [].
 
 
-is_word_ini(C) :-     print(user_error,'\nIs word ini'),
+is_word_ini(C) :-     %%print(user_error,'\nIs word ini'),
     ( code_type(C, alpha); C=0'_ ), !. %'
 		
 is_word_mid(C) :-
-    print(user_error,'Is word mid'),
+    %%print(user_error,'Is word mid'),
     ( code_type(C, alnum); C=0'_ ; C=0'- ),
-    xmg:send(info,'\nDone is word mid').
+    %%xmg:send(info,'\nDone is word mid').
     !. 
 
 %% converting an identifier into a token:
@@ -394,9 +395,9 @@ more_dimtype2 -->>
 %    xmg_tokenizer_punct:punctuation(P),
 punctuation(T,C) :--
     coord(C),
-    xmg:send(info,'\nPunctuation'),
+    %%xmg:send(info,'\nPunctuation'),
     xmg:punctuation(A),
-    xmg:send(info,A),
+    %%xmg:send(info,A),
     atom_codes(A,S),
     input_gets(S), !,
     punctuation_to_token(A,T).
@@ -422,11 +423,11 @@ xmg:punctuation_to_token('-', bool('-')).
 %%=============================================================================
 
 file_to_string(Path, String, Encoding) :-
-    print(user_error,'\nIn file_to_string, trying to open file: '),
+    %%print(user_error,'\nIn file_to_string, trying to open file: '),
     %% This fails because of this Yap import problem at the moment (only with includes)
-    print(user_error,Path),    
+    %%print(user_error,Path),    
     open(Path, read, IStream,[encoding(Encoding)]),
-    print(user_error,'\nOpened'),
+    %%print(user_error,'\nOpened'),
     stream_read_all(IStream, String),
     close(IStream), !.
 	
@@ -443,7 +444,7 @@ stream_read_all(IStream, String) :--
 
 tokenize_string(Name, Text, Tokens, Encoding) :--
 xmg_table:table_new(DIn),
-print(user_error,'\nTable created'),
+%%print(user_error,'\nTable created'),
     tokens with (chars(Text,[]),
 		 file([Name],_),
 		 line(1,R),
@@ -454,9 +455,9 @@ print(user_error,'\nTable created'),
 		 macros(DIn,_)).
 
 tokenize_file(Path, Tokens, Encoding) :--
-print(user_error,'\nStarting tokenize_file'),
+%%print(user_error,'\nStarting tokenize_file'),
     file_to_string(Path, String, Encoding),
-print(user_error,'\nFile to string done'),
+%%print(user_error,'\nFile to string done'),
     tokenize_string(Path, String, Tokens, Encoding).
 
 %%=============================================================================

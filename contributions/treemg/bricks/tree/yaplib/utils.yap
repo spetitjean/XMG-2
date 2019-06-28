@@ -17,18 +17,21 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_tree_utils, [
-	      node_with_propq/2,
-	      node_with_featq/2,
-	      node_with_prop_or_featq/2,
-	      node_with_prop/2,
-	      node_with_feat/2,
-	      node_with_prop_or_feat/2
-	  ]).
+:- module(xmg_brick_tree_utils).
+%% :- module(xmg_brick_tree_utils, [
+%% 	      node_with_propq/2,
+%% 	      node_with_featq/2,
+%% 	      node_with_prop_or_featq/2,
+%% 	      node_with_prop/2,
+%% 	      node_with_feat/2,
+%% 	      node_with_prop_or_feat/2
+%% 	  ]).
 
 :- use_module(library(lists), [member/2]).
-:- xmg:import('xmg/utils', [memberq/2]).
-:- xmg:import('xmg/brick/avm/avm', [avm/2]).
+:- xmg:import('xmg/utils').
+%% :- xmg:import('xmg/utils', [memberq/2]).
+xmg:import('xmg/brick/avm/avm').
+%% :- xmg:import('xmg/brick/avm/avm', [avm/2]).
 
 
 %==============================================================================
@@ -38,13 +41,14 @@
 %==============================================================================
 
 node_with_propq(FV, node(P,_,_)) :-
-    avm(P, PL), memberq(FV, PL), !.
+    xmg_brick_avm_avm:avm(P, PL),
+    xmg_utils:memberq(FV, PL), !.
 
 node_with_featq(FV, node(_, F, _)) :-
-    avm(F, FL),
-    (memberq(FV, FL);
-     (member(top-TOP, FL),avm(TOP, TL),memberq(FV, TL));
-     (member(bot-BOT, FL),avm(BOT, BL),memberq(FV, BL))),
+    xmg_brick_avm_avm:avm(F, FL),
+    (xmg_utils:memberq(FV, FL);
+     (member(top-TOP, FL),xmg_brick_avm_avm:avm(TOP, TL),xmg_utils:memberq(FV, TL));
+     (member(bot-BOT, FL),xmg_brick_avm_avm:avm(BOT, BL),xmg_utils:memberq(FV, BL))),
     !.
 
 node_with_prop_or_featq(FV, Node) :-
@@ -60,13 +64,13 @@ node_with_prop_or_featq(FV, Node) :-
 %==============================================================================
 
 node_with_prop(PV, node(P,_,_)) :-
-    avm(P, PL), member(PV, PL), !.
+    xmg_brick_avm_avm:avm(P, PL), member(PV, PL), !.
 
 node_with_feat(FV, node(_,F,_)) :-
-    avm(F, FL),
+    xmg_brick_avm_avm:avm(F, FL),
     (member(FV, FL);
-     (member(top-TOP, FL), avm(TOP, TL), member(FV, TL));
-     (member(bot-BOT, BL), avm(BOT, BL), member(FV, BL))),
+     (member(top-TOP, FL), xmg_brick_avm_avm:avm(TOP, TL), member(FV, TL));
+     (member(bot-BOT, BL), xmg_brick_avm_avm:avm(BOT, BL), member(FV, BL))),
     !.
 
 node_with_prop_or_feat(FV, Node) :-

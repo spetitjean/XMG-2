@@ -1,4 +1,5 @@
-:- module(xmg_utils, [nthq/3, memberq/2, implements/2, zip/3, zip/4, zip/5]).
+%%:- module(xmg_utils, [nthq/3, memberq/2, implements/2, zip/3, zip/4, zip/5]).
+:- module(xmg_utils).
 :- use_module(library(lists), [nth/3, length/2]).
 :- use_module(library(apply), [maplist/3, maplist/4, maplist/5]).
 

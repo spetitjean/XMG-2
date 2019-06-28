@@ -17,9 +17,12 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
+:-print(user_error,'\nOpening module').
 :-module(xmg_brick_mg_prelude).
 
+:-print(user_error,'\nDoing a multifile').
 :-multifile(user:term_expansion/2).
+:-print(user_error,'\nDid a multifile').
 
 term_expansion((:- xmg:edcg), R) :-
     xmg:path(XMG),

@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_mg_solver, []).
+:- module(xmg_brick_mg_solver).
 
 :-xmg:edcg.
 :-edcg:thread(solver,edcg:table).

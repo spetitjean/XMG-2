@@ -17,13 +17,13 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_rank_preparer, []).
+:- module(xmg_brick_rank_preparer).
 :- use_module(library(apply), [maplist/3]).
 
 :- xmg:edcg.
 
 %%:- xmg:import('xmg/brick/avm/avm').
-%%:- xmg:import('xmg/brick/tree/utils').
+:- xmg:import('xmg/brick/tree/utils').
 
 :-edcg:using(xmg_brick_mg_preparer:preparer).
 :-edcg:weave([preparer],[prepare/2]).
@@ -36,6 +36,6 @@ prepare(I, Out) :--
     !.
 
 prepare_one(Node, Result) :-
-    node_with_prop(rank-C, Node)
+    xmg_brick_tree_utils:node_with_prop(rank-C, Node)
     -> Result=rank(C)
     ;  Result=rank(none).

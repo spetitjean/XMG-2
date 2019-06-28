@@ -22,7 +22,7 @@
 :- use_module(library(apply), [maplist/3]).
 
 :- xmg:edcg.
-:- xmg:import('xmg/brick/tree/utils', [node_with_prop_or_featq/2]).
+:- xmg:import('xmg/brick/tree/utils').
 
 :-edcg:using([xmg_brick_mg_preparer:preparer]).
 :-edcg:weave([preparer],[prepare/2]).
@@ -38,5 +38,5 @@ prepare(feat(A,V,_), Out) :--
 
 prepare_one(FV, Node, Result) :-
     xmg:send(info,'\nIn prepare_one'),
-    (node_with_prop_or_featq(FV, Node)
+    (xmg_brick_tree_utils:node_with_prop_or_featq(FV, Node)
     -> Result=true ; Result=false).

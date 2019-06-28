@@ -72,7 +72,7 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	
 
 	xmg:send(info,'\nPosting plugins'),	
-	%%xmg:post_plugins(Plugins) with solver(TSNO,_),
+	xmg:post_plugins(Plugins) with solver(TSNO,_),
 
 	xmg:send(info,'\nPosted plugins'),	
 	

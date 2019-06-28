@@ -16,7 +16,7 @@
 %% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %%=============================================================================
 
-:-print(user_error,'\nStarting EDCG').
+:-write(user_error,'\nStarting EDCG').
 
 :- module(edcg, [op(1200, xfx, '-->>'),
 		 op(1200, xfx, ':--' ),

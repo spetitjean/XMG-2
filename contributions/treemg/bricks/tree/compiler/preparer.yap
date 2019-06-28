@@ -66,9 +66,9 @@ prepare(syn(Syn,Trace),prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relation
 	xmg_table:table_new(Extras),
 	xmg_table:table_put(Extras,nodes,GetNodes,TNodes),
 
-	%%xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,FNodes),
+	xmg:prepare_plugins(GetNodes,Plugins,prepared(OutPlugins,SynNC)) with preparer(TNodes,FNodes),
 	%% To be removed when plugins are back (when YAP imports are cleaned):
-	SynNC=GetNodes,
+	%% SynNC=GetNodes,
 
 	xmg:send(info,'\nPlugins ignored'),
 	

@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_colors_preparer, []).
+:- module(xmg_brick_colors_preparer).
 :- use_module(library(apply), [maplist/3]).
 :- xmg:edcg.
 
@@ -31,7 +31,7 @@ prepare(I,Out):--
     preparer::tget(nodes, Nodes),
     maplist(prepare_one, Nodes, Out),
     maplist(no_color, Nodes, NNodes),
-    preparer::tput(nodes,NNodes), !.
+    preparer::tput(nodes,NNodes),!.
 
 
 prepare_one(node(P,F,N), Color) :- 
@@ -56,9 +56,10 @@ search_color(Name, [_|T], C) :-
 no_color(node(AVM,F,N),node(NCAVM,F,N)):-
 	xmg_brick_avm_avm:avm(AVM,LAVM),
 	lists:member(color-C,LAVM),!,
-	lists:delete(LAVM,color-C,NCLAVM),
+	      lists:subtract(LAVM,[color-C],NCLAVM),
+	      xmg:send(info,NCLAVM),
 	xmg_brick_avm_avm:avm(NCAVM,NCLAVM),
-	xmg:send(debug,'\nremoved color!'),!.
+	xmg:send(info,'\nremoved color!'),!.
 
 no_color(AVM,AVM):-
 	!.

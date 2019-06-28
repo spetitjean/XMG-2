@@ -155,9 +155,10 @@ pop2N([H1,H2|T],N,[H3,H4|T1],L):-
 
 
 tokArgs(token(Coord,Token),Tok,Args):-
-    	xmg_brick_mg_compiler:send(info,'\nTokArg'),
+    	%%xmg_brick_mg_compiler:send(info,'\nTokArg'),
 	Token=..[Tok|Args],
-	xmg_brick_mg_compiler:send(info,'\ndone'),!.
+	%%xmg_brick_mg_compiler:send(info,'\ndone'),
+	!.
 
 
 
@@ -167,9 +168,10 @@ tokArgs(token(Coord,Token),Tok,Args):-
 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
-	xmg_brick_mg_compiler:send(info,Token),
+	%%xmg_brick_mg_compiler:send(info,Token),
 	generated_parser:action(State,Tok,'accept'),
-	xmg_brick_mg_compiler:send(info,'\nAccepted\n'),!.
+	%%xmg_brick_mg_compiler:send(info,'\nAccepted\n'),
+	!.
 
 parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
@@ -209,7 +211,7 @@ parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
 
 generated_parser:action(State,Tok,'reduce',NRule),
-	xmg_brick_mg_compiler:send(info,'\nReducing\n'),
+	%%xmg_brick_mg_compiler:send(info,'\nReducing\n'),
 
 
 	steps::incr ,
@@ -230,7 +232,7 @@ parse_sem([State|States],[Token|Tokens]):--
 	tokArgs(Token,Tok,Args),
 	
 	generated_parser:action(State,Tok,'shift',NState),
-	xmg_brick_mg_compiler:send(info,'\nShifting\n'),
+	%%xmg_brick_mg_compiler:send(info,'\nShifting\n'),
 
 	%% xmg:send(info,'\nstate '),
 	%% xmg:send(info,State),
@@ -248,7 +250,7 @@ parse_sem([State|States],[Token|Tokens]):--
 
 parse_sem([State|States],[token(coord(File,Line,Col),Token)|Tokens]):--
 %% error is before last
-	xmg_brick_mg_compiler:send(info,'\nErroring\n'),
+	%%xmg_brick_mg_compiler:send(info,'\nErroring\n'),
 	steps::get(Steps),
 	lastError(Err,StepE),
 	%%errors::top(error(Err,StepE)),
@@ -324,20 +326,21 @@ parse_sem(States,Tokens,Sem):--
 
 parse_file(File,Sem):--
 xmg:send(info,'HERE'),
-        print(user_error,'\nParsing file'),
+        %%print(user_error,'\nParsing file'),
 	xmg_brick_mg_compiler:encoding(Encoding),
 	xmg_brick_mg_compiler:send(info,'\ntokenizing\n'),
 	xmg_brick_mg_tokenizer:tokenize_file(File,Tokens,Encoding),
 	xmg_brick_mg_compiler:send(info,'\ntokenized\n'),
-	xmg_brick_mg_compiler:send(info,Tokens),
-	xmg_brick_mg_compiler:send(debug,'\n'),
+	%%xmg_brick_mg_compiler:send(info,Tokens),
+	%%xmg_brick_mg_compiler:send(debug,'\n'),
 	remove_coords(Tokens,Toks),
-	xmg_brick_mg_compiler:send(info,'\nToks removed'),
+	%%xmg_brick_mg_compiler:send(info,'\nToks removed'),
 	parse_sem([0],Toks,Sem) with errors(Errors,[error(error(none,none,none),0)]),!.
 
 remove_coords([coord(A,B,C)],[token(coord(A,B,C),'(EOF)')]):- !.
 remove_coords([Token],[token(coord(0,0,end),'(EOF)')]):-
-	xmg_brick_mg_compiler:send(debug,Token),!.
+    %%xmg_brick_mg_compiler:send(debug,Token),
+    !.
 remove_coords([coord(A1,B1,C1),coord(A,B,C)|T],T1):-
 	%xmg_brick_mg_compiler:send(info,H),
 	remove_coords([coord(A,B,C)|T],T1),!.

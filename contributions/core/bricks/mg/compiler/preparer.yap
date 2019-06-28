@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_mg_preparer, []).
+:- module(xmg_brick_mg_preparer).
 :- xmg:import('xmg/plugins').
 
 
