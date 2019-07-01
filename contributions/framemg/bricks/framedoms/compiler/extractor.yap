@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_framedoms_extractor, []).
+:- module(xmg_brick_framedoms_extractor).
 
 extract(Model,ModelEE):-
     xmg:send(debug,'\nExtracting frame: '),

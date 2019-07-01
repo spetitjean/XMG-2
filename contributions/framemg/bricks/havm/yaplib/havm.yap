@@ -17,7 +17,7 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:- module(xmg_brick_havm_havm, [h_avm/3, const_h_avm/2]).
+:- module(xmg_brick_havm_havm).
 
 :- use_module(library(atts)).
 :- use_module(library(rbtrees)).

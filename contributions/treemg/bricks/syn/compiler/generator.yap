@@ -22,7 +22,7 @@
 
 :- xmg:edcg.
 
-:-xmg:import('xmg/brick/syn/engine').
+%%:-xmg:import('xmg/brick/syn/engine').
 
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).

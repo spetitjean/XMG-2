@@ -26,6 +26,8 @@
 
 %%:- edcg:thread(name,edcg:counter).
 
+:-xmg:edcg.
+
 :- edcg:using(xmg_brick_mg_convert:name).
 
 :- edcg:weave([name],[xmlHFeats/2, new_name/2]).

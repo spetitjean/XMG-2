@@ -19,8 +19,9 @@
 
 
 :-module(xmg_brick_frame_generator).
-:-use_module('xmg/brick/frame/engine').
+%%:-use_module('xmg/brick/frame/engine').
 
+:-xmg:edcg.
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:name).
 :-edcg:using(xmg_brick_mg_generator:code).

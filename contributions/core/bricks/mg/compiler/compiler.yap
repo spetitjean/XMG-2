@@ -17,7 +17,6 @@
 %%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %% ========================================================================
 
-:-print(user_error,'\nOpening module compiler').
 :-module(xmg_brick_mg_compiler).
 
 xmg:import(File):-
@@ -27,16 +26,12 @@ xmg:import(File):-
     %%xmg:send(info,XMG),
     atom_concat([XMG,File],Concat),
     load_files([Concat],[silent(true)]).
-:-print(user_error,'\nDone one definition').
 xmg:import(File,Import):-
     xmg:path(XMG),
     atom_concat([XMG,File],Concat),
     use_module(Concat,Import).
  
-:-print(user_error,'\nLoading prelude').
 :-xmg:import('xmg/brick/mg/compiler/prelude.yap').
-:-print(user_error,'\nLoaded prelude').
-
 
 :-dynamic(principle/1).
 :-dynamic(xmg:principle/3).
@@ -104,7 +99,6 @@ send(O,M):-!, xmg:send(O,M),!.
 
 
 compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
-    print(user_error,'\n\nHERE'),
 	asserta(encoding(Encoding)),
 	(
 	    Debug='on'
@@ -135,7 +129,6 @@ compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
              ;
 	     (true)
 	),!,
-	xmg:send(info,'\n\n\nhere'),
 	 catch(compile_file(File,Eval),Exception,true),
 	 (
 	     not(var(Exception))->
