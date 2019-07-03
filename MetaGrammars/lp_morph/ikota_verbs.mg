@@ -51,16 +51,16 @@ class Init
 class Subject_Clitic
 {
 {<morph>{f_sujet <- "m"};<iface>{[p=1, n=sg]}}
-%   | 
-% {<morph>{f_sujet <- "ò" };<iface>{[p=2, n=sg]}}
-%   |
-% {<morph>{f_sujet <- "à" };<iface>{[p=3, n=sg]}}
-%   |
-% {<morph>{f_sujet <- "mín"};<iface>{[p=1, n=pl]}}
-%   |
-% {<morph>{f_sujet <- "bíh" };<iface>{[p=2, n=pl]}}
-%   | 
-% {<morph>{f_sujet <- "b" };<iface>{[p=3, n=pl]}}
+  | 
+{<morph>{f_sujet <- "ò" };<iface>{[p=2, n=sg]}}
+  |
+{<morph>{f_sujet <- "à" };<iface>{[p=3, n=sg]}}
+  |
+{<morph>{f_sujet <- "mín"};<iface>{[p=1, n=pl]}}
+  |
+{<morph>{f_sujet <- "bíh" };<iface>{[p=2, n=pl]}}
+  | 
+{<morph>{f_sujet <- "b" };<iface>{[p=3, n=pl]}}
 }
 
 class Subject_Noun
@@ -91,8 +91,8 @@ class Subject_Noun
 class Subject
 { 
   Subject_Clitic[] 
-  % | 
-  % Subject_Noun[] 
+  | 
+  Subject_Noun[] 
   }
 
 class TensePos
@@ -128,8 +128,8 @@ class TenseNeg
 class Tense
 { 
   TensePos[] 
-  % | 
-  % TenseNeg[] 
+  | 
+  TenseNeg[] 
   }
 
 class Theme
@@ -190,11 +190,11 @@ class Theme
 
 class Voix
 {
-   % {<morph>{f_voix <- "ébw" };
-   %  <iface>{[active = -]} 
+   {<morph>{f_voix <- "ébw" };
+    <iface>{[active = -]} 
    	
-   % 	}
-   % 	|
+   	}
+   	|
   <iface>{[active= +]}
 
 		
@@ -308,7 +308,7 @@ class Choisir
 
 class VR
 {
-  Manger[] %| Donner[] | Choisir[]
+  Manger[] | Donner[] | Choisir[]
 }
 
 class Verb

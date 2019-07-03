@@ -273,8 +273,9 @@ class Entry(object):
         d = Renaming()
         if self.tree:
             self.tree.normalize_vars(d)
-        if self.sem:
-            self.sem.normalize_vars(d)
+        if hasattr(self,'sem'):
+            if self.sem:
+                self.sem.normalize_vars(d)
         self.interface.normalize_vars(d)
     def pprint(self, fd=sys.stdout):
         if not isinstance(fd, IndentableStream):
