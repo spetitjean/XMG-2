@@ -86,11 +86,11 @@ solve(prepared(_,_,Nodes,_,_,NotUnifs,Relations,_,plugins(Plugins),_,NodeList1),
 	%%xmg_brick_mg_compiler:send(info,'\nIgnored posts '),
 
 	
-	%%xmg_brick_mg_compiler:send(info,'\nBranching '),
+	xmg_brick_mg_compiler:send(info,'\nBranching '),
 
 
 	xmg_brick_tree_dominance:global_branch(Space,IntVars),!,
-	%%xmg_brick_mg_compiler:send(info,'\nGlobal branched '),
+	xmg_brick_mg_compiler:send(info,'\nGlobal branched '),
 	xmg_brick_tree_dominance:global_pbranch(Space,IntPVars),!,
 	%%xmg_brick_mg_compiler:send(info,'\nPBranched '),
 	xmg_brick_tree_dominance:do_branch(Space,NodeList),!,	

@@ -111,6 +111,7 @@ node_rel(Space,X,Y,Rel):-
 	Space += reify(Rel4,'RM_EQV',Rel4R),
 	Space += reify(Rel5,'RM_EQV',Rel5R),
 
+
         %%xmg:send(info,'\nDone reify'),
 	
 	EqX       :=: eq(X),      
@@ -164,6 +165,7 @@ node_rel(Space,X,Y,Rel):-
 	Rel1P := boolvars(Space,13),
 	Rel1P=[R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,R13],
 
+	
 	Space += reify(R1,'RM_EQV',R1R),
 	Space += reify(R2,'RM_EQV',R2R),
 	Space += reify(R3,'RM_EQV',R3R),
@@ -545,9 +547,11 @@ node_rels(Space,[Node1|T1],[Node2|T2],[H|T],[HH,HHH|TP]):-
 	!.
 
 
+global_branch(Space,[]).
 global_branch(Space,List):-
 	Space += branch(List,'INT_VAR_NONE','INT_VAL_MIN').
 
+global_pbranch(Space,[]).
 global_pbranch(Space,List):-
 	Space += branch(List,'INT_VAR_NONE','INT_VAL_MIN').
 

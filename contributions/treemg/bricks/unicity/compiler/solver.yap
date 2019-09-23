@@ -20,10 +20,29 @@
 :- module(xmg_brick_unicity_solver).
 :- xmg:edcg.
 
+:- use_module(library(gecode)).
 %%:- xmg:gecode.
 %%:- use_module('xmg/brick/tree/compiler/dominance').
 
 :- op(500, xfx, ':=:').
+
+%% Duplicate until Yap's import system is fixed
+Eq       :=: eq(Node)       :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 1,Node,Eq).
+Up       :=: up(Node)       :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 2,Node,Up).
+Down     :=: down(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 3,Node,Down).
+Left     :=: left(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 4,Node,Left).
+Right    :=: right(Node)    :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 5,Node,Right).
+EqDown   :=: eqdown(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 6,Node,EqDown).
+EqUp     :=: equp(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 7,Node,EqUp).
+Side     :=: side(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 8,Node,Side).
+Children :=: children(Node) :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 9,Node,Children).
+Parent   :=: parent(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg(10,Node,Parent).
+UpCard   :=: upcard(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg(11,Node,UpCard).
+IsRoot   :=: isroot(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg(12,Node,IsRoot).
+RB       :=: rb(Node)       :- !, xmg_brick_tree_dominance:assert_node(Node), arg(13,Node,RB).
+Values   :=: map(Fun,Nodes) :- !, map_fun(Values,Nodes,Fun).
+X        :=: Y              :- throw(unrecognized(X :=: Y)).
+
 
 :-edcg:using(xmg_brick_mg_solver:solver).
 :-edcg:weave([solver],[post/1]).
@@ -56,8 +75,8 @@ post_unicities_first(Space,[Node|T],IntVars,['false'|TU],I1):-
 
 post_unicities_others(Space,[],[],IntVars,_,_,_):- !.
 post_unicities_others(Space,[Node|T],[true|TU],IntVars,NodeU,I1,I2):-
-	assert_node(Node),
-	assert_node(NodeU),
+	xmg_brick_tree_dominance:assert_node(Node),
+	xmg_brick_tree_dominance:assert_node(NodeU),
 
 	%% EqX       :=: eq(Node),      
 	%% EqY       :=: eq(NodeU),      

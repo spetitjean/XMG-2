@@ -27,6 +27,24 @@
 
 :- op(500, xfx, ':=:').
 
+%% Duplicate until Yap's import system is fixed
+Eq       :=: eq(Node)       :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 1,Node,Eq).
+Up       :=: up(Node)       :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 2,Node,Up).
+Down     :=: down(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 3,Node,Down).
+Left     :=: left(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 4,Node,Left).
+Right    :=: right(Node)    :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 5,Node,Right).
+EqDown   :=: eqdown(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 6,Node,EqDown).
+EqUp     :=: equp(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 7,Node,EqUp).
+Side     :=: side(Node)     :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 8,Node,Side).
+Children :=: children(Node) :- !, xmg_brick_tree_dominance:assert_node(Node), arg( 9,Node,Children).
+Parent   :=: parent(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg(10,Node,Parent).
+UpCard   :=: upcard(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg(11,Node,UpCard).
+IsRoot   :=: isroot(Node)   :- !, xmg_brick_tree_dominance:assert_node(Node), arg(12,Node,IsRoot).
+RB       :=: rb(Node)       :- !, xmg_brick_tree_dominance:assert_node(Node), arg(13,Node,RB).
+Values   :=: map(Fun,Nodes) :- !, map_fun(Values,Nodes,Fun).
+X        :=: Y              :- throw(unrecognized(X :=: Y)).
+
+
 :-edcg:using(xmg_brick_mg_solver:solver).
 :-edcg:weave([solver],[post/1]).
 
@@ -69,8 +87,8 @@ do_rposts(Space,[_],_,[],IntVars):-
 do_rposts(Space,[H,H1|T],[],Rels,IntVars):-
 	do_rposts(Space,[H1|T],T,Rels,IntVars),!.
 do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
-	assert_node(X),
-	assert_node(Y),
+	xmg_brick_tree_dominance:assert_node(X),
+	xmg_brick_tree_dominance:assert_node(Y),
 
 	EqX       :=: eq(X),      
 	UpX       :=: up(X) ,     
@@ -105,8 +123,9 @@ do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
 
 
 	Space += rel(Rel1,'IRT_NQ',Rel2),
-	
-	Space += rel(ParentX,'SRT_DISJ',ParentY,Rel1),
+	Space += reify(Rel1,Rel1R)
+
+	Space += rel(ParentX,'SRT_DISJ',ParentY,Rel1R),
 	
 	%%	post(Space,H,'<<+',H1),
 
