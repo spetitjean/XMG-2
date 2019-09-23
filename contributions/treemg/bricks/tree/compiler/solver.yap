@@ -370,9 +370,12 @@ do_post(_,_,_,_,Const):-
 do_nposts(_,_,[]):- !.
 
 do_nposts(Space,Rels,[noteq(A,B)|T]):-
-	get_rel(A,B,Rels,Rel),!,
-	IntVarEq :=  intvar(Space,1,1),
-	Space+=rel(Rel,'IRT_NQ',IntVarEq),
+	%% get_rel(A,B,Rels,Rel),!,
+	%% IntVarEq :=  intvar(Space,1,1),
+        %% Space+=rel(Rel,'IRT_NQ',IntVarEq),
+        EqA :=: eq(A),
+        EqB :=: eq(B),
+	Space += rel(EqA,'SRT_DISJ',EqB),
 	do_nposts(Space,Rels,T),!.
 
 do_nposts(Space,Rels,[H|T]):-
