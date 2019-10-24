@@ -277,10 +277,10 @@ class BrickCompiler(object):
                 # if a loader is there, do not load it, to avoid double imports
                 if not os.path.basename(yapfile)=="loader.yap": 
                     files.append('\'%s\'' % yapfile)
-        for solver in self._solvers:
-            for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,self._solvers[solver])):
+        for  solver in set(self._solvers.values()):
+            for yapfile in glob.glob("%s/xmg/brick/%s/*.yap" % (yapdir,solver)):
                 files.append('\'%s\'' % yapfile)
-            for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,self._solvers[solver])):
+            for yapfile in glob.glob("%s/xmg/brick/%s/compiler/*.yap" % (yapdir,solver)):
                  # if a loader is there, do not load it, to avoid double imports
                 if not os.path.basename(yapfile)=="loader.yap": 
                     files.append('\'%s\'' % yapfile)
