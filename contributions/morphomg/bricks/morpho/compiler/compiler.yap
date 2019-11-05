@@ -23,7 +23,7 @@
 xmg:trace_off.
 xmg:grammar_tags(['mcgrammar','morphs']).
 
-xmg:eval(morpho,_,Morph,Value,_):-
+xmg:eval(morpho,Dim,_,Morph,Value,_):-
 	xmg_brick_morpho_solver:eval(Morph,Value),
 	xmg:send(debug,' Value : '),
 	xmg:send(debug,Value).

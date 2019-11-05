@@ -23,7 +23,7 @@
 xmg:trace_off.
 xmg:grammar_tags(['mcgrammar','lemmas']).
 
-xmg:eval(lemma,_,Lemma,Value,_):-
+xmg:eval(lemma,Dim,_,Lemma,Value,_):-
 	xmg_brick_lemma_solver:eval(Lemma,Value),
 	xmg:send(debug,' Value : '),
 	xmg:send(debug,Value).
