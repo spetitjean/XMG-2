@@ -17,7 +17,7 @@ init_nodes([Node|Nodes],Space,N,I) :-
 	init_nodes(Nodes,Space,N,J).
 
 init_node(Node,Space,N,I) :-
-	Node=node(Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,UpCard,IsRoot,RB),
+        Node=node(Eq,Up,Down,Left,Right,EqDown,EqUp,Side,Children,Parent,UpCard,IsRoot,RB),
 	Empty := intset([]),
 	Full := intset(1,N),
 	FullVar := setvar(Space,Full,Full),
@@ -26,11 +26,9 @@ init_node(Node,Space,N,I) :-
 	M is N-1,
 	UpCard := intvar(Space,0,M),
 	IsRoot := boolvar(Space),
-
-	Space += reify(IsRoot,'RM_EQV',IsRootR),
-		
 	Space += cardinality(Parent,0,M), 
 	Space += cardinality(Up,UpCard),
+	Space += reify(IsRoot,'RM_EQV',IsRootR),	
 	Space += rel(UpCard,'IRT_EQ',0,IsRootR),
 	%%Space += rel(Side,'SRT_EQ',EmptyVar,IsRoot),
 	Space += rel(FullVar,'SRT_EQ',EqDown,IsRootR),

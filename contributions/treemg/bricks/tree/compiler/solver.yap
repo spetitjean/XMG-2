@@ -28,12 +28,11 @@
 
 
 solve(prepared(Family,Noteqs,Nodes,Doms,Precs,NotUnifs,Relations,NodeNames,plugins(Plugins),Table,NodeList1),solution(IsRoot,Eq, Children, Left, NodeList1)):--
-	!,		
-	Space:=space,!,
-	
+        !,
+	Space:=space,!,	
 	new_nodes(NodeList,Space,Nodes),!,
 	global_constraints(Space,NodeList,IntVars,IntPVars),!,
-
+	
 	%% Here are the threads used by the plugins:
 	%% space
 	%% nodes - the list of nodes used by the solver

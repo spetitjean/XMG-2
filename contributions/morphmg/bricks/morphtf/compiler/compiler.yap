@@ -20,7 +20,7 @@
 :-module(xmg_brick_morphtf_compiler).
 
 
-xmg:eval(morphtf,_,Morph,morphtf:morphtf(Value),_):-
+xmg:eval(morphtf,_,_,Morph,morphtf:morphtf(Value),_):-
 	xmg:send(info,Morph),
 	xmg_brick_morphtf_solver:eval_morph(Morph,Value),
 	%%xmg:send_nl(info,2),

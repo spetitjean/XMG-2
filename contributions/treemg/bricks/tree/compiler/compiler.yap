@@ -20,7 +20,7 @@
 :-module(xmg_brick_tree_compiler).
 
 %% TAG compiler
-eval(Syn,[tree],tree:tree(Tree,Class,Previous),Class):-
+eval(Syn,Dim,[tree],tree:tree(Tree,Class,Previous),Class):-
 	xmg:send(debug,' preparing '),
 
 	xmg_brick_tree_preparer:prepare(syn(Syn,[Class]),Prepared),
@@ -32,6 +32,5 @@ eval(Syn,[tree],tree:tree(Tree,Class,Previous),Class):-
 	xmg_brick_mg_compiler:current(Previous).
 	%%xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML)
 
-eval([],_,tree:none,_).
-%%eval([],_,elem(tree, features([id-none])),_).
+eval([],_,_,tree:none,_).
 
