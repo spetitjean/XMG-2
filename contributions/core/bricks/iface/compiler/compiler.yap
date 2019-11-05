@@ -19,19 +19,7 @@
 
 :-module(xmg_brick_iface_compiler).
 
-xmg:eval(iface,_,I, iface:iface(IAVM),_):-
+xmg:eval(iface,_,_,I, iface:iface(IAVM),_):-
 	xmg_brick_avm_avm:avm(I,IAVM).
-xmg:eval(iface,_,[], iface:iface([]),_).
-
-
-%% xmg:eval(iface,_,I, elem(interface, children([elem(fs, children(XML))])),_):-
-%% 	%%xmg:send(info,'\n Here comes the interface'),
-%% 	xmg_brick_avm_avm:avm(I,IAVM),
-%% 	%%xmg:send(info,IAVM),
-%% 	%%xmg_brick_avm_convert:xmlFeats(IAVM,XML,1,_).
-%%     	xmg:do_xml_convert(avm:avm(IAVM),XML)
-%% 	%%xmg:send(info,'\nDone')
-%% 	.
-%% 	%%xmg:send(info,'\nDone').
-%% xmg:eval(iface,_,[], elem(interface, children([])),_).
+xmg:eval(iface,_,_,[], iface:iface([]),_).
 

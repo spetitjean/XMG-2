@@ -53,8 +53,8 @@ xmg:import(File,Import):-
 :-multifile(xmg:send_others/2).
 
 %% xmg:eval extracts the models from a description. 
-:-multifile(xmg:eval/5).
-:-multifile(xmg:eval/7).
+:-multifile(xmg:eval/6).
+:-multifile(xmg:eval/8).
 
 
 %encoding(iso_latin_1).
@@ -320,7 +320,7 @@ eval_dims([Dim-Acc|T],[XML|T1],Class):-
 	xmg:send(info,Dim),
 	xmg:dimbrick(Dim,DimBrick),
 	findall(Solver,xmg:solver(Dim,Solver),Solvers),
-	xmg:eval(DimBrick,Solvers,Acc,XML,Class),
+	xmg:eval(DimBrick,Dim,Solvers,Acc,XML,Class),
 	xmg:send(info,'\nDone '),
 	xmg:send(debug,Dim),
 	xmg:send(debug,XML),

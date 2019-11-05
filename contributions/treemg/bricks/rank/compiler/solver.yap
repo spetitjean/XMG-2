@@ -123,7 +123,7 @@ do_rposts(Space,[R1-rank(X,N1)|T],[R2-rank(Y,N2)|T1],[Rel2|RT],IntVars):-
 
 
 	Space += rel(Rel1,'IRT_NQ',Rel2),
-	Space += reify(Rel1,Rel1R)
+	Space += reify(Rel1,Rel1R),
 
 	Space += rel(ParentX,'SRT_DISJ',ParentY,Rel1R),
 	

@@ -19,36 +19,17 @@
 
 :-module(xmg_brick_syn_compiler).
 
-xmg:eval(syn,[tree],Syn,XML,Class):-
-    xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
-xmg:eval(syn,[rrg],Syn,XML,Class):-
-	xmg_brick_rrg_compiler:eval(Syn,Solvers,XML,Class).
-xmg:eval(syn,[],Syn,XML,Class):-
-	xmg_brick_syn_compiler:eval(Syn,Solvers,XML,Class).
-
-%% %% TAG compiler
-%% eval(Syn,[tree],XML,Class):-
-%% 	%%xmg_brick_mg_compiler:send(info,Syn),
-%% 	xmg_brick_mg_compiler:send(debug,' preparing '),
-
-%% 	xmg_brick_tree_preparer:prepare(syn(Syn,[Class]),Prepared),
-%% 	xmg_brick_mg_compiler:send(debug,' prepared '),
-%% 	xmg_brick_tree_solver:solve(Prepared,solution(IsRoot,Eq, Children, Left, NodeList1)),
-%% 	xmg_brick_tree_extractor:extract(IsRoot,Eq, Children, Left, NodeList1,Tree),
-%% 	%%xmg:send(info,Tree),
-%% 	xmg:send(debug,' extracted '),
-%% 	%%flush_output,
-%% 	xmg_brick_mg_compiler:current(Previous),
-%% 	%% Current is Previous + 1,
-%% 	%% retract(current(Previous)),
-%% 	%% asserta(current(Current)),
-%% 	xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML).
-%% eval([],_,elem(tree, features([id-none])),_).
+xmg:eval(syn,Dim,[tree],Syn,XML,Class):-
+    xmg_brick_tree_compiler:eval(Syn,Dim,Solvers,XML,Class).
+xmg:eval(syn,Dim,[rrg],Syn,XML,Class):-
+	xmg_brick_rrg_compiler:eval(Syn,Dim,Solvers,XML,Class).
+xmg:eval(syn,Dim,[],Syn,XML,Class):-
+	xmg_brick_syn_compiler:eval(Syn,Dim,Solvers,XML,Class).
 
 
 %% IG compiler
-eval(Syn,[],XML,Class):-
+eval(Syn,_,[],XML,Class):-
 	xmg_brick_mg_compiler:current(Previous),
 	xmg:do_xml_convert(syn:desc(Syn,Class,Previous),XML).
-eval([], elem(tree, features([id-none])),_).
+eval([], _,elem(tree, features([id-none])),_).
 
