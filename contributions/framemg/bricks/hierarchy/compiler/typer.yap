@@ -73,8 +73,8 @@ init_print_hierarchy:-
 
 clean_all_attrs([],[]).
 clean_all_attrs([H|T],[H1|T1]):-
-    xmg:send(info,'\nConstraints:'),
-    xmg:send(info,H),
+    %%xmg:send(info,'\nConstraints:'),
+    %%xmg:send(info,H),
     empty_assoc(Assoc),
     clean_attrs(H,[],Assoc,H1),
     clean_all_attrs(T,T1).
