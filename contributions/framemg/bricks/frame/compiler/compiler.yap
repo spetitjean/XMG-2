@@ -19,11 +19,9 @@
 
 :-module(xmg_brick_frame_compiler).
 
-xmg:eval(frame,[],Frame,frame:frame(PFrame),_):-
+xmg:eval(frame,Dim,[],Frame,frame:frame(PFrame),_):-
 	xmg_brick_frame_preparer:prepare(Frame,PFrame),
 	xmg:send(debug,PFrame).
-	%%xmg_brick_frame_convert:toXML(PFrame,XML,0).
-	%%xmg:send(debug,Tree).
-%%xmg:eval(frame,_,[], elem(frame, features([id-none])),_).
+
 
 

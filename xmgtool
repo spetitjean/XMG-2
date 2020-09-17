@@ -273,8 +273,9 @@ class Entry(object):
         d = Renaming()
         if self.tree:
             self.tree.normalize_vars(d)
-        if self.sem:
-            self.sem.normalize_vars(d)
+        if hasattr(self,'sem'):
+            if self.sem:
+                self.sem.normalize_vars(d)
         self.interface.normalize_vars(d)
     def pprint(self, fd=sys.stdout):
         if not isinstance(fd, IndentableStream):
@@ -301,7 +302,14 @@ class Tree(object):
     def pprint(self, fd):
         if self.node:
             self.node.pprint(fd)
-
+    def __eq__(self, other):
+        if self.node and other.node:
+            return hash(self)==hash(other)
+            #return self.node == other.node
+    def __hash__(self):
+        if self.node:
+            return hash(self.node)
+        
 class Node(object):
     def normalize_vars(self, d):
         if self.fs:
@@ -315,6 +323,26 @@ class Node(object):
         with fd.indent():
             for x in self.children:
                 x.pprint(fd)
+    def __eq__(self, other):
+        if self.fs == other.fs:
+            if len(self.children) == len(other.children):
+                fine=True
+                for i in range(0,len(self.children)):
+                    if self.children[i] != other.children[i]:
+                        fine=False
+                        break
+                return fine
+            else:
+                return False
+        else:
+            return False
+    def __hash__(self):
+        return hash(str(self))
+    def __str__(self):
+        s=str(self.type)+"-"+str(self.fs)+"{"
+        for child in self.children:
+            s=s+str(child)
+        return s+"}"
 
 class FS(dict):
     def normalize_vars(self, d):
@@ -340,7 +368,19 @@ class FS(dict):
                     y.pprint(fd)
                     first = False
             fd.writeln("]")
-
+    def __eq__(self, other):
+        if self.items == other.items:
+            return True
+        else:
+            return False
+    def __str__(self):
+        s="["
+        for a,v in list(self.items()):
+            s=s+str(a)+"-"+str(v)+" "
+        s=s+"]"
+        return s
+            
+        
 class Var(object):
     def __init__(self, varname):
         self.varname = varname
@@ -357,6 +397,8 @@ class Sym(object):
         pass
     def pprint(self, fd):
         fd.write(self.value)
+    def __str__(self):
+        return str(self.value)
 
 class VAlt(object):
     def __init__(self):
@@ -421,6 +463,59 @@ def stat_families_diff(xmg1, xmg2):
         if n1 != n2:
             print("%20s  %4d  %4d" % (k,n1,n2))
 
+def find_duplicates(xmg1):
+    print("Finding duplicates")
+    # keys are tree templates, values are lists of entry names
+    is_template=dict()
+    for entry in xmg1.entries:
+        #print(entry.name)
+        if entry.tree in is_template.keys():
+            if entry.family in is_template[entry.tree].keys():
+                is_template[entry.tree][entry.family]+=[entry.name]
+            else:
+                is_template[entry.tree][entry.family]=[entry.name]
+            #is_template[entry.tree]=is_template[entry.tree]+[entry.name]
+        else:
+            is_template[entry.tree]=dict({entry.family:[entry.name]})
+    nb_duplicates=0
+    duplicate_families=dict()
+    # Printing 
+    for tree in is_template:
+        families=is_template[tree]
+        length=0
+        for family in families:
+            length+=len(families[family])
+        if length>1:    
+            print("________________________")
+            #print("Tree template: "+str(tree.node))
+            print("Duplicates:")
+            for family in families:
+                if family in duplicate_families:
+                    duplicate_families[family]+=len(is_template[tree][family])
+                else:
+                    duplicate_families[family]=len(is_template[tree][family])
+                print("Family "+str(family))
+                values=families[family]
+                print(", ".join(map(str,values)))
+            nb_duplicates+=length-1
+    print("________________________")
+    print("There are "+str(nb_duplicates)+" duplicate trees")
+    print("defined (duplicates and originals) in "+str(len(duplicate_families))+" families:\n")
+    inv_dup = {}
+    for k, v in duplicate_families.items():
+        inv_dup[v] = inv_dup.get(v, [])
+        inv_dup[v].append(k)
+    for arity in sorted(inv_dup):
+        plural=""
+        if arity>1:
+            plural="s"
+        print(str(arity)+" duplicate"+plural+": "+", ".join(map(str,inv_dup[arity])))
+    #print("Double check count: ")
+    #check_nb=0
+    #for dup in duplicate_families:
+    #    check_nb+=duplicate_families[dup]
+    #print(check_nb)
+    
 class IndentionContext(object):
 
     def __init__(self, fd, prefix):
@@ -520,6 +615,19 @@ cmd = subcmds.add_parser(
 cmd.add_argument("XML1", help="first (pickled) grammar file")
 cmd.add_argument("XML2", help="second (pickled) grammar file")
 cmd.set_defaults(handler=handler_fstat)
+
+#==============================================================================
+# xmgtool duplicates FILE
+#==============================================================================
+
+def handler_duplicates(args):
+    xmg1 = loadXMG(args.XML1)
+    find_duplicates(xmg1)
+
+cmd = subcmds.add_parser(
+    "duplicates", description="shows which entries have identical syntactic trees")
+cmd.add_argument("XML1", help="first (pickled) grammar file")
+cmd.set_defaults(handler=handler_duplicates)
 
 #==============================================================================
 # xmgtool eprint XML ENTRY

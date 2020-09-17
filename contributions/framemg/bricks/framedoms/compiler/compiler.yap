@@ -19,7 +19,7 @@
 
 :-module(xmg_brick_framedoms_compiler).
 
-xmg:eval(frame,[framedoms],Frame,framedoms:frame(Extracted),Class):-
+xmg:eval(frame,Dim,[framedoms],Frame,framedoms:frame(Extracted),Class):-
 	xmg:send(debug,' preparing '),
 	xmg_brick_framedoms_preparer:prepare(frame(Frame,[Class]),Prepared),
 	xmg:send(debug,' prepared '),
