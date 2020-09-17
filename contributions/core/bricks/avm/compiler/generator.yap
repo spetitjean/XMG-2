@@ -55,11 +55,12 @@ xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
 
 
 xmg:avm_dot(Member-Value,List) :-
-	lists:member(Member-Value,List).
-	%%xmg:send(info,'\nFound key '),
-	%%xmg:send(info,Member),
-	%%xmg:send(info,' in '),
-	%%xmg:send(info,List).
+    lists:member(Member-Value,List).
+xmg:avm_dot(Member-Value,AVM) :-
+     %% sometimes it seems that we have avm objects instead of lists
+     xmg_brick_avm_avm:avm(AVM,List),!,
+     xmg:avm_dot(Member-Value,List).
+
 xmg:avm_dot(Member-_,List):-
 	not(lists:member(Member-Value,List)),
 	xmg:send(info,'\nDid not find key '),
