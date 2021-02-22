@@ -38,4 +38,3 @@ xmg:generate_instr((morpho:feat(c(F),v(V)),Dim)):--
 xmg:generate_instr((morpho:feat(c(F),c(C)),Dim)):--
 	Acc=..['::',xmg_acc:Dim,put(feat(F,C))],
 	code::enq(Acc),!.
-

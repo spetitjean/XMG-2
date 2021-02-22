@@ -23,6 +23,9 @@ declare ?Feats
   ?Feats=[cat=v, num=pl]
 }
 
+%% standard uses of dots:
+%% * access variable in export vector
+%% * access value of (existing) attribute in FS 
 class B
 declare ?V ?Feats ?Cat 
 {
@@ -35,6 +38,27 @@ declare ?V ?Feats ?Cat
   }
 }
 
-value B
+%% non standard uses of dots:
+%% * access non existing variable in export vector
+%% * access value of non existing attribute in FS 
+class C
+declare ?V ?Feats ?OtherFeats ?Cat ?Cot
+{
+  ?V=A[];
+  ?V.?Feats = ?Feats;
+  %% this raises a type error: good
+  %% ?V.?OtherFeats = ?OtherFeats;
+  
+  ?Feats.cat = ?Cat;
+  ?Feats.cot = ?Cat;
+  <syn>{
+    %%node  [cat = ?Cat]
+    node feats ?Feats
+  }
+}
 
+
+
+value B
+value C
 

@@ -21,6 +21,11 @@
 
 :- xmg:edcg.
 
+:- edcg:using(xmg_brick_mg_convert:name).
+
+
+:- edcg:weave([name],[convert_feats/2]).
+
 
 xmg:xml_convert_term(morpho:solved(M), elem(morph, features([lex-Morph]),children([elem(lemmaref,features([cat-Cat, name-Lemma]),children([Feats]))]))) :--
 	lists:member(feat(morph,string(SMorph)),M),
@@ -28,9 +33,9 @@ xmg:xml_convert_term(morpho:solved(M), elem(morph, features([lex-Morph]),childre
         lists:member(feat(lemma,string(SLemma)),M),
         atom_codes(Lemma,SLemma),
 	lists:member(feat(cat,Cat),M),
-	xmg:send(info,M),
+	%%xmg:send(info,M),
 	xmg:xml_convert_term(morpho:feats(M),Feats),
-	xmg:send(info,Feats),
+	%%xmg:send(info,Feats),
 	!.
 
 xmg:xml_convert_term(morpho:feats(M),elem(fs, children(Feats))):-- 
@@ -38,14 +43,19 @@ xmg:xml_convert_term(morpho:feats(M),elem(fs, children(Feats))):--
     !.
 
 %% There should never be variables here
-convert_feats([],[]).
-convert_feats([feat(cat,_)|T],Feats):-
+convert_feats([],[]):--!.
+convert_feats([feat(cat,_)|T],Feats):--
     convert_feats(T,Feats).
-convert_feats([feat(lemma,_)|T],Feats):-
+convert_feats([feat(lemma,_)|T],Feats):--
     convert_feats(T,Feats).
-convert_feats([feat(morph,_)|T],Feats):-
+convert_feats([feat(morph,_)|T],Feats):--
     convert_feats(T,Feats).
-convert_feats([feat(A,V)|T],[elem(f, features([name-A]), children([elem(sym,features([value-V]))]))|Feats]):-
+convert_feats([feat(A,V)|T],[elem(f, features([name-A]), children([elem(fs,children(GFeats))]))|Feats]):--
+    var(V),
+    xmg_brick_avm_avm:avm(V,VFeats),
+    xmg:xml_convert_term(avm:avm(VFeats),GFeats),!,
+    convert_feats(T,Feats).
+convert_feats([feat(A,V)|T],[elem(f, features([name-A]), children([elem(sym,features([value-V]))]))|Feats]):--
       convert_feats(T,Feats).
 
 

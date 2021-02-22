@@ -22,16 +22,25 @@
 :-xmg:edcg.
 :-xmg:unfolder_accs.
 
+xmg:unfold_dimstmt(Dim,morpho:feat(Att,avm:avm(C,F))):--
+    xmg:unfold_expr(Att,UAtt),
+    xmg:unfold_expr(avm:avm(C,F),UVal),
+    (var(UVal)->xmg:new_target_var(UVal);true),
+
+    constraints::enq((morpho:feat(UAtt,UVal),Dim)),
+    !.
 
 xmg:unfold_dimstmt(Dim,morpho:feat(Att,Val)):--
-	xmg:unfold_expr(Att,UAtt),
-	xmg:unfold_expr(Val,UVal),
-	constraints::enq((morpho:feat(UAtt,UVal),Dim)),!.
+    xmg:unfold_expr(Att,UAtt),
+    xmg:unfold_expr(Val,UVal),
+    constraints::enq((morpho:feat(UAtt,UVal),Dim)),
+    !.
 
 xmg:unfold_expr(morpho:dot(ID1,ID2),morpho:dot(UID1,UID2)):--
 		  xmg:unfold_expr(ID1,UID1),
 		  xmg:unfold_expr(ID2,UID2),
 		  !.
+
 
 
 
