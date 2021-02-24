@@ -29,6 +29,7 @@
 :-dynamic(current/1).
 :-dynamic(debug_mode/0).
 :-dynamic(xmg:more_mode/0).
+:-dynamic(xmg:hierarchy_mode/0).
 :-dynamic(json_output/0).
 :-dynamic(xmg:notype_mode/0).
 
@@ -56,6 +57,9 @@ debug_mode_on:-
 
 more_mode_on:-
     asserta(xmg:more_mode).
+
+hierarchy_mode_on:-
+    asserta(xmg:hierarchy_mode).
 
 json_output_on:-
     asserta(json_output).
@@ -88,7 +92,7 @@ xmg:send_nl(info,N):-
 send(O,M):-!, xmg:send(O,M),!.
 
 
-compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
+compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More,Hierarchy):-
 	asserta(encoding(Encoding)),
 	(
 	    Debug='on'
@@ -118,7 +122,15 @@ compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More):-
 	     ( more_mode_on, xmg:send(info,'\n\nPrinting of additional files activated.\n\n\n'))
              ;
 	     (true)
-	 ),!,
+	),!,
+	(
+	    Hierarchy='on'
+	->
+	( hierarchy_mode_on, xmg:send(info,'\n\nPrinting of class hierarchy activated.\n\n\n'))
+        ;
+	(true)
+	),!,
+
 	 catch(compile_file(File,Eval),Exception,true),
 	 (
 	     not(var(Exception))->

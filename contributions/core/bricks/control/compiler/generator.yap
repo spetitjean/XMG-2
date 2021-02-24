@@ -25,14 +25,16 @@
 :-edcg:using(xmg_brick_mg_generator:name).
 :-edcg:using(xmg_brick_mg_generator:decls).
 :-edcg:using(xmg_brick_mg_generator:code).
+:-edcg:using(xmg_brick_mg_generator:class_hierarchy).
 
 :-edcg:weave([name,decls,code],[get_params/2]).
 
 
 xmg:generate_instr(control:or([I1,I2])):--
-	xmg:generate_instr(I1) with code([]-C1,[]-[]),
-	xmg:generate_instr(I2) with code([]-C2,[]-[]),
+	xmg:generate_instr(I1) with (code([]-C1,[]-[]), class_hierarchy([]-CL1,[]-[])),
+	xmg:generate_instr(I2) with (code([]-C2,[]-[]), class_hierarchy([]-CL2,[]-[])),
 	code::enq(or(C1,C2)),
+	class_hierarchy::enq(or(CL1,CL2)),
 	!.
 xmg:generate_instr(control:and(I)):--
 	xmg:generate_instrs(I),
@@ -49,6 +51,7 @@ xmg:generate_instr((v(Var),control:call(Class,Params))):--
 	get_params(Params,GParams),
 	Call=..[value_class,Class,params(GParams),exports(GV)],
 	code::enq(xmg:Call),
+	class_hierarchy::enq(Class),
 	%%xmg:send(debug,Call),
 	!.
 
