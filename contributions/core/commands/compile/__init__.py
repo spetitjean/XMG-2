@@ -53,16 +53,17 @@ def handler_xmg_compile(args):
         print('An additional file was created, moving it to the file: more')
         os.rename('.more','more.mac')
     if os.path.exists('.class_hierarchy'):
-        print('Hierarchy graphs were generated, moving them to the directory: class_hierarchy')
-        if os.path.exists('class_hierarchy'):
-            for dotfile in os.listdir('class_hierarchy'):
-                os.remove('class_hierarchy/'+dotfile)
-            os.rmdir('class_hierarchy')
-        os.rename('.class_hierarchy','class_hierarchy')
+        class_hierarchy_dir = rename.replace('.xml','') + '_class_hierarchy'
+        print('Hierarchy graphs were generated, moving them to the directory: '+class_hierarchy_dir)
+        if os.path.exists(class_hierarchy_dir):
+            for dotfile in os.listdir(class_hierarchy_dir):
+                os.remove(class_hierarchy_dir+'/'+dotfile)
+            os.rmdir(class_hierarchy_dir)
+        os.rename('.class_hierarchy',class_hierarchy_dir)
         if which('dot') is not None:
             print('Dot installed, generating the pdf files')
-            for dotfile in os.listdir('class_hierarchy'):
-                os.system('dot class_hierarchy/'+dotfile+' -O -Tpdf')
+            for dotfile in os.listdir(class_hierarchy_dir):
+                os.system('dot '+class_hierarchy_dir+'/'+dotfile+' -O -Tpdf')
         else:
             print('Dot not found')
         

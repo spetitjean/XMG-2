@@ -331,8 +331,8 @@ var_or_const(bool(A,C),const(A,bool)):-- !.
 
 print_class_hierarchy(Class):-
     xmg:hierarchy_edges(Class,(EdgesImport,EdgesCall)),
-    process_hierarchy_edges(Class,EdgesImport,PEdgesImport),
-    process_hierarchy_edges(Class,EdgesCall,PEdgesCall),
+    process_hierarchy_edges(Class,EdgesImport,PEdgesImport,''),
+    process_hierarchy_edges(Class,EdgesCall,PEdgesCall,''),
     lists:append(PEdgesImport,PEdgesCall,PEdges),
     lists:remove_duplicates(PEdges,CPEdges),
     atom_concat(Class,'.dot',OutFile),
@@ -342,27 +342,31 @@ print_class_hierarchy(Class):-
     close(dotfile),
     !.
 
-process_hierarchy_edges(_,[],[]).
-process_hierarchy_edges(Class,[H|T],Res):-
-    process_hierarchy_edge(Class,H,H1),
-    process_hierarchy_edges(Class,T,T1),
+process_hierarchy_edges(Class,[],[(Class)],_).
+process_hierarchy_edges(Class,[H|T],Res,Label):-
+    process_hierarchy_edge(Class,H,H1,Label),
+    process_hierarchy_edges(Class,T,T1,Label),
     lists:append(H1,T1,Res),!.
-process_hierarchy_edges(Class,or(T1,T2),T3):-
-    process_hierarchy_edges(Class,T1,T11),
-    process_hierarchy_edges(Class,T2,T21),
+process_hierarchy_edges(Class,or(T1,T2),T3,Label):-
+    atom_concat(Label,'l',Label1),
+    atom_concat(Label,'r',Label2),
+    process_hierarchy_edges(Class,T1,T11,Label1),
+    process_hierarchy_edges(Class,T2,T21,Label2),
     lists:append(T1,T2,T3),!.
 
-process_hierarchy_edge(Class,or(T1,T2),T3):-
-    process_hierarchy_edges(Class,T1,T11),
-    process_hierarchy_edges(Class,T2,T21),
+process_hierarchy_edge(Class,or(T1,T2),T3,Label):-
+    atom_concat(Label,'l',Label1),
+    atom_concat(Label,'r',Label2),
+    process_hierarchy_edges(Class,T1,T11,Label1),
+    process_hierarchy_edges(Class,T2,T21,Label2),
     lists:append(T11,T21,T3),!.
-process_hierarchy_edge(Class,Edge,[EdgeCode|T]):-
+process_hierarchy_edge(Class,Edge,[EdgeCode|T],Label):-
     %%xmg:send(info,'\nProcessing edge: '),
     %%xmg:send(info,(Class,Edge)),
-    EdgeCode=(Class,Edge),
+    EdgeCode=(Class,Edge,Label),
     xmg:hierarchy_edges(Edge,(EdgesImport,EdgesCall)),    
-    process_hierarchy_edges(Edge,EdgesImport,PEdgesImport),
-    process_hierarchy_edges(Edge,EdgesCall,PEdgesCall),
+    process_hierarchy_edges(Edge,EdgesImport,PEdgesImport,''),
+    process_hierarchy_edges(Edge,EdgesCall,PEdgesCall,''),
     lists:append(PEdgesImport,PEdgesCall,T),
     !.
 
@@ -370,16 +374,27 @@ process_hierarchy_edge(Class,Edge,[EdgeCode|T]):-
 output_dot(List):-
     write(dotfile,'digraph D{\n'),
     write(dotfile,'  graph [ranksep="2"];\n'),
+    write(dotfile,'  node [shape=box];\n'),
 
     output_dot_list(List).
 output_dot_list([]):-
     write(dotfile,'}').
-output_dot_list([(Class,Edge)|T]):-
+output_dot_list([(Class,Edge,Label)|T]):-
     write(dotfile,'  "'),
     write(dotfile,Class),
     write(dotfile,'" -> "'),
     write(dotfile,Edge),
     write(dotfile,'"'),
+    write(dotfile,' [label="'),
+    write(dotfile,Label),
+    write(dotfile,'"]'),
     write(dotfile,';\n'),
     output_dot_list(T),
     !.
+output_dot_list([(Class)|T]):-
+    write(dotfile,'  "'),
+    write(dotfile,Class),
+    write(dotfile,'";\n'),
+    output_dot_list(T),
+    !.
+    
