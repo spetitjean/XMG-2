@@ -21,5 +21,26 @@
 
 :- use_module(library(assoc)).
 
-eval(Morph,morpho:solved(Morph)):-
-	!.
+eval(Morph,morpho:solved(MergedMorph)):-
+    merge_feats(Morph,Morph,[],MergedMorph),
+    !.
+
+merge_feats([],_,_,[]).
+merge_feats([H|T],Morph,Seen,MT):-
+    H=feat(F,_),
+    lists:member(F,Seen),
+    merge_feats(T,Morph,Seen,MT),!.
+merge_feats([H|T],Morph,Seen,[MH|MT]):-
+    H=feat(F,_),
+    merge_feat(H,Morph,MH),
+    merge_feats(T,Morph,[F|Seen],MT),!.
+
+merge_feat(F,[],F).
+merge_feat(feat(F,V),[feat(F1,_)|T],Merge):-
+    not(F=F1),
+    merge_feat(feat(F,V),T,Merge),!.
+merge_feat(feat(F,V),[feat(F,V1)|T],Merge):-
+    V=V1,
+    merge_feat(feat(F,V),T,Merge),!.
+
+    
