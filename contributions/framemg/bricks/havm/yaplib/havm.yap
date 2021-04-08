@@ -26,20 +26,18 @@
 :- attribute avmfeats/3.
 
 verify_attributes(Var, Other, Goals) :-
-	get_atts(Var, avmfeats(Type1,T1,U)), !,
+        get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
 	( get_atts(Other, avmfeats(Type2,T2,U)) ->
-	      unify_types(Type1,Type2,Type3,CType3),
+	    unify_types(Type1,Type2,Type3,CType3),
 	    %%check_type(Type1),
 	    get_attrconstraints(CType3,Must),
 	    rb_visit(T1,Pairs),
 	    lists:append(Must,Pairs,PairsMust),
-
 	    list_to_rbtree(PairsMust,RPairsMust),
 	    add_feat_constraints(RPairsMust,Final),
 	    add_feat_constraints(Final,Final1),
-	    rb_visit(Final1,LFinal1),
-
+	    rb_visit(Final1,LFinal1),	    
 	    %%xmg:send(info,'\n\nUnifying entries: '),
 	    
 	    %%xmg:send(info,T2),
@@ -57,12 +55,12 @@ verify_attributes(Var, Other, Goals) :-
 		 unify_entries(TC,T3List,T33));T3=T33),
 		 	    
 	    add_feat_constraints(T33,FinalT3),
-
 	    unify_types(TypeC,Type3,FinalType,_),
 	    
 
 	    put_atts(Other, avmfeats(FinalType,FinalT3,U)),
-	    %%put_atts(Other, avmfeats(Type1,T3,U)),
+	    %%put_atts(Other, avmfeats(Type1,T3,U)),    
+
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
 
@@ -70,7 +68,7 @@ verify_attributes(_, _, []).
 
 unify_entries(T,[],T).
 unify_entries(T1,[K-V0|L],T3) :-
-	(rb_lookup(K,V1,T1) ->  V0=V1, T1=T2; rb_insert(T1,K,V0,T2)),
+	(rb_lookup(K,V1,T1) ->  V0=V1,T1=T2 ; rb_insert(T1,K,V0,T2)),
 	unify_entries(T2,L,T3).
 
 
@@ -85,7 +83,7 @@ h_avm(X, Type, L) :- var(L), !,
         xmg:send(debug,Type).
 
 h_avm(X, Type, L) :-
-	xmg:send(debug,'\nCreating havm '),
+        xmg:send(debug,'\nCreating havm '),
 	xmg:send(debug,X),
 	xmg:send(debug,' with given type '),
 	xmg:send(debug,Type),
@@ -224,17 +222,18 @@ attribute_goal(Var, h_avm(Var,Type,L)) :-
 	get_atts(Var, avmfeats(Type,T,_)),
 	rb_visit(T,L).
 
-
+get_attrconstraints(Type,MCT):-
+        var(Type),!.
 get_attrconstraints(Type,MCT):-
 	xmg:fattrconstraint(Type,C),
 	xmg:send(debug,'\nGot attr contraints:'),
 	xmg:send(debug,C),
 	xmg:send(debug,'\n for :'),
 	xmg:send(debug,Type),
-
 	create_attr_types(C,CT),
 
-	merge_feats(CT,CT,MCT),!.
+	merge_feats(CT,CT,MCT),
+        !.
 
 get_attrconstraints(Type,MCT):-
 	not(xmg:fattrconstraint(Type,C)),!.
@@ -261,6 +260,7 @@ merge_feats([A-V|T],Feats,[A-V|T1]):-
 	merge_feats(T,Feats,T1),!.
 merge_feats([F|T],Feats,[F|T1]):-
 	merge_feats(T,Feats,T1),!.
+
 
 add_must([],L,L).
 add_must([H-V|T],L,NewL):-
