@@ -788,9 +788,22 @@ compute_matrix(Vectors,Matrix):-
 type_ftype(Type):-
 	assert_type(Type),!.
 
+check_types([]):-!.
+check_types([H|T]):-
+    check_type(H),
+    check_types(T),!.
+
+check_type(T):-
+    xmg:ftype(T),!.
+check_type(T):-
+    xmg:send(info,'\n\nError: undefined frame type: '),
+    xmg:send(info,T),
+    halt,
+    !.
 
 
 type_fconstraint(CT,types(Ts1),types(Ts2)):-
+        check_types(Ts1),
 	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
 
 type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
