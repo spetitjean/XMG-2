@@ -50,7 +50,7 @@ def handler_xmg_compile(args):
     finally:
         YAP.maybe_kill()
     if os.path.exists('.more'):
-        print('An additional file was created, moving it to the file: '+rename.split('.')[0]+'_more.mac')
+        print('An additional file was created, moving it to the file: '+'.'.join(rename.split('.')[:-1])+'_more.mac')
         os.rename('.more',rename.split('.')[0]+'_more.mac')
     if os.path.exists('.class_hierarchy'):
         class_hierarchy_dir = rename.replace('.xml','') + '_class_hierarchy'
