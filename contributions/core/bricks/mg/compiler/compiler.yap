@@ -34,6 +34,7 @@
 :-dynamic(xmg:notype_mode/0).
 
 :-dynamic(xmg:print_appendix/0).
+:-dynamic(xmg:mg_file/1).
 
 %% Customizing tags in the output
 :-dynamic(xmg:grammar_tags/1). 
@@ -93,7 +94,8 @@ send(O,M):-!, xmg:send(O,M),!.
 
 
 compile_file(File,Eval,Encoding,Debug,JSON,NoTypes,More,Hierarchy):-
-	asserta(encoding(Encoding)),
+    asserta(encoding(Encoding)),
+    asserta(xmg:mg_file(File)),
 	(
 	    Debug='on'
 	    ->

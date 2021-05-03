@@ -49,10 +49,12 @@ def handler_xmg_compile(args):
         YAP.communicate()
     finally:
         YAP.maybe_kill()
-    if os.path.exists('.more'):
+    initial_more_file = (os.path.split(os.path.abspath(args.input))[0]+'/.more')
+    print(initial_more_file)
+    if os.path.exists(initial_more_file):
         more_path = '.'.join(rename.split('.')[:-1])+'_more.mac'
         print('An additional file was created, moving it to the file: '+more_path)
-        os.rename('.more',more_path)
+        os.rename(initial_more_file,more_path)
     if os.path.exists('.class_hierarchy'):
         class_hierarchy_dir = rename.replace('.xml','') + '_class_hierarchy'
         print('Hierarchy graphs were generated, moving them to the directory: '+class_hierarchy_dir)

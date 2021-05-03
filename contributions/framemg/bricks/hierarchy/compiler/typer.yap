@@ -50,15 +50,17 @@ xmg:print_appendix:-
     not(xmg:more_mode),!.
 
 init_print_hierarchy:-
-    xmg:send(info,'\n\nInit print hierarchy\n'),
+    xmg:send(debug,'\n\nInit print hierarchy\n'),
+    xmg:mg_file(MG_FILE),
+    file_directory_name(MG_FILE,MG_DIR),
     %%xmg:fReachableTypes(FVectors),
     findall(FReachable,xmg:fReachableType(FReachable,_),FVectors),
 
     xmg:send(debug,'\nGot reacheable types\n'),
     
     fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-    
-    open('.more',write,S,[alias(hierarchy)]),
+    atom_concat(MG_DIR,'/.more',More_file),
+    open(More_file,write,S,[alias(hierarchy)]),
     write(hierarchy,'<type_info>\n'),
     write(hierarchy,'  <hierarchy>\n'),
     clean_all_attrs(FAttrs,CFAttrs),
