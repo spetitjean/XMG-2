@@ -50,7 +50,6 @@ def handler_xmg_compile(args):
     finally:
         YAP.maybe_kill()
     initial_more_file = (os.path.split(os.path.abspath(args.input))[0]+'/.more')
-    print(initial_more_file)
     if os.path.exists(initial_more_file):
         more_path = '.'.join(rename.split('.')[:-1])+'_more.mac'
         print('An additional file was created, moving it to the file: '+more_path)

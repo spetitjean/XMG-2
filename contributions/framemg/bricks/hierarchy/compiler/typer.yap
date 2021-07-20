@@ -95,6 +95,10 @@ clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
     %%xmg:send(info,SeenVars),
     put_assoc(H,SeenVars,V,NewSeenVars),
     clean_attrs(T,[H|Seen],NewSeenVars,T1),!.
+clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+    xmg:send(debug,'\nFailed clean_attrs\n'),
+    xmg:send(debug,H-V),
+    clean_attrs(T,[H|Seen],SeenVars,T1),!.
 
     
 
