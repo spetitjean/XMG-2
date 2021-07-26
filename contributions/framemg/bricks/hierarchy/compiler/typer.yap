@@ -75,14 +75,16 @@ init_print_hierarchy:-
 
 clean_all_attrs([],[]).
 clean_all_attrs([H|T],[H1|T1]):-
-    %%xmg:send(info,'\nConstraints:'),
-    %%xmg:send(info,H),
+    %% xmg:send(info,'\nConstraints:'),
+    %% xmg:send(info,H),
     empty_assoc(Assoc),
     clean_attrs(H,[],Assoc,H1),
+    %% xmg:send(info,'\nCleaned:'),
+    %% xmg:send(info,H1), 
     clean_all_attrs(T,T1).
 
 clean_attrs([],_,_,[]):-!.
-clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+clean_attrs([H-(Type,V)|T],Seen,SeenVars,[H-(Type,V)|T1]):-
     %%xmg:send(info,'\nClean attrs[0]: '),
     %%xmg:send(info,SeenVars),
     
@@ -90,14 +92,16 @@ clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
     get_assoc(H,SeenVars,V1),!,
     V=V1,
     clean_attrs(T,Seen,SeenVars,T1),!.
-clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+clean_attrs([H-(Type,V)|T],Seen,SeenVars,[H-(Type,V)|T1]):-
     %%xmg:send(info,'\nClean attrs[1]: '),
     %%xmg:send(info,SeenVars),
     put_assoc(H,SeenVars,V,NewSeenVars),
     clean_attrs(T,[H|Seen],NewSeenVars,T1),!.
+%% this happened when 2 type constraints are given for the same attribute
+%% now only values are unified, not types, so this should not happen anymore
 clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
-    xmg:send(debug,'\nFailed clean_attrs\n'),
-    xmg:send(debug,H-V),
+    xmg:send(info,'\nFailed clean_attrs\n'),
+    xmg:send(info,H-V),
     clean_attrs(T,[H|Seen],SeenVars,T1),!.
 
     
