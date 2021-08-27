@@ -26,25 +26,54 @@
 :- attribute avmfeats/3.
 
 verify_attributes(Var, Other, Goals) :-
+    xmg:send(debug, '\nVerify attributes'),
         get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
 	( get_atts(Other, avmfeats(Type2,T2,U)) ->
+            xmg:send(debug, '\nUnifying types'),
 	    unify_types(Type1,Type2,Type3,CType3),
+	    xmg:send(debug, '\nTypes unified'),
 	    %%check_type(Type1),
+	    xmg:send(debug, '\nget_attrconstraints'),
+	    xmg:send(debug, CType3),
 	    get_attrconstraints(CType3,Must),
+	    xmg:send(debug, '\nDone get_attrconstraints'),
+	    xmg:send(debug, Must),
 	    rb_visit(T1,Pairs),
-	    lists:append(Must,Pairs,PairsMust),
+	    xmg:send(debug, '\nDone rb_visit'),
+	    xmg:send(debug, '\nAppend new pairs'),
+	    xmg:send(debug, Must),	    
+	    xmg:send(debug, Pairs),
+	    %% we sometimes backtrack here and get into an infinite loop
+	    %% when Must is a free variable (is is always the case?)
+	    %% this happens when the havm is untyped, and only with more
+	    %% than one feature
+	    %% the cut after append prevents this, but may cause problems
+	    lists:append(Must,Pairs,PairsMust),!,
+	    xmg:send(debug, '\nDid append: '),
+	    xmg:send(debug, Must),
+	    xmg:send(debug, Pairs),
 	    list_to_rbtree(PairsMust,RPairsMust),
+	    xmg:send(debug, '\nDid list_to_rbtree'),
+	    xmg:send(debug, '\nNew pairs: '),
+	    xmg:send(debug, PairsMust),
+	    xmg:send(debug, '\nadd_feat_constraints'),	    
+	    xmg:send(debug, RPairsMust),	    
 	    add_feat_constraints(RPairsMust,Final),
 	    add_feat_constraints(Final,Final1),
 	    rb_visit(Final1,LFinal1),	    
+	    xmg:send(debug, '\nDone add_feat_constraints'),
+	    xmg:send(debug, LFinal1),
 	    %%xmg:send(info,'\n\nUnifying entries: '),
 	    
 	    %%xmg:send(info,T2),
 	    
 	    %%xmg:send(info,LFinal1),
-	    
+            xmg:send(debug, '\nunify_entries in verify_attributes'),	    
+            xmg:send(debug, LFinal1),	    
 	    unify_entries(T2,LFinal1,T3),
+            xmg:send(debug, '\nDone unify_entries in verify_attributes'),	    
+            xmg:send(debug, LFinal1),	    
 	    
 	    get_atts(Other,avmfeats(TypeC,TC,UC)),
 	    rb_visit(TC,LTC),
@@ -55,7 +84,9 @@ verify_attributes(Var, Other, Goals) :-
 		 unify_entries(TC,T3List,T33));T3=T33),
 		 	    
 	    add_feat_constraints(T33,FinalT3),
+            xmg:send(debug, '\nUnifying types'),
 	    unify_types(TypeC,Type3,FinalType,_),
+	    xmg:send(debug, '\nTypes unified'),
 	    
 
 	    put_atts(Other, avmfeats(FinalType,FinalT3,U)),
@@ -68,6 +99,7 @@ verify_attributes(_, _, []).
 
 unify_entries(T,[],T).
 unify_entries(T1,[K-V0|L],T3) :-
+        xmg:send(debug, '\nunify_entries in havm'),
 	(rb_lookup(K,V1,T1) ->  V0=V1,T1=T2 ; rb_insert(T1,K,V0,T2)),
 	unify_entries(T2,L,T3).
 
@@ -113,11 +145,14 @@ h_avm(X, Type, L) :-
 	%% two passes, in case something happens deeper in the structure
 	add_feat_constraints(MT,Final),
 	add_feat_constraints(Final,Final1),
-
-	
+	xmg:send(debug, '\nAdded feat constraints in havm: '),
 	put_atts(Y, avmfeats(Vector,Final1,_)),
-
-	X = Y.
+	xmg:send(debug, '\nDid put_atts in havm: '),
+	X = Y,
+        xmg:send(debug, '\nDone creating havm, initial list: '),
+        xmg:send(debug, L),
+	xmg:send(debug, '\nfinal feats: '),
+	xmg:send(debug, Final1).
 
 
 %% MT should be a RB TREE and return a RB TREE
@@ -280,7 +315,7 @@ check_type(Vector):-
 	xmg:send(info,Vector),false.
 
 unify_types(T1,T2,T3,CT3):-
-    xmg:send(debug,'Unify types: '),
+    xmg:send(debug,'\nUnify types: '),
     xmg:send(debug,T1),
     xmg:send(debug,' and '),
     xmg:send(debug,T2),
