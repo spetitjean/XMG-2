@@ -29,7 +29,8 @@
 :-dynamic(xmg:fAttrConstraint/2).
 :-dynamic(xmg:fAttrConstraint/4).
 :-dynamic(xmg:fPathConstraint/4).
-:-dynamic(xmg:fPathConstraintFromAtts/5).
+:-dynamic(xmg:fPathConstraintFromAttr/5).
+:-dynamic(xmg:fAttrConstraintFromAttr/5).
     
 :- xmg:edcg.
 :- edcg:using(xmg_brick_mg_typer:type_decls).
@@ -249,7 +250,29 @@ get_fconstraints([H|T]):-
 	get_fconstraints(T),!.
 
 get_fconstraint(fconstraint(CT,Left,Right)):-
-	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
+        split_constraints(Left, SLeft),!,
+        split_constraints(Right, SRight),!,
+	xmg_brick_hierarchy_typer:type_fconstraint(CT,SLeft,SRight),!.
+
+split_constraints(Constraints, const(Types, Paths, AttrTypes)):-
+    split_constraints(Constraints, _, Types, _, Paths, _, AttrTypes),
+    !.
+
+split_constraints([], [], [], [], [], [], []):-
+    !.
+split_constraints([type(Type)|T], Types, [Type|Types] ,Paths, Paths, AttrTypes, AttrTypes):-
+    split_constraints(T, _, Types, _, Paths, _, AttrTypes),
+    !.
+split_constraints([pathEq(Left, Right)|T], Types, Types ,Paths, [pathEq(Left, Right)|Paths], AttrTypes, AttrTypes):-
+    split_constraints(T, _, Types, _, Paths, _, AttrTypes),
+    !.
+split_constraints([attrType(Left, Right)|T], Types, Types ,Paths, Paths, AttrTypes, [attrType(Left, Right)|AttrTypes]):-
+    split_constraints(T, _, Types, _, Paths, _, AttrTypes),
+    !.
+split_constraints(List, _, _, _, _, _, _):-
+    xmg:send(info, '\nFailed to split constraints:'),
+    false.
+    
 
 get_fconstraint(C):-
 	xmg:send(info,'\nUnknown fconstraint:\n'),
@@ -812,20 +835,39 @@ check_type(T):-
     !.
 
 
-type_fconstraint(CT,types(Ts1),types(Ts2)):-
+%% type_fconstraint(CT,types(Ts1),types(Ts2)):-
+%%         check_types(Ts1),
+%% 	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
+
+%% type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
+%% 	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
+
+%% type_fconstraint(CT,types(Ts1),pathEq(Attr1,Attr2)):-
+%%         asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+
+%% type_fconstraint(CT,attrType(Attr,Type),pathEq(Attr1,Attr2)):-
+%% 	asserta(xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2)),!.
+
+
+%% TODO: make this WAY more flexible (include missing cases)
+
+%% The easy case: types -> types
+type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,[],[])):-
         check_types(Ts1),
 	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
-
-type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
+%% types -> attrType (TODO: attrType not unique)
+type_fconstraint(CT, const(Ts1, [], []), const([], [], [attrType(Attr,Type)])):-
 	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
-
-type_fconstraint(CT,types(Ts1),pathEq(Attr1,Attr2)):-
-        asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
-
-type_fconstraint(CT,attrType(Attr,Type),pathEq(Attr1,Attr2)):-
-	asserta(xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2)),!.
-
-
+%% types -> pathEq (TODO: pathEq not unique)
+type_fconstraint(CT, const(Ts1, [], []), const([], [pathEq(Attr1,Attr2)], [])):-
+    asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+%% attrType -> path (TODO: both not unique)
+type_fconstraint(CT, const([], [], [attrType(Attr,Type)]), const([], [pathEq(Attr1,Attr2)], [])):-
+	asserta(xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2)),!.
+%% attrType -> attrType (TODO: both not unique)
+type_fconstraint(CT, const([], [], [attrType(Attr, Type)]), const([], [], [attrType(Attr1, Type1)])):-
+	asserta(xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1)),!.
+%% TODO: constraints with mixed litterals types pathEqs attrTypes -> types pathEqs attrTypes
 
 
 type_fconstraint(CT,C1,C2):-

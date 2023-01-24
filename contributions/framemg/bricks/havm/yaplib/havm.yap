@@ -159,11 +159,16 @@ h_avm(X, Type, L) :-
 add_feat_constraints(MT,Final):-
     xmg:send(debug,'\nStarting add_feat_constraints: '),
     xmg:send(debug,MT),
-    check_feat_constraints(MT,MT,ToApply,N),
+    check_feat_constraints(MT, MT, ToApply, N),
+    check_new_feat_constraints(MT, MT, NewToApply, NewN),
     xmg:send(debug,'\nToApply:'),
     xmg:send(debug,ToApply),
-
-    xmg_brick_hierarchy_typer:generate_vector_attrs(_,ToApply,Feats),
+    xmg:send(debug,'\nNewToApply:'),
+    xmg:send(debug,NewToApply),
+    lists:append(ToApply, NewToApply, AllToApply),
+    xmg:send(info,'\nAllToApply: '),
+    xmg:send(info,AllToApply),
+    xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
     xmg:send(debug,Feats),
 	create_attr_types(Feats,CToApply),
 
@@ -189,7 +194,7 @@ add_feat_constraints(MT,Final):-
 
 %% To check contraints on attributes (only leading to path equalities for now)
 check_feat_constraints(Feats,Feats,ToApply,N):-
-    findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
+    findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
     OldFeats = Feats,
@@ -199,11 +204,22 @@ check_feat_constraints(Feats,Feats,ToApply,N):-
     %%check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_),
     !.
 
+%% To check contraints on attributes (only leading to other constraints on attributes)
+check_new_feat_constraints(Feats,Feats,ToApply,N):-
+    findall(featconstraint(CT,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),FeatConstraints),
+    xmg:send(debug,'\nChecking these constraints on feats:\n'),
+    xmg:send(debug,FeatConstraints),
+    OldFeats = Feats,
+    xmg:send(info,'\nFeatConstraints: '),
+    xmg:send(info,FeatConstraints),
+    check_new_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
+    !.
+
+
 check_feat_constraints([],Feats,Feats,[],N,N).
 check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
     check_feat_constraint(H,Feats,Feats),!,
     extract_constraint(H,EH),
-    %%xmg:send(debug,EH),
     M is N+1,
     check_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
@@ -212,13 +228,25 @@ check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
     check_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
+check_new_feat_constraints([],Feats,Feats,[],N,N).
+check_new_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
+    check_new_feat_constraint(H,Feats,Feats),!,
+    M is N+1,
+    %% TODO: THIS PART
+    EH = 1,
+    check_new_feat_constraints(T,Feats,Feats,ToApply,M,O),
+    !.
+check_new_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
+    not(check_new_feat_constraint(H,Feats,Feats1)),!,
+    check_new_feat_constraints(T,Feats,Feats,ToApply,N,M),
+    !.
+
 extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
     transform_path(P1,TP1),
     transform_path(P2,TP2),!.
 
 
 check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
-  
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
@@ -228,7 +256,6 @@ check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
     xmg:send(debug,'\nGot the feature\n'),
     !.
 check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats,Feats):-
-  
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
@@ -245,7 +272,34 @@ check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats
     %%h_avm(Val,_,Visit),
     !.
 %%check_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
-    
+
+check_new_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
+    rb_lookup(Attr,Val,Feats),
+    xmg:send(debug,'\nFound attribute\n'),
+    xmg:send(debug,Attr),
+    h_avm(NVal,Type,[]),
+    xmg:send(debug,'\nCreated new h_avm\n'),
+    not(not(NVal=Val)),
+    xmg:send(debug,'\nGot the feature\n'),
+    !.
+check_new_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Type1),Feats,Feats):-
+    rb_lookup(Attr,Val,Feats),
+    xmg:send(debug,'\nFound attribute\n'),
+    xmg:send(debug,Attr),
+    xmg:send(debug,'\nNow looking for\n'),
+    xmg:send(debug,Else),
+    xmg:send(debug,' in \n'),
+    attvar(Val),
+    h_avm(Val,_,ValFeats),
+    xmg:send(debug,' the havm '),
+    list_to_rbtree(ValFeats,RBValFeats),
+    xmg:send(debug,RBValFeats),
+    check_feat_constraint(featconstraint(CT,[Else|Path],Type,Attr1,Type1),RBValFeats,RBValFeats),
+    %%rb_visit(RBValFeats,Visit),
+    %%h_avm(Val,_,Visit),
+    !.
+%check_new_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
+
 transform_path([Att],Att):- !.
 transform_path([H|T],path(H,T1)):-
     transform_path(T,T1),!.
