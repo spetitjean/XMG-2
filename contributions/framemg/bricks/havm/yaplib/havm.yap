@@ -168,31 +168,27 @@ add_feat_constraints(MT,Final):-
     xmg:send(debug,'\nNewToApply:'),
     xmg:send(debug,NewToApply),
     lists:append(ToApply, NewToApply, AllToApply),
-    xmg:send(info,'\nAllToApply: '),
-    xmg:send(info,AllToApply),
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
-    xmg:send(info,'\nGenerated vectors: '),
-    xmg:send(info,Feats),
     xmg:send(debug,Feats),
-	create_attr_types(Feats,CToApply),
+    create_attr_types(Feats,CToApply),
 
-	xmg:send(debug,'\nCToApply: '),
-	xmg:send(debug,CToApply),
-	xmg_brick_avm_avm:avm(E,CToApply),
-
-	merge_feats(CToApply,CToApply,MToApply),
-	
-	xmg:send(debug,'\nMT: '),
-	xmg:send(debug,MT),
-	xmg:send(debug,'\nMToApply: '),
-	xmg:send(debug,MToApply),
-	
-	add_must(MToApply,MT,Final),
-	%% Final should be a rb_tree now
-	
-	xmg:send(debug,'\nFinal: '),
-	xmg:send(debug,Final),	
-	!.
+    xmg:send(debug,'\nCToApply: '),
+    xmg:send(debug,CToApply),
+    xmg_brick_avm_avm:avm(E,CToApply),
+    
+    merge_feats(CToApply,CToApply,MToApply),
+    
+    xmg:send(debug,'\nMT: '),
+    xmg:send(debug,MT),
+    xmg:send(debug,'\nMToApply: '),
+    xmg:send(debug,MToApply),
+    
+    add_must(MToApply,MT,Final),
+    %% Final should be a rb_tree now
+    
+    xmg:send(debug,'\nFinal: '),
+    xmg:send(debug,Final),	
+    !.
 
 
 
@@ -213,8 +209,6 @@ check_new_feat_constraints(Feats,Feats,ToApply,N):-
     findall(featconstraint(CT,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
-    xmg:send(info,'\nFeatConstraints: '),
-    xmg:send(info,FeatConstraints),
     check_new_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
     !.
 
