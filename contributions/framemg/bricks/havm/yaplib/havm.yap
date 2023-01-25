@@ -159,6 +159,8 @@ h_avm(X, Type, L) :-
 add_feat_constraints(MT,Final):-
     xmg:send(debug,'\nStarting add_feat_constraints: '),
     xmg:send(debug,MT),
+    %% ToApply is a list of tuples encoding the consequents of the
+    %% constraints to apply to this frame
     check_feat_constraints(MT, MT, ToApply, N),
     check_new_feat_constraints(MT, MT, NewToApply, NewN),
     xmg:send(debug,'\nToApply:'),
@@ -169,6 +171,8 @@ add_feat_constraints(MT,Final):-
     xmg:send(info,'\nAllToApply: '),
     xmg:send(info,AllToApply),
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
+    xmg:send(info,'\nGenerated vectors: '),
+    xmg:send(info,Feats),
     xmg:send(debug,Feats),
 	create_attr_types(Feats,CToApply),
 
@@ -209,7 +213,6 @@ check_new_feat_constraints(Feats,Feats,ToApply,N):-
     findall(featconstraint(CT,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
-    OldFeats = Feats,
     xmg:send(info,'\nFeatConstraints: '),
     xmg:send(info,FeatConstraints),
     check_new_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
@@ -218,7 +221,9 @@ check_new_feat_constraints(Feats,Feats,ToApply,N):-
 
 check_feat_constraints([],Feats,Feats,[],N,N).
 check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
+    % check whether the current constraint should be applied to the frame
     check_feat_constraint(H,Feats,Feats),!,
+    % convert the constraint into a 3-uple
     extract_constraint(H,EH),
     M is N+1,
     check_feat_constraints(T,Feats,Feats,ToApply,M,O),
@@ -230,10 +235,12 @@ check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
 
 check_new_feat_constraints([],Feats,Feats,[],N,N).
 check_new_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
+    % check whether the current constraint should be applied to the frame    
     check_new_feat_constraint(H,Feats,Feats),!,
-    M is N+1,
     %% TODO: THIS PART
-    EH = 1,
+    % convert the constraint into a 3-uple
+    extract_new_constraint(H,EH),
+    M is N+1,
     check_new_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
 check_new_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
@@ -245,7 +252,11 @@ extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
     transform_path(P1,TP1),
     transform_path(P2,TP2),!.
 
+extract_new_constraint(featconstraint(CT,Attr,Type,Attr1,Type1),(_,TA1-Type1)):-
+    transform_path(Attr1,TA1),!.
 
+
+% checks whether the constraint should apply in the current frame (c.a. whether the feat constraint holds)
 check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
@@ -273,6 +284,10 @@ check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats
     !.
 %%check_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
 
+
+
+% DUPLICATE?
+% checks whether the constraint should apply in the current frame (c.a. whether the feat constraint holds)
 check_new_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
