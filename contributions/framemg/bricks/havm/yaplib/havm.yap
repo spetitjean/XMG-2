@@ -171,21 +171,16 @@ add_feat_constraints(MT,Final):-
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
     xmg:send(debug,Feats),
     create_attr_types(Feats,CToApply),
-
     xmg:send(debug,'\nCToApply: '),
     xmg:send(debug,CToApply),
-    xmg_brick_avm_avm:avm(E,CToApply),
-    
+    xmg_brick_avm_avm:avm(E,CToApply),    
     merge_feats(CToApply,CToApply,MToApply),
-    
     xmg:send(debug,'\nMT: '),
     xmg:send(debug,MT),
     xmg:send(debug,'\nMToApply: '),
     xmg:send(debug,MToApply),
-    
     add_must(MToApply,MT,Final),
     %% Final should be a rb_tree now
-    
     xmg:send(debug,'\nFinal: '),
     xmg:send(debug,Final),	
     !.
@@ -212,12 +207,12 @@ check_new_feat_constraints(Feats,Feats,ToApply,N):-
     check_new_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
     !.
 
-
+%% for constraints of the form a : t -> b = c
 check_feat_constraints([],Feats,Feats,[],N,N).
 check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
-    % check whether the current constraint should be applied to the frame
+    % check whether the current constraint should be applied to the frame (a : t holds)
     check_feat_constraint(H,Feats,Feats),!,
-    % convert the constraint into a 3-uple
+    % convert the consequent into a 3-uple (b = c)
     extract_constraint(H,EH),
     M is N+1,
     check_feat_constraints(T,Feats,Feats,ToApply,M,O),
@@ -227,71 +222,47 @@ check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
     check_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
+%% for constraints of the form a : t -> b : u
 check_new_feat_constraints([],Feats,Feats,[],N,N).
 check_new_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
-    % check whether the current constraint should be applied to the frame    
-    check_new_feat_constraint(H,Feats,Feats),!,
-    %% TODO: THIS PART
-    % convert the constraint into a 3-uple
+    % check whether the current constraint should be applied to the frame  (a : t holds)  
+    check_feat_constraint(H,Feats,Feats),!,
+    % convert the consequent into a 3-uple (b : u)
     extract_new_constraint(H,EH),
     M is N+1,
     check_new_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
 check_new_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
-    not(check_new_feat_constraint(H,Feats,Feats1)),!,
+    not(check_feat_constraint(H,Feats,Feats1)),!,
     check_new_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
+%% converting a path equality to a 3-uple
 extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
     transform_path(P1,TP1),
     transform_path(P2,TP2),!.
 
+%% converting an attribute type constraint to a 2-uple
 extract_new_constraint(featconstraint(CT,Attr,Type,Attr1,Type1),(_,TA1-Type1)):-
     transform_path(Attr1,TA1),!.
 
-
-% checks whether the constraint should apply in the current frame (c.a. whether the feat constraint holds)
-check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
+%% checks whether the constraint should apply in the current frame (c.a. whether the feat a : t exists and has the right type)
+%% 1) look for the attribute a
+%% 2) if the feature has a type, it must be a subtype of t
+check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
-    h_avm(NVal,Type,[]),
-    xmg:send(debug,'\nCreated new h_avm\n'),
-    not(not(NVal=Val)),
+    h_avm(NVal,true,[]),
+    Val = NVal,
+    h_avm(Val,NVector,_),
+    xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),
+    lists:member(Type, TypeList),
     xmg:send(debug,'\nGot the feature\n'),
+    %% here it is not about t and NVector being compatible
+    %% NVector must be a subtype of t (c.a. contain the atomic type t)
     !.
-check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats,Feats):-
-    rb_lookup(Attr,Val,Feats),
-    xmg:send(debug,'\nFound attribute\n'),
-    xmg:send(debug,Attr),
-    xmg:send(debug,'\nNow looking for\n'),
-    xmg:send(debug,Else),
-    xmg:send(debug,' in \n'),
-    attvar(Val),
-    h_avm(Val,_,ValFeats),
-    xmg:send(debug,' the havm '),
-    list_to_rbtree(ValFeats,RBValFeats),
-    xmg:send(debug,RBValFeats),
-    check_feat_constraint(featconstraint(CT,[Else|Path],Type,Attr1,Attr2),RBValFeats,RBValFeats),
-    %%rb_visit(RBValFeats,Visit),
-    %%h_avm(Val,_,Visit),
-    !.
-%%check_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
-
-
-
-% DUPLICATE?
-% checks whether the constraint should apply in the current frame (c.a. whether the feat constraint holds)
-check_new_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
-    rb_lookup(Attr,Val,Feats),
-    xmg:send(debug,'\nFound attribute\n'),
-    xmg:send(debug,Attr),
-    h_avm(NVal,Type,[]),
-    xmg:send(debug,'\nCreated new h_avm\n'),
-    not(not(NVal=Val)),
-    xmg:send(debug,'\nGot the feature\n'),
-    !.
-check_new_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Type1),Feats,Feats):-
+check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Type1),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
@@ -314,27 +285,26 @@ transform_path([H|T],path(H,T1)):-
     transform_path(T,T1),!.
 
 const_h_avm(A,C) :-
-	get_atts(A, avmfeats(_, _, C)).
+    get_atts(A, avmfeats(_, _, C)).
 	
 attribute_goal(Var, h_avm(Var,Type,L)) :-
-	get_atts(Var, avmfeats(Type,T,_)),
-	rb_visit(T,L).
+    get_atts(Var, avmfeats(Type,T,_)),
+    rb_visit(T,L).
 
 get_attrconstraints(Type,MCT):-
-        var(Type),!.
+    var(Type),!.
 get_attrconstraints(Type,MCT):-
-	xmg:fattrconstraint(Type,C),
-	xmg:send(debug,'\nGot attr contraints:'),
-	xmg:send(debug,C),
-	xmg:send(debug,'\n for :'),
-	xmg:send(debug,Type),
-	create_attr_types(C,CT),
-
-	merge_feats(CT,CT,MCT),
-        !.
+    xmg:fattrconstraint(Type,C),
+    xmg:send(debug,'\nGot attr contraints:'),
+    xmg:send(debug,C),
+    xmg:send(debug,'\n for :'),
+    xmg:send(debug,Type),
+    create_attr_types(C,CT),
+    merge_feats(CT,CT,MCT),
+    !.
 
 get_attrconstraints(Type,MCT):-
-	not(xmg:fattrconstraint(Type,C)),!.
+    not(xmg:fattrconstraint(Type,C)),!.
 
 create_attr_types([],[]).
 create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
@@ -344,20 +314,20 @@ create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
     create_attr_types(T,T1),
     !.
 create_attr_types([A-(Type,V)|T],[A-V|T1]):-
-	var(Type),!,
-	create_attr_types(T,T1),!.
+    var(Type),!,
+    create_attr_types(T,T1),!.
 create_attr_types([A-(Type,V)|T],[A-V|T1]):-
-	%%not(var(V)),!,
-	h_avm(V,Type,[]),
-	create_attr_types(T,T1),!.
+    %%not(var(V)),!,
+    h_avm(V,Type,[]),
+    create_attr_types(T,T1),!.
 
 merge_feats([],Feats,[]).
 merge_feats([A-V|T],Feats,[A-V|T1]):-
-	lists:member(A-V1,T),
-	V=V1,!,
-	merge_feats(T,Feats,T1),!.
+    lists:member(A-V1,T),
+    V=V1,!,
+    merge_feats(T,Feats,T1),!.
 merge_feats([F|T],Feats,[F|T1]):-
-	merge_feats(T,Feats,T1),!.
+    merge_feats(T,Feats,T1),!.
 
 
 add_must([],L,L).
@@ -368,14 +338,13 @@ add_must([H-V|T],L,NewL):-
     
 add_must([H-V|T],L,NewL):-
     rb_insert(L,H,V,TL),
-
-	add_must(T,TL,NewL),!.
+    add_must(T,TL,NewL),!.
 	
 check_type(Vector):-
-	not(not(xmg:fReachableType(Vector,_))),!.
+    not(not(xmg:fReachableType(Vector,_))),!.
 check_type(Vector):-
-	xmg:send(info,'\nInvalid type vector:'),
-	xmg:send(info,Vector),false.
+    xmg:send(info,'\nInvalid type vector:'),
+    xmg:send(info,Vector),false.
 
 unify_types(T1,T2,T3,CT3):-
     xmg:send(debug,'\nUnify types: '),
