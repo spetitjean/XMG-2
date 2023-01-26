@@ -851,22 +851,38 @@ check_type(T):-
 
 %% TODO: make this WAY more flexible (include missing cases)
 
-%% The easy case: types -> types
-type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,[],[])):-
-        check_types(Ts1),
-	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
-%% types -> attrType (TODO: attrType not unique)
-type_fconstraint(CT, const(Ts1, [], []), const([], [], [attrType(Attr,Type)])):-
-	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
-%% types -> pathEq (TODO: pathEq not unique)
-type_fconstraint(CT, const(Ts1, [], []), const([], [pathEq(Attr1,Attr2)], [])):-
-    asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+type_fconstraint(CT, const(Ts1, [], []), const([], [], [])):-
+    !.
+%% The standard case: types -> types or types <-> types
+%% we only support <-> in this case (not sure what to do yet in the other cases)
+type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,Paths,Attrs)):-
+    not(Ts2=[]),
+    check_types(Ts1),
+    asserta(xmg:fConstraint(CT,Ts1,Ts2)),
+    type_fconstraint(CT, const(Ts1,[],[]), const([],Paths,Attrs)),
+    !.
+%% type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,[],[])):-
+%%     not(Ts2=[]),
+%%     check_types(Ts1),
+%%     asserta(xmg:fConstraint(CT,Ts1,Ts2)),
+%%     !.
+%% types -> pathEq
+type_fconstraint(implies, const(Ts1, [], []), const([], [pathEq(Attr1,Attr2)|T], Attrs)):-
+    asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),
+    type_fconstraint(implies, const(Ts1, [], []), const([], T, Attrs)),
+    !.
+%% types -> attrType 
+type_fconstraint(implies, const(Ts1, [], []), const([], [], [attrType(Attr,Type)|T])):-
+    asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),
+    type_fconstraint(implies, const(Ts1, [], []), const([], [], T)),
+    !.
+
 %% attrType -> path (TODO: both not unique)
-type_fconstraint(CT, const([], [], [attrType(Attr,Type)]), const([], [pathEq(Attr1,Attr2)], [])):-
-	asserta(xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2)),!.
+type_fconstraint(implies, const([], [], [attrType(Attr,Type)]), const([], [pathEq(Attr1,Attr2)], [])):-
+	asserta(xmg:fPathConstraintFromAttr(implies,Attr,Type,Attr1,Attr2)),!.
 %% attrType -> attrType (TODO: both not unique)
-type_fconstraint(CT, const([], [], [attrType(Attr, Type)]), const([], [], [attrType(Attr1, Type1)])):-
-	asserta(xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1)),!.
+type_fconstraint(implies, const([], [], [attrType(Attr, Type)]), const([], [], [attrType(Attr1, Type1)])):-
+	asserta(xmg:fAttrConstraintFromAttr(implies,Attr,Type,Attr1,Type1)),!.
 %% TODO: constraints with mixed litterals types pathEqs attrTypes -> types pathEqs attrTypes
 
 
