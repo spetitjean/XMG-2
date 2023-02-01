@@ -66,9 +66,19 @@ init_print_hierarchy:-
     write(hierarchy,'  <hierarchy>\n'),
     clean_all_attrs(FAttrs,CFAttrs),
     print_hierarchy(FTypes,CFAttrs),
-    findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+    xmg:send(info,'\nPrinted accessible types'),
+    findall(fConstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+    findall(fPathConstraint(TC,T1s,Attr1,Attr2),xmg:fPathConstraint(TC,T1s,Attr1,Attr2),PathConstraints),
+    findall(fAttrConstraint(TC,T1s,Attr,Type),xmg:fAttrConstraint(TC,T1s,Attr,Type),AttrConstraints),
+    findall(fPathConstraintFromAttr(TC,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAttr(TC,Attr,Type,Attr1,Attr2),PathConstraintsFromAttr),
+    findall(fAttrConstraintFromAttr(TC,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(TC,Attr,Type,Attr1,Type1),AttrConstraintsFromAttr),
+    lists:append(Constraints, PathConstraints, MoreConstraints),
+    lists:append(MoreConstraints, AttrConstraints, EvenMoreConstraints),
+    lists:append(EvenMoreConstraints, PathConstraintsFromAttr, AlmostAllConstraints),
+    lists:append(AlmostAllConstraints, AttrConstraintsFromAttr, AllConstraints),
     write(hierarchy,'  <type_constraints>\n'),
-    print_type_constraints(Constraints),
+    xmg:send(info,'\nPrinting type constraints'),
+    print_type_constraints(AllConstraints),
     write(hierarchy,'</type_info>\n'),
     close(hierarchy),!.
 init_print_hierarchy:-
@@ -150,19 +160,34 @@ print_constraints([A-(Type,V)|T],N):-
 	print_constraints(T,O),
 	!.
 
-print_attribute(path(A1,A2)):-
+print_attribute(A):-
     write(hierarchy,'          <path>\n'),
+    do_print_attribute(A),
+    write(hierarchy,'          </path>\n'),!.
+    
+do_print_attribute(path(A1,T)):-
     write(hierarchy,'            <attr val="'),
     write(hierarchy,A1),
     write(hierarchy,'"/>\n'),
+    do_print_attribute(T),!.
+do_print_attribute(A):-
     write(hierarchy,'            <attr val="'),
-    write(hierarchy,A2),
+    write(hierarchy,A),
+    write(hierarchy,'"/>\n'),!.
+
+%% for type constraints, this comes as a list
+print_list_attribute(L):-
+    write(hierarchy,'          <path>\n'),
+    do_print_list_attribute(L),
+    write(hierarchy,'          </path>\n'),
+    !.
+do_print_list_attribute([A1|T]):-
+    write(hierarchy,'            <attr val="'),
+    write(hierarchy,A1),
     write(hierarchy,'"/>\n'),
-    write(hierarchy,'          </path>\n'),!.
-print_attribute(A):-
-	write(hierarchy,'          <attr val="'),
-	write(hierarchy,A),
-	write(hierarchy,'"/>\n'),!.
+    do_print_list_attribute(T),!.
+do_print_list_attribute([]):-
+    !.
 	
 set_constraint_value(A,N,M):-
     var(A),
@@ -176,18 +201,83 @@ set_constraint_value(A,N,M):-
 print_type_constraints([]):-
     write(hierarchy,'  </type_constraints>\n'),!.
 
-print_type_constraints([fconstraint(CType,Type1,Type2)|T]):-
+print_type_constraints([fConstraint(CType,Type1,Type2)|T]):-
     write(hierarchy,'    <type_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <ctype1>\n'),    
+    write(hierarchy,'      <ctype1>\n'),
     print_type('ctype1',Type1),
     write(hierarchy,'      <ctype2>\n'),
     print_type('ctype2',Type2),
     write(hierarchy,'    </type_constraint>\n'),
     print_type_constraints(T),!.
 
-    
+print_type_constraints([fPathConstraint(CType,Type1,Attr1,Attr2)|T]):-
+    write(hierarchy,'    <type_to_path_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <ctype>\n'),    
+    print_type('ctype',Type1),
+    write(hierarchy,'      <attr1>\n'),
+    print_list_attribute(Attr1),
+    write(hierarchy,'      </attr1>\n'),
+    write(hierarchy,'      <attr2>\n'),
+    print_list_attribute(Attr2),
+    write(hierarchy,'      </attr2>\n'),
+    write(hierarchy,'    </type_to_path_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fAttrConstraint(CType,Type,Attr1,Type1)|T]):-
+    write(hierarchy,'    <type_to_attr_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <ctype1>\n'),    
+    print_type('ctype',Type),
+    write(hierarchy,'      <attr>\n'),
+    print_list_attribute(Attr1),
+    write(hierarchy,'      </attr>\n'),
+    write(hierarchy,'      <ctype2>\n'),
+    set_constraint_value(Type1,0,_),
+    print_type('ctype2',[Type1]),
+    write(hierarchy,'    </type_to_attr_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fPathConstraintFromAttr(CType,Attr,Type,Attr1,Attr2)|T]):-
+    write(hierarchy,'    <attr_to_path_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <attr0>\n'),
+    print_list_attribute(Attr),
+    write(hierarchy,'      <attr1>\n'),
+    print_list_attribute(Attr1),
+    write(hierarchy,'      </attr1>\n'),
+    write(hierarchy,'      <attr2>\n'),
+    print_list_attribute(Attr2),
+    write(hierarchy,'      </attr2>\n'),
+    write(hierarchy,'    </attr_to_path_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fAttrConstraintFromAttr(CType,Attr,Type,Attr1,Type1)|T]):-
+    write(hierarchy,'    <attr_to_attr_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <attr1>\n'),
+    print_list_attribute(Attr),
+    write(hierarchy,'      </attr1>\n'),
+    write(hierarchy,'      <ctype1>\n'),
+    set_constraint_value(Type,0,N),
+    print_type('ctype',[Type]),
+    write(hierarchy,'      <attr2>\n'),
+    print_list_attribute(Attr1),
+    write(hierarchy,'      </attr2>\n'),
+    write(hierarchy,'      <ctype2>\n'),
+    set_constraint_value(Type1,N,_),
+    print_type('ctype2',[Type1]),
+    write(hierarchy,'    </attr_to_attr_constraint>\n'),
+    print_type_constraints(T),!.
+
+
+
     
 
 
@@ -854,7 +944,7 @@ check_type(T):-
 type_fconstraint(CT, const(Ts1, [], []), const([], [], [])):-
     !.
 %% The standard case: types -> types or types <-> types
-%% we only support <-> in this case (not sure what to do yet in the other cases)
+%% <-> is only supported in this case (not sure what to do yet in the other cases)
 type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,Paths,Attrs)):-
     not(Ts2=[]),
     check_types(Ts1),
@@ -868,12 +958,12 @@ type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,Paths,Attrs)):-
 %%     !.
 %% types -> pathEq
 type_fconstraint(implies, const(Ts1, [], []), const([], [pathEq(Attr1,Attr2)|T], Attrs)):-
-    asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),
+    asserta(xmg:fPathConstraint(implies,Ts1,Attr1,Attr2)),
     type_fconstraint(implies, const(Ts1, [], []), const([], T, Attrs)),
     !.
 %% types -> attrType 
 type_fconstraint(implies, const(Ts1, [], []), const([], [], [attrType(Attr,Type)|T])):-
-    asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),
+    asserta(xmg:fAttrConstraint(implies,Ts1,Attr,Type)),
     type_fconstraint(implies, const(Ts1, [], []), const([], [], T)),
     !.
 
