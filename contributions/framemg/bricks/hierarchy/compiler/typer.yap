@@ -122,21 +122,30 @@ print_hierarchy([],[]):-
 print_hierarchy([H|T],[H1|T1]):-
         write(hierarchy,'    <entry>\n'),
         write(hierarchy,'      <ctype>\n'),
-	print_type('ctype',H),
+	print_type('ctype',H,8),
 	print_constraints(H1),
 	write(hierarchy,'    </entry>\n'),
 	print_hierarchy(T,T1).
 
-print_type(Label,[]):-
-    write(hierarchy,'      </'),
+print_type(Label,[],N):-
+    write_spaces(N-2),
+    write(hierarchy,'</'),
     write(hierarchy,Label),
     write(hierarchy,'>\n'),!.
 
-print_type(Label,[H|T]):-
-    write(hierarchy,'        <type val="'),
+print_type(Label,[H|T],N):-
+    write_spaces(N),
+    write(hierarchy,'<type val="'),
     write(hierarchy,H),
     write(hierarchy,'"/>\n'),
-    print_type(Label,T),!.
+    print_type(Label,T,N),!.
+
+write_spaces(0).
+write_spaces(N):-
+    N > 0,
+    M is N - 1,
+    write(hierarchy, ' '),
+    write_spaces(M).
 	
 
 print_constraints(C):-
@@ -177,12 +186,12 @@ do_print_attribute(A):-
 
 %% for type constraints, this comes as a list
 print_list_attribute(L):-
-    write(hierarchy,'          <path>\n'),
+    write(hierarchy,'        <path>\n'),
     do_print_list_attribute(L),
-    write(hierarchy,'          </path>\n'),
+    write(hierarchy,'        </path>\n'),
     !.
 do_print_list_attribute([A1|T]):-
-    write(hierarchy,'            <attr val="'),
+    write(hierarchy,'          <attr val="'),
     write(hierarchy,A1),
     write(hierarchy,'"/>\n'),
     do_print_list_attribute(T),!.
@@ -205,10 +214,14 @@ print_type_constraints([fConstraint(CType,Type1,Type2)|T]):-
     write(hierarchy,'    <type_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <ctype1>\n'),
-    print_type('ctype1',Type1),
-    write(hierarchy,'      <ctype2>\n'),
-    print_type('ctype2',Type2),
+    write(hierarchy,'      <antecedent>\n'),
+    write(hierarchy,'        <ctype>\n'),
+    print_type('ctype',Type1,10),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    write(hierarchy,'        <ctype>\n'),
+    print_type('ctype',Type2,10),
+    write(hierarchy,'      </consequent>\n'),
     write(hierarchy,'    </type_constraint>\n'),
     print_type_constraints(T),!.
 
@@ -216,14 +229,14 @@ print_type_constraints([fPathConstraint(CType,Type1,Attr1,Attr2)|T]):-
     write(hierarchy,'    <type_to_path_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <ctype>\n'),    
-    print_type('ctype',Type1),
-    write(hierarchy,'      <attr1>\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    write(hierarchy,'        <ctype>\n'),    
+    print_type('ctype',Type1,10),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
     print_list_attribute(Attr1),
-    write(hierarchy,'      </attr1>\n'),
-    write(hierarchy,'      <attr2>\n'),
     print_list_attribute(Attr2),
-    write(hierarchy,'      </attr2>\n'),
+    write(hierarchy,'      </consequent>\n'),
     write(hierarchy,'    </type_to_path_constraint>\n'),
     print_type_constraints(T),!.
 
@@ -231,14 +244,16 @@ print_type_constraints([fAttrConstraint(CType,Type,Attr1,Type1)|T]):-
     write(hierarchy,'    <type_to_attr_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <ctype1>\n'),    
-    print_type('ctype',Type),
-    write(hierarchy,'      <attr>\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    write(hierarchy,'        <ctype>\n'),    
+    print_type('ctype',Type,10),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
     print_list_attribute(Attr1),
-    write(hierarchy,'      </attr>\n'),
-    write(hierarchy,'      <ctype2>\n'),
+    write(hierarchy,'        <ctype>\n'),
     set_constraint_value(Type1,0,_),
-    print_type('ctype2',[Type1]),
+    print_type('ctype',[Type1],10),
+    write(hierarchy,'      </consequent>\n'),
     write(hierarchy,'    </type_to_attr_constraint>\n'),
     print_type_constraints(T),!.
 
@@ -246,14 +261,13 @@ print_type_constraints([fPathConstraintFromAttr(CType,Attr,Type,Attr1,Attr2)|T])
     write(hierarchy,'    <attr_to_path_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <attr0>\n'),
+    write(hierarchy,'      <antecedent>\n'),
     print_list_attribute(Attr),
-    write(hierarchy,'      <attr1>\n'),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
     print_list_attribute(Attr1),
-    write(hierarchy,'      </attr1>\n'),
-    write(hierarchy,'      <attr2>\n'),
     print_list_attribute(Attr2),
-    write(hierarchy,'      </attr2>\n'),
+    write(hierarchy,'      </consequent>\n'),
     write(hierarchy,'    </attr_to_path_constraint>\n'),
     print_type_constraints(T),!.
 
@@ -261,18 +275,18 @@ print_type_constraints([fAttrConstraintFromAttr(CType,Attr,Type,Attr1,Type1)|T])
     write(hierarchy,'    <attr_to_attr_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <attr1>\n'),
+    write(hierarchy,'      <antecedent>\n'),
     print_list_attribute(Attr),
-    write(hierarchy,'      </attr1>\n'),
-    write(hierarchy,'      <ctype1>\n'),
+    write(hierarchy,'        <ctype>\n'),
     set_constraint_value(Type,0,N),
-    print_type('ctype',[Type]),
-    write(hierarchy,'      <attr2>\n'),
+    print_type('ctype',[Type],10),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
     print_list_attribute(Attr1),
-    write(hierarchy,'      </attr2>\n'),
-    write(hierarchy,'      <ctype2>\n'),
+    write(hierarchy,'        <ctype>\n'),
     set_constraint_value(Type1,N,_),
-    print_type('ctype2',[Type1]),
+    print_type('ctype',[Type1],10),
+    write(hierarchy,'      </consequent>\n'),
     write(hierarchy,'    </attr_to_attr_constraint>\n'),
     print_type_constraints(T),!.
 
