@@ -58,7 +58,7 @@ verify_attributes(Var, Other, Goals) :-
 	    xmg:send(debug, '\nNew pairs: '),
 	    xmg:send(debug, PairsMust),
 	    xmg:send(debug, '\nadd_feat_constraints'),	    
-	    xmg:send(debug, RPairsMust),	    
+	    xmg:send(debug, RPairsMust),
 	    add_feat_constraints(RPairsMust,Final),
 	    add_feat_constraints(Final,Final1),
 	    rb_visit(Final1,LFinal1),	    
@@ -68,6 +68,7 @@ verify_attributes(Var, Other, Goals) :-
 	    
 	    %%xmg:send(info,T2),
 	    
+
 	    %%xmg:send(info,LFinal1),
             xmg:send(debug, '\nunify_entries in verify_attributes'),	    
             xmg:send(debug, LFinal1),	    
@@ -82,16 +83,15 @@ verify_attributes(Var, Other, Goals) :-
 	    (not(TC=T2)->(
 			  rb_visit(T3,T3List),     
 		 unify_entries(TC,T3List,T33));T3=T33),
-		 	    
 	    add_feat_constraints(T33,FinalT3),
-            xmg:send(debug, '\nUnifying types'),
+	    xmg:send(debug, '\nUnifying types'),
 	    unify_types(TypeC,Type3,FinalType,_),
 	    xmg:send(debug, '\nTypes unified'),
 	    
 
 	    put_atts(Other, avmfeats(FinalType,FinalT3,U)),
 	    %%put_atts(Other, avmfeats(Type1,T3,U)),    
-
+	 
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
 
@@ -143,6 +143,7 @@ h_avm(X, Type, L) :-
 	!,
 
 	%% two passes, in case something happens deeper in the structure
+		    
 	add_feat_constraints(MT,Final),
 	add_feat_constraints(Final,Final1),
 	xmg:send(debug, '\nAdded feat constraints in havm: '),
@@ -168,6 +169,7 @@ add_feat_constraints(MT,Final):-
     xmg:send(debug,'\nNewToApply:'),
     xmg:send(debug,NewToApply),
     lists:append(ToApply, NewToApply, AllToApply),
+    
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
     xmg:send(debug,Feats),
     create_attr_types(Feats,CToApply),
@@ -179,10 +181,11 @@ add_feat_constraints(MT,Final):-
     xmg:send(debug,MT),
     xmg:send(debug,'\nMToApply: '),
     xmg:send(debug,MToApply),
+    
     add_must(MToApply,MT,Final),
     %% Final should be a rb_tree now
     xmg:send(debug,'\nFinal: '),
-    xmg:send(debug,Final),	
+    xmg:send(debug,Final),
     !.
 
 
@@ -202,7 +205,7 @@ check_feat_constraints(Feats,Feats,ToApply,N):-
 %% To check contraints on attributes (only leading to other constraints on attributes)
 check_new_feat_constraints(Feats,Feats,ToApply,N):-
     findall(featconstraint(CT,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),FeatConstraints),
-    xmg:send(debug,'\nChecking these constraints on feats:\n'),
+    xmg:send(debug,'\nChecking these new constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
     check_new_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
     !.
@@ -253,8 +256,6 @@ check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
-    h_avm(NVal,true,[]),
-    Val = NVal,
     h_avm(Val,NVector,_),
     xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),
     lists:member(Type, TypeList),
