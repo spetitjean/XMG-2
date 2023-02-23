@@ -163,14 +163,15 @@ add_feat_constraints(MT,Final):-
     %% ToApply is a list of tuples encoding the consequents of the
     %% constraints to apply to this frame
     check_feat_constraints(MT, MT, ToApply, N),
-    check_new_feat_constraints(MT, MT, NewToApply, NewN),
     xmg:send(debug,'\nToApply:'),
     xmg:send(debug,ToApply),
-    xmg:send(debug,'\nNewToApply:'),
-    xmg:send(debug,NewToApply),
-    lists:append(ToApply, NewToApply, AllToApply),
+    xmg:send(info,'\nToApply:'),
+    xmg:send(info,ToApply),
+    ToApply = AllToApply,
     
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
+    xmg:send(info,'\nVector_attrs: '),
+    xmg:send(info,Feats),
     xmg:send(debug,Feats),
     create_attr_types(Feats,CToApply),
     xmg:send(debug,'\nCToApply: '),
@@ -192,9 +193,16 @@ add_feat_constraints(MT,Final):-
 
 %% To check contraints on attributes (only leading to path equalities for now)
 check_feat_constraints(Feats,Feats,ToApply,N):-
-    findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
+    findall(constraint(CT,attr(Attr,Type),path(Attr1,Attr2)),xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2),PathFromAttrConstraints),
+    findall(constraint(CT,attr(Attr,Type),attr(Attr1,Type1)),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),AttrFromAttrConstraints),
+    findall(constraint(CT,attr(Attr,Type),types(Ts)),xmg:fTypeConstraintFromAttr(CT,Attr,Type,Ts),TypeFromAttrConstraints),
+    findall(constraint(CT,path(Attr1,Attr2),path(Attr3,Attr4)),xmg:fPathConstraintFromPath(CT,Attr1,Attr2,Attr3,Attr4),PathFromPathConstraints),
+    findall(constraint(CT,path(Attr1,Attr2),attr(Attr,Type)),xmg:fAttrConstraintFromPath(CT,Attr1,Attr2,Attr,Type),AttrFromPathConstraints),
+    findall(constraint(CT,path(Attr1,Attr2),types(Ts)),xmg:fTypeConstraintFromPath(CT,Attr1,Attr2,Ts),TypeFromPathConstraints),
+    lists:append([PathFromAttrConstraints, AttrFromAttrConstraints, TypeFromAttrConstraints, PathFromPathConstraints, AttrFromPathConstraints, TypeFromPathConstraints], FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
+    
     OldFeats = Feats,
     check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
     %%(N>0 -> (check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_)) ; true ),
@@ -202,57 +210,46 @@ check_feat_constraints(Feats,Feats,ToApply,N):-
     %%check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_),
     !.
 
-%% To check contraints on attributes (only leading to other constraints on attributes)
-check_new_feat_constraints(Feats,Feats,ToApply,N):-
-    findall(featconstraint(CT,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),FeatConstraints),
-    xmg:send(debug,'\nChecking these new constraints on feats:\n'),
-    xmg:send(debug,FeatConstraints),
-    check_new_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
-    !.
-
 %% for constraints of the form a : t -> b = c
 check_feat_constraints([],Feats,Feats,[],N,N).
-check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
+check_feat_constraints([constraint(CT, Left, Right)|T],Feats,Feats,[EH|ToApply],N,O):-
     % check whether the current constraint should be applied to the frame (a : t holds)
-    check_feat_constraint(H,Feats,Feats),!,
+    check_feat_constraint(Left,Feats,Feats),!,
     % convert the consequent into a 3-uple (b = c)
-    extract_constraint(H,EH),
+    extract_constraint(Right,EH),
     M is N+1,
     check_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
-check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
-    not(check_feat_constraint(H,Feats,Feats1)),!,
+check_feat_constraints([constraint(CT, Left, Right)|T],Feats,Feats,ToApply,N,M):-
+    not(check_feat_constraint(Left,Feats,Feats1)),!,
     check_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
-%% for constraints of the form a : t -> b : u
-check_new_feat_constraints([],Feats,Feats,[],N,N).
-check_new_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
-    % check whether the current constraint should be applied to the frame  (a : t holds)  
-    check_feat_constraint(H,Feats,Feats),!,
-    % convert the consequent into a 3-uple (b : u)
-    extract_new_constraint(H,EH),
-    M is N+1,
-    check_new_feat_constraints(T,Feats,Feats,ToApply,M,O),
-    !.
-check_new_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
-    not(check_feat_constraint(H,Feats,Feats1)),!,
-    check_new_feat_constraints(T,Feats,Feats,ToApply,N,M),
-    !.
-
 %% converting a path equality to a 3-uple
-extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
+extract_constraint(path(P1,P2),path(_,TP1,TP2)):-
     transform_path(P1,TP1),
     transform_path(P2,TP2),!.
-
 %% converting an attribute type constraint to a 2-uple
-extract_new_constraint(featconstraint(CT,Attr,Type,Attr1,Type1),(_,TA1-Type1)):-
+extract_constraint(attr(Attr1,Type1),attr(_,TA1-Type1)):-
     transform_path(Attr1,TA1),!.
+%% converting a type constraint to a 1-uple
+extract_constraint(types(Ts),types(_,Ts)):- !.
+
+
+get_value_at_path(Feats, [Attr], Value):-
+    rb_lookup(Attr,Value,Feats),!.
+get_value_at_path(Feats, [Attr|Path], Value):-
+    rb_lookup(Attr,Val,Feats),
+    attvar(Val),
+    h_avm(Val,_,ValFeats),
+    list_to_rbtree(ValFeats,RBValFeats),
+    get_value_at_path(Feats, Path, Value),!.
+    
 
 %% checks whether the constraint should apply in the current frame (c.a. whether the feat a : t exists and has the right type)
 %% 1) look for the attribute a
 %% 2) if the feature has a type, it must be a subtype of t
-check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
+check_feat_constraint(attr([Attr],Type),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
@@ -263,7 +260,7 @@ check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Type1),Feats,Feats):-
     %% here it is not about t and NVector being compatible
     %% NVector must be a subtype of t (c.a. contain the atomic type t)
     !.
-check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Type1),Feats,Feats):-
+check_feat_constraint(attr([Attr,Else|Path],Type),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
@@ -275,12 +272,36 @@ check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Type1),Feats
     xmg:send(debug,' the havm '),
     list_to_rbtree(ValFeats,RBValFeats),
     xmg:send(debug,RBValFeats),
-    check_feat_constraint(featconstraint(CT,[Else|Path],Type,Attr1,Type1),RBValFeats,RBValFeats),
+    check_feat_constraint(attr([Else|Path],Type),RBValFeats,RBValFeats),
     %%rb_visit(RBValFeats,Visit),
     %%h_avm(Val,_,Visit),
     !.
-%check_new_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
-
+%% checks whether the constraint should apply in the current frame (c.a. whether the feats a and a1 exist and have the same value)
+%% 1) look for the attribute a
+%% 2) look for the attribute b
+%% 3) check value equality
+check_feat_constraint(path(Attr1,Attr2),Feats,Feats):-
+    xmg:send(info,'\nIn check feat constraint (path): '),
+    xmg:send(info,Attr1),
+    xmg:send(info,Attr2),
+    xmg:send(info,Feats),
+    get_value_at_path(Feats, Attr1, Value1),
+    xmg:send(info,'\nFound attribute 1\n'),
+    xmg:send(info,Value1),
+    get_value_at_path(Feats, Attr2, Value2),
+    xmg:send(info,'\nFound attribute 2\n'),
+    xmg:send(info,Value2),
+    %% if the values do not exist, it should fail before here
+    Value1 == Value2,
+    xmg:send(info,'\nEqual!'),
+    %% is this what we want?
+    !.
+check_feat_constraint(Left,Feats,Feats):-
+    Left = types(_),
+    xmg:send(info,'\nUnsupported left side of constraint: '),
+    xmg:send(info,Left),
+    fail,
+    !.
 transform_path([Att],Att):- !.
 transform_path([H|T],path(H,T1)):-
     transform_path(T,T1),!.

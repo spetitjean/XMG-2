@@ -31,6 +31,10 @@
 :-dynamic(xmg:fPathConstraint/4).
 :-dynamic(xmg:fPathConstraintFromAttr/5).
 :-dynamic(xmg:fAttrConstraintFromAttr/5).
+:-dynamic(xmg:fTypeConstraintFromAttr/4).
+:-dynamic(xmg:fPathConstraintFromPath/5).
+:-dynamic(xmg:fAttrConstraintFromPath/5).
+:-dynamic(xmg:fTypeConstraintFromPath/4).
     
 :- xmg:edcg.
 :- edcg:using(xmg_brick_mg_typer:type_decls).
@@ -72,10 +76,15 @@ init_print_hierarchy:-
     findall(fAttrConstraint(TC,T1s,Attr,Type),xmg:fAttrConstraint(TC,T1s,Attr,Type),AttrConstraints),
     findall(fPathConstraintFromAttr(TC,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAttr(TC,Attr,Type,Attr1,Attr2),PathConstraintsFromAttr),
     findall(fAttrConstraintFromAttr(TC,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(TC,Attr,Type,Attr1,Type1),AttrConstraintsFromAttr),
-    lists:append(Constraints, PathConstraints, MoreConstraints),
-    lists:append(MoreConstraints, AttrConstraints, EvenMoreConstraints),
-    lists:append(EvenMoreConstraints, PathConstraintsFromAttr, AlmostAllConstraints),
-    lists:append(AlmostAllConstraints, AttrConstraintsFromAttr, AllConstraints),
+    findall(fTypeConstraintFromAttr(TC,Attr,Type,Ts),xmg:fTypeConstraintFromAttr(TC,Attr,Type,Ts),TypeConstraintsFromAttr),
+    findall(fPathConstraintFromPath(TC,Attr1,Attr2,Attr3,Attr4),xmg:fPathConstraintFromPath(TC,Attr1,Attr2,Attr3,Attr4),PathConstraintsFromPath),
+    findall(fAttrConstraintFromPath(TC,Attr1,Attr2,Attr,Type),xmg:fAttrConstraintFromPath(TC,Attr1,Attr2,Attr,Type),AttrConstraintsFromPath),
+    findall(fTypeConstraintFromPath(TC,Attr1,Attr2,Ts),xmg:fTypeConstraintFromPath(TC,Attr1,Attr2,Ts),TypeConstraintsFromPath),
+    %% lists:append(Constraints, PathConstraints, MoreConstraints),
+    %% lists:append(MoreConstraints, AttrConstraints, EvenMoreConstraints),
+    %% lists:append(EvenMoreConstraints, PathConstraintsFromAttr, AlmostAllConstraints),
+    %% lists:append(AlmostAllConstraints, AttrConstraintsFromAttr, AllConstraints),
+    lists:append([Constraints, PathConstraints, AttrConstraints, PathConstraintsFromAttr, AttrConstraintsFromAttr, TypeConstraintsFromAttr, PathConstraintsFromPath, AttrConstraintsFromPath, TypeConstraintsFromPath], AllConstraints),
     write(hierarchy,'  <type_constraints>\n'),
     xmg:send(info,'\nPrinting type constraints'),
     print_type_constraints(AllConstraints),
@@ -293,7 +302,10 @@ print_type_constraints([fAttrConstraintFromAttr(CType,Attr,Type,Attr1,Type1)|T])
     write(hierarchy,'    </attr_to_attr_constraint>\n'),
     print_type_constraints(T),!.
 
-
+print_type_constraints([H|T]):-
+    xmg:send(info,'\nNot supported: '),
+    xmg:send(info, H),
+    print_type_constraints(T),!.
 
     
 
@@ -347,6 +359,8 @@ get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttPathConstraints,Types,VAttConstraints),
 	xmg:send(debug,'\n\nAttr constraints vectors:'),
 	xmg:send(debug,VAttConstraints),
+	xmg:send(info,'\n\nAttr constraints vectors:'),
+	xmg:send(info,VAttConstraints),
 	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
 
 
@@ -357,6 +371,10 @@ get_fconstraints([H|T]):-
 	get_fconstraints(T),!.
 
 get_fconstraint(fconstraint(CT,Left,Right)):-
+    xmg:send(info,'\nGetting fconstraint: '),
+    xmg:send(info,Left),
+    xmg:send(info,Right),
+    
         split_constraints(Left, SLeft),!,
         split_constraints(Right, SRight),!,
 	xmg_brick_hierarchy_typer:type_fconstraint(CT,SLeft,SRight),!.
@@ -771,14 +789,14 @@ attrConstraints_to_vectors([A|AT],Types,[A1|AT1]):-
 	attrConstraint_to_vector(A,Types,A1),
 	attrConstraints_to_vectors(AT,Types,AT1),!.
 
-attrConstraint_to_vector(attrconstraint(implies,Ts1,Path,Value),Types,(Vector,TPath-CValue)):-
+attrConstraint_to_vector(attrconstraint(implies,Ts1,Path,Value),Types,attr(Vector,TPath-CValue)):-
     attr_value(Value,CValue),
     transform_path(Path,TPath),
 	init_vector(Types,Vector),
 	set_to_left(Ts1,Types,Vector),
 	!.
 
-attrConstraint_to_vector(pathconstraint(implies,Ts1,Path1,Path2),Types,(Vector,TPath1,TPath2)):-
+attrConstraint_to_vector(pathconstraint(implies,Ts1,Path1,Path2),Types,path(Vector,TPath1,TPath2)):-
     %%attr_value(Value,CValue),
     transform_path(Path1,TPath1),
     transform_path(Path2,TPath2),    
@@ -809,15 +827,15 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 
 generate_vector_attrs(Vector,[],[]):-!.
 %% path constraints
-generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],ACT2):-
+generate_vector_attrs(Vector,[path(AVector,A1,A2)|ACT],ACT2):-
 	not(not(Vector=AVector)),
 	generate_vector_attrs(Vector,ACT,ACT1),
 	insert(A1-(_,V),ACT1,ACTT),
 	insert(A2-(_,V),ACTT,ACT2),!.
-generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
+generate_vector_attrs(Vector,[path(AVector,_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.	
 %% attribute constraints
-generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
+generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT2):-
 	not(not(Vector=AVector)),!,
 	generate_vector_attrs(Vector,ACT,ACT1),
 	%%xmg:send(debug,'\n Adding '),
@@ -832,7 +850,16 @@ generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	%%xmg:send(info,ACT2),
 	%%xmg:send(debug,ACT2),
 	!.
-generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
+generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT1):-
+	generate_vector_attrs(Vector,ACT,ACT1),!.
+%% type constraints
+generate_vector_attrs(Vector,[types(AVector,Ts)|ACT],ACT2):-
+	not(not(Vector=AVector)),!,
+	generate_vector_attrs(Vector,ACT,ACT1),
+	xmg:send(info,'\nUnsupported right part of constraint: '),
+	xmg:send(info,types(AVector,Ts)),
+	!.
+generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 
 insert(Feat,[],[Feat]).
@@ -990,7 +1017,25 @@ type_fconstraint(implies, const([], [], [attrType(Attr,Type)]), const([], [pathE
 %% attrType -> attrType (TODO: both not unique)
 type_fconstraint(implies, const([], [], [attrType(Attr, Type)]), const([], [], [attrType(Attr1, Type1)])):-
 	asserta(xmg:fAttrConstraintFromAttr(implies,Attr,Type,Attr1,Type1)),!.
+%% attrType -> types (TODO: attr not unique)
+type_fconstraint(implies, const([], [], [attrType(Attr, Type)]), const(Ts1, [], [])):-
+	asserta(xmg:fTypeConstraintFromAttr(implies,Attr,Type,Ts1)),!.
+
+
+%% pathEq -> types (TODO: pathEq not unique)
+type_fconstraint(implies, const([], [pathEq(Attr1,Attr2)], []), const(Ts1, [], [])):-
+    xmg:send(info,'\nAsserting '),
+    xmg:send(info,pathEq(Attr1,Attr2)),
+	asserta(xmg:fTypeConstraintFromPath(implies,Attr1,Attr2,Ts1)),!.
+%% pathEq -> attrType (TODO: both not unique)
+type_fconstraint(implies, const([], [pathEq(Attr1,Attr2)], []), const([], [], [attrType(Attr, Type)])):-
+	asserta(xmg:fAttrConstraintFromPath(implies,Attr1,Attr2,Attr,Type)),!.
+%% pathEq -> pathEq (TODO: both not unique)
+type_fconstraint(implies, const([], [pathEq(Attr1,Attr2)], []), const([], [pathEq(Attr3,Attr4)], [])):-
+	asserta(xmg:fPathConstraintFromPath(implies,Attr1,Attr2,Attr3,Attr4)),!.
+
 %% TODO: constraints with mixed litterals types pathEqs attrTypes -> types pathEqs attrTypes
+
 
 
 type_fconstraint(CT,C1,C2):-
