@@ -59,8 +59,8 @@ verify_attributes(Var, Other, Goals) :-
 	    xmg:send(debug, PairsMust),
 	    xmg:send(debug, '\nadd_feat_constraints'),	    
 	    xmg:send(debug, RPairsMust),
-	    add_feat_constraints(RPairsMust,Final),
-	    add_feat_constraints(Final,Final1),
+	    add_feat_constraints(RPairsMust, Final, _),
+	    add_feat_constraints(Final, Final1, _),
 	    rb_visit(Final1,LFinal1),	    
 	    xmg:send(debug, '\nDone add_feat_constraints'),
 	    xmg:send(debug, LFinal1),
@@ -83,9 +83,11 @@ verify_attributes(Var, Other, Goals) :-
 	    (not(TC=T2)->(
 			  rb_visit(T3,T3List),     
 		 unify_entries(TC,T3List,T33));T3=T33),
-	    add_feat_constraints(T33,FinalT3),
+	    add_feat_constraints(T33, FinalT3, ExtraTypes),
 	    xmg:send(debug, '\nUnifying types'),
-	    unify_types(TypeC,Type3,FinalType,_),
+	    
+	    unify_types(TypeC,ExtraTypes,TypeCC,_),
+	    unify_types(TypeCC,Type3,FinalType,_),
 	    xmg:send(debug, '\nTypes unified'),
 	    
 
@@ -144,10 +146,12 @@ h_avm(X, Type, L) :-
 
 	%% two passes, in case something happens deeper in the structure
 		    
-	add_feat_constraints(MT,Final),
-	add_feat_constraints(Final,Final1),
+	add_feat_constraints(MT, Final, _),
+	add_feat_constraints(Final, Final1, ExtraTypes),
+	unify_types(Vector, ExtraTypes, FinalType,_),
+
 	xmg:send(debug, '\nAdded feat constraints in havm: '),
-	put_atts(Y, avmfeats(Vector,Final1,_)),
+	put_atts(Y, avmfeats(FinalType,Final1,_)),
 	xmg:send(debug, '\nDid put_atts in havm: '),
 	X = Y,
         xmg:send(debug, '\nDone creating havm, initial list: '),
@@ -157,7 +161,7 @@ h_avm(X, Type, L) :-
 
 
 %% MT should be a RB TREE and return a RB TREE
-add_feat_constraints(MT,Final):-
+add_feat_constraints(MT, Final, ExtraTypes):-
     xmg:send(debug,'\nStarting add_feat_constraints: '),
     xmg:send(debug,MT),
     %% ToApply is a list of tuples encoding the consequents of the
@@ -165,13 +169,10 @@ add_feat_constraints(MT,Final):-
     check_feat_constraints(MT, MT, ToApply, N),
     xmg:send(debug,'\nToApply:'),
     xmg:send(debug,ToApply),
-    xmg:send(info,'\nToApply:'),
-    xmg:send(info,ToApply),
     ToApply = AllToApply,
+    find_extra_types(AllToApply, ExtraTypes),
     
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
-    xmg:send(info,'\nVector_attrs: '),
-    xmg:send(info,Feats),
     xmg:send(debug,Feats),
     create_attr_types(Feats,CToApply),
     xmg:send(debug,'\nCToApply: '),
@@ -187,10 +188,23 @@ add_feat_constraints(MT,Final):-
     %% Final should be a rb_tree now
     xmg:send(debug,'\nFinal: '),
     xmg:send(debug,Final),
-    xmg:send(info,'\nFinal: '),
-    xmg:send(info,Final),
     !.
 
+
+find_extra_types([], _).
+find_extra_types([types(_ , Types) | T], Vector):-
+    build_extra_vector(Types, Vector),
+    find_extra_types(T, Vector),
+    !.
+find_extra_types([H | T], ET):-
+    find_extra_types(T, ET),!.
+
+build_extra_vector([], _).
+build_extra_vector([H | T], Vector):-
+    xmg_brick_hierarchy_typer:fTypeToVector(H, Vector, _),
+    build_extra_vector(T, Vector),!.
+    
+    
 
 
 %% To check contraints on attributes (only leading to path equalities for now)
@@ -256,8 +270,8 @@ check_feat_constraint(attr([Attr],Type),Feats,Feats):-
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
     h_avm(Val,NVector,_),
-    xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),
-    lists:member(Type, TypeList),
+    xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),    
+    (lists:member(Type, TypeList) ; TypeList = []),
     xmg:send(debug,'\nGot the feature\n'),
     %% here it is not about t and NVector being compatible
     %% NVector must be a subtype of t (c.a. contain the atomic type t)
@@ -283,19 +297,10 @@ check_feat_constraint(attr([Attr,Else|Path],Type),Feats,Feats):-
 %% 2) look for the attribute b
 %% 3) check value equality
 check_feat_constraint(path(Attr1,Attr2),Feats,Feats):-
-    xmg:send(info,'\nIn check feat constraint (path): '),
-    xmg:send(info,Attr1),
-    xmg:send(info,Attr2),
-    xmg:send(info,Feats),
     get_value_at_path(Feats, Attr1, Value1),
-    xmg:send(info,'\nFound attribute 1\n'),
-    xmg:send(info,Value1),
     get_value_at_path(Feats, Attr2, Value2),
-    xmg:send(info,'\nFound attribute 2\n'),
-    xmg:send(info,Value2),
     %% if the values do not exist, it should fail before here
     Value1 == Value2,
-    xmg:send(info,'\nEqual!'),
     %% is this what we want?
     !.
 check_feat_constraint(Left,Feats,Feats):-

@@ -423,8 +423,6 @@ get_fconstraints([]):-
 	xmg_brick_hierarchy_typer:attrConstraints_to_vectors(AttPathConstraints,Types,VAttConstraints),
 	xmg:send(debug,'\n\nAttr constraints vectors:'),
 	xmg:send(debug,VAttConstraints),
-	xmg:send(info,'\n\nAttr constraints vectors:'),
-	xmg:send(info,VAttConstraints),
 	xmg_brick_hierarchy_typer:generate_vectors_attrs(FSets,VAttConstraints),
 
 
@@ -435,10 +433,6 @@ get_fconstraints([H|T]):-
 	get_fconstraints(T),!.
 
 get_fconstraint(fconstraint(CT,Left,Right)):-
-    xmg:send(info,'\nGetting fconstraint: '),
-    xmg:send(info,Left),
-    xmg:send(info,Right),
-    
         split_constraints(Left, SLeft),!,
         split_constraints(Right, SRight),!,
 	xmg_brick_hierarchy_typer:type_fconstraint(CT,SLeft,SRight),!.
@@ -919,8 +913,6 @@ generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT1):-
 %% type constraints
 generate_vector_attrs(Vector,[types(AVector,Ts)|ACT],ACT2):-
 	not(not(Vector=AVector)),!,
-	xmg:send(info,'\nUnsupported right part of constraint: '),
-	xmg:send(info,types(AVector,Ts)),
 	generate_vector_attrs(Vector,ACT,ACT2),
 	!.
 generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT1):-
