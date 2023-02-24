@@ -187,6 +187,8 @@ add_feat_constraints(MT,Final):-
     %% Final should be a rb_tree now
     xmg:send(debug,'\nFinal: '),
     xmg:send(debug,Final),
+    xmg:send(info,'\nFinal: '),
+    xmg:send(info,Final),
     !.
 
 
