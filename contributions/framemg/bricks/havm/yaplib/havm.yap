@@ -252,7 +252,7 @@ extract_constraint(attr(Attr1,Type1),attr(_,TA1-Type1)):-
 extract_constraint(types(Ts),types(_,Ts)):- !.
 
 
-get_value_at_path(Feats, [Attr], Value):-
+get_value_at_path(Feats, [Attr], Value):-	
     rb_lookup(Attr,Value,Feats),!.
 get_value_at_path(Feats, [Attr|Path], Value):-
     rb_lookup(Attr,Val,Feats),
@@ -270,8 +270,14 @@ check_feat_constraint(attr([Attr],Type),Feats,Feats):-
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
     h_avm(Val,NVector,_),
-    xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),    
-    (lists:member(Type, TypeList) ; TypeList = []),
+    xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),
+    (
+	lists:member(Type, TypeList)
+    ;
+        %% for the cases where type is + 
+        % TypeList = []
+	var(Type)
+    ),
     xmg:send(debug,'\nGot the feature\n'),
     %% here it is not about t and NVector being compatible
     %% NVector must be a subtype of t (c.a. contain the atomic type t)
