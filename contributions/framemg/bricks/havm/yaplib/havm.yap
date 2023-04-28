@@ -171,7 +171,6 @@ add_feat_constraints(MT, Final, ExtraTypes):-
     xmg:send(debug,ToApply),
     ToApply = AllToApply,
     find_extra_types(AllToApply, ExtraTypes),
-    
     xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
     xmg:send(debug,Feats),
     create_attr_types(Feats,CToApply),
@@ -183,7 +182,6 @@ add_feat_constraints(MT, Final, ExtraTypes):-
     xmg:send(debug,MT),
     xmg:send(debug,'\nMToApply: '),
     xmg:send(debug,MToApply),
-    
     add_must(MToApply,MT,Final),
     %% Final should be a rb_tree now
     xmg:send(debug,'\nFinal: '),
@@ -247,7 +245,8 @@ extract_constraint(path(P1,P2),path(_,TP1,TP2)):-
     transform_path(P2,TP2),!.
 %% converting an attribute type constraint to a 2-uple
 extract_constraint(attr(Attr1,Type1),attr(_,TA1-Type1)):-
-    transform_path(Attr1,TA1),!.
+    transform_path(Attr1,TA1),
+    !.
 %% converting a type constraint to a 1-uple
 extract_constraint(types(Ts),types(_,Ts)):- !.
 
@@ -269,8 +268,14 @@ check_feat_constraint(attr([Attr],Type),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
-    h_avm(Val,NVector,_),
+    (
+	h_avm(Val,NVector,_)
+    ;
+    %% the feature exists but is not yet an h_avm (type is 'true')
+	var(Val)
+    ),
     xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),
+    
     (
 	lists:member(Type, TypeList)
     ;
@@ -360,9 +365,11 @@ merge_feats([],Feats,[]).
 merge_feats([A-V|T],Feats,[A-V|T1]):-
     lists:member(A-V1,T),
     V=V1,!,
-    merge_feats(T,Feats,T1),!.
+    merge_feats(T,Feats,T1),
+    !.
 merge_feats([F|T],Feats,[F|T1]):-
-    merge_feats(T,Feats,T1),!.
+    merge_feats(T,Feats,T1),
+    !.
 
 
 add_must([],L,L).
@@ -598,7 +605,17 @@ print_h_avm(AVM,Indent):-
 	indent(Indent),
 	xmg:send(info,']\n'),
 	!.	
+print_h_avm(AVM,Indent):-
+    not(h_avm(AVM,Type,Feats)),
+    	xmg:send(info,'\n'),
+	indent(Indent),
+	xmg:send(info,' is not a typed FS\n'),
+	!.	
 
+print_feats(_, 10):-
+    indent(10),
+    xmg:send(info,'...\n'),
+    !.
 print_feats([],I).
 print_feats([A-V|T],I):-
 	indent(I),
