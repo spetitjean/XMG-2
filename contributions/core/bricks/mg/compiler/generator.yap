@@ -23,13 +23,15 @@
 :-edcg:thread(decls,edcg:table).
 :-edcg:thread(name,edcg:counter).
 :-edcg:thread(code,edcg:queue).
+:-edcg:thread(class_hierarchy,edcg:queue).
 
-:-multifile(xmg:generate_instr/7).
+:-multifile(xmg:generate_instr/9).
 :-dynamic(xmg:is_class/1).
+:-dynamic(xmg:hierarchy_edges/2).
 
-
-:-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, import_calls/3,  unify_exports/3, unify_exports_as/4, do_unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
-:-edcg:weave([decls,name,code],[xmg:generate_instr/1, xmg:generate_instrs/1]).
+:-edcg:weave([decls,name], [var_or_const/2,new_name/2, put_in_table/1, generate_class/2, unify_exports/3, unify_exports_as/4, do_unify_exports/4, list_exports/3, get_params/3, xmg_brick_control_generator:generate/4]).
+:-edcg:weave([decls,name,class_hierarchy], [import_calls/3]).
+:-edcg:weave([decls,name,code,class_hierarchy],[xmg:generate_instr/1, xmg:generate_instrs/1]).
 
 %% :- edcg:thread(xmg_generator:skolem, edcg:counter).
 %% :- edcg:weave([xmg_generator:skolem],[xmg_generator:init_skolems/1]).
@@ -73,7 +75,8 @@ generate(mg(_,Classes,Values)):-
 	%% xmg_brick_mg_compiler:send_nl(info),
 	%% xmg_brick_mg_compiler:send(info,' threading classes'),
 	xmg_brick_mg_compiler:send(info,' generating classes'),
-	
+
+	( not(xmg:hierarchy_mode) ; (exists_directory('.class_hierarchy');make_directory('.class_hierarchy'))),
 	generate_classes(Classes),
 	generate_values(Values).
 
@@ -112,7 +115,6 @@ generate_classes([class(Class,P,I,_,_,built(Stmt,Vars),coord(_,_,_))|T]):--
 	generate_classes(T).
 
 generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
-	
 	%%xmg_brick_mg_exporter:declared(Class,List),
 	xmg_brick_mg_exporter:exports(Class,Exports),
 	%%xmg:send(info,Exports),
@@ -120,13 +122,25 @@ generate_class(class(Class,P,I,_,_,Stmt,coord(_,_,_)),List):--
 
 	list_exports(Exports,List,LExports),
 
-	import_calls(I,List,ICalls),
+	import_calls(I,List,ICalls) with class_hierarchy([]-ClassHierarchy,[]-[]),
 
+	%%xmg:send(info,'\n***************\nClass '),
+	%%xmg:send(info,Class),
+	
+	%%xmg:send(info,'\nClass Hierarchy (only imports):\n'),
+	%%xmg:send(info,ClassHierarchy),
 	get_params(P,List,GP),
 
 	%%xmg:send(info,' got params '),
 	
-	xmg:generate_instrs(Stmt) with code([]-Generated,[]-[]),
+	xmg:generate_instrs(Stmt) with (code([]-Generated,[]-[]), class_hierarchy([]-ClassHierarchy1,[]-[])),
+	%%xmg:generate_instrs(Stmt) with code([]-Generated,[]-[]),
+
+	%%xmg:send(info,'\nClass Hierarchy (only calls):\n'),
+	%%xmg:send(info,ClassHierarchy1),
+
+	asserta(xmg:hierarchy_edges(Class,(ClassHierarchy,ClassHierarchy1))),
+	
 	extract_code(Generated,EGenerated),
 
 	%%xmg:send(info,EGenerated),
@@ -190,8 +204,9 @@ generate_values([]).
 generate_values([value(Value)|T]):-
     %% Value part
     xmg:is_class(Value),
-	asserta(xmg:value(Value)),
-	generate_values(T).
+    asserta(xmg:value(Value)),
+    ( not(xmg:hierarchy_mode) ; print_class_hierarchy(Value)),
+    generate_values(T).
 generate_values([value(Value)|T]):-
     %% Value part
     not(xmg:is_class(Value)),
@@ -206,6 +221,7 @@ import_calls([import(id(Class,C),P,AS)|T],List,ICalls):--
         get_params(P,List,UP),
 	Call=..[value_class,Class,params(UP),exports(Exports)],
 	ICall=..[':',xmg,Call],
+	class_hierarchy::enq(Class),
 	%% add Call to Trace
 	%%Put=..[put,Class],
 	%%Trace=..['::',xmg_generator:trace,Put],
@@ -312,3 +328,73 @@ var_or_const(bool(A,C),const(A,bool)):-- !.
 %% 	init_skolems(T),!.
 %% init_skolems([_|T]):--
 %% 	init_skolems(T),!.
+
+print_class_hierarchy(Class):-
+    xmg:hierarchy_edges(Class,(EdgesImport,EdgesCall)),
+    process_hierarchy_edges(Class,EdgesImport,PEdgesImport,''),
+    process_hierarchy_edges(Class,EdgesCall,PEdgesCall,''),
+    lists:append(PEdgesImport,PEdgesCall,PEdges),
+    lists:remove_duplicates(PEdges,CPEdges),
+    atom_concat(Class,'.dot',OutFile),
+    atom_concat('.class_hierarchy/',OutFile,OutFileInDir),
+    open(OutFileInDir,write,S,[alias(dotfile)]),
+    output_dot(CPEdges),
+    close(dotfile),
+    !.
+
+process_hierarchy_edges(Class,[],[(Class)],_).
+process_hierarchy_edges(Class,[H|T],Res,Label):-
+    process_hierarchy_edge(Class,H,H1,Label),
+    process_hierarchy_edges(Class,T,T1,Label),
+    lists:append(H1,T1,Res),!.
+process_hierarchy_edges(Class,or(T1,T2),T3,Label):-
+    atom_concat(Label,'l',Label1),
+    atom_concat(Label,'r',Label2),
+    process_hierarchy_edges(Class,T1,T11,Label1),
+    process_hierarchy_edges(Class,T2,T21,Label2),
+    lists:append(T1,T2,T3),!.
+
+process_hierarchy_edge(Class,or(T1,T2),T3,Label):-
+    atom_concat(Label,'l',Label1),
+    atom_concat(Label,'r',Label2),
+    process_hierarchy_edges(Class,T1,T11,Label1),
+    process_hierarchy_edges(Class,T2,T21,Label2),
+    lists:append(T11,T21,T3),!.
+process_hierarchy_edge(Class,Edge,[EdgeCode|T],Label):-
+    %%xmg:send(info,'\nProcessing edge: '),
+    %%xmg:send(info,(Class,Edge)),
+    EdgeCode=(Class,Edge,Label),
+    xmg:hierarchy_edges(Edge,(EdgesImport,EdgesCall)),    
+    process_hierarchy_edges(Edge,EdgesImport,PEdgesImport,''),
+    process_hierarchy_edges(Edge,EdgesCall,PEdgesCall,''),
+    lists:append(PEdgesImport,PEdgesCall,T),
+    !.
+
+
+output_dot(List):-
+    write(dotfile,'digraph D{\n'),
+    write(dotfile,'  graph [ranksep="2"];\n'),
+    write(dotfile,'  node [shape=box];\n'),
+
+    output_dot_list(List).
+output_dot_list([]):-
+    write(dotfile,'}').
+output_dot_list([(Class,Edge,Label)|T]):-
+    write(dotfile,'  "'),
+    write(dotfile,Class),
+    write(dotfile,'" -> "'),
+    write(dotfile,Edge),
+    write(dotfile,'"'),
+    write(dotfile,' [label="'),
+    write(dotfile,Label),
+    write(dotfile,'"]'),
+    write(dotfile,';\n'),
+    output_dot_list(T),
+    !.
+output_dot_list([(Class)|T]):-
+    write(dotfile,'  "'),
+    write(dotfile,Class),
+    write(dotfile,'";\n'),
+    output_dot_list(T),
+    !.
+    

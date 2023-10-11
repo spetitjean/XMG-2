@@ -33,4 +33,5 @@ eval(Syn,Dim,[tree],tree:tree(Tree,Class,Previous),Class):-
 	%%xmg:do_xml_convert(tree:tree(Tree,Class,Previous),XML)
 
 eval([],_,_,tree:none,_).
+%%eval([],_,elem(tree, features([id-none])),_).
 

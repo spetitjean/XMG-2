@@ -287,8 +287,9 @@ parse_sem([State|States],[token(Coord,Token)|Tokens]):--
     ),
 	fail.
 
+
 throw_errors:--
-	lastError(Errors,_),
+        lastError(Errors,_),
 	%%errors::top(Errors),
 	
 	%%xmg_brick_mg_compiler:send(debug,Errors),
@@ -297,12 +298,17 @@ throw_errors:--
 throw_error([],Expected,Coord,Token):-
 	throw(xmg(parser_error(   expected(Expected,Token,Coord)))),
 	!.
+throw_error([none],Expected,Coord,Token):-
+	throw(xmg(parser_error(   expected(Expected,Token,Coord)))),
+	!.
 
 throw_error([H|T],Expected,_,_):-
-	H=error(State,Token,Coord),
+        H=error(State,Token,Coord),
+        %% xmg:send(info,'THERE'),
 	expected_tokens(State,tokens(State,Expected1)),
-	%%xmg:send(info,Expected1),
-	%%xmg:send(info,Expected),
+	%% xmg:send(info,Expected1),
+	%% xmg:send(info,Expected),
+	%% xmg:send(info,T),
 	lists:append(Expected,Expected1,Expected2),
 	throw_error(T,Expected2,Coord,Token),
 	!.

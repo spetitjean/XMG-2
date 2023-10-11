@@ -19,6 +19,6 @@
 
 :-module(xmg_brick_iface_compiler).
 
-xmg:eval(iface,_,_,I, iface:iface(IAVM),_):-
+xmg:eval(iface,Dim,_,I, iface:iface(IAVM),_):-
 	xmg_brick_avm_avm:avm(I,IAVM).
-xmg:eval(iface,_,_,[], iface:iface([]),_).
+xmg:eval(iface,Dim,_,[], iface:iface([]),_).

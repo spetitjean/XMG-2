@@ -26,27 +26,55 @@
 :- attribute avmfeats/3.
 
 verify_attributes(Var, Other, Goals) :-
-	get_atts(Var, avmfeats(Type1,T1,U)), !,
+    xmg:send(debug, '\nVerify attributes'),
+        get_atts(Var, avmfeats(Type1,T1,U)), !,
 	var(Other),
 	( get_atts(Other, avmfeats(Type2,T2,U)) ->
-	      unify_types(Type1,Type2,Type3,CType3),
+            xmg:send(debug, '\nUnifying types'),
+	    unify_types(Type1,Type2,Type3,CType3),
+	    xmg:send(debug, '\nTypes unified'),
 	    %%check_type(Type1),
+	    xmg:send(debug, '\nget_attrconstraints'),
+	    xmg:send(debug, CType3),
 	    get_attrconstraints(CType3,Must),
+	    xmg:send(debug, '\nDone get_attrconstraints'),
+	    xmg:send(debug, Must),
 	    rb_visit(T1,Pairs),
-	    lists:append(Must,Pairs,PairsMust),
-
+	    xmg:send(debug, '\nDone rb_visit'),
+	    xmg:send(debug, '\nAppend new pairs'),
+	    xmg:send(debug, Must),	    
+	    xmg:send(debug, Pairs),
+	    %% we sometimes backtrack here and get into an infinite loop
+	    %% when Must is a free variable (is is always the case?)
+	    %% this happens when the havm is untyped, and only with more
+	    %% than one feature
+	    %% the cut after append prevents this, but may cause problems
+	    lists:append(Must,Pairs,PairsMust),!,
+	    xmg:send(debug, '\nDid append: '),
+	    xmg:send(debug, Must),
+	    xmg:send(debug, Pairs),
 	    list_to_rbtree(PairsMust,RPairsMust),
-	    add_feat_constraints(RPairsMust,Final),
-	    add_feat_constraints(Final,Final1),
-	    rb_visit(Final1,LFinal1),
-
+	    xmg:send(debug, '\nDid list_to_rbtree'),
+	    xmg:send(debug, '\nNew pairs: '),
+	    xmg:send(debug, PairsMust),
+	    xmg:send(debug, '\nadd_feat_constraints'),	    
+	    xmg:send(debug, RPairsMust),
+	    add_feat_constraints(RPairsMust, Final, _),
+	    add_feat_constraints(Final, Final1, _),
+	    rb_visit(Final1,LFinal1),	    
+	    xmg:send(debug, '\nDone add_feat_constraints'),
+	    xmg:send(debug, LFinal1),
 	    %%xmg:send(info,'\n\nUnifying entries: '),
 	    
 	    %%xmg:send(info,T2),
 	    
+
 	    %%xmg:send(info,LFinal1),
-	    
+            xmg:send(debug, '\nunify_entries in verify_attributes'),	    
+            xmg:send(debug, LFinal1),	    
 	    unify_entries(T2,LFinal1,T3),
+            xmg:send(debug, '\nDone unify_entries in verify_attributes'),	    
+            xmg:send(debug, LFinal1),	    
 	    
 	    get_atts(Other,avmfeats(TypeC,TC,UC)),
 	    rb_visit(TC,LTC),
@@ -55,14 +83,17 @@ verify_attributes(Var, Other, Goals) :-
 	    (not(TC=T2)->(
 			  rb_visit(T3,T3List),     
 		 unify_entries(TC,T3List,T33));T3=T33),
-		 	    
-	    add_feat_constraints(T33,FinalT3),
-
-	    unify_types(TypeC,Type3,FinalType,_),
+	    add_feat_constraints(T33, FinalT3, ExtraTypes),
+	    xmg:send(debug, '\nUnifying types'),
+	    
+	    unify_types(TypeC,ExtraTypes,TypeCC,_),
+	    unify_types(TypeCC,Type3,FinalType,_),
+	    xmg:send(debug, '\nTypes unified'),
 	    
 
 	    put_atts(Other, avmfeats(FinalType,FinalT3,U)),
-	    %%put_atts(Other, avmfeats(Type1,T3,U)),
+	    %%put_atts(Other, avmfeats(Type1,T3,U)),    
+	 
 	    Goals=[]
 	; \+ attvar(Other), Goals=[], put_atts(Other, avmfeats(Type1,T1,U))).
 
@@ -70,7 +101,8 @@ verify_attributes(_, _, []).
 
 unify_entries(T,[],T).
 unify_entries(T1,[K-V0|L],T3) :-
-	(rb_lookup(K,V1,T1) ->  V0=V1, T1=T2; rb_insert(T1,K,V0,T2)),
+        xmg:send(debug, '\nunify_entries in havm'),
+	(rb_lookup(K,V1,T1) ->  V0=V1,T1=T2 ; rb_insert(T1,K,V0,T2)),
 	unify_entries(T2,L,T3).
 
 
@@ -85,7 +117,7 @@ h_avm(X, Type, L) :- var(L), !,
         xmg:send(debug,Type).
 
 h_avm(X, Type, L) :-
-	xmg:send(debug,'\nCreating havm '),
+        xmg:send(debug,'\nCreating havm '),
 	xmg:send(debug,X),
 	xmg:send(debug,' with given type '),
 	xmg:send(debug,Type),
@@ -113,52 +145,78 @@ h_avm(X, Type, L) :-
 	!,
 
 	%% two passes, in case something happens deeper in the structure
-	add_feat_constraints(MT,Final),
-	add_feat_constraints(Final,Final1),
+		    
+	add_feat_constraints(MT, Final, _),
+	add_feat_constraints(Final, Final1, ExtraTypes),
+	unify_types(Vector, ExtraTypes, FinalType,_),
 
-	
-	put_atts(Y, avmfeats(Vector,Final1,_)),
-
-	X = Y.
+	xmg:send(debug, '\nAdded feat constraints in havm: '),
+	put_atts(Y, avmfeats(FinalType,Final1,_)),
+	xmg:send(debug, '\nDid put_atts in havm: '),
+	X = Y,
+        xmg:send(debug, '\nDone creating havm, initial list: '),
+        xmg:send(debug, L),
+	xmg:send(debug, '\nfinal feats: '),
+	xmg:send(debug, Final1).
 
 
 %% MT should be a RB TREE and return a RB TREE
-add_feat_constraints(MT,Final):-
+add_feat_constraints(MT, Final, ExtraTypes):-
     xmg:send(debug,'\nStarting add_feat_constraints: '),
     xmg:send(debug,MT),
-    check_feat_constraints(MT,MT,ToApply,N),
+    %% ToApply is a list of tuples encoding the consequents of the
+    %% constraints to apply to this frame
+    check_feat_constraints(MT, MT, ToApply, N),
     xmg:send(debug,'\nToApply:'),
     xmg:send(debug,ToApply),
-
-    xmg_brick_hierarchy_typer:generate_vector_attrs(_,ToApply,Feats),
+    ToApply = AllToApply,
+    find_extra_types(AllToApply, ExtraTypes),
+    xmg_brick_hierarchy_typer:generate_vector_attrs(_,AllToApply,Feats),
     xmg:send(debug,Feats),
-	create_attr_types(Feats,CToApply),
+    create_attr_types(Feats,CToApply),
+    xmg:send(debug,'\nCToApply: '),
+    xmg:send(debug,CToApply),
+    xmg_brick_avm_avm:avm(E,CToApply),    
+    merge_feats(CToApply,CToApply,MToApply),
+    xmg:send(debug,'\nMT: '),
+    xmg:send(debug,MT),
+    xmg:send(debug,'\nMToApply: '),
+    xmg:send(debug,MToApply),
+    add_must(MToApply,MT,Final),
+    %% Final should be a rb_tree now
+    xmg:send(debug,'\nFinal: '),
+    xmg:send(debug,Final),
+    !.
 
-	xmg:send(debug,'\nCToApply: '),
-	xmg:send(debug,CToApply),
-	xmg_brick_avm_avm:avm(E,CToApply),
 
-	merge_feats(CToApply,CToApply,MToApply),
-	
-	xmg:send(debug,'\nMT: '),
-	xmg:send(debug,MT),
-	xmg:send(debug,'\nMToApply: '),
-	xmg:send(debug,MToApply),
-	
-	add_must(MToApply,MT,Final),
-	%% Final should be a rb_tree now
-	
-	xmg:send(debug,'\nFinal: '),
-	xmg:send(debug,Final),	
-	!.
+find_extra_types([], _).
+find_extra_types([types(_ , Types) | T], Vector):-
+    build_extra_vector(Types, Vector),
+    find_extra_types(T, Vector),
+    !.
+find_extra_types([H | T], ET):-
+    find_extra_types(T, ET),!.
 
+build_extra_vector([], _).
+build_extra_vector([H | T], Vector):-
+    xmg_brick_hierarchy_typer:fTypeToVector(H, Vector, _),
+    build_extra_vector(T, Vector),!.
+    
+    
 
 
 %% To check contraints on attributes (only leading to path equalities for now)
 check_feat_constraints(Feats,Feats,ToApply,N):-
-    findall(featconstraint(CT,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2),FeatConstraints),
+    findall(constraint(CT,attr(Attr,Type),path(Attr1,Attr2)),xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2),PathFromAttrConstraints),
+    findall(constraint(CT,attr(Attr,Type),attr(Attr1,Type1)),xmg:fAttrConstraintFromAttr(CT,Attr,Type,Attr1,Type1),AttrFromAttrConstraints),
+    findall(constraint(CT,attr(Attr,Type),types(Ts)),xmg:fTypeConstraintFromAttr(CT,Attr,Type,Ts),TypeFromAttrConstraints),
+    findall(constraint(CT,path(Attr1,Attr2),path(Attr3,Attr4)),xmg:fPathConstraintFromPath(CT,Attr1,Attr2,Attr3,Attr4),PathFromPathConstraints),
+    findall(constraint(CT,path(Attr1,Attr2),attr(Attr,Type)),xmg:fAttrConstraintFromPath(CT,Attr1,Attr2,Attr,Type),AttrFromPathConstraints),
+    findall(constraint(CT,path(Attr1,Attr2),types(Ts)),xmg:fTypeConstraintFromPath(CT,Attr1,Attr2,Ts),TypeFromPathConstraints),
+    lists:append([PathFromAttrConstraints, AttrFromAttrConstraints, TypeFromAttrConstraints, PathFromPathConstraints, AttrFromPathConstraints, TypeFromPathConstraints], FeatConstraints),
     xmg:send(debug,'\nChecking these constraints on feats:\n'),
     xmg:send(debug,FeatConstraints),
+    
     OldFeats = Feats,
     check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,N),
     %%(N>0 -> (check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_)) ; true ),
@@ -166,36 +224,70 @@ check_feat_constraints(Feats,Feats,ToApply,N):-
     %%check_feat_constraints(FeatConstraints,Feats,Feats,ToApply,0,_),
     !.
 
+%% for constraints of the form a : t -> b = c
 check_feat_constraints([],Feats,Feats,[],N,N).
-check_feat_constraints([H|T],Feats,Feats,[EH|ToApply],N,O):-
-    check_feat_constraint(H,Feats,Feats),!,
-    extract_constraint(H,EH),
-    %%xmg:send(debug,EH),
+check_feat_constraints([constraint(CT, Left, Right)|T],Feats,Feats,[EH|ToApply],N,O):-
+    % check whether the current constraint should be applied to the frame (a : t holds)
+    check_feat_constraint(Left,Feats,Feats),!,
+    % convert the consequent into a 3-uple (b = c)
+    extract_constraint(Right,EH),
     M is N+1,
     check_feat_constraints(T,Feats,Feats,ToApply,M,O),
     !.
-check_feat_constraints([H|T],Feats,Feats,ToApply,N,M):-
-    not(check_feat_constraint(H,Feats,Feats1)),!,
+check_feat_constraints([constraint(CT, Left, Right)|T],Feats,Feats,ToApply,N,M):-
+    not(check_feat_constraint(Left,Feats,Feats1)),!,
     check_feat_constraints(T,Feats,Feats,ToApply,N,M),
     !.
 
-extract_constraint(featconstraint(CT,Attr,Type,P1,P2),(_,TP1,TP2)):-
+%% converting a path equality to a 3-uple
+extract_constraint(path(P1,P2),path(_,TP1,TP2)):-
     transform_path(P1,TP1),
     transform_path(P2,TP2),!.
+%% converting an attribute type constraint to a 2-uple
+extract_constraint(attr(Attr1,Type1),attr(_,TA1-Type1)):-
+    transform_path(Attr1,TA1),
+    !.
+%% converting a type constraint to a 1-uple
+extract_constraint(types(Ts),types(_,Ts)):- !.
 
 
-check_feat_constraint(featconstraint(CT,[Attr],Type,Attr1,Attr2),Feats,Feats):-
-  
+get_value_at_path(Feats, [Attr], Value):-	
+    rb_lookup(Attr,Value,Feats),!.
+get_value_at_path(Feats, [Attr|Path], Value):-
+    rb_lookup(Attr,Val,Feats),
+    attvar(Val),
+    h_avm(Val,_,ValFeats),
+    list_to_rbtree(ValFeats,RBValFeats),
+    get_value_at_path(Feats, Path, Value),!.
+    
+
+%% checks whether the constraint should apply in the current frame (c.a. whether the feat a : t exists and has the right type)
+%% 1) look for the attribute a
+%% 2) if the feature has a type, it must be a subtype of t
+check_feat_constraint(attr([Attr],Type),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
-    h_avm(NVal,Type,[]),
-    xmg:send(debug,'\nCreated new h_avm\n'),
-    not(not(NVal=Val)),
+    (
+	h_avm(Val,NVector,_)
+    ;
+    %% the feature exists but is not yet an h_avm (type is 'true')
+	var(Val)
+    ),
+    xmg_brick_hierarchy_typer:fVectorToType(NVector,TypeList),
+    
+    (
+	lists:member(Type, TypeList)
+    ;
+        %% for the cases where type is + 
+        % TypeList = []
+	var(Type)
+    ),
     xmg:send(debug,'\nGot the feature\n'),
+    %% here it is not about t and NVector being compatible
+    %% NVector must be a subtype of t (c.a. contain the atomic type t)
     !.
-check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats,Feats):-
-  
+check_feat_constraint(attr([Attr,Else|Path],Type),Feats,Feats):-
     rb_lookup(Attr,Val,Feats),
     xmg:send(debug,'\nFound attribute\n'),
     xmg:send(debug,Attr),
@@ -207,37 +299,52 @@ check_feat_constraint(featconstraint(CT,[Attr,Else|Path],Type,Attr1,Attr2),Feats
     xmg:send(debug,' the havm '),
     list_to_rbtree(ValFeats,RBValFeats),
     xmg:send(debug,RBValFeats),
-    check_feat_constraint(featconstraint(CT,[Else|Path],Type,Attr1,Attr2),RBValFeats,RBValFeats),
+    check_feat_constraint(attr([Else|Path],Type),RBValFeats,RBValFeats),
     %%rb_visit(RBValFeats,Visit),
     %%h_avm(Val,_,Visit),
     !.
-%%check_feat_constraint(featconstraint(CT,Attr,Type,Attr1,Attr2),Fentityeats,Feats).
-    
+%% checks whether the constraint should apply in the current frame (c.a. whether the feats a and a1 exist and have the same value)
+%% 1) look for the attribute a
+%% 2) look for the attribute b
+%% 3) check value equality
+check_feat_constraint(path(Attr1,Attr2),Feats,Feats):-
+    get_value_at_path(Feats, Attr1, Value1),
+    get_value_at_path(Feats, Attr2, Value2),
+    %% if the values do not exist, it should fail before here
+    Value1 == Value2,
+    %% is this what we want?
+    !.
+check_feat_constraint(Left,Feats,Feats):-
+    Left = types(_),
+    xmg:send(info,'\nUnsupported left side of constraint: '),
+    xmg:send(info,Left),
+    fail,
+    !.
 transform_path([Att],Att):- !.
 transform_path([H|T],path(H,T1)):-
     transform_path(T,T1),!.
 
 const_h_avm(A,C) :-
-	get_atts(A, avmfeats(_, _, C)).
+    get_atts(A, avmfeats(_, _, C)).
 	
 attribute_goal(Var, h_avm(Var,Type,L)) :-
-	get_atts(Var, avmfeats(Type,T,_)),
-	rb_visit(T,L).
-
-
-get_attrconstraints(Type,MCT):-
-	xmg:fattrconstraint(Type,C),
-	xmg:send(debug,'\nGot attr contraints:'),
-	xmg:send(debug,C),
-	xmg:send(debug,'\n for :'),
-	xmg:send(debug,Type),
-
-	create_attr_types(C,CT),
-
-	merge_feats(CT,CT,MCT),!.
+    get_atts(Var, avmfeats(Type,T,_)),
+    rb_visit(T,L).
 
 get_attrconstraints(Type,MCT):-
-	not(xmg:fattrconstraint(Type,C)),!.
+    var(Type),!.
+get_attrconstraints(Type,MCT):-
+    xmg:fattrconstraint(Type,C),
+    xmg:send(debug,'\nGot attr contraints:'),
+    xmg:send(debug,C),
+    xmg:send(debug,'\n for :'),
+    xmg:send(debug,Type),
+    create_attr_types(C,CT),
+    merge_feats(CT,CT,MCT),
+    !.
+
+get_attrconstraints(Type,MCT):-
+    not(xmg:fattrconstraint(Type,C)),!.
 
 create_attr_types([],[]).
 create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
@@ -247,20 +354,23 @@ create_attr_types([path(A,A1)-(Type,V)|T],[A-V1|T1]):-
     create_attr_types(T,T1),
     !.
 create_attr_types([A-(Type,V)|T],[A-V|T1]):-
-	var(Type),!,
-	create_attr_types(T,T1),!.
+    var(Type),!,
+    create_attr_types(T,T1),!.
 create_attr_types([A-(Type,V)|T],[A-V|T1]):-
-	%%not(var(V)),!,
-	h_avm(V,Type,[]),
-	create_attr_types(T,T1),!.
+    %%not(var(V)),!,
+    h_avm(V,Type,[]),
+    create_attr_types(T,T1),!.
 
 merge_feats([],Feats,[]).
 merge_feats([A-V|T],Feats,[A-V|T1]):-
-	lists:member(A-V1,T),
-	V=V1,!,
-	merge_feats(T,Feats,T1),!.
+    lists:member(A-V1,T),
+    V=V1,!,
+    merge_feats(T,Feats,T1),
+    !.
 merge_feats([F|T],Feats,[F|T1]):-
-	merge_feats(T,Feats,T1),!.
+    merge_feats(T,Feats,T1),
+    !.
+
 
 add_must([],L,L).
 add_must([H-V|T],L,NewL):-
@@ -270,17 +380,16 @@ add_must([H-V|T],L,NewL):-
     
 add_must([H-V|T],L,NewL):-
     rb_insert(L,H,V,TL),
-
-	add_must(T,TL,NewL),!.
+    add_must(T,TL,NewL),!.
 	
 check_type(Vector):-
-	not(not(xmg:fReachableType(Vector,_))),!.
+    not(not(xmg:fReachableType(Vector,_))),!.
 check_type(Vector):-
-	xmg:send(info,'\nInvalid type vector:'),
-	xmg:send(info,Vector),false.
+    xmg:send(info,'\nInvalid type vector:'),
+    xmg:send(info,Vector),false.
 
 unify_types(T1,T2,T3,CT3):-
-    xmg:send(debug,'Unify types: '),
+    xmg:send(debug,'\nUnify types: '),
     xmg:send(debug,T1),
     xmg:send(debug,' and '),
     xmg:send(debug,T2),
@@ -497,7 +606,17 @@ print_h_avm(AVM,Indent):-
 	indent(Indent),
 	xmg:send(info,']\n'),
 	!.	
+print_h_avm(AVM,Indent):-
+    not(h_avm(AVM,Type,Feats)),
+    	xmg:send(info,'\n'),
+	indent(Indent),
+	xmg:send(info,' is not a typed FS\n'),
+	!.	
 
+print_feats(_, 10):-
+    indent(10),
+    xmg:send(info,'...\n'),
+    !.
 print_feats([],I).
 print_feats([A-V|T],I):-
 	indent(I),

@@ -125,13 +125,38 @@ xmg:type_expr(avm:dot(value:var(token(_,id(AVM))),token(_,id(Feat))),Type):--
 	),
 	!.
 
+%% xmg:type_expr(avm:dot(avm:dot(AVM1,V),token(_,id(Feat))),Type):--
+%%         %% This may work for import vectors, but not for features in AVMs
+%%         xmg:type_expr(avm:dot(AVM1,V),T1),
+%%         xmg:send(debug,'\n\nTyping recursive dot expression:'),
+%% 	xmg:send(debug,' DOT '),
+%% 	xmg:send(debug,Feat),	
+%% 	xmg_brick_avm_avm:dot(T1,Feat,Type),
+%% 	!.
+
 xmg:type_expr(avm:dot(avm:dot(AVM1,V),token(_,id(Feat))),Type):--
+        %% For features in AVMs, as ?Class.?AVMVariable.cat
+        %% Should work for import vectors too
 	xmg:type_expr(avm:dot(AVM1,V),T1),
-        xmg:send(debug,'\n\nTyping recursive dot expression:'),
+        xmg:send(debug,'\n\nTyping recursive dot expression (V2):'),
 	xmg:send(debug,' DOT '),
 	xmg:send(debug,Feat),
-	xmg_brick_avm_avm:dot(T1,Feat,Type),
+
+	(
+	    xmg_brick_avm_avm:dot(T1,Feat,Type);
+	    %% What to do when the thing is not an AVM, or not yet? (that includes parameters)
+	    %% We create a new empty cavm, it should be checked later
+	    (
+		not(attvar(T1)),
+		xmg_brick_avm_avm:avm(T1,[Feat-Type])
+	    )
+	),
+
+	xmg:send(debug,'\nFinal type of the whole expression: '),
+	xmg:send(debug,T1),
+	
 	!.
+
 
 %% For dots in classes (should be consistent)
 xmg:type_expr(avm:dot(token(_,id(AVM)),token(_,id(Feat))),Type):--

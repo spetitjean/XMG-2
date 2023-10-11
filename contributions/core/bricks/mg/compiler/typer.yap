@@ -48,7 +48,7 @@
 :-edcg:thread(free,edcg:table).
 
 
-:-edcg:weave([types,global_context,dim_types,type_decls],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2]).
+:-edcg:weave([types,global_context,dim_types,type_decls],[xmg:type_stmt/2,xmg:type_expr/2,put_in_table/1,put_global_in_table/1,unify_imports/1,unify_import/1,xmg:get_var_type/2,import_exports/2, import_export/2,import_exports_as/3, import_export_as/3]).
 :-edcg:weave([global_context,dim_types,type_decls],[type_classes/1]).
 :-edcg:weave([types,exports],[make_exports_global/1,make_params_global/1]).
 :-edcg:weave([type_decls],[type_decls/1, type_decl/1, type_only_principles/1, type_decl_if_principle/1, get_types/1, get_type/1, get_feats_types/2, get_feat_type/2, assert_type/1, type_feats/1, type_feat/1, assert_feat/1,add_base_types/1, assert_consts/2, assert_const/2]).
@@ -106,17 +106,17 @@ do_type_classes(Classes,Type_Decls):--
 type_classes([]):--
 	!.
 type_classes([mg:class(token(Coord,id(N)),P,I,E,D,S)|T]):--
-	!,
+        !,
 	xmg:send(debug,N),
 	global_context::get(GContext),
 	xmg_brick_mg_exporter:declared(N,List),
 	xmg_table:table_new(TableIn),
 	put_in_table(List) with types(TableIn,TableOut),
 	rbtrees:rb_visit(GContext,GContextList),
-
+	
 	put_global_in_table(GContextList) with types(TableOut,TableGOut),
 	unify_imports(I) with types(TableGOut,UTableOut),
-
+	
 	xmg:send(debug,'\n\nInitial table for '),
 	xmg:send(debug,N),
 	xmg:send(debug,': '),
@@ -219,7 +219,7 @@ make_params_global([A|T]):--
 	halt,!.
 
 unify_imports(none):-- !.
-unify_imports(some(mg:import(I))):-- 
+unify_imports(some(mg:import(I))):--
 	unify_imports(I),!.
 unify_imports([]):-- !.
 unify_imports([I|T]):--
@@ -230,16 +230,34 @@ unify_import(mg:iclass(token(_,id(A)),_,none)):--
 	%%global_context::tget(A,Exports),
 	types::tget(class(A),(Params,CAVM)),
 	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
-	xmg_brick_mg_exporter:exports(N,List),
+	xmg_brick_mg_exporter:exports(A,List),
 	%%xmg:send(info,List),
 	import_exports(List,FACAVM).
 unify_import(mg:iclass(token(_,id(A)),_,AS)):--
 	%% TODO: something about the AS
-	%%global_context::tget(A,Exports),
+        %%global_context::tget(A,Exports),
 	types::tget(class(A),(Params,CAVM)),
 	xmg:do_forall((Params,CAVM),(NParams,FACAVM)),
-	xmg_brick_mg_exporter:exports(N,List),
-	import_exports(List,FACAVM).
+	xmg_brick_mg_exporter:exports(A,List),
+	transform_as(AS,AST),
+	import_exports_as(List,FACAVM,AST).
+
+transform_as(none,[]).
+transform_as(some([]),[]).
+transform_as(some([H|T]),[H1|T1]):-
+    transform_one_as(H,H1),!,
+    transform_as(some(T),T1),!.
+
+transform_one_as(mg:ias(value:var(token(_,id(Var))),value:var(token(_,id(Alias)))),Var-Alias):-
+    % other cases? const?
+    !.
+transform_one_as(mg:ias(value:var(token(_,id(V))),none),Var-Var):-
+    % other cases? const?
+    !.
+transform_one_as(Unexpected,Var-Alias):-
+    xmg:send(info,'\nUnexpected in as list for import:\n  '),
+    xmg:send(info,Unexpected),
+    fail.
 
 xmg:do_forall((Params,cavm(Vars)),(NParams,NVars)):--
 	xmg:send(debug,'\n forall on '),
@@ -296,7 +314,7 @@ new_free([H|T],[V-H|T1]):--
 
 import_exports([],CAVM):-- !.
 import_exports([H|T],CAVM):--
-	import_export(H,CAVM),
+        import_export(H,CAVM),
 	import_exports(T,CAVM).
 
 import_export(id(A,_)-_,CAVM):--
@@ -306,8 +324,34 @@ import_export(id(A,_)-_,CAVM):--
 	xmg:send(debug,CAVM),
 
 	xmg_brick_avm_avm:dot(CAVM,A,Type),
-	types::tget(A,Type),!.
+   	types::tget(A,Type),
+	!.
 
+import_exports_as([],CAVM,AS):-- !.
+import_exports_as([H|T],CAVM,AS):--
+        import_export_as(H,CAVM,AS),
+	import_exports_as(T,CAVM,AS).
+
+import_export_as(id(A,_)-_,CAVM,AS):--
+        not(lists:member(A-_,AS)),
+        !.
+
+import_export_as(id(A,_)-_,CAVM,AS):--
+	xmg:send(debug,'\nexporting as '),
+	xmg:send(debug,A),
+	xmg:send(debug,',  '),
+	xmg:send(debug,CAVM),
+	
+	
+	xmg_brick_avm_avm:dot(CAVM,A,Type),
+	get_alias(A,AS,Alias),
+   	types::tget(Alias,Type),
+	!.
+
+get_alias(A,[A-V|_],V).
+get_alias(A,[_|T],V):-
+    get_alias(A,T,V),!.
+    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type Declarations

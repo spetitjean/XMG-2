@@ -1,4 +1,5 @@
 from xmg.command import parser, subparsers
+from shutil import which
 
 YAPDIR = '.install/yap'
 
@@ -43,14 +44,31 @@ def handler_xmg_compile(args):
         file=os.open(rename,os.O_RDWR|os.O_CREAT)
         yap_out= os.fdopen(file)
     else : yap_out=1
-    YAP=xmg.modular_yap.YAP.xmg_compile(args.compiler,args.input,args.debug,args.json,args.latin,args.notype,args.more,stdout=yap_out)
+    YAP=xmg.modular_yap.YAP.xmg_compile(args.compiler,args.input,args.debug,args.json,args.latin,args.notype,args.more,args.hierarchy,stdout=yap_out)
     try:
         YAP.communicate()
     finally:
         YAP.maybe_kill()
-    if os.path.exists('.more'):
-        print('An additional file was create, moving it to the file: more')
-        os.rename('.more','more.mac')
+    initial_more_file = (os.path.split(os.path.abspath(args.input))[0]+'/.more')
+    if os.path.exists(initial_more_file):
+        more_path = '.'.join(rename.split('.')[:-1])+'_more.mac'
+        print('An additional file was created, moving it to the file: '+more_path)
+        os.rename(initial_more_file,more_path)
+    if os.path.exists('.class_hierarchy'):
+        class_hierarchy_dir = rename.replace('.xml','') + '_class_hierarchy'
+        print('Hierarchy graphs were generated, moving them to the directory: '+class_hierarchy_dir)
+        if os.path.exists(class_hierarchy_dir):
+            for dotfile in os.listdir(class_hierarchy_dir):
+                os.remove(class_hierarchy_dir+'/'+dotfile)
+            os.rmdir(class_hierarchy_dir)
+        os.rename('.class_hierarchy',class_hierarchy_dir)
+        if which('dot') is not None:
+            print('Dot installed, generating the pdf files')
+            for dotfile in os.listdir(class_hierarchy_dir):
+                os.system('dot '+class_hierarchy_dir+'/'+dotfile+' -O -Tpdf')
+        else:
+            print('Dot not found')
+        
     if not rename == "":
         parser.exit(status=0, message="Resource produced in file '%s'\n" % rename )
     else:
@@ -71,4 +89,5 @@ cmd.add_argument("--json", action='store_true', help="Use JSON as output languag
 cmd.add_argument("--latin", action='store_true', help="iso_latin_1 mode")
 cmd.add_argument("--notype", action='store_true', help="Cancels type checking (not recommanded)")
 cmd.add_argument("--more", action='store_true', help="Creates additional files when needed")
+cmd.add_argument("--hierarchy", action='store_true', help="Generates graphs for the class hierarchy")
 cmd.set_defaults(handler=handler_xmg_compile)

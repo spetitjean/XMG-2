@@ -53,7 +53,7 @@ has_duplicate(H,[_|T]):-
 remove_subframes([],_,[]):-!.
 remove_subframes([H|T],Frames,T1):-
     is_subframe(H,Frames),!,
-    xmg:send(info,'\nRemoved a frame'),
+    xmg:send(info,'\nRemoved a frame\n'),
     remove_subframes(T,Frames,T1),!.
 remove_subframes([H|T],Frames,[H|T1]):-
     not(is_subframe(H,Frames)),

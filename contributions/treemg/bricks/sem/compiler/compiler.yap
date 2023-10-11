@@ -19,7 +19,7 @@
 
 :-module(xmg_brick_sem_compiler).
 
-xmg:eval(sem,_,_,Sem,sem:sem(Sem),_).
+xmg:eval(sem,Dim,_,Sem,sem:sem(Sem),_).
 
 
 

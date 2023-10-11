@@ -29,7 +29,12 @@
 :-dynamic(xmg:fAttrConstraint/2).
 :-dynamic(xmg:fAttrConstraint/4).
 :-dynamic(xmg:fPathConstraint/4).
-:-dynamic(xmg:fPathConstraintFromAtts/5).
+:-dynamic(xmg:fPathConstraintFromAttr/5).
+:-dynamic(xmg:fAttrConstraintFromAttr/5).
+:-dynamic(xmg:fTypeConstraintFromAttr/4).
+:-dynamic(xmg:fPathConstraintFromPath/5).
+:-dynamic(xmg:fAttrConstraintFromPath/5).
+:-dynamic(xmg:fTypeConstraintFromPath/4).
     
 :- xmg:edcg.
 :- edcg:using(xmg_brick_mg_typer:type_decls).
@@ -50,22 +55,39 @@ xmg:print_appendix:-
     not(xmg:more_mode),!.
 
 init_print_hierarchy:-
-    xmg:send(info,'\n\nInit print hierarchy\n'),
+    xmg:send(debug,'\n\nInit print hierarchy\n'),
+    xmg:mg_file(MG_FILE),
+    file_directory_name(MG_FILE,MG_DIR),
     %%xmg:fReachableTypes(FVectors),
     findall(FReachable,xmg:fReachableType(FReachable,_),FVectors),
 
     xmg:send(debug,'\nGot reacheable types\n'),
     
     fVectorsToTypesAndAttrs(FVectors,FTypes,FAttrs),
-    
-    open('.more',write,S,[alias(hierarchy)]),
+    atom_concat(MG_DIR,'/.more',More_file),
+    open(More_file,write,S,[alias(hierarchy)]),
     write(hierarchy,'<type_info>\n'),
     write(hierarchy,'  <hierarchy>\n'),
     clean_all_attrs(FAttrs,CFAttrs),
     print_hierarchy(FTypes,CFAttrs),
-    findall(fconstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+    xmg:send(info,'\nPrinted accessible types'),
+    findall(fConstraint(TC,T1s,T2s),xmg:fConstraint(TC,T1s,T2s),Constraints),
+    findall(fPathConstraint(TC,T1s,Attr1,Attr2),xmg:fPathConstraint(TC,T1s,Attr1,Attr2),PathConstraints),
+    findall(fAttrConstraint(TC,T1s,Attr,Type),xmg:fAttrConstraint(TC,T1s,Attr,Type),AttrConstraints),
+    findall(fPathConstraintFromAttr(TC,Attr,Type,Attr1,Attr2),xmg:fPathConstraintFromAttr(TC,Attr,Type,Attr1,Attr2),PathConstraintsFromAttr),
+    findall(fAttrConstraintFromAttr(TC,Attr,Type,Attr1,Type1),xmg:fAttrConstraintFromAttr(TC,Attr,Type,Attr1,Type1),AttrConstraintsFromAttr),
+    findall(fTypeConstraintFromAttr(TC,Attr,Type,Ts),xmg:fTypeConstraintFromAttr(TC,Attr,Type,Ts),TypeConstraintsFromAttr),
+    findall(fPathConstraintFromPath(TC,Attr1,Attr2,Attr3,Attr4),xmg:fPathConstraintFromPath(TC,Attr1,Attr2,Attr3,Attr4),PathConstraintsFromPath),
+    findall(fAttrConstraintFromPath(TC,Attr1,Attr2,Attr,Type),xmg:fAttrConstraintFromPath(TC,Attr1,Attr2,Attr,Type),AttrConstraintsFromPath),
+    findall(fTypeConstraintFromPath(TC,Attr1,Attr2,Ts),xmg:fTypeConstraintFromPath(TC,Attr1,Attr2,Ts),TypeConstraintsFromPath),
+    %% lists:append(Constraints, PathConstraints, MoreConstraints),
+    %% lists:append(MoreConstraints, AttrConstraints, EvenMoreConstraints),
+    %% lists:append(EvenMoreConstraints, PathConstraintsFromAttr, AlmostAllConstraints),
+    %% lists:append(AlmostAllConstraints, AttrConstraintsFromAttr, AllConstraints),
+    lists:append([Constraints, PathConstraints, AttrConstraints, PathConstraintsFromAttr, AttrConstraintsFromAttr, TypeConstraintsFromAttr, PathConstraintsFromPath, AttrConstraintsFromPath, TypeConstraintsFromPath], AllConstraints),
     write(hierarchy,'  <type_constraints>\n'),
-    print_type_constraints(Constraints),
+    xmg:send(info,'\nPrinting type constraints'),
+    print_type_constraints(AllConstraints),
     write(hierarchy,'</type_info>\n'),
     close(hierarchy),!.
 init_print_hierarchy:-
@@ -73,14 +95,16 @@ init_print_hierarchy:-
 
 clean_all_attrs([],[]).
 clean_all_attrs([H|T],[H1|T1]):-
-    xmg:send(info,'\nConstraints:'),
-    xmg:send(info,H),
+    %% xmg:send(info,'\nConstraints:'),
+    %% xmg:send(info,H),
     empty_assoc(Assoc),
     clean_attrs(H,[],Assoc,H1),
+    %% xmg:send(info,'\nCleaned:'),
+    %% xmg:send(info,H1), 
     clean_all_attrs(T,T1).
 
 clean_attrs([],_,_,[]):-!.
-clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+clean_attrs([H-(Type,V)|T],Seen,SeenVars,[H-(Type,V)|T1]):-
     %%xmg:send(info,'\nClean attrs[0]: '),
     %%xmg:send(info,SeenVars),
     
@@ -88,11 +112,17 @@ clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
     get_assoc(H,SeenVars,V1),!,
     V=V1,
     clean_attrs(T,Seen,SeenVars,T1),!.
-clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+clean_attrs([H-(Type,V)|T],Seen,SeenVars,[H-(Type,V)|T1]):-
     %%xmg:send(info,'\nClean attrs[1]: '),
     %%xmg:send(info,SeenVars),
     put_assoc(H,SeenVars,V,NewSeenVars),
     clean_attrs(T,[H|Seen],NewSeenVars,T1),!.
+%% this happened when 2 type constraints are given for the same attribute
+%% now only values are unified, not types, so this should not happen anymore
+clean_attrs([H-V|T],Seen,SeenVars,[H-V|T1]):-
+    xmg:send(info,'\nFailed clean_attrs\n'),
+    xmg:send(info,H-V),
+    clean_attrs(T,[H|Seen],SeenVars,T1),!.
 
     
 
@@ -101,21 +131,30 @@ print_hierarchy([],[]):-
 print_hierarchy([H|T],[H1|T1]):-
         write(hierarchy,'    <entry>\n'),
         write(hierarchy,'      <ctype>\n'),
-	print_type('ctype',H),
+	print_type('ctype',H,8),
 	print_constraints(H1),
 	write(hierarchy,'    </entry>\n'),
 	print_hierarchy(T,T1).
 
-print_type(Label,[]):-
-    write(hierarchy,'      </'),
+print_type(Label,[],N):-
+    write_spaces(N-2),
+    write(hierarchy,'</'),
     write(hierarchy,Label),
     write(hierarchy,'>\n'),!.
 
-print_type(Label,[H|T]):-
-    write(hierarchy,'        <type val="'),
+print_type(Label,[H|T],N):-
+    write_spaces(N),
+    write(hierarchy,'<type val="'),
     write(hierarchy,H),
     write(hierarchy,'"/>\n'),
-    print_type(Label,T),!.
+    print_type(Label,T,N),!.
+
+write_spaces(0).
+write_spaces(N):-
+    N > 0,
+    M is N - 1,
+    write(hierarchy, ' '),
+    write_spaces(M).
 	
 
 print_constraints(C):-
@@ -139,19 +178,34 @@ print_constraints([A-(Type,V)|T],N):-
 	print_constraints(T,O),
 	!.
 
-print_attribute(path(A1,A2)):-
+print_attribute(A):-
     write(hierarchy,'          <path>\n'),
+    do_print_attribute(A),
+    write(hierarchy,'          </path>\n'),!.
+    
+do_print_attribute(path(A1,T)):-
     write(hierarchy,'            <attr val="'),
     write(hierarchy,A1),
     write(hierarchy,'"/>\n'),
+    do_print_attribute(T),!.
+do_print_attribute(A):-
     write(hierarchy,'            <attr val="'),
-    write(hierarchy,A2),
+    write(hierarchy,A),
+    write(hierarchy,'"/>\n'),!.
+
+%% for type constraints, this comes as a list
+print_list_attribute(L):-
+    write(hierarchy,'          <path>\n'),
+    do_print_list_attribute(L),
+    write(hierarchy,'          </path>\n'),
+    !.
+do_print_list_attribute([A1|T]):-
+    write(hierarchy,'            <attr val="'),
+    write(hierarchy,A1),
     write(hierarchy,'"/>\n'),
-    write(hierarchy,'          </path>\n'),!.
-print_attribute(A):-
-	write(hierarchy,'          <attr val="'),
-	write(hierarchy,A),
-	write(hierarchy,'"/>\n'),!.
+    do_print_list_attribute(T),!.
+do_print_list_attribute([]):-
+    !.
 	
 set_constraint_value(A,N,M):-
     var(A),
@@ -165,19 +219,245 @@ set_constraint_value(A,N,M):-
 print_type_constraints([]):-
     write(hierarchy,'  </type_constraints>\n'),!.
 
-print_type_constraints([fconstraint(CType,Type1,Type2)|T]):-
+print_type_constraints([fConstraint(CType,Type1,Type2)|T]):-
     write(hierarchy,'    <type_constraint type="'),
     write(hierarchy,CType),
     write(hierarchy,'">\n'),
-    write(hierarchy,'      <ctype1>\n'),    
-    print_type('ctype1',Type1),
-    write(hierarchy,'      <ctype2>\n'),
-    print_type('ctype2',Type2),
+    write(hierarchy,'      <antecedent>\n'),
+    type_constraint_to_string(Type1, String1),
+    write(hierarchy, String1),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    type_constraint_to_string(Type2, String2),
+    write(hierarchy, String2),
+    write(hierarchy,'      </consequent>\n'),
     write(hierarchy,'    </type_constraint>\n'),
     print_type_constraints(T),!.
 
+print_type_constraints([fPathConstraint(CType,Type1,Attr1,Attr2)|T]):-
+    write(hierarchy,'    <type_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    type_constraint_to_string(Type1, String2),
+    write(hierarchy, String2),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    path_constraint_to_string(Attr1, Attr2, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fAttrConstraint(CType,Type,Attr1,Type1)|T]):-
+    write(hierarchy,'    <type_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    type_constraint_to_string(Type, String1),
+    write(hierarchy, String1),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    attr_constraint_to_string(Attr1, Type1, String2),
+    write(hierarchy, String2),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fPathConstraintFromAttr(CType,Attr,Type,Attr1,Attr2)|T]):-
+    write(hierarchy,'    <type_attribute_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    attr_constraint_to_string(Attr, Type, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    path_constraint_to_string(Attr1, Attr2, String1),
+    write(hierarchy, String1),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_attribute_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fAttrConstraintFromAttr(CType,Attr,Type,Attr1,Type1)|T]):-
+    write(hierarchy,'    <type_attribute_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    attr_constraint_to_string(Attr, Type, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    attr_constraint_to_string(Attr1, Type1, String1),
+    write(hierarchy, String1),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_attribute_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fTypeConstraintFromAttr(CType, Attr, Type, Type1)|T]):-
+    write(hierarchy,'    <type_attribute_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    attr_constraint_to_string(Attr, Type, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    type_constraint_to_string(Type1, String2),
+    write(hierarchy, String2),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_attribute_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fAttrConstraintFromPath(CType,Attr1,Attr2,Attr,Type)|T]):-
+    write(hierarchy,'    <type_attribute_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    path_constraint_to_string(Attr1, Attr2, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    attr_constraint_to_string(Attr, Type, String2),
+    write(hierarchy, String2),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_attribute_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fPathConstraintFromPath(CType,Attr1,Attr2,Attr3,Attr4)|T]):-
+    write(hierarchy,'    <type_attribute_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    path_constraint_to_string(Attr1, Attr2, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    path_constraint_to_string(Attr3, Attr4, PathString),
+    write(hierarchy, PathString),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_attribute_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([fTypeConstraintFromPath(CType,Attr1,Attr2,Type1)|T]):-
+    write(hierarchy,'    <type_attribute_constraint type="'),
+    write(hierarchy,CType),
+    write(hierarchy,'">\n'),
+    write(hierarchy,'      <antecedent>\n'),
+    path_constraint_to_string(Attr1, Attr2, String),
+    write(hierarchy, String),
+    write(hierarchy,'      </antecedent>\n'),
+    write(hierarchy,'      <consequent>\n'),
+    type_constraint_to_string(Type1, String2),
+    write(hierarchy, String2),
+    write(hierarchy,'      </consequent>\n'),
+    write(hierarchy,'    </type_attribute_constraint>\n'),
+    print_type_constraints(T),!.
+
+print_type_constraints([H|T]):-
+    xmg:send(info,'\nNot supported: '),
+    xmg:send(info, H),
+    print_type_constraints(T),!.
+
+print_path_constraint(Attr1, Attr2):-
+    write(hierarchy,'        <path_identity>\n'),
+    print_list_attribute(Attr1),
+    print_list_attribute(Attr2),
+    write(hierarchy,'        </path_identity>\n'),
+    !.
+
+
+attribute_list_to_string(List, String):-
+    Space = '          ',
+    Label = 'path',
+    do_attribute_list_to_string(List, PreString),
+    atomic_list_concat([Space,  '<',  Label,  '>\n', PreString,  Space,  '</',  Label,  '>\n'], String),
+    !.
     
+do_attribute_list_to_string([], '').
+do_attribute_list_to_string([H | T], String):-
+    Space = '            ',
+    Label = 'attr',
+    atomic_list_concat([Space,  '<',  Label,  ' val="',  H,  '"/>\n'], HString),
+    do_attribute_list_to_string(T, TString),
+    atomic_list_concat([HString, TString], String),
+    !.
+
+int_to_spaces(0, '').
+int_to_spaces(N, String):-
+    N > 0,
+    M is N - 1,
+    int_to_spaces(M, Tail),
+    atom_concat(' ', Tail, String),
+    !.
+
+
+type_to_string(Label, List ,N , String):-
+    int_to_spaces(N, Spaces),    
+    do_type_to_string(Label, List, N + 2, PreString),
+    atomic_list_concat([Spaces, '<', Label, '>\n', PreString, Spaces, '</', Label, '>\n'], String),
+    !.
+
+do_type_to_string(Label, [] ,N , ''):-
+    !.
+do_type_to_string(Label, [H|T] ,N, Final):-
+    int_to_spaces(N, Spaces),    
+    atomic_list_concat([Spaces, '<type val="', H, '"/>\n'], String),
+    do_type_to_string(Label, T, N, Next),
+    atom_concat(String, Next, Final),
+    !.
     
+
+path_constraint_to_string(Attr1, Attr2, String):-
+    Space = '        ',
+    Label = 'path_identity',
+    attribute_list_to_string(Attr1, Str1),
+    attribute_list_to_string(Attr2, Str2),
+    atomic_list_concat([Space,  '<',  Label,  '>\n',  Str1,  Str2,  Space,  '</',  Label,  '>\n'], String),
+    !.
+
+attr_constraint_to_string(Attr, Type, String):-
+    var(Type),
+    Space = '        ',
+    Label = 'attr_type',
+    attribute_list_to_string(Attr, Str1),
+    set_constraint_value(Type,0,N),
+    type_to_string('ctype', [Type], 10, Str2),
+    atomic_list_concat([Space,  '<',  Label,  '>\n',  Str1,  Str2,  Space,  '</',  Label,  '>\n'], String),
+    !.
+attr_constraint_to_string(Attr, Type, String):-
+    Space = '        ',
+    Label = 'attr_type',
+    attribute_list_to_string(Attr, Str1),
+    type_to_string('ctype', [Type], 10, Str2),
+    atomic_list_concat([Space,  '<',  Label,  '>\n',  Str1,  Str2,  Space,  '</',  Label,  '>\n'], String),
+    !.
+
+type_constraint_to_string(Type, String):-
+    var(Type),
+    Space = '        ',
+    Label = 'type_constraint',
+    set_constraint_value(Type,0,N),
+    type_to_string('ctype', Type, 10, Str),
+    atomic_list_concat([Space,  '<',  Label,  '>\n',  Str,  Space,  '</',  Label,  '>\n'], String),
+    !.
+
+type_constraint_to_string(Type, String):-
+    Space = '        ',
+    Label = 'type_constraint',
+    type_to_string('ctype', Type, 10, Str),
+    atomic_list_concat([Space,  '<',  Label,  '>\n', Str,  Space,  '</',  Label,  '>\n'], String),
+    !.
+
+
+print_attr_constraint(Attr, Type):-
+    print_list_attribute(Attr),
+    write(hierarchy,'        <ctype>\n'),
+    set_constraint_value(Type,0,N),
+    print_type('ctype',[Type],10),
+    !.
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -239,7 +519,29 @@ get_fconstraints([H|T]):-
 	get_fconstraints(T),!.
 
 get_fconstraint(fconstraint(CT,Left,Right)):-
-	xmg_brick_hierarchy_typer:type_fconstraint(CT,Left,Right),!.
+        split_constraints(Left, SLeft),!,
+        split_constraints(Right, SRight),!,
+	xmg_brick_hierarchy_typer:type_fconstraint(CT,SLeft,SRight),!.
+
+split_constraints(Constraints, const(Types, Paths, AttrTypes)):-
+    split_constraints(Constraints, _, Types, _, Paths, _, AttrTypes),
+    !.
+
+split_constraints([], [], [], [], [], [], []):-
+    !.
+split_constraints([type(Type)|T], Types, [Type|Types] ,Paths, Paths, AttrTypes, AttrTypes):-
+    split_constraints(T, _, Types, _, Paths, _, AttrTypes),
+    !.
+split_constraints([pathEq(Left, Right)|T], Types, Types ,Paths, [pathEq(Left, Right)|Paths], AttrTypes, AttrTypes):-
+    split_constraints(T, _, Types, _, Paths, _, AttrTypes),
+    !.
+split_constraints([attrType(Left, Right)|T], Types, Types ,Paths, Paths, AttrTypes, [attrType(Left, Right)|AttrTypes]):-
+    split_constraints(T, _, Types, _, Paths, _, AttrTypes),
+    !.
+split_constraints(List, _, _, _, _, _, _):-
+    xmg:send(info, '\nFailed to split constraints:'),
+    false.
+    
 
 get_fconstraint(C):-
 	xmg:send(info,'\nUnknown fconstraint:\n'),
@@ -630,14 +932,14 @@ attrConstraints_to_vectors([A|AT],Types,[A1|AT1]):-
 	attrConstraint_to_vector(A,Types,A1),
 	attrConstraints_to_vectors(AT,Types,AT1),!.
 
-attrConstraint_to_vector(attrconstraint(implies,Ts1,Path,Value),Types,(Vector,TPath-CValue)):-
+attrConstraint_to_vector(attrconstraint(implies,Ts1,Path,Value),Types,attr(Vector,TPath-CValue)):-
     attr_value(Value,CValue),
     transform_path(Path,TPath),
 	init_vector(Types,Vector),
 	set_to_left(Ts1,Types,Vector),
 	!.
 
-attrConstraint_to_vector(pathconstraint(implies,Ts1,Path1,Path2),Types,(Vector,TPath1,TPath2)):-
+attrConstraint_to_vector(pathconstraint(implies,Ts1,Path1,Path2),Types,path(Vector,TPath1,TPath2)):-
     %%attr_value(Value,CValue),
     transform_path(Path1,TPath1),
     transform_path(Path2,TPath2),    
@@ -668,15 +970,15 @@ generate_vectors_attrs([V1|VT],AttConstraints):-
 
 generate_vector_attrs(Vector,[],[]):-!.
 %% path constraints
-generate_vector_attrs(Vector,[(AVector,A1,A2)|ACT],ACT2):-
+generate_vector_attrs(Vector,[path(AVector,A1,A2)|ACT],ACT2):-
 	not(not(Vector=AVector)),
 	generate_vector_attrs(Vector,ACT,ACT1),
 	insert(A1-(_,V),ACT1,ACTT),
 	insert(A2-(_,V),ACTT,ACT2),!.
-generate_vector_attrs(Vector,[(AVector,_,_)|ACT],ACT1):-
+generate_vector_attrs(Vector,[path(AVector,_,_)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.	
 %% attribute constraints
-generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
+generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT2):-
 	not(not(Vector=AVector)),!,
 	generate_vector_attrs(Vector,ACT,ACT1),
 	%%xmg:send(debug,'\n Adding '),
@@ -691,7 +993,14 @@ generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT2):-
 	%%xmg:send(info,ACT2),
 	%%xmg:send(debug,ACT2),
 	!.
-generate_vector_attrs(Vector,[(AVector,Feat)|ACT],ACT1):-
+generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT1):-
+	generate_vector_attrs(Vector,ACT,ACT1),!.
+%% type constraints
+generate_vector_attrs(Vector,[types(AVector,Ts)|ACT],ACT2):-
+	not(not(Vector=AVector)),!,
+	generate_vector_attrs(Vector,ACT,ACT2),
+	!.
+generate_vector_attrs(Vector,[attr(AVector,Feat)|ACT],ACT1):-
 	generate_vector_attrs(Vector,ACT,ACT1),!.
 
 insert(Feat,[],[Feat]).
@@ -787,20 +1096,86 @@ compute_matrix(Vectors,Matrix):-
 type_ftype(Type):-
 	assert_type(Type),!.
 
+check_types([]):-!.
+check_types([H|T]):-
+    check_type(H),
+    check_types(T),!.
+
+check_type(T):-
+    xmg:ftype(T),!.
+check_type(T):-
+    xmg:send(info,'\n\nError: undefined frame type: '),
+    xmg:send(info,T),
+    halt,
+    !.
 
 
-type_fconstraint(CT,types(Ts1),types(Ts2)):-
-	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
+%% type_fconstraint(CT,types(Ts1),types(Ts2)):-
+%%         check_types(Ts1),
+%% 	asserta(xmg:fConstraint(CT,Ts1,Ts2)),!.
 
-type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
-	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
+%% type_fconstraint(CT,types(Ts1),attrType(Attr,Type)):-
+%% 	asserta(xmg:fAttrConstraint(CT,Ts1,Attr,Type)),!.
 
-type_fconstraint(CT,types(Ts1),pathEq(Attr1,Attr2)):-
-        asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
+%% type_fconstraint(CT,types(Ts1),pathEq(Attr1,Attr2)):-
+%%         asserta(xmg:fPathConstraint(CT,Ts1,Attr1,Attr2)),!.
 
-type_fconstraint(CT,attrType(Attr,Type),pathEq(Attr1,Attr2)):-
-	asserta(xmg:fPathConstraintFromAtts(CT,Attr,Type,Attr1,Attr2)),!.
+%% type_fconstraint(CT,attrType(Attr,Type),pathEq(Attr1,Attr2)):-
+%% 	asserta(xmg:fPathConstraintFromAttr(CT,Attr,Type,Attr1,Attr2)),!.
 
+
+%% TODO: make this WAY more flexible (include missing cases)
+
+type_fconstraint(CT, const(Ts1, [], []), const([], [], [])):-
+    !.
+%% The standard case: types -> types or types <-> types
+%% <-> is only supported in this case (not sure what to do yet in the other cases)
+type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,Paths,Attrs)):-
+    not(Ts2=[]),
+    check_types(Ts1),
+    asserta(xmg:fConstraint(CT,Ts1,Ts2)),
+    type_fconstraint(CT, const(Ts1,[],[]), const([],Paths,Attrs)),
+    !.
+%% type_fconstraint(CT, const(Ts1,[],[]), const(Ts2,[],[])):-
+%%     not(Ts2=[]),
+%%     check_types(Ts1),
+%%     asserta(xmg:fConstraint(CT,Ts1,Ts2)),
+%%     !.
+%% types -> pathEq
+type_fconstraint(implies, const(Ts1, [], []), const([], [pathEq(Attr1,Attr2)|T], Attrs)):-
+    asserta(xmg:fPathConstraint(implies,Ts1,Attr1,Attr2)),
+    type_fconstraint(implies, const(Ts1, [], []), const([], T, Attrs)),
+    !.
+%% types -> attrType 
+type_fconstraint(implies, const(Ts1, [], []), const([], [], [attrType(Attr,Type)|T])):-
+    asserta(xmg:fAttrConstraint(implies,Ts1,Attr,Type)),
+    type_fconstraint(implies, const(Ts1, [], []), const([], [], T)),
+    !.
+
+%% attrType -> path (TODO: both not unique)
+type_fconstraint(implies, const([], [], [attrType(Attr,Type)]), const([], [pathEq(Attr1,Attr2)], [])):-
+	asserta(xmg:fPathConstraintFromAttr(implies,Attr,Type,Attr1,Attr2)),!.
+%% attrType -> attrType (TODO: both not unique)
+type_fconstraint(implies, const([], [], [attrType(Attr, Type)]), const([], [], [attrType(Attr1, Type1)])):-
+	asserta(xmg:fAttrConstraintFromAttr(implies,Attr,Type,Attr1,Type1)),!.
+%% attrType -> types (TODO: attr not unique)
+type_fconstraint(implies, const([], [], [attrType(Attr, Type)]), const(Ts1, [], [])):-
+	asserta(xmg:fTypeConstraintFromAttr(implies,Attr,Type,Ts1)),!.
+
+
+%% pathEq -> types (TODO: pathEq not unique)
+type_fconstraint(implies, const([], [pathEq(Attr1,Attr2)], []), const(Ts1, [], [])):-
+    xmg:send(info,'\nAsserting '),
+    xmg:send(info,pathEq(Attr1,Attr2)),
+	asserta(xmg:fTypeConstraintFromPath(implies,Attr1,Attr2,Ts1)),!.
+%% pathEq -> attrType (TODO: both not unique)
+type_fconstraint(implies, const([], [pathEq(Attr1,Attr2)], []), const([], [], [attrType(Attr, Type)])):-
+	asserta(xmg:fAttrConstraintFromPath(implies,Attr1,Attr2,Attr,Type)),!.
+%% pathEq -> pathEq (TODO: both not unique)
+type_fconstraint(implies, const([], [pathEq(Attr1,Attr2)], []), const([], [pathEq(Attr3,Attr4)], [])):-
+	asserta(xmg:fPathConstraintFromPath(implies,Attr1,Attr2,Attr3,Attr4)),!.
+
+%% TODO: constraints with mixed litterals types pathEqs attrTypes -> types pathEqs attrTypes
 
 
 

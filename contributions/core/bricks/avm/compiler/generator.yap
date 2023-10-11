@@ -53,13 +53,33 @@ xmg:generate_instr((v(Var),avm:dot(v(Class),c(CVar)))):--
 	Dot=..[avm_dot,CVar-GV,GC],
 	code::enq(xmg:Dot),!.
 
-
 xmg:avm_dot(Member-Value,List) :-
-	lists:member(Member-Value,List).
-	%%xmg:send(info,'\nFound key '),
-	%%xmg:send(info,Member),
-	%%xmg:send(info,' in '),
-	%%xmg:send(info,List).
+    %% xmg:send(info,'\nDOT 1'),
+    not(var(List)),
+    lists:member(Member-Value,List).
+xmg:avm_dot(Member-Value,AVM) :-
+    %% sometimes the avm does not have the given feature yet
+    %% this should not happen for const_avms (export vectors)
+    %%  xmg:send(info,'\nDOT 4'),
+      xmg_brick_avm_avm:avm(AVM,List),
+      not(lists:member(Member-Value,List)),!,
+      xmg_brick_avm_avm:avm(AVM,[Member-Value]),
+      !.
+
+xmg:avm_dot(Member-Value,AVM) :-
+     %% sometimes it seems that we have avm objects instead of lists
+     %% xmg:send(info,'\nDOT 2'),
+      xmg_brick_avm_avm:avm(AVM,List),!,
+      xmg:avm_dot(Member-Value,List).
+xmg:avm_dot(Member-Value,AVM) :-
+    %% sometimes the AVM is not yet an AVM (free variable)
+    %% xmg:send(info,'\nDOT 3'),
+    var(AVM),
+    %% not(attvar(AVM)),
+    xmg_brick_avm_avm:avm(AVM,[Member-Value]),
+    %% attvar(AVM),
+    !.
+		      
 xmg:avm_dot(Member-_,List):-
 	not(lists:member(Member-Value,List)),
 	xmg:send(info,'\nDid not find key '),

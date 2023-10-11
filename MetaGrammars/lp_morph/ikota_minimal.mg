@@ -72,7 +72,7 @@ class Theme
 { 
   {	
     <iface>{[prog= +, proxi=@{none,imminent,far,day}]};
-    <morph>{f_active <- "á"}
+    <morph>{f_active <- "a´"}
   }
 | 
   {

@@ -19,7 +19,7 @@
 
 :-module(xmg_brick_frame_compiler).
 
-xmg:eval(frame,_,[],Frame,frame:frame(PFrame),_):-
+xmg:eval(frame,Dim,[],Frame,frame:frame(PFrame),_):-
 	xmg_brick_frame_preparer:prepare(Frame,PFrame),
 	xmg:send(debug,PFrame).
 

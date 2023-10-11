@@ -39,8 +39,8 @@ unfold_ftypes([H|T],[ftype(H1)|T1]):-
 
 xmg:unfold(hierarchy:fconstraint(Op,Ts1,Ts2),fconstraint(UOp,UTs1,UTs2)):-
 	unfold_op(Op,UOp),
-	unfold_idsOrAttr(Ts1,UTs1),
-	unfold_idsOrAttr(Ts2,UTs2),
+	unfold_idOrAttrs(Ts1,UTs1),
+	unfold_idOrAttrs(Ts2,UTs2),
 	!.
 
 xmg:unfold(hierarchy:frelation(Rel,Params),frelation(URel,UParams)):-
@@ -70,30 +70,31 @@ unfold_op(token(_,'<->'),is_equivalent).
 
 unfold_id(token(_,id(ID)),ID).
 
-unfold_idsOrAttr(ids(IDS),types(UIDS)):-
-	unfold_list(IDS,UIDS),!.
-unfold_idsOrAttr(token(_,bool(+)),types([_])):-
-	unfold_list(IDS,UIDS),!.
-unfold_idsOrAttr(token(_,bool(-)),types([false])):-
-	unfold_list(IDS,UIDS),!.
+unfold_idOrAttrs([],[]).
+unfold_idOrAttrs([H|T],[H1|T1]):-
+	unfold_idOrAttr(H,H1),
+	unfold_idOrAttrs(T,T1),!.
 
-unfold_idsOrAttr(attrType(ID1,ID2),attrType(UID1,UID2)):-
-	unfold_list(ID1,UID1),
+
+unfold_idOrAttr(token(_,id(ID)),type(ID)).
+unfold_idOrAttr(token(_,bool(+)),type(_)).
+unfold_idOrAttr(token(_,bool(-)),type(false)).
+unfold_idOrAttr(attrType(ID1,ID2),attrType(UID1,UID2)):-
+	unfold_DotList(ID1,UID1),
 	unfold_id(ID2,UID2),!.
+unfold_idOrAttr(attrType(ID1,token(_,bool(+))),attrType(UID1,_)):-
+	unfold_DotList(ID1,UID1),!.
+unfold_idOrAttr(attrType(ID1,token(_,bool(-))),attrType(UID1,false)):-
+	unfold_DotList(ID1,UID1),!.
 
-unfold_idsOrAttr(attrType(ID1,token(_,bool(+))),attrType(UID1,_)):-
-	unfold_list(ID1,UID1),!.
-unfold_idsOrAttr(attrType(ID1,token(_,bool(-))),attrType(UID1,false)):-
-	unfold_list(ID1,UID1),!.
+unfold_idOrAttr(pathEq(ID1,ID2),pathEq(UID1,UID2)):-
+	unfold_DotList(ID1,UID1),
+	unfold_DotList(ID2,UID2),!.
 
-unfold_idsOrAttr(pathEq(ID1,ID2),pathEq(UID1,UID2)):-
-	unfold_list(ID1,UID1),
-	unfold_list(ID2,UID2),!.
 
-unfold_list([],[]).
-unfold_list([H|T],[H1|T1]):-
-	unfold_id(H,H1),
-	unfold_list(T,T1),!.
+unfold_DotList([],[]).
+unfold_DotList([token(_, id(ID))|T],[ID|T1]):-
+	unfold_DotList(T,T1),!.
 
 
 unfold_pairs([],[]):- !.

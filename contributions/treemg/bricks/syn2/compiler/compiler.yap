@@ -19,6 +19,6 @@
 
 :-module(xmg_brick_syn2_compiler).
 
-xmg:eval(syn2,_,[tree],Syn,XML,Class):-
+xmg:eval(syn2,Dim,[tree],Syn,XML,Class):-
 	xmg_brick_tree_compiler:eval(Syn,Solvers,XML,Class).
 

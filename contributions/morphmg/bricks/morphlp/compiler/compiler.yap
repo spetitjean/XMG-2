@@ -20,7 +20,7 @@
 :-module(xmg_brick_morphlp_compiler).
 
 
-xmg:eval(morphlp,_,_,Morph,Value,_):-
+xmg:eval(morphlp,Dim,_,Morph,Value,_):-
     %%xmg:send(info,Morph),
 	xmg_brick_morphlp_solver:eval(Morph,Value),
 	%%xmg:send_nl(info,2),
