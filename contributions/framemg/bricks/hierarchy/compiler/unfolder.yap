@@ -59,6 +59,13 @@ xmg:unfold(hierarchy:frelations(Cs),frelations(UCs)):-
 unfold_op(token(_,'->'),implies).
 unfold_op(token(_,'<->'),is_equivalent).
 
+unfold_list([],[]).
+ 
+unfold_list([H|T],[H1|T1]):-
+ 
+	unfold_id(H,H1),
+ 
+	unfold_list(T,T1),!.
 
 %% xmg:unfold(hierarchy:fconstraint(Type,Must,Cant,Supertypes,Compatible),fconstraint(UType,UMust,UCant,USupertypes,UCompatible)):-
 %% 	unfold_id(Type,UType),
